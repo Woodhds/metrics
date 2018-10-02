@@ -63,9 +63,9 @@ namespace metrics
 
             app.UseMvcWithDefaultRoute();
 
-            app.Map("/api", builder =>
+            app.Map("/admin", builder =>
             {
-                builder.UseMvc(routeBuilder => { routeBuilder.MapRoute("api", "{controller}/{action}/{id?}"); });
+                builder.UseMvc(routeBuilder => { routeBuilder.MapRoute("admin", "{controller}/{action}/{id?}"); });
                 builder.UseSpa(spaBuilder =>
                 {
                     spaBuilder.Options.SourcePath = "scripts/app";
