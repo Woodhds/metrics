@@ -1,0 +1,4 @@
+<kendo-grid [filterable]="true" [skip]="state.skip" (dataStateChange)="dataStateChange($event)"
+            [sortable]="true" [sort]="state.sort" [data]="view | async">
+  <kendo-grid-column field="Name"></kendo-grid-column>
+</kendo-grid>

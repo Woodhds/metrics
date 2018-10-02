@@ -10,10 +10,11 @@ namespace metrics
 {
     public class GenericControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
     {
+        
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
-                .Where(c => typeof(BaseEntity).IsAssignableFrom(c)))
+            foreach (var type in Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
+                .SelectMany(x => x.DefinedTypes).Where(c => typeof(BaseEntity).IsAssignableFrom(c) && !c.IsAbstract))
             {
                 var typeName = type.Name + "Controller";
                 if (!feature.Controllers.Any(t => t.Name == typeName))

@@ -36,13 +36,16 @@ namespace metrics
             services.AddDbContext<DataContext>(opts => { opts.UseNpgsql(connectionString);});
             services.AddScoped<DbContext, DataContext>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddKendo();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
                 manager =>
                 {
                     manager.FeatureProviders.Add(new GenericControllerFeatureProvider());
                 });
+            services.AddSpaStaticFiles(z =>
+            {
+                z.RootPath = "ClientApp/dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,26 +64,18 @@ namespace metrics
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseCors();
             app.UseMvcWithDefaultRoute();
 
-            app.Map("/api", builder =>
+            app.Map("/admin", builder =>
             {
-                builder.UseMvc(routeBuilder => { routeBuilder.MapRoute("api", "{controller}/{action}/{id?}"); });
+                builder.UseSpaStaticFiles();
                 builder.UseSpa(spaBuilder =>
                 {
-                    spaBuilder.Options.SourcePath = "scripts/app";
-                    spaBuilder.UseSpaPrerendering(options =>
-                    {
-                        options.BootModulePath = $"{spaBuilder.Options.SourcePath}/dist-server/main.bundle.js";
-                        options.BootModuleBuilder = env.IsDevelopment()
-                            ? new AngularCliBuilder(npmScript: "build:ssr")
-                            : null;
-                        options.ExcludeUrls = new[] { "/sockjs-node" };
-                    });
+                    spaBuilder.Options.SourcePath = "ClientApp";
                     if (env.IsDevelopment())
                     {
-                        spaBuilder.UseAngularCliServer(npmScript: "start");
+                        spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                     }
                 });
             });

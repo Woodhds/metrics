@@ -12,14 +12,8 @@ namespace metrics.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IRepository<Product> _repository;
-        public HomeController(IRepository<Product> repository)
-        {
-            _repository = repository;
-        }
         public async Task<IActionResult> Index()
         {
-            var q =_repository.Read();
             return View();
         }
 
