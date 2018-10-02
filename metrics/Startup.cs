@@ -36,6 +36,7 @@ namespace metrics
             services.AddDbContext<DataContext>(opts => { opts.UseNpgsql(connectionString);});
             services.AddScoped<DbContext, DataContext>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddKendo();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
                 manager =>
@@ -63,9 +64,9 @@ namespace metrics
 
             app.UseMvcWithDefaultRoute();
 
-            app.Map("/admin", builder =>
+            app.Map("/api", builder =>
             {
-                builder.UseMvc(routeBuilder => { routeBuilder.MapRoute("admin", "{controller}/{action}/{id?}"); });
+                builder.UseMvc(routeBuilder => { routeBuilder.MapRoute("api", "{controller}/{action}/{id?}"); });
                 builder.UseSpa(spaBuilder =>
                 {
                     spaBuilder.Options.SourcePath = "scripts/app";

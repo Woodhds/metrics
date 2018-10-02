@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DAL;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace metrics.Controllers
@@ -15,9 +16,9 @@ namespace metrics.Controllers
         
         [HttpGet]
         [Route("")]
-        public async Task<IQueryable<T>> Get()
+        public async Task<DataSourceResult> Get(DataSourceRequest request)
         {
-            return _repository.Read();
+            return await Kendo.Mvc.Extensions.QueryableExtensions.ToDataSourceResultAsync(_repository.Read(), request);
         }
     }
 }
