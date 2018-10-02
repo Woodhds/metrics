@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Data.Entities;
+﻿using Data.Entities;
+using DAL;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.EF
 {
-    public sealed class DataContext : DbContext
+    public sealed class DataContext : BaseContext
     {
-        public DbSet<Product> Products { get; set; }
-
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContext(DbContextOptions options) : base(options)
         {
-            Database.AutoTransactionsEnabled = true;
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Product>();
+            modelBuilder.Entity<Order>();
         }
     }
 }

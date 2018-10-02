@@ -14,10 +14,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Telerik.UI.for.AspNet.Core.Trial" Version="2018.3.911" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="scripts\app" />
   </ItemGroup>
 
 </Project>

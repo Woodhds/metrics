@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Data.Entities;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace metrics
@@ -36,7 +37,11 @@ namespace metrics
             services.AddScoped<DbContext, DataContext>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
+                manager =>
+                {
+                    manager.FeatureProviders.Add(new GenericControllerFeatureProvider());
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +62,27 @@ namespace metrics
             app.UseCookiePolicy();
 
             app.UseMvcWithDefaultRoute();
+
+            app.Map("/api", builder =>
+            {
+                builder.UseMvc(routeBuilder => { routeBuilder.MapRoute("api", "{controller}/{action}/{id?}"); });
+                builder.UseSpa(spaBuilder =>
+                {
+                    spaBuilder.Options.SourcePath = "scripts/app";
+                    spaBuilder.UseSpaPrerendering(options =>
+                    {
+                        options.BootModulePath = $"{spaBuilder.Options.SourcePath}/dist-server/main.bundle.js";
+                        options.BootModuleBuilder = env.IsDevelopment()
+                            ? new AngularCliBuilder(npmScript: "build:ssr")
+                            : null;
+                        options.ExcludeUrls = new[] { "/sockjs-node" };
+                    });
+                    if (env.IsDevelopment())
+                    {
+                        spaBuilder.UseAngularCliServer(npmScript: "start");
+                    }
+                });
+            });
         }
     }
 }
