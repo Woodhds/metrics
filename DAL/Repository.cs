@@ -31,6 +31,11 @@ namespace DAL
             await _context.SaveChangesAsync();
         }
 
+        public async Task<TEntity> Find(int id)
+        {
+            return await _context.Set<TEntity>().AsNoTracking().SingleOrDefaultAsync(c => c.Id == id);
+        }
+
         public IQueryable<TEntity> Read()
         {
             return _set.AsNoTracking().AsQueryable();

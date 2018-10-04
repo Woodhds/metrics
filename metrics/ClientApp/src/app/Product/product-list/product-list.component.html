@@ -1,4 +1,8 @@
-<kendo-grid [filterable]="true" [skip]="state.skip" (dataStateChange)="dataStateChange($event)"
-            [sortable]="true" [sort]="state.sort" [data]="view | async">
-  <kendo-grid-column field="Name"></kendo-grid-column>
+<kendo-grid [filterable]="true" [pageSize]="state.take" [skip]="state.skip" (dataStateChange)="dataStateChange($event)"
+            [sortable]="true" pageable="true" [sort]="state.sort" [data]="view | async">
+  <kendo-grid-messages>
+
+  </kendo-grid-messages>
+  <kendo-grid-column field="name" title="Название"></kendo-grid-column>
+  <kendo-grid-column field="price" title="Цена"></kendo-grid-column>
 </kendo-grid>

@@ -12,5 +12,6 @@ namespace DAL
         IQueryable<TEntity> Read();
         Task<TEntity> UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
+        Task<TEntity> Find(int id);
     }
 }

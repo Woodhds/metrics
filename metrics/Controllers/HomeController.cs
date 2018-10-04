@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 using DAL;
 using Microsoft.AspNetCore.Mvc;
 using metrics.Models;
-using Data.Entities;
 
 namespace metrics.Controllers
 {
     public class HomeController : Controller
     {
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }

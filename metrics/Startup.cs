@@ -1,15 +1,14 @@
 ﻿using Data.EF;
 using DAL;
+using DAL.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Data.Entities;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace metrics
 {
@@ -22,33 +21,39 @@ namespace metrics
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             var connectionString = Configuration.GetConnectionString("DataContext");
-            services.AddDbContext<DataContext>(opts => { opts.UseNpgsql(connectionString);});
+            services.AddDbContext<DataContext>(opts => {
+                opts.UseNpgsql(connectionString);
+            });
+
+            services.AddDefaultIdentity<User>().AddEntityFrameworkStores<DataContext>()
+                .AddRoles<Role>();
+
+            services.Configure<IdentityOptions>(opts =>
+            {
+            });
+            
+            
             services.AddScoped<DbContext, DataContext>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
-                manager =>
-                {
-                    manager.FeatureProviders.Add(new GenericControllerFeatureProvider());
-                });
+                manager => { manager.FeatureProviders.Add(new GenericControllerFeatureProvider()); });
             services.AddSpaStaticFiles(z =>
             {
                 z.RootPath = "ClientApp/dist";
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -61,11 +66,25 @@ namespace metrics
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseCors();
-            app.UseMvcWithDefaultRoute();
+            app.UseCors(opts =>
+            {
+                opts.AllowAnyMethod();
+                opts.AllowAnyOrigin();
+                opts.AllowAnyHeader();
+            });
+            app.UseMvc(builder =>
+            {
+                builder.MapRoute("category", "{controller}/{slug}",
+                    new {controller = "category", action = "Index"});
+                    
+                    builder.MapRoute("default", "{controller}/{action}/{id?}",
+                        new {controller = "Home", action = "Index"});
+                });
+            
 
             app.Map("/admin", builder =>
             {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ProductService} from "../product.service";
 import {State} from "@progress/kendo-data-query";
-import {Observable} from "rxjs";
 import {DataStateChangeEvent, GridDataResult} from "@progress/kendo-angular-grid";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-product-list',
