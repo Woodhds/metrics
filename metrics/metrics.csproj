@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
@@ -22,10 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Account" />
     <Folder Include="ClientApp\src\app\Product" />
     <Folder Include="ClientApp\src\app\services" />
-    <Folder Include="Views\Product" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>

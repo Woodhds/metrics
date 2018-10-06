@@ -1,0 +1,14 @@
+﻿@import 'vars.scss';
+@import '_fonts.scss';
+
+html {
+    font-family: $font-stack-sans;
+}
+
+.icon-menu {
+    fill: $c-white;
+}
+
+.icon-collection {
+    display: none;
+}
