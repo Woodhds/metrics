@@ -151,10 +151,8 @@ body {
   font-family: "Fira sans", Helvetica, Verdana, sans-serif; }
 
 main {
-  margin-top: 4.854rem;
+  margin-top: 5.663rem;
   display: flex;
-  align-items: center;
-  flex-direction: column;
   height: 100%; }
   main .container {
     padding: 1.2135rem;
@@ -167,3 +165,81 @@ main {
 
 .icon-collection {
   display: none; }
+
+a {
+  text-decoration: none;
+  transition: all .2s linear; }
+  a:hover, a:focus, a:active {
+    color: #ff9300;
+    text-decoration: none; }
+
+.product-list {
+  display: flex;
+  flex: 1 1 100%;
+  align-content: flex-start;
+  flex-wrap: wrap; }
+  .product-list__product {
+    height: 17.798rem;
+    width: 12.135rem;
+    margin-right: 3.0742rem;
+    margin-bottom: 1.618rem;
+    border: 1px solid #0069d9;
+    transition: all .2s linear;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; }
+    .product-list__product:nth-child(4n) {
+      margin-right: 0; }
+    .product-list__product:hover {
+      box-shadow: 5px 5px #eee; }
+    .product-list__product__image {
+      height: 8.09rem;
+      width: 100%; }
+      .product-list__product__image-caption {
+        text-align: center; }
+    .product-list__product__actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-self: stretch;
+      flex: 1; }
+    .product-list__product__price {
+      color: initial; }
+    .product-list__product__description {
+      padding: 1.2135rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-items: space-between;
+      height: 100%; }
+
+footer {
+  height: 12.135rem; }
+
+.side-bar {
+  width: 25%;
+  margin-right: 2.0225rem; }
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0;
+  align-content: center;
+  list-style: none; }
+  .category-list__list-item {
+    list-style: none;
+    line-height: 2.8315rem;
+    transition: all .2s linear;
+    text-align: center; }
+    .category-list__list-item:hover {
+      background-color: #0e99da; }
+      .category-list__list-item:hover a {
+        color: #fff; }
+    .category-list__list-item__link {
+      color: initial;
+      display: block; }
+      .category-list__list-item__link.active {
+        background-color: #0e99da;
+        color: #fff; }

@@ -3,6 +3,7 @@ using Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace metrics.ViewComponents
 {
@@ -15,14 +16,19 @@ namespace metrics.ViewComponents
             _repository = repository;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int? id)
+        public async Task<IViewComponentResult> InvokeAsync(int? categoryId)
         {
-            if(id.HasValue)
+            if (categoryId.HasValue)
             {
-                return View(_repository.Read().Where(c => c.ProductCategory.Id == id));
+                return View(await _repository.Read()
+                    .Include(z => z.ProductImages)
+                    .Include(c => c.ProductCategory)
+                    .Where(c => c.ProductCategory.Id == categoryId).ToListAsync());
             }
 
-            return View(_repository.Read());
+            return View(await _repository.Read()
+                .Include(z => z.ProductImages).Include(c => c.ProductCategory)
+                .ToListAsync());
         }
     }
 }

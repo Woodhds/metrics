@@ -28,7 +28,7 @@ namespace metrics.Controllers
                 .SingleOrDefaultAsync();
             if (category == null)
                 return NotFound();
-            return View(category.Products);
+            return View(category.Id);
         }
     }
 }

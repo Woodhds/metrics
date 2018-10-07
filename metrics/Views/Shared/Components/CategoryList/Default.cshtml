@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ProductCategory>
+@{
+    Layout = null;
+}
+
+<ul class="nav flex-column nav-pills nav-fill side-bar">
+    @foreach (var category in Model)
+    {
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveId != null && ViewBag.ActiveId == category.Id ? "active": string.Empty)" 
+           href="@Url.RouteUrl("category", new { slug = category.Slug })" >
+            @category.Name
+        </a>
+    </li>
+    }
+</ul>

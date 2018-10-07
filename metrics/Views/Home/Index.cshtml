@@ -1,5 +1,5 @@
-﻿@{ 
+﻿@{
     ViewBag.Title = "Главная";
 }
-
+@await Component.InvokeAsync("CategoryList")
 @await Component.InvokeAsync("ProductList")

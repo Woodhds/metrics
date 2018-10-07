@@ -23,8 +23,8 @@ namespace Data.Entities
         public DateTime CreateDate { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdateDate { get; set; }
-        [NotMapped] 
-        public string Thumbnail => ProductImages.FirstOrDefault(c => c.IsActive && c.IsMain)?.ThumbnailPath;
+        [NotMapped]
+        public string Thumbnail => ProductImages?.FirstOrDefault(c => c.IsActive && c.IsMain)?.ThumbnailPath;
         public virtual ProductCategory ProductCategory { get; set; }
         public virtual ICollection<ProductImage> ProductImages { get; set; }
     }

@@ -78,10 +78,10 @@ namespace metrics
             });
             app.UseMvc(builder =>
             {
-                //builder.MapRoute("category", "{controller}/{slug}",
-                //    new {controller = "category", action = "Index"});
-                    
-                    builder.MapRoute("default", "{controller}/{action}/{id?}",
+                builder.MapRoute("category", "category/{slug}",
+                    new { controller = "category", action = "Index" });
+
+                builder.MapRoute("default", "{controller}/{action}/{id?}",
                         new {controller = "Home", action = "Index"});
                 });
             

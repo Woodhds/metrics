@@ -16,10 +16,8 @@ body {
 }
 
 main {
-    margin-top: $ms * 3rem;
+    margin-top: $ms * 3.5rem;
     display: flex;
-    align-items: center;
-    flex-direction: column;
     height: 100%;
 
     .container {
@@ -36,4 +34,117 @@ main {
 
 .icon-collection {
     display: none;
+}
+
+a {
+    text-decoration: none;
+    transition: all .2s linear;
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: #ff9300;
+        text-decoration: none;
+    }
+}
+
+.product-list {
+    display: flex;
+    flex: 1 1 100%;
+    align-content: flex-start;
+    flex-wrap: wrap;
+
+    &__product {
+        height: $ms * 11rem;
+        width: $ms * 7.5rem;
+        margin-right: $ms * 1.9rem;
+        margin-bottom: $ms * 1rem;
+        border: 1px solid #0069d9;
+        transition: all .2s linear;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        &:nth-child(4n) {
+            margin-right: 0;
+        }
+
+        &:hover {
+            box-shadow: 5px 5px #eee;
+        }
+
+        &__image {
+            height: $ms * 5rem;
+            width: 100%;
+
+            &-caption {
+                text-align: center;
+            }
+        }
+
+        &__actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-self: stretch;
+            flex: 1;
+        }
+
+        &__price {
+            color: initial;
+        }
+
+        &__description {
+            padding: $ms * 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-items: space-between;
+            height: 100%;
+        }
+    }
+}
+
+footer {
+    height: $ms * 7.5rem;
+}
+
+.side-bar {
+    width: 25%;
+    margin-right: $ms * 1.25rem;
+}
+
+.category-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    align-content: center;
+    list-style: none;
+
+    &__list-item {
+        list-style: none;
+        line-height: $ms * 1.75rem;
+        transition: all .2s linear;
+        text-align: center;
+
+        &:hover {
+            a {
+                color: $c-white;
+            }
+
+            background-color: $c-nav-background;
+        }
+
+        &__link {
+            color: initial;
+            display: block;
+
+            &.active {
+                background-color: $c-nav-background;
+                color: $c-white;
+            }
+        }
+    }
 }

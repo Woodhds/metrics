@@ -16,6 +16,7 @@ namespace Data.EF
             modelBuilder.Entity<Product>(c => 
             { 
                 c.HasOne(d => d.ProductCategory).WithMany(d => d.Products);
+                c.HasMany(d => d.ProductImages).WithOne(e => e.Product);
             });
             modelBuilder.Entity<Order>();
             modelBuilder.Entity<ProductCategory>(c =>
