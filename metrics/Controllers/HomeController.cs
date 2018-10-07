@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using DAL;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using metrics.Models;
+using Data.Entities;
+using DAL;
 
 namespace metrics.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IRepository<Product> _repository;
+        public HomeController(IRepository<Product> repository)
+        {
+            _repository = repository;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            return View(_repository.Read());
         }
 
         public IActionResult About()

@@ -17,6 +17,6 @@ namespace Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreateDate { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using DAL;
 
 namespace Data.Entities
@@ -17,8 +19,12 @@ namespace Data.Entities
         public string Description { get; set; }
         public string Composition { get; set; }
         public string Slug { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreateDate { get; set; }
-        public string UpdateDate { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime? UpdateDate { get; set; }
+        [NotMapped] 
+        public string Thumbnail => ProductImages.FirstOrDefault(c => c.IsActive && c.IsMain)?.ThumbnailPath;
         public virtual ProductCategory ProductCategory { get; set; }
         public virtual ICollection<ProductImage> ProductImages { get; set; }
     }

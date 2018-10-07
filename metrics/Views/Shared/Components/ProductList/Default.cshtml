@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Product>
+@{
+    Layout = null;
+}
+
+@if (Model.Count() > 0)
+{
+    foreach (var product in Model)
+    {
+        <div class="product-list__product" itemscope="https://schema.org/Product">
+
+            <a itemprop="url" href="@Url.Action("Index", "Product", new { id = product.Slug })" title="@product.Name">
+                <figure>
+                    <img src="@(!string.IsNullOrEmpty(product.Thumbnail) ? Url.Content("images/products/" + product.Thumbnail) : Url.Content("images/no-photo.svg"))"
+                         itemprop="image" class="product-list__product__image" />
+                    <figcaption class="product-list__product__image-caption">
+                        <h4 itemprop="name">@product.Name</h4>
+                    </figcaption>
+                </figure>
+            </a>
+            <div class="product-list__product__description">
+                <small itemprop="description" class="text-muted">@product.Description</small>
+                <h3 class="product-list__product__price">
+                    @product.Price.ToString("C")
+                    <i class="fa fa-ruble"></i>
+                </h3>
+                <div class="product-list__product__actions">
+                    <button data-update-id="cart" data-product-id="@product.Id" class="product-list__product__actions__add add-item">
+                        В
+                        корзину
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    }
+}
+else
+{
+    <h4>В данной категории не найдено товаров</h4>
+}

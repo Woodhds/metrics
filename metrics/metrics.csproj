@@ -28,6 +28,7 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\app\Product" />
     <Folder Include="ClientApp\src\app\services" />
+    <Folder Include="wwwroot\images\products" />
   </ItemGroup>
 
   <ItemGroup>
