@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DAL
 {
@@ -16,6 +17,14 @@ namespace DAL
         {
             _context = context;
             _set = _context.Set<TEntity>();
+        }
+
+        public async Task<CommittableTransaction> BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            var transaction = new CommittableTransaction(new TransactionOptions { IsolationLevel = isolationLevel});
+            await _context.Database.OpenConnectionAsync();
+            _context.Database.EnlistTransaction(transaction);
+            return transaction;
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity)
