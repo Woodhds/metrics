@@ -1,6 +1,8 @@
 ﻿using Data.EF;
 using DAL;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +35,8 @@ namespace metrics
             services.AddDbContext<DataContext>(opts => {
                 opts.UseNpgsql(connectionString);
             });
+            services.AddScoped<DbContext, DataContext>();
+            
 
             services.AddDefaultIdentity<User>().AddEntityFrameworkStores<DataContext>()
                 .AddRoles<Role>();
@@ -40,9 +44,20 @@ namespace metrics
             services.Configure<IdentityOptions>(opts =>
             {
             });
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+            {
+                opts.Audience = "metrics";
+                opts.ClaimsIssuer = "metrics";
+            }).AddCookie(JwtBearerDefaults.AuthenticationScheme);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Bearer", builder => builder.RequireAuthenticatedUser());
+            });
             
-            
-            services.AddScoped<DbContext, DataContext>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddCors();
 
