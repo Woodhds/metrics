@@ -1,0 +1,18 @@
+﻿@page
+@model metrics.Pages.Account.Register
+@{
+    ViewBag.Title = "Вход";
+}
+
+<form method="post" asp-antiforgery="true">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input class="form-control" asp-for="Email"/>
+        <span class="text-danger" asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input class="form-control" asp-for="Password" />
+    </div>
+    <button class="btn btn-primary">Зарегистрироваться</button>
+</form>

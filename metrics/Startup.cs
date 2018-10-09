@@ -37,21 +37,18 @@ namespace metrics
             });
             services.AddScoped<DbContext, DataContext>();
             
-
             services.AddDefaultIdentity<User>().AddEntityFrameworkStores<DataContext>()
                 .AddRoles<Role>();
 
             services.Configure<IdentityOptions>(opts =>
             {
             });
-            services.AddAuthentication(opts =>
-            {
-                opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
-            {
-                opts.Audience = "metrics";
-                opts.ClaimsIssuer = "metrics";
-            }).AddCookie(JwtBearerDefaults.AuthenticationScheme);
+            services.AddAuthentication()
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+                {
+                    opts.Audience = "metrics";
+                    opts.ClaimsIssuer = "metrics";
+                });
 
             services.AddAuthorization(options =>
             {
