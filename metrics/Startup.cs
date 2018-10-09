@@ -44,16 +44,13 @@ namespace metrics
             {
             });
             services.AddAuthentication()
+                .AddFacebook()
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
                 {
                     opts.Audience = "metrics";
                     opts.ClaimsIssuer = "metrics";
                 });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Bearer", builder => builder.RequireAuthenticatedUser());
-            });
             
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddCors();
