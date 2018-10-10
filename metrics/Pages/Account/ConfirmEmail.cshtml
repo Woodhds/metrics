@@ -1,8 +1,23 @@
 ﻿@page
-@model metrics.Pages.Account.ConfirmEmailModel
+@model metrics.Pages.Account.ConfirmEmail
 @{
-    ViewData["Title"] = "ConfirmEmail";
+    ViewBag.Title = "Подтверждение электронной почты";
 }
 
-<h2>ConfirmEmail</h2>
+<div class="flex-column justify-content-center">
+    <h3>Введите электронный адрес для повторной отправки сообщения о подтверждении</h3>
+    <form method="post" asp-antiforgery="true">
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="g-recaptcha" data-sitekey="6LcuNnQUAAAAAFCoJqJ3go0et7GOQZECKdZS1Ozy"></div>
+        <button class="btn btn-primary">Отправить</button>
+    </form>
+</div>
 
+@section scripts 
+{
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+}

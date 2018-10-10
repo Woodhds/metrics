@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
 using metrics.Services;
+using metrics.Services.Abstract;
 
 namespace metrics
 {
@@ -39,14 +40,18 @@ namespace metrics
             });
             services.AddScoped<DbContext, DataContext>();
             
-            services.AddDefaultIdentity<User>().AddEntityFrameworkStores<DataContext>()
+            services.AddDefaultIdentity<User>(options => {
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
+            }).AddEntityFrameworkStores<DataContext>()
                 .AddRoles<Role>();
 
-            services.Configure<IdentityOptions>(opts =>
-            {
-            });
+
             services.AddAuthentication()
-                .AddFacebook()
+                .AddFacebook(z => {
+                    z.AppId = Configuration.GetValue<string>("Facebook:AppId");
+                    z.ClientSecret = Configuration.GetValue<string>("Facebook:ClientSecret");
+                })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
                 {
                     opts.Audience = "metrics";
@@ -66,6 +71,8 @@ namespace metrics
 
             services.Configure<MailOptions>(Configuration.GetSection("Mail"));
             services.AddScoped<IEmailService, EmailService>();
+            services.AddHttpClient();
+            services.AddScoped<IHttpClient, BaseHttpClient>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
