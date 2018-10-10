@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using metrics.Options;
+using metrics.Services;
 
 namespace metrics
 {
@@ -61,6 +63,9 @@ namespace metrics
             {
                 z.RootPath = "ClientApp/dist";
             });
+
+            services.Configure<MailOptions>(Configuration.GetSection("Mail"));
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
