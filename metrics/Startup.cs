@@ -39,12 +39,18 @@ namespace metrics
                 opts.UseNpgsql(connectionString);
             });
             services.AddScoped<DbContext, DataContext>();
-            
-            services.AddDefaultIdentity<User>(options => {
+
+            services.AddDefaultIdentity<User>(options =>
+            {
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedEmail = true;
-            }).AddEntityFrameworkStores<DataContext>()
-                .AddRoles<Role>();
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            })
+            .AddRoles<Role>()
+            .AddRoleStore<UserRole>()
+            .AddEntityFrameworkStores<DataContext>();
+                
 
 
             services.AddAuthentication()

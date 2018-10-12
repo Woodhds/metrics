@@ -11,19 +11,19 @@
     <div asp-validation-summary="All"></div>
     <form method="post" asp-antiforgery="true">
         <div class="form-group">
-            <label asp-for="Email"></label>
-            <input class="form-control" asp-for="Email" />
-            <span class="text-danger" asp-validation-for="Email"></span>
+            <label asp-for="ViewModel.Email"></label>
+            <input class="form-control" asp-for="ViewModel.Email" />
+            <span class="text-danger" asp-validation-for="ViewModel.Email"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Password"></label>
-            <input class="form-control" asp-for="Password" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+            <label asp-for="ViewModel.Password"></label>
+            <input class="form-control" asp-for="ViewModel.Password" />
+            <span asp-validation-for="ViewModel.Password" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="ConfirmPassword"></label>
-            <input asp-for="ConfirmPassword" class="form-control" />
-            <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+            <label asp-for="ViewModel.ConfirmPassword"></label>
+            <input asp-for="ViewModel.ConfirmPassword" class="form-control" />
+            <span class="text-danger" asp-validation-for="ViewModel.ConfirmPassword"></span>
         </div>
         <button class="btn btn-primary">Зарегистрироваться</button>
     </form>

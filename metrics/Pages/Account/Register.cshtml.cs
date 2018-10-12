@@ -14,22 +14,8 @@ namespace metrics.Pages.Account
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
-        [EmailAddress]
-        [Required]
-        [Display(Name = "Email")]
         [BindProperty]
-        public string Email { get; set; }
-        [Display(Name = "Пароль")]
-        [Required]
-        [DataType(DataType.Password)]
-        [BindProperty]
-        public string Password { get; set; }
-        [Display(Name = "Повторите пароль")]
-        [Required]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password), ErrorMessage = "Пароли должны совпадать")]
-        [BindProperty]
-        public string ConfirmPassword { get; set; }
+        public RegisterViewModel ViewModel { get; set; }
 
         [TempData]
         public string Message { get; set; }
@@ -49,7 +35,7 @@ namespace metrics.Pages.Account
         {
             if(ModelState.IsValid)
             {
-                var existed = await _userManager.FindByEmailAsync(Email);
+                var existed = await _userManager.FindByEmailAsync(ViewModel.Email);
                 if (existed != null)
                 {
                     ModelState.AddModelError(string.Empty, "Пользователь с таким Email уже существует");
@@ -57,10 +43,10 @@ namespace metrics.Pages.Account
                 }
                 var user = new User()
                 {
-                    Email = Email,
-                    UserName = Email
+                    Email = ViewModel.Email,
+                    UserName = ViewModel.Email
                 };
-                var result = await _userManager.CreateAsync(user, Password);
+                var result = await _userManager.CreateAsync(user, ViewModel.Password);
 
                 if(result.Succeeded)
                 {
@@ -80,6 +66,23 @@ namespace metrics.Pages.Account
             }
 
             return Page();
+        }
+
+        public class RegisterViewModel
+        {
+            [EmailAddress]
+            [Required]
+            [Display(Name = "Email")]
+            public string Email { get; set; }
+            [Display(Name = "Пароль")]
+            [Required]
+            [DataType(DataType.Password)]
+            public string Password { get; set; }
+            [Display(Name = "Повторите пароль")]
+            [Required]
+            [DataType(DataType.Password)]
+            [Compare(nameof(Password), ErrorMessage = "Пароли должны совпадать")]
+            public string ConfirmPassword { get; set; }
         }
     }
 }
