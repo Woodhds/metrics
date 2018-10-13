@@ -34,6 +34,7 @@ namespace metrics.Pages.Account
             return Page();
         }
 
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostAsync()
         {
             if(ModelState.IsValid)

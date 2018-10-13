@@ -9,7 +9,7 @@ using metrics.Services.Helpers;
 
 namespace metrics.Services
 {
-    public class BaseHttpClient: IHttpClient
+    public class BaseHttpClient: IBaseHttpClient
     {
         protected readonly HttpClient _httpClient;
         public BaseHttpClient(IHttpClientFactory httpClientFactory)
@@ -17,28 +17,28 @@ namespace metrics.Services
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        protected async Task<T> GetAsync<T>(string url, NameValueCollection @params = null)
+        async Task<T> IBaseHttpClient.PostAsync<T>(string url, object content, NameValueCollection @params = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        async Task<T> IBaseHttpClient.GetAsync<T>(string url, NameValueCollection @params = null)
         {
             try
             {
                 var uri = @params.BuildUrl(url);
                 var response = await _httpClient.GetAsync(uri);
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
                 }
 
                 return default(T);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return default(T);
             }
-        }
-
-        Task<T> IHttpClient.GetAsync<T>(string url, NameValueCollection @params)
-        {
-            throw new NotImplementedException();
         }
     }
 }

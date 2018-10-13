@@ -31,7 +31,7 @@ namespace metrics.Services.Concrete
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var query = new NameValueCollection()
             {
-                { "token", token },
+                { "token", HttpUtility.UrlEncode(token) },
                 { "userId", user.Id.ToString() }
             }.BuildUrl(new UriBuilder(_httpContext.Request.Scheme,
                 _httpContext.Request.Host.Host, 

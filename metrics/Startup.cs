@@ -59,10 +59,6 @@ namespace metrics
             .AddEntityFrameworkStores<DataContext>();
 
             services.AddAuthentication()
-                .AddFacebook(z => {
-                    z.AppId = Configuration.GetValue<string>("Facebook:AppId");
-                    z.ClientSecret = Configuration.GetValue<string>("Facebook:ClientSecret");
-                })
 
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
                 {
@@ -89,9 +85,11 @@ namespace metrics
             });
 
             services.Configure<MailOptions>(Configuration.GetSection("Mail"));
+            services.Configure<GoogleRecaptcha>(Configuration.GetSection("GoogleRecaptcha"));
+            services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddHttpClient();
-            services.AddScoped<IHttpClient, BaseHttpClient>();
+            services.AddScoped<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<IUserManagerService, UserManagerService>();
         }
 
@@ -140,6 +138,7 @@ namespace metrics
                 });
             });
 
+            DataBaseInitializer.Init(serviceProvider);
             IdentityInitializer.Init(serviceProvider);
         }
     }

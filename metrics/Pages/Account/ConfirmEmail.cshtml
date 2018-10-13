@@ -4,8 +4,9 @@
     ViewBag.Title = "Подтверждение электронной почты";
 }
 
-<div class="flex-column justify-content-center">
+<div class="flex-column ml-auto mr-auto align-items-center">
     <h3>Введите электронный адрес для повторной отправки сообщения о подтверждении</h3>
+    <h4 class="text-success">@Model.Message</h4>
     <form method="post" asp-antiforgery="true">
         <div class="form-group">
             <label asp-for="Email"></label>
