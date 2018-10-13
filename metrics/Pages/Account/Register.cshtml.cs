@@ -7,23 +7,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Web;
+using DAL;
+using System.Transactions;
+using metrics.Services.Abstract;
 
 namespace metrics.Pages.Account
 {
     public class Register : PageModel
     {
         private readonly UserManager<User> _userManager;
-        private readonly IEmailService _emailService;
+        private readonly IUserManagerService _userManagerService;
         [BindProperty]
         public RegisterViewModel ViewModel { get; set; }
 
         [TempData]
         public string Message { get; set; }
 
-        public Register(UserManager<User> userManager, IEmailService emailService)
+        public Register(UserManager<User> userManager, IUserManagerService userManagerService)
         {
             _userManager = userManager;
-            _emailService = emailService;
+            _userManagerService = userManagerService;
         }
 
         public IActionResult OnGet()
@@ -35,32 +38,30 @@ namespace metrics.Pages.Account
         {
             if(ModelState.IsValid)
             {
-                var existed = await _userManager.FindByEmailAsync(ViewModel.Email);
-                if (existed != null)
+                using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    ModelState.AddModelError(string.Empty, "Пользователь с таким Email уже существует");
-                    return Page();
-                }
-                var user = new User()
-                {
-                    Email = ViewModel.Email,
-                    UserName = ViewModel.Email
-                };
-                var result = await _userManager.CreateAsync(user, ViewModel.Password);
-
-                if(result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, Constants.USER_ROLE_NAME);
-                    if(result.Succeeded)
+                    var existed = await _userManager.FindByEmailAsync(ViewModel.Email);
+                    if (existed != null)
                     {
-                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var callbackUrl = Url.Page("/Account/ConfirmEmail", null, 
-                            new { token = token, userId = user.Id }, Request.Scheme);
+                        ModelState.AddModelError(string.Empty, "Пользователь с таким Email уже существует");
+                        return Page();
+                    }
+                    var user = new User()
+                    {
+                        Email = ViewModel.Email,
+                        UserName = ViewModel.Email
+                    };
+                    var result = await _userManager.CreateAsync(user, ViewModel.Password);
 
-                        await _emailService.SendAsync("Подтверждение электронного адреса",
-                            $"Пожалуйста перейдите <a href='{HttpUtility.UrlEncode(callbackUrl)}'>по ссылке</a> для подтверждения электронного адреса", 
-                            new List<string> { user.Email });
-                        Message = "На ваш электронный ящик было отправлено письмо с подтверждением";
+                    if (result.Succeeded)
+                    {
+                        result = await _userManager.AddToRoleAsync(user, Constants.USER_ROLE_NAME);
+                        await _userManagerService.SendEmailConfirmation(user);
+                        if (result.Succeeded)
+                        {
+                            Message = "На ваш электронный ящик было отправлено письмо с подтверждением";
+                            transactionScope.Complete();
+                        }
                     }
                 }
             }

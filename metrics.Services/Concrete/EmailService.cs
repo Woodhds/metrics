@@ -21,11 +21,13 @@ namespace metrics.Services
             {
                 var message = new MailMessage();
                 message.Body = body;
+                message.Subject = title;
                 to.ForEach(x => message.To.Add(x));
                 message.IsBodyHtml = true;
                 message.From = new MailAddress(_mailOptions.From);
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.EnableSsl = _mailOptions.UseSSL;
+                smtpClient.UseDefaultCredentials = true;
                 smtpClient.Credentials = new NetworkCredential(_mailOptions.UserName, _mailOptions.Password);
                 await smtpClient.SendMailAsync(message);
             }

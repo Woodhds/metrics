@@ -1,9 +1,10 @@
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DAL
 {
-    public class BaseContext : DbContext
+    public class BaseContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public BaseContext(DbContextOptions options) : base(options)
         {
@@ -12,9 +13,6 @@ namespace DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>().HasKey(z => z.Id);
-            modelBuilder.Entity<Role>().HasKey(z => z.Id);
-            modelBuilder.Entity<UserRole>().HasKey(z => new { z.RoleId, z.UserId });
         }
     }
 }

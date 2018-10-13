@@ -14,6 +14,7 @@ namespace metrics.Pages.Account
         [Required]
         [Display(Name = "Email")]
         [EmailAddress]
+        [BindProperty]
         public string Email { get; set; }
         [TempData]
         public string ErrorMessage { get; set; }
@@ -42,6 +43,21 @@ namespace metrics.Pages.Account
                 }
                 return LocalRedirect("/");
             }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if(ModelState.IsValid)
+            {
+                var user = _userManager.FindByEmailAsync(Email);
+                if(user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                    return Page();
+                }
+            }
+
             return Page();
         }
     }

@@ -8,7 +8,7 @@
     <h3><a asp-page="/Account/Register">Зарегистрироваться</a></h3>
     <span>Или</span>
     <h3 class="text-muted">Войти</h3>
-    <div asp-validation-summary="All"></div>
+    <div asp-validation-summary="All" class="text-danger"></div>
     <form method="post" asp-antiforgery="true">
         <div class="form-group">
             <label asp-for="Email"></label>

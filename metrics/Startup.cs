@@ -2,7 +2,6 @@
 using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
 using metrics.Services;
 using metrics.Services.Abstract;
+using System;
+using DAL.Identity;
+using metrics.Services.Concrete;
 
 namespace metrics
 {
@@ -39,30 +41,41 @@ namespace metrics
                 opts.UseNpgsql(connectionString);
             });
             services.AddScoped<DbContext, DataContext>();
+            services.AddHttpContextAccessor();
 
             services.AddDefaultIdentity<User>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedEmail = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = false;
             })
             .AddRoles<Role>()
-            .AddRoleStore<UserRole>()
+            .AddRoleManager<RoleManager<Role>>()
+            .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<DataContext>();
-                
-
 
             services.AddAuthentication()
                 .AddFacebook(z => {
                     z.AppId = Configuration.GetValue<string>("Facebook:AppId");
                     z.ClientSecret = Configuration.GetValue<string>("Facebook:ClientSecret");
                 })
+
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
                 {
                     opts.Audience = "metrics";
                     opts.ClaimsIssuer = "metrics";
                 });
+
+            services.ConfigureApplicationCookie(z =>
+            {
+                z.LoginPath = "/Account/Login";
+                z.ReturnUrlParameter = "returnUrl";
+                z.Cookie.HttpOnly = true;
+            });
 
             
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -79,9 +92,10 @@ namespace metrics
             services.AddScoped<IEmailService, EmailService>();
             services.AddHttpClient();
             services.AddScoped<IHttpClient, BaseHttpClient>();
+            services.AddScoped<IUserManagerService, UserManagerService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -125,6 +139,8 @@ namespace metrics
                     }
                 });
             });
+
+            IdentityInitializer.Init(serviceProvider);
         }
     }
 }

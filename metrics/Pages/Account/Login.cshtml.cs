@@ -18,13 +18,15 @@ namespace metrics.Pages.Account
         [Display(Name = "Email")]
         [EmailAddress]
         [Required]
+        [BindProperty]
         public string Email { get; set; }
 
         [Display(Name = "Пароль")]
         [DataType(DataType.Password)]
         [Required]
+        [BindProperty]
         public string Password { get; set; }
-
+        [BindProperty]
         public string ReturnUrl { get; set; }
 
         [TempData]
@@ -61,10 +63,10 @@ namespace metrics.Pages.Account
 
                 if (!user.EmailConfirmed)
                 {
-                    return RedirectToPage("Account/ConfirmEmail");
+                    return RedirectToPage("ConfirmEmail");
                 }
 
-                if(!(await _userManager.CheckPasswordAsync(user, Password)))
+                if (!(await _userManager.CheckPasswordAsync(user, Password)))
                 {
                     ModelState.AddModelError(string.Empty, "Указан неверный пароль");
                     return Page();
@@ -85,7 +87,7 @@ namespace metrics.Pages.Account
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName)
             };
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
