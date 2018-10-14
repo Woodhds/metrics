@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using metrics.Models;
 using Data.Entities;
 using DAL;
+using Microsoft.AspNetCore.Authentication;
 
 namespace metrics.Controllers
 {
@@ -21,8 +22,6 @@ namespace metrics.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 

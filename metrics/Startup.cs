@@ -16,6 +16,14 @@ using metrics.Services.Abstract;
 using System;
 using DAL.Identity;
 using metrics.Services.Concrete;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Collections.Generic;
+using System.Security.Claims;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace metrics
 {
@@ -58,19 +66,32 @@ namespace metrics
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<DataContext>();
 
-            services.AddAuthentication()
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
                 {
                     opts.Audience = "metrics";
                     opts.ClaimsIssuer = "metrics";
-                });
+                })
+                .AddCookie();
+                //.AddOAuth("vk", e =>
+                //{
+                //    e.ClientId = Configuration.GetValue<string>("Vkontakte:ClientId");
+                //    e.ClientSecret = Configuration.GetValue<string>("Vkontakte:ClientSecret");
+                //    e.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
+                //    e.TokenEndpoint = "https://oauth.vk.com/access_token";
+                //    e.CallbackPath = "/account/signin-vkontakte";
+                //    e.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
+                //});
 
             services.ConfigureApplicationCookie(z =>
             {
                 z.LoginPath = "/Account/Login";
                 z.ReturnUrlParameter = "returnUrl";
                 z.Cookie.HttpOnly = true;
+                z.SlidingExpiration = true;
+                z.ExpireTimeSpan = TimeSpan.FromDays(1);
             });
 
             
@@ -84,6 +105,14 @@ namespace metrics
                 z.RootPath = "ClientApp/dist";
             });
 
+            services.AddAuthorization(z =>
+            {
+                z.AddPolicy("VKPolicy", e =>
+                {
+                    e.RequireClaim("VKToken");
+                });
+            });
+
             services.Configure<MailOptions>(Configuration.GetSection("Mail"));
             services.Configure<GoogleRecaptcha>(Configuration.GetSection("GoogleRecaptcha"));
             services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
@@ -91,6 +120,7 @@ namespace metrics
             services.AddHttpClient();
             services.AddScoped<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<IUserManagerService, UserManagerService>();
+            services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
