@@ -24,6 +24,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace metrics
 {
@@ -102,7 +103,7 @@ namespace metrics
                 manager => { manager.FeatureProviders.Add(new GenericControllerFeatureProvider()); });
             services.AddSpaStaticFiles(z =>
             {
-                z.RootPath = "ClientApp/dist";
+                z.RootPath = "wwwroot/dist";
             });
 
             services.AddAuthorization(z =>
@@ -153,17 +154,26 @@ namespace metrics
                 builder.MapRoute("default", "{controller}/{action}/{id?}",
                         new {controller = "Home", action = "Index"});
                 });
-            
 
-            app.Map("/admin", builder =>
+            app.UseSpaStaticFiles();
+            app.Map("/repost/user", builder =>
             {
-                builder.UseSpaStaticFiles();
-                builder.UseSpa(spaBuilder =>
+                builder.UseSpa(spa =>
                 {
-                    spaBuilder.Options.SourcePath = "ClientApp";
+                    spa.Options.SourcePath = "ClientApp";
+
+                    spa.UseSpaPrerendering(options =>
+                    {
+                        options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
+                        options.BootModuleBuilder = env.IsDevelopment()
+                            ? new AngularCliBuilder(npmScript: "build:ssr")
+                            : null;
+                        options.ExcludeUrls = new[] { "/sockjs-node" };
+                    });
+
                     if (env.IsDevelopment())
                     {
-                        spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                        spa.UseAngularCliServer("start");
                     }
                 });
             });

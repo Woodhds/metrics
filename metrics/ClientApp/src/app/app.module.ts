@@ -16,7 +16,7 @@ import {HttpCorsInterceptor} from "./http-interceptor";
     ProductListComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'metrics' }),
     AppRoutingModule,
     GridModule,
     BrowserAnimationsModule,

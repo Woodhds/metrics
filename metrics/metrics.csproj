@@ -6,10 +6,16 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <UserSecretsId>37a3abed-c8fa-407d-9fd6-40af533e3630</UserSecretsId>
+    <BuildServerSideRenderer>true</BuildServerSideRenderer>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\app.server.module.ts" />
+    <None Remove="ClientApp\src\main.server.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +40,11 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\app.server.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\main.server.ts" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
