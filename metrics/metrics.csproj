@@ -10,12 +10,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\src\app\Product\**" />
+    <Compile Remove="ClientApp\src\app\services\**" />
+    <Content Remove="ClientApp\src\app\Product\**" />
+    <Content Remove="ClientApp\src\app\services\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Product\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\services\**" />
+    <None Remove="ClientApp\src\app\Product\**" />
+    <None Remove="ClientApp\src\app\services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="compilerconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\app.server.module.ts" />
-    <None Remove="ClientApp\src\main.server.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,18 +43,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\Product" />
-    <Folder Include="ClientApp\src\app\services" />
+    <Folder Include="Areas\Reposts\Controllers" />
+    <Folder Include="ClientApp\src\app\Components" />
     <Folder Include="wwwroot\images\products" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\app.server.module.ts" />
-    <TypeScriptCompile Include="ClientApp\src\main.server.ts" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
