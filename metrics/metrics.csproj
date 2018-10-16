@@ -10,14 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ClientApp\src\app\Product\**" />
-    <Compile Remove="ClientApp\src\app\services\**" />
-    <Content Remove="ClientApp\src\app\Product\**" />
-    <Content Remove="ClientApp\src\app\services\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\Product\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\services\**" />
-    <None Remove="ClientApp\src\app\Product\**" />
-    <None Remove="ClientApp\src\app\services\**" />
+    <Compile Remove="%2a%2a\**" />
+    <Content Remove="%2a%2a\**" />
+    <EmbeddedResource Remove="%2a%2a\**" />
+    <None Remove="%2a%2a\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,16 +21,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\app\app.server.module.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+    <PackageReference Include="NLog" Version="4.5.10" />
+    <PackageReference Include="NLog.Web" Version="4.7.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
-    <PackageReference Include="Telerik.UI.for.AspNet.Core.Trial" Version="2018.3.911" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,13 +37,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Reposts\Controllers" />
-    <Folder Include="ClientApp\src\app\Components" />
-    <Folder Include="wwwroot\images\products" />
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="compilerconfig.json" />
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>

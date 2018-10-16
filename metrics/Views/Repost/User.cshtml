@@ -1,0 +1,19 @@
+﻿@model RepostsViewModel
+@{
+    ViewBag.Title = "Пользователь";
+}
+
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Filter">Пользователь</label>
+        <input class="form-control" asp-for="Filter" />
+        <button class="btn btn-primary" type="submit">Получить</button>
+    </div>
+</form>
+<div class="row">
+    @foreach (var post in Model.Messages)
+    {
+        <span>@post.owner_id</span>
+    }
+</div>

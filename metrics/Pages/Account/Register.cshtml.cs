@@ -56,7 +56,7 @@ namespace metrics.Pages.Account
 
                     if (result.Succeeded)
                     {
-                        result = await _userManager.AddToRoleAsync(user, Constants.USER_ROLE_NAME);
+                        result = await _userManager.AddToRoleAsync(user, DAL.Constants.USER_ROLE_NAME);
                         await _userManagerService.SendEmailConfirmation(user);
                         if (result.Succeeded)
                         {

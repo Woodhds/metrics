@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using metrics.Services.Options;
 
 namespace metrics
 {
@@ -76,15 +77,6 @@ namespace metrics
                     opts.ClaimsIssuer = "metrics";
                 })
                 .AddCookie();
-                //.AddOAuth("vk", e =>
-                //{
-                //    e.ClientId = Configuration.GetValue<string>("Vkontakte:ClientId");
-                //    e.ClientSecret = Configuration.GetValue<string>("Vkontakte:ClientSecret");
-                //    e.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
-                //    e.TokenEndpoint = "https://oauth.vk.com/access_token";
-                //    e.CallbackPath = "/account/signin-vkontakte";
-                //    e.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
-                //});
 
             services.ConfigureApplicationCookie(z =>
             {
@@ -97,20 +89,15 @@ namespace metrics
 
             
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
                 manager => { manager.FeatureProviders.Add(new GenericControllerFeatureProvider()); });
-            services.AddSpaStaticFiles(z =>
-            {
-                z.RootPath = "wwwroot/dist";
-            });
 
             services.AddAuthorization(z =>
             {
                 z.AddPolicy("VKPolicy", e =>
                 {
-                    e.RequireClaim("VKToken");
+                    e.RequireClaim(Constants.VK_TOKEN_CLAIM);
                 });
             });
 
@@ -119,9 +106,12 @@ namespace metrics
             services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddHttpClient();
+            services.AddLogging();
             services.AddScoped<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<IUserManagerService, UserManagerService>();
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
+            services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
+            services.AddSingleton<IVkClient, VkClient>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
@@ -154,20 +144,6 @@ namespace metrics
                 builder.MapRoute("default", "{controller}/{action}/{id?}",
                         new {controller = "Home", action = "Index"});
                 });
-
-            app.UseSpaStaticFiles();
-            app.Map("/repost/user", builder =>
-            {
-                builder.UseSpa(spa =>
-                {
-                    spa.Options.SourcePath = "ClientApp";
-
-                    if (env.IsDevelopment())
-                    {
-                        spa.UseAngularCliServer("start");
-                    }
-                });
-            });
 
             DataBaseInitializer.Init(serviceProvider);
             IdentityInitializer.Init(serviceProvider);

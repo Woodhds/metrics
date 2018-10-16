@@ -9,11 +9,11 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using System.Linq;
 using System;
-using Microsoft.AspNetCore.Identity;
-using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using metrics.Services.Abstract;
+using metrics.Models;
 
 namespace metrics.Controllers
 {
@@ -22,11 +22,13 @@ namespace metrics.Controllers
     {
         private readonly VkontakteOptions _options;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IVkClient _vkClient;
 
-        public RepostController(IHttpClientFactory httpClientFactory, IOptions<VkontakteOptions> options)
+        public RepostController(IHttpClientFactory httpClientFactory, IOptions<VkontakteOptions> options, IVkClient vkClient)
         {
             _httpClientFactory = httpClientFactory;
             _options = options.Value;
+            _vkClient = vkClient;
         }
 
         [HttpGet]
@@ -47,7 +49,7 @@ namespace metrics.Controllers
             {
                 var response = await httpClient.GetAsync(QueryHelpers.AddQueryString(VkontakteOptions.UserInformationEndpoint, new Dictionary<string, string>()
                 {
-                    ["v"] = VkontakteOptions.ApiVersion,
+                    ["v"] = Constants.ApiVersion,
                     ["access_token"] = token,
                     ["fields"] = string.Join(",", new List<string>() { "first_name", "last_name" })
                 }));
@@ -62,7 +64,7 @@ namespace metrics.Controllers
                     var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.NameIdentifier, payload["response"].First["id"]?.ToString()),
-                        new Claim("VKToken", token),
+                        new Claim(Constants.VK_TOKEN_CLAIM, token),
                         new Claim(ClaimTypes.Name, $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}")
                     };
                     await HttpContext.SignOutAsync();
@@ -76,9 +78,19 @@ namespace metrics.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetReposts()
+        [HttpGet]
+        [Authorize(Policy = "VkPolicy")]
+        public new IActionResult User()
         {
-            return View();
+            return View(new RepostsViewModel());
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "VkPolicy")]
+        public new async Task<IActionResult> User(RepostsViewModel model)
+        {
+            model.Messages = (await _vkClient.GetReposts(model.Filter)).Response.Items;
+            return View(model);
         }
     }
 }
