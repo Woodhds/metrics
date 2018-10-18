@@ -8,6 +8,6 @@ namespace metrics.Services.Abstract
 {
     public interface IVkClient : IBaseHttpClient
     {
-        Task<VkResponse<List<VkMessage>>> GetReposts(string id);
+        Task<VkResponse<List<VkMessage>>> GetReposts(string id, int skip, int take);
     }
 }

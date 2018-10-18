@@ -26,17 +26,17 @@ namespace metrics.Services.Concrete
             urls = options.Value;
         }
 
-        public async Task<VkResponse<List<VkMessage>>> GetReposts(string id)
+        public async Task<VkResponse<List<VkMessage>>> GetReposts(string id, int skip, int take)
         {
-            var workID = Regex.Match(id.Replace(urls.MainDomain, string.Empty), @"\d+");
+            var workID = id.Replace(urls.MainDomain, string.Empty);
             var userid = string.Empty;
             var owner = string.Empty;
-            if(!string.IsNullOrEmpty(workID.Value))
+            if(workID.StartsWith("id"))
             {
-                userid = workID.Value;
+                userid = Regex.Match(workID, @"\d+")?.Value;
             } else
             {
-                owner = id.Replace(urls.MainDomain, string.Empty);
+                owner = workID;
             }
             var ci = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
             if(ci == null)
@@ -48,7 +48,8 @@ namespace metrics.Services.Concrete
             {
                 { "v", Constants.ApiVersion },
                 { "access_token", token?.ToString() },
-                { "count", 100.ToString() }
+                { "count", take.ToString() },
+                { "offset", skip.ToString() }
             };
             if(!string.IsNullOrEmpty(userid))
             {

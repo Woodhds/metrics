@@ -3,17 +3,68 @@
     ViewBag.Title = "Пользователь";
 }
 
-
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Filter">Пользователь</label>
-        <input class="form-control" asp-for="Filter" />
-        <button class="btn btn-primary" type="submit">Получить</button>
+<div id="user-repost">
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Filter">Пользователь</label>
+            <input data-bind="value: user" class="form-control" asp-for="Filter" />
+            <button data-bind="events: { click: search }" class="btn btn-primary" type="submit">Получить</button>
+        </div>
+    </form>
+    <br />
+    <div data-role="listview" class="row" data-template="repost-tmpl" data-bind="source: reposts" data-auto-bind="false">
     </div>
-</form>
-<div class="row">
-    @foreach (var post in Model.Messages)
-    {
-        <span>@post.owner_id</span>
-    }
+    <div data-role="pager" data-auto-bind="false" data-bind="source: reposts">
+
+    </div>
 </div>
+
+@section Scripts 
+{
+    <script type="text/x-kendo-template" id="repost-tmpl">
+        <div class="card col-sm-12 col-md-3 col-lg-4">
+            <div class="card-header">
+                <h4>#:owner_id#</h4>
+            </div>
+            <div class="card-body">
+                <div class="card-text">
+                    #= text #
+                </div>
+            </div>
+        </div>
+    </script>
+    <script src="~/js/kendo.all.min.js"></script>
+    <script>
+        $(function () {
+            var viewModel = kendo.observable({
+                reposts: new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: '/repost/getData'
+                        }
+                    },
+                    pageSize: 50,
+                    serverPaging: true,
+                    schema: {
+                        data: 'data',
+                        total: 'total'
+                    }
+                }),
+                user: '',
+                search: function (e) {
+                    e.preventDefault()
+                    this.reposts.transport.options.read.data = {
+                        userId: this.user
+                    };
+                    this.reposts.fetch();
+                }
+            });
+            kendo.bind("#user-repost", viewModel);
+        });
+    </script>
+}
+
+@section Styles 
+{
+    <link rel="stylesheet" href="~/css/kendo.bootstrap-v4.min.css"/>
+}

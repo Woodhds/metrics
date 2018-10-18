@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
 using metrics.Models;
+using System.Linq;
 
 namespace metrics.Controllers
 {
@@ -85,12 +86,18 @@ namespace metrics.Controllers
             return View(new RepostsViewModel());
         }
 
-        [HttpPost]
         [Authorize(Policy = "VkPolicy")]
-        public new async Task<IActionResult> User(RepostsViewModel model)
+        public new async Task<IActionResult> GetData(string userId, int skip, int take)
         {
-            model.Messages = (await _vkClient.GetReposts(model.Filter)).Response.Items;
-            return View(model);
+            var data = await _vkClient.GetReposts(userId, skip, take);
+            var reposts = data.Response
+                .Items.Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First());
+            return Ok(
+                new {
+                    Data = reposts,
+                    Total = data.Response.Count
+                }
+            );
         }
     }
 }
