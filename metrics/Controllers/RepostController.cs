@@ -83,7 +83,7 @@ namespace metrics.Controllers
         [Authorize(Policy = "VkPolicy")]
         public new IActionResult User()
         {
-            return View(new RepostsViewModel());
+            return View();
         }
 
         [Authorize(Policy = "VkPolicy")]
@@ -91,7 +91,8 @@ namespace metrics.Controllers
         {
             var data = await _vkClient.GetReposts(userId, skip, take);
             var reposts = data.Response
-                .Items.Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First());
+                .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeMilliseconds(c.date))
+                .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First()).Distinct().ToList();
             return Ok(
                 new {
                     Data = reposts,
