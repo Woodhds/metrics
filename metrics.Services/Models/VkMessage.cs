@@ -14,6 +14,7 @@ namespace metrics.Services.Models
         public PostType Post_type { get; set; }
         public List<VkMessage> Copy_History { get; set; }
         public List<MessageAttachment> Attachments { get; set; }
+        public MessageReposts Reposts { get; set; }
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>

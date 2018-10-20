@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
 using metrics.Models;
 using System.Linq;
+using metrics.Services.Models;
+using Microsoft.Extensions.Logging;
 
 namespace metrics.Controllers
 {
@@ -24,12 +26,14 @@ namespace metrics.Controllers
         private readonly VkontakteOptions _options;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IVkClient _vkClient;
-
-        public RepostController(IHttpClientFactory httpClientFactory, IOptions<VkontakteOptions> options, IVkClient vkClient)
+        private readonly ILogger<RepostController> _logger;
+        public RepostController(IHttpClientFactory httpClientFactory, IOptions<VkontakteOptions> options, 
+            IVkClient vkClient, ILogger<RepostController> logger)
         {
             _httpClientFactory = httpClientFactory;
             _options = options.Value;
             _vkClient = vkClient;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -87,9 +91,9 @@ namespace metrics.Controllers
         }
 
         [Authorize(Policy = "VkPolicy")]
-        public async Task<IActionResult> GetData(string userId, int skip, int take, string search = null)
+        public IActionResult GetData(string userId, int skip, int take, string search = null)
         {
-            var data = await _vkClient.GetReposts(userId, skip, take, search);
+            var data = _vkClient.GetReposts(userId, skip, take, search);
             var reposts = data.Response
                 .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.date))
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First()).Distinct().ToList();
@@ -103,10 +107,18 @@ namespace metrics.Controllers
 
         [Authorize(Policy = "VkPolicy")]
         [HttpPost]
-        public async Task<IActionResult> Repost(int owner, int id)
+        public IActionResult Repost(List<VkRepostViewModel> reposts)
         {
-            var data = await _vkClient.Repost(owner, id);
-            return data.Response.Success ? (IActionResult) Ok() : BadRequest();
+            try
+            {
+                _vkClient.Repost(reposts);
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return BadRequest();
+            }
         }
     }
 }

@@ -4,15 +4,18 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using metrics.Services.Abstract;
 using metrics.Services.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace metrics.Services.Concrete
 {
     public class BaseHttpClient : IBaseHttpClient
     {
         private readonly HttpClient _httpClient;
-        public BaseHttpClient(IHttpClientFactory httpClientFactory)
+        private readonly ILogger<BaseHttpClient> _logger;
+        public BaseHttpClient(IHttpClientFactory httpClientFactory, ILogger<BaseHttpClient> logger)
         {
             _httpClient = httpClientFactory.CreateClient();
+            _logger = logger;
         }
 
         protected virtual async Task<T> PostAsync<T>(string url, object content, NameValueCollection @params = null)
@@ -30,6 +33,7 @@ namespace metrics.Services.Concrete
             }
             catch (Exception e)
             {
+                _logger.LogError(e, e.Message);
                 return default;
             }
         }
@@ -50,6 +54,7 @@ namespace metrics.Services.Concrete
             }
             catch (Exception e)
             {
+                _logger.LogError(e, e.Message);
                 return default;
             }
         }

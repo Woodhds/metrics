@@ -20,12 +20,15 @@ namespace metrics.Services.Concrete
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly VKApiUrls urls;
+        private readonly ILogger<VkClient> _logger;
         private object locker = new object();
         public VkClient(IHttpClientFactory httpClientFactory,
-            IHttpContextAccessor httpContextAccessor, IOptions<VKApiUrls> options) : base(httpClientFactory)
+            IHttpContextAccessor httpContextAccessor, IOptions<VKApiUrls> options,
+            ILogger<VkClient> logger) : base(httpClientFactory, logger)
         {
             _httpContextAccessor = httpContextAccessor;
             urls = options.Value;
+            _logger = logger;
         }
 
         private NameValueCollection AddVkParams(NameValueCollection @params)
@@ -42,10 +45,11 @@ namespace metrics.Services.Concrete
             return @params;
         }
 
-        private async Task<T> GetVkAsync<T>(string url, NameValueCollection @params = null)
+        private T GetVkAsync<T>(string method, NameValueCollection @params = null)
         {
             @params = AddVkParams(@params);
             T result;
+            var url = new Uri(new Uri(urls.Domain), method).AbsoluteUri;
             lock (locker)
             {
                 result = base.GetAsync<T>(url, @params).GetAwaiter().GetResult();
@@ -55,12 +59,13 @@ namespace metrics.Services.Concrete
             return result;
         }
 
-        private async Task<T> PostVkAsync<T>(string url, object content, NameValueCollection @params = null)
+        private T PostVkAsync<T>(string method, object content, NameValueCollection @params = null)
         {
             @params = AddVkParams(@params);
             T result;
             lock (locker)
             {
+                var url = new Uri(new Uri(urls.Domain), method).AbsoluteUri;
                 result = base.PostAsync<T>(url, content, @params).GetAwaiter().GetResult();
                 Thread.Sleep(500);
             }
@@ -68,26 +73,27 @@ namespace metrics.Services.Concrete
             return result;
         }
 
-        public async Task<VkResponse<List<VkMessage>>> GetReposts(string id, int skip, int take, string search = null)
+        public VkResponse<List<VkMessage>> GetReposts(string id, int skip, int take, string search = null)
         {
             var workID = id.Replace(urls.MainDomain, string.Empty);
             var userid = string.Empty;
             var owner = string.Empty;
-            if(workID.StartsWith("id"))
+            if (workID.StartsWith("id"))
             {
                 userid = Regex.Match(workID, @"\d+")?.Value;
-            } else
+            }
+            else
             {
                 owner = workID;
             }
-            
+
             var @params = new NameValueCollection()
             {
                 { "count", take.ToString() },
                 { "offset", skip.ToString() },
                 { "filter", "owner" }
             };
-            if(!string.IsNullOrEmpty(userid))
+            if (!string.IsNullOrEmpty(userid))
             {
                 @params.Add("owner_id", userid);
             }
@@ -95,24 +101,65 @@ namespace metrics.Services.Concrete
             {
                 @params.Add("domain", owner);
             }
-            string url = new Uri(new Uri(urls.Domain), urls.Wall).AbsoluteUri;
+            string method = urls.Wall;
             if (!string.IsNullOrEmpty(search))
             {
-                url = new Uri(new Uri(urls.Domain), urls.WallSearch).AbsoluteUri;
+                method = urls.WallSearch;
                 @params.Add("query", search);
             }
-            return await GetVkAsync<VkResponse<List<VkMessage>>>(url, @params);
+            return GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
         }
 
-        public async Task<RepostMessageResponse> Repost(int owner, int id)
+        public void JoinGroup(int groupId)
         {
-            var @params = new NameValueCollection()
+            var @params = new NameValueCollection
             {
-                { "object", $"wall{owner}_{id}" }
+                { "group_id", groupId.ToString() }
             };
 
-            return await PostVkAsync<RepostMessageResponse>(
-                new Uri(new Uri(urls.Domain), urls.Repost).AbsoluteUri, null, @params);
+            GetVkAsync<VkResponse<int>>(urls.GroupJoin, @params);
+        }
+
+        public void Repost(List<VkRepostViewModel> vkRepostViewModels)
+        {
+            if (vkRepostViewModels == null)
+                throw new ArgumentNullException(nameof(vkRepostViewModels));
+
+            var posts = GetById(vkRepostViewModels);
+            foreach (var item in posts.Response.Items.Where(c => c.Reposts != null 
+                && !c.Reposts.User_reposted))
+            {
+                try
+                {
+                    foreach(var group in posts.Response.Groups)
+                    {
+                        JoinGroup(group.Id);
+                    }
+                    var @params = new NameValueCollection()
+                    {
+                        { "object", $"wall{item.owner_id}_{item.id}" }
+                    };
+                    PostVkAsync<RepostMessageResponse>(urls.Repost, null, @params);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, e.Message);
+                }
+            }
+        }
+
+        public VkResponse<List<VkMessage>> GetById(List<VkRepostViewModel> vkRepostViewModels)
+        {
+            if (vkRepostViewModels == null)
+            {
+                throw new ArgumentNullException(nameof(vkRepostViewModels));
+            }
+            var @params = new NameValueCollection
+            {
+                { "posts", string.Join(",", vkRepostViewModels.Select(c => $"{c.Owner_id}_{c.Id}")) },
+                { "extended", 1.ToString() }
+            };
+            return GetVkAsync<VkResponse<List<VkMessage>>>(urls.WallGetById, @params);
         }
     }
 }

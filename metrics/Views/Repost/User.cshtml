@@ -44,9 +44,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a class="repost-btn text-primary">
-                    <svg width="10" height="10">
-                        <use xlink:href="thumbup"></use>
+                <a href="\\#" class="repost-btn text-primary" data-bind="events: { click: repost }">
+                    <svg width="25" height="25">
+                        <use xlink:href="\\#thumbup"></use>
                     </svg>
                 </a>
             </div>
@@ -55,27 +55,6 @@
     <script src="~/js/kendo.all.min.js"></script>
     <script>
         $(function () {
-            $('.repost-btn').on('click', function(e) {
-                e.preventDefault();
-                var btn = this;
-                debugger;
-                var card = $(btn).closest('.card');
-                var lv = $('#repost-lv').data('kendoListView');
-                var dataItem = lv.dataItem(card);
-                if (dataItem) {
-                    $.ajax({
-                        type: 'POST',
-                        data: {
-                            owner: dataItem.owner_id,
-                            id: dataItem.id
-                        },
-                        success: function() {
-                            btn.css('color', 'red');
-                        }
-                    });
-                }
-                
-            });
             var viewModel = kendo.observable({
                 reposts: new kendo.data.DataSource({
                     transport: {
@@ -91,6 +70,26 @@
                         total: 'total'
                     }
                 }),
+                repost: function (e) {
+                    e.preventDefault();
+                    debugger;
+                    var dataItem = e.data;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/repost/repost',
+                        data: {
+                            reposts: [
+                                {
+                                    owner_id: dataItem.owner_id,
+                                    id: dataItem.id
+                                }
+                            ]
+                        },
+                        success: function () {
+                            btn.css('color', 'red');
+                        }
+                    });
+                },
                 user: '',
                 filter: function (e) {
                     e.preventDefault();
