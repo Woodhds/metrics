@@ -4,7 +4,7 @@ using System.Text;
 
 namespace metrics.Services.Models
 {
-    public class VkResponse<T> where T: class
+    public class VkResponse<T>
     {
         public VkResponseItems<T> Response { get; set; }
 

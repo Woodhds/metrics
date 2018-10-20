@@ -87,11 +87,11 @@ namespace metrics.Controllers
         }
 
         [Authorize(Policy = "VkPolicy")]
-        public new async Task<IActionResult> GetData(string userId, int skip, int take)
+        public async Task<IActionResult> GetData(string userId, int skip, int take, string search = null)
         {
-            var data = await _vkClient.GetReposts(userId, skip, take);
+            var data = await _vkClient.GetReposts(userId, skip, take, search);
             var reposts = data.Response
-                .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeMilliseconds(c.date))
+                .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.date))
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First()).Distinct().ToList();
             return Ok(
                 new {
@@ -99,6 +99,14 @@ namespace metrics.Controllers
                     Total = data.Response.Count
                 }
             );
+        }
+
+        [Authorize(Policy = "VkPolicy")]
+        [HttpPost]
+        public async Task<IActionResult> Repost(int owner, int id)
+        {
+            var data = await _vkClient.Repost(owner, id);
+            return data.Response.Success ? (IActionResult) Ok() : BadRequest();
         }
     }
 }

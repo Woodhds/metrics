@@ -2,27 +2,39 @@
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using metrics.Services.Helpers;
 using metrics.Services.Abstract;
-using Microsoft.Extensions.Logging;
+using metrics.Services.Helpers;
 
-namespace metrics.Services
+namespace metrics.Services.Concrete
 {
     public class BaseHttpClient : IBaseHttpClient
     {
-        protected readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
         public BaseHttpClient(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        protected Task<T> PostAsync<T>(string url, object content, NameValueCollection @params = null)
+        protected virtual async Task<T> PostAsync<T>(string url, object content, NameValueCollection @params = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var uri = @params.BuildUrl(url);
+                var response = await _httpClient.PostAsJsonAsync(uri, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return default;
+                }
+
+                return await response.Content.ReadAsAsync<T>();
+            }
+            catch (Exception e)
+            {
+                return default;
+            }
         }
 
-        protected async Task<T> GetAsync<T>(string url, NameValueCollection @params = null)
+        protected virtual async Task<T> GetAsync<T>(string url, NameValueCollection @params = null)
         {
             try
             {
@@ -31,14 +43,14 @@ namespace metrics.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+                    return await response.Content.ReadAsAsync<T>();
                 }
 
-                return default(T);
+                return default;
             }
             catch (Exception e)
             {
-                return default(T);
+                return default;
             }
         }
     }

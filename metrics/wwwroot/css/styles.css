@@ -243,3 +243,6 @@ footer {
       .category-list__list-item__link.active {
         background-color: #0e99da;
         color: #fff; }
+
+.repost-btn.thumbs {
+  fill: red; }

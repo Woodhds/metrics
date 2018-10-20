@@ -10,7 +10,7 @@
         {
             <div class="product-list__product" itemscope="https://schema.org/Product">
 
-                <a itemprop="url" href="@Url.Action("Index", "Product", new {id = product.Slug})" title="@product.Name">
+                <a itemprop="url" title="@product.Name">
                     <figure>
                         <img src="@(!string.IsNullOrEmpty(product.Thumbnail) ? Url.Content("images/products/" + product.Thumbnail) : Url.Content("images/no-photo.svg"))"
                              itemprop="image" class="product-list__product__image"/>
