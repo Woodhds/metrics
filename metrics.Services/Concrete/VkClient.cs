@@ -117,10 +117,10 @@ namespace metrics.Services.Concrete
                 { "group_id", groupId.ToString() }
             };
 
-            GetVkAsync<VkResponse<int>>(urls.GroupJoin, @params);
+            GetVkAsync<SimpleVkResponse<bool>>(urls.GroupJoin, @params);
         }
 
-        public void Repost(List<VkRepostViewModel> vkRepostViewModels)
+        public void Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0)
         {
             if (vkRepostViewModels == null)
                 throw new ArgumentNullException(nameof(vkRepostViewModels));
@@ -140,6 +140,7 @@ namespace metrics.Services.Concrete
                         { "object", $"wall{item.owner_id}_{item.id}" }
                     };
                     PostVkAsync<RepostMessageResponse>(urls.Repost, null, @params);
+                    Thread.Sleep(timeout * 1000);
                 }
                 catch (Exception e)
                 {
