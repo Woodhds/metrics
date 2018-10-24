@@ -1,0 +1,16 @@
+<form class="k-form" method="post" #f="ngForm" (ngSubmit)="handleLogin()" novalidate>
+  <div *ngIf="message" class="k-text-error">
+    {{message}}
+  </div>
+  <div class="k-form-field">
+    <a target="_blank"
+       href="https://oauth.vk.com/authorize?client_id={{clientId}}&display=page&redirect_uri=http://vk.com/blank.php&scope=111111111&response_type=token&v=5.85">Получить токен</a>
+  </div>
+  <div class="form-group">
+    <kendo-textbox-container id="Token" floatingLabel="Токен">
+      <input required kendoTextBox ngModel class="k-textbox" type="text" name="Token" />
+    </kendo-textbox-container>
+
+  </div>
+  <button type="submit" [disabled]="!f.valid" class="k-button k-primary">Отправить</button>
+</form>

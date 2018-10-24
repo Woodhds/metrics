@@ -1,0 +1,33 @@
+$ms: 1.618;
+$c-black: #000;
+$font-color: #222;
+$c-nav-background: #0e99da;
+$font-stack-sans: 'Fira sans', Helvetica, Verdana, sans-serif;
+
+
+html {
+  background-color: #eee;
+  color: $font-color;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: $font-stack-sans;
+}
+
+main {
+  margin-top: $ms * 3.5rem;
+  display: flex;
+  height: 100%;
+
+  .container {
+    padding: $ms * 0.75rem;
+    height: 100%;
+    display: flex;
+    background-color: #fff;
+  }
+}

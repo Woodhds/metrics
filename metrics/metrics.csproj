@@ -14,10 +14,27 @@
     <Compile Remove="ViewComponents\**" />
     <Content Remove="%2a%2a\**" />
     <Content Remove="ViewComponents\**" />
+    <Content Include="ClientApp\src\app\guards\auth.guard.spec.ts" />
+    <Content Include="ClientApp\src\app\guards\auth.guard.ts" />
+    <Content Include="ClientApp\src\app\home\home.component.html" />
+    <Content Include="ClientApp\src\app\home\home.component.scss" />
+    <Content Include="ClientApp\src\app\home\home.component.spec.ts" />
+    <Content Include="ClientApp\src\app\home\home.component.ts" />
+    <Content Include="ClientApp\src\app\login\login.component.html" />
+    <Content Include="ClientApp\src\app\login\login.component.scss" />
+    <Content Include="ClientApp\src\app\login\login.component.spec.ts" />
+    <Content Include="ClientApp\src\app\login\login.component.ts" />
     <Content Include="ClientApp\src\app\navbar\navbar.component.html" />
     <Content Include="ClientApp\src\app\navbar\navbar.component.scss" />
     <Content Include="ClientApp\src\app\navbar\navbar.component.spec.ts" />
     <Content Include="ClientApp\src\app\navbar\navbar.component.ts" />
+    <Content Include="ClientApp\src\app\services\apiinterceptor.ts" />
+    <Content Include="ClientApp\src\app\services\auth.service.spec.ts" />
+    <Content Include="ClientApp\src\app\services\auth.service.ts" />
+    <Content Include="ClientApp\src\app\user\user.component.html" />
+    <Content Include="ClientApp\src\app\user\user.component.scss" />
+    <Content Include="ClientApp\src\app\user\user.component.spec.ts" />
+    <Content Include="ClientApp\src\app\user\user.component.ts" />
     <EmbeddedResource Remove="%2a%2a\**" />
     <EmbeddedResource Remove="ViewComponents\**" />
     <None Remove="%2a%2a\**" />
@@ -53,6 +70,10 @@
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\core" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
