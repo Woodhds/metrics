@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using metrics.Models;
-using DAL;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,21 +14,23 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using metrics.Options;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace metrics.Controllers
 {
+    [ApiController]
     public class HomeController : Controller
     {
         private IHttpClientFactory _httpClientFactory;
+        private JwtBearerOptions _jwtBearerOptions;
 
-        public HomeController(IHttpClientFactory httpClientFactory)
+        public HomeController(IHttpClientFactory httpClientFactory, IOptions<JwtBearerOptions> jwtBearerOptions)
         {
+            _jwtBearerOptions = jwtBearerOptions.Value;
             _httpClientFactory = httpClientFactory;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
 
@@ -38,7 +40,7 @@ namespace metrics.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Ok();
             }
             using (var httpClient = _httpClientFactory.CreateClient())
             {
@@ -62,45 +64,23 @@ namespace metrics.Controllers
                         new Claim(Constants.VK_TOKEN_CLAIM, token),
                         new Claim(ClaimTypes.Name, $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}")
                     };
-                    await HttpContext.SignOutAsync();
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme)),
-                        new AuthenticationProperties() { ExpiresUtc = DateTimeOffset.MaxValue });
-                    return View();
+
+                    return Ok(CreateToken(claims));
                 }
             }
-            ModelState.AddModelError("", "Ошибка аутентификации");
-            return View();
+            return Ok();
         }
 
-        [HttpGet]
-        [Authorize(Policy = "VkPolicy")]
-        public new IActionResult User()
+        private string CreateToken(List<Claim> claims)
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var token = new JwtSecurityToken(
+                issuer: _jwtBearerOptions.ClaimsIssuer,
+                audience: _jwtBearerOptions.Audience,
+                claims: claims,
+                expires: DateTime.MaxValue,
+                signingCredentials: new SigningCredentials(_jwtBearerOptions.TokenValidationParameters.IssuerSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

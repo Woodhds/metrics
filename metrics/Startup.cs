@@ -16,16 +16,13 @@ using metrics.Services.Abstract;
 using System;
 using DAL.Identity;
 using metrics.Services.Concrete;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Collections.Generic;
-using System.Security.Claims;
-using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using metrics.Services.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
+using System.Text;
+using NSwag.AspNetCore;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace metrics
 {
@@ -75,6 +72,10 @@ namespace metrics
                 {
                     opts.Audience = "metrics";
                     opts.ClaimsIssuer = "metrics";
+                    opts.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt"]))
+                    };
                 })
                 .AddCookie();
 
@@ -112,6 +113,11 @@ namespace metrics
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddSingleton<IVkClient, VkClient>();
+            services.AddSwagger();
+            services.AddSpaStaticFiles(e =>
+            {
+                e.RootPath = "dist";
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
@@ -126,6 +132,7 @@ namespace metrics
                 app.UseHsts();
             }
 
+            app.UseSpaStaticFiles();
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -136,14 +143,27 @@ namespace metrics
                 opts.AllowAnyOrigin();
                 opts.AllowAnyHeader();
             });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                }
+            });
+
             app.UseMvc(builder =>
             {
-                builder.MapRoute("category", "category/{slug}",
-                    new { controller = "category", action = "Index" });
-
                 builder.MapRoute("default", "{controller}/{action}/{id?}",
                         new {controller = "Home", action = "Index"});
                 });
+
+            app.UseSwaggerUi3WithApiExplorer(settings =>
+            {
+                settings.GeneratorSettings.DefaultPropertyNameHandling = NJsonSchema.PropertyNameHandling.CamelCase;
+            });
 
             DataBaseInitializer.Init(serviceProvider);
             IdentityInitializer.Init(serviceProvider);

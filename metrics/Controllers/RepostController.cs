@@ -1,45 +1,23 @@
-﻿using metrics.Options;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using System;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
-using metrics.Models;
 using System.Linq;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 
 namespace metrics.Controllers
 {
-
+    [ApiController]
     public class RepostController : Controller
     {
-        private readonly VkontakteOptions _options;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IVkClient _vkClient;
         private readonly ILogger<RepostController> _logger;
-        public RepostController(IHttpClientFactory httpClientFactory, IOptions<VkontakteOptions> options, 
-            IVkClient vkClient, ILogger<RepostController> logger)
+        public RepostController(IVkClient vkClient, ILogger<RepostController> logger)
         {
-            _httpClientFactory = httpClientFactory;
-            _options = options.Value;
             _vkClient = vkClient;
             _logger = logger;
-        }
-
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [Authorize(Policy = "VkPolicy")]
