@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {LoginModel} from "../login/loginmodel";
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,15 +11,10 @@ export class AuthService {
   constructor(private httpClient: HttpClient) {
   }
 
-  auth(token: string): boolean {
-    let authtoken = "";
-    this.httpClient.post('/account/login', {token: token}).subscribe((data: string) => authtoken = data);
-    if(token && token != '') {
-      localStorage.setItem('metrics-token', authtoken);
-      return true;
-    }
-    return false;
+  auth(token: string): Observable<LoginModel> {
+    return this.httpClient.post<LoginModel>('/api/account/login', { 'token': token });
   }
+
 
   static isLogged(): boolean {
     const token = localStorage.getItem('metrics-token');

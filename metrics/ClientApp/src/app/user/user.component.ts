@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {State} from "@progress/kendo-data-query";
+import { GridDataResult } from '@progress/kendo-angular-grid';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -6,10 +9,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-
-  constructor() { }
+  public data: GridDataResult;
+  public userId: string = '';
+  public search: string = '';
+  public state: State = {
+    skip: 0,
+    take: 100
+  };
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
   }
 
+  handleSearch() {
+    this.userService.getReposts(this.userId, this.state, this.search).subscribe(data => this.data = data);
+  }
 }

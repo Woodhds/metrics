@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Constants} from "../core/constants";
-import {NgForm} from "@angular/forms";
+import {FormGroup, NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 
 @Component({
@@ -19,10 +19,14 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  handleLogin(form:NgForm) : void {
-    var result = this.authService.auth(form.value);
-    if(result) {
-
-    }
+  handleLogin(): void {
+    this.authService.auth(this.token).subscribe(data => {
+      if (data && data.accessToken != '') {
+        localStorage.setItem('metrics-token', data.accessToken)
+        this.router.navigate(['/user'])
+      } else {
+        this.message = 'Ошибка авторизации';
+      }
+    });
   }
 }

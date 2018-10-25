@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace metrics.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     public class RepostController : Controller
     {
         private readonly IVkClient _vkClient;
@@ -21,9 +22,10 @@ namespace metrics.Controllers
         }
 
         [Authorize(Policy = "VkPolicy")]
-        public IActionResult GetData(string userId, int skip, int take, string search = null)
+        [HttpGet("user")]
+        public IActionResult GetData(string userId, int page, int pageSize, string search = null)
         {
-            var data = _vkClient.GetReposts(userId, skip, take, search);
+            var data = _vkClient.GetReposts(userId, page, pageSize, search);
             var reposts = data.Response
                 .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.date))
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First()).Distinct().ToList();

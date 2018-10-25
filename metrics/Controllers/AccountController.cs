@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using DAL.Entities;
+using metrics.Models;
 using metrics.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -16,18 +20,20 @@ using Newtonsoft.Json.Linq;
 
 namespace metrics.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
         private readonly SignInManager<User> _signInManager;
         private readonly IHttpClientFactory _httpClientFactory;
-        private JwtBearerOptions _jwtBearerOptions;
+        private JwtOptions _jwtBearerOptions;
 
         public AccountController(SignInManager<User> signInManager, IHttpClientFactory httpClientFactory,
-            IOptions<JwtBearerOptions> jwtBearerOptions)
+            IOptions<JwtOptions> jwtBearerOptions)
         {
             _httpClientFactory = httpClientFactory;
             _signInManager = signInManager;
+            _jwtBearerOptions = jwtBearerOptions.Value;
         }
 
         [HttpPost]
@@ -37,20 +43,17 @@ namespace metrics.Controllers
             return LocalRedirect("/");
         }
 
-        public async Task<IActionResult> Login(string token)
+        [HttpPost("login")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<string>> Login([FromBody]LoginModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return Ok();
-            }
-
             using (var httpClient = _httpClientFactory.CreateClient())
             {
                 var response = await httpClient.GetAsync(QueryHelpers.AddQueryString(
                     VkontakteOptions.UserInformationEndpoint, new Dictionary<string, string>
                     {
                         ["v"] = Constants.ApiVersion,
-                        ["access_token"] = token,
+                        ["access_token"] = model.Token,
                         ["fields"] = string.Join(",", new List<string> {"first_name", "last_name"})
                     }));
 
@@ -65,12 +68,12 @@ namespace metrics.Controllers
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, payload["response"].First["id"]?.ToString()),
-                        new Claim(Constants.VK_TOKEN_CLAIM, token),
+                        new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
                         new Claim(ClaimTypes.Name,
                             $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}")
                     };
 
-                    return Ok(CreateToken(claims));
+                    return Ok(new { accessToken = CreateToken(claims) });
                 }
             }
 
@@ -79,12 +82,16 @@ namespace metrics.Controllers
 
         private string CreateToken(List<Claim> claims)
         {
+            claims.Add(new Claim(JwtRegisteredClaimNames.Iss, _jwtBearerOptions.Issuer));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Aud, _jwtBearerOptions.Audience));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.ToString()));
             var token = new JwtSecurityToken(
-                issuer: _jwtBearerOptions.ClaimsIssuer,
+                issuer: _jwtBearerOptions.Issuer,
                 audience: _jwtBearerOptions.Audience,
                 claims: claims,
-                expires: DateTime.MaxValue,
-                signingCredentials: new SigningCredentials(_jwtBearerOptions.TokenValidationParameters.IssuerSigningKey,
+                expires: DateTime.Now.Add(TimeSpan.FromHours(24)),
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtBearerOptions.Key)),
                     SecurityAlgorithms.HmacSha256)
             );
             return new JwtSecurityTokenHandler().WriteToken(token);

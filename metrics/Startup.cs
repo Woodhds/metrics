@@ -19,10 +19,8 @@ using metrics.Services.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using metrics.Services.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
 using System.Text;
 using NSwag.AspNetCore;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace metrics
 {
@@ -65,16 +63,19 @@ namespace metrics
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<DataContext>();
 
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
                 {
-                    opts.Audience = "metrics";
-                    opts.ClaimsIssuer = "metrics";
                     opts.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt"]))
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 })
                 .AddCookie();
@@ -90,7 +91,6 @@ namespace metrics
 
             
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
                 manager => { manager.FeatureProviders.Add(new GenericControllerFeatureProvider()); });
 
@@ -143,6 +143,12 @@ namespace metrics
                 opts.AllowAnyOrigin();
                 opts.AllowAnyHeader();
             });
+            
+            app.UseMvc(builder =>
+            {
+                builder.MapRoute("default", "{controller}/{action}/{id?}",
+                    new {controller = "Home", action = "Index"});
+            });
 
             app.UseSpa(spa =>
             {
@@ -150,15 +156,9 @@ namespace metrics
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200/");
                 }
             });
-
-            app.UseMvc(builder =>
-            {
-                builder.MapRoute("default", "{controller}/{action}/{id?}",
-                        new {controller = "Home", action = "Index"});
-                });
 
             app.UseSwaggerUi3WithApiExplorer(settings =>
             {

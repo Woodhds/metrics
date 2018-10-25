@@ -1,5 +1,0 @@
-@model int
-
-@await  Component.InvokeAsync("CategoryList", new { activeId = Model })
-@await Component.InvokeAsync("ProductList", new { categoryId = Model })
-
