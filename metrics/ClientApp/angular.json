@@ -31,7 +31,6 @@
                 "input": "node_modules/@progress/kendo-theme-bootstrap/dist/all.css"
               },
               "node_modules/font-fira-sans/firasans.css",
-
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],

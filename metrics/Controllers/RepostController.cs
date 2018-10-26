@@ -6,6 +6,8 @@ using metrics.Services.Abstract;
 using System.Linq;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
+using metrics.Models;
+using System.Net;
 
 namespace metrics.Controllers
 {
@@ -23,18 +25,14 @@ namespace metrics.Controllers
 
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
-        public IActionResult GetData(string userId, int page, int pageSize, string search = null)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public DataSourceResponseModel<List<VkMessage>> GetData(string userId, int page, int pageSize, string search = null)
         {
             var data = _vkClient.GetReposts(userId, page, pageSize, search);
             var reposts = data.Response
                 .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.date))
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First()).Distinct().ToList();
-            return Ok(
-                new {
-                    Data = reposts,
-                    Total = data.Response.Count
-                }
-            );
+            return new DataSourceResponseModel<List<VkMessage>>(reposts, data.Response.Count);
         }
 
         [Authorize(Policy = "VkPolicy")]

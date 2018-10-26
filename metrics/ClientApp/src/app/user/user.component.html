@@ -1,45 +1,43 @@
-<form class="k-form" #form="ngForm" novalidate>
-  <div class="col-xs-12 row">
-    <div class="k-form-field col-sm-12 col-md-6">
-      <kendo-textbox-container id="Filter" floatingLabel="Пользователь">
-        <input kendoTextBox [(ngModel)]="userId" name="Filter" id="Filter" required class="k-textbox" />
-      </kendo-textbox-container>
-      <button [disabled]="!form.valid" (click)="handleSearch()" kendoButton [primary]="true" type="submit">Получить</button>
-    </div>
-    <div class="k-form-field col-sm-12 col-md-6">
-      <kendo-textbox-container id="Search" floatingLabel="Поиск">
-        <input kendoTextBox name="Search" [(ngModel)]="search" id="Search" class="k-textbox" />
-      </kendo-textbox-container>
-      <button kendoButton [primary]="true">Репост всего</button>
-    </div>
-  </div>
-</form>
-
-<kendo-grid take="state.take" [data]="data" skip="state.skip">
-  <kendo-grid-column>
-    <ng-template kendoGridCellTemplate let-dataItem>
-
-      <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">
-                <a target="_blank" href="https://vk.com//wall{{dataItem.owner_id}}_{{dataItem.id}}">Пост</a>
-            </h4>
-            <span class="card-subtitle"></span>
+<div>
+  <kendo-grid take="state.take" [pageSize]="state.take" [pageable]="true" [data]="data" skip="state.skip">
+    <ng-template position="top" kendoGridToolbarTemplate>
+      <form class="k-form row" #form="ngForm" novalidate>
+        <div class="k-form-field col">
+          <kendo-textbox-container id="Filter" floatingLabel="Пользователь">
+            <input kendoTextBox [(ngModel)]="userId" name="Filter" id="Filter" required class="k-textbox" />
+          </kendo-textbox-container>
+          <kendo-textbox-container id="Search" floatingLabel="Поиск">
+            <input kendoTextBox name="Search" [(ngModel)]="search" id="Search" class="k-textbox" />
+          </kendo-textbox-container>
+          <button [disabled]="!form.valid" (click)="handleSearch()" kendoButton [primary]="true" type="submit">Получить</button>
         </div>
-        <div class="card-body">
-            <div class="card-text">
-               {{dataItem.text}}
-            </div>
-        </div>
-        <div class="card-footer">
-            <a href="#" class="repost-btn text-primary">
-                <svg width="25" height="25">
-                    <use xlink:href="\\#thumbup"></use>
-                </svg>
-            </a>
-        </div>
-    </div>
 
+        <button kendoButton [primary]="true">Репост всего</button>
+      </form>
     </ng-template>
-  </kendo-grid-column>
-</kendo-grid>
+    <kendo-grid-column>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div class="card col-sm-12 col-md-6 col-lg-4">
+          <div class="card-header">
+            <h4 class="card-title">
+              <a target="_blank" href="https://vk.com//wall{{dataItem.owner_id}}_{{dataItem.id}}">Пост</a>
+            </h4>
+            <span class="card-subtitle">{{dataItem.date | unixtime | kendoDate: 'G' }}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-text">
+              {{dataItem.text}}
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="repost-btn text-primary">
+              <svg width="25" height="25">
+                <use xlink:href="\\#thumbup"></use>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</div>
