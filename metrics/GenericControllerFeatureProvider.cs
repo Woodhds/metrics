@@ -13,17 +13,17 @@ namespace metrics
         
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
-            //foreach (var type in Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
-            //    .SelectMany(x => x.DefinedTypes).Where(c => typeof(BaseEntity).IsAssignableFrom(c) && !c.IsAbstract))
-            //{
-            //    var typeName = type.Name + "Controller";
-            //    if (!feature.Controllers.Any(t => t.Name == typeName))
-            //    {
-            //        var controllerType = typeof(EntitiesController<>)
-            //            .MakeGenericType(type).GetTypeInfo();
-            //        feature.Controllers.Add(controllerType);
-            //    }
-            //}
+            foreach (var type in Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)
+               .SelectMany(x => x.DefinedTypes).Where(c => typeof(BaseEntity).IsAssignableFrom(c) && !c.IsAbstract))
+            {
+               var typeName = type.Name + "Controller";
+               if (!feature.Controllers.Any(t => t.Name == typeName))
+               {
+                   var controllerType = typeof(EntitiesController<>)
+                       .MakeGenericType(type).GetTypeInfo();
+                   feature.Controllers.Add(controllerType);
+               }
+            }
         }
     }
 }

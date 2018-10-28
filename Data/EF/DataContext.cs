@@ -1,4 +1,5 @@
 ﻿using DAL;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.EF
@@ -12,6 +13,7 @@ namespace Data.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<VkUser>();
         }
     }
 }
