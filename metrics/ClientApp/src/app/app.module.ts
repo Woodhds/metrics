@@ -16,6 +16,9 @@ import { IntlModule } from '@progress/kendo-angular-intl';
 import { ToolBarModule } from '@progress/kendo-angular-toolbar';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { MessageImageComponent } from './message-image/message-image.component';
+import { CommonModule } from '@angular/common';
+import { TooltipModule } from '@progress/kendo-angular-tooltip';
 
 
 @NgModule({
@@ -25,19 +28,22 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
     UserComponent,
     LoginComponent,
     HomeComponent,
-    UnixtimePipe
+    UnixtimePipe,
+    MessageImageComponent
   ],
   imports: [
     GridModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    CommonModule,
     BrowserAnimationsModule,
     FormsModule,
     IntlModule,
     InputsModule,
     ToolBarModule,
-    ButtonsModule
+    ButtonsModule,
+    TooltipModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }

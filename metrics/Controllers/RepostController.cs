@@ -36,8 +36,9 @@ namespace metrics.Controllers
         }
 
         [Authorize(Policy = "VkPolicy")]
-        [HttpPost]
-        public IActionResult Repost(List<VkRepostViewModel> reposts, int timeout = 0)
+        [HttpPost("repost")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public IActionResult Repost([FromBody]List<VkRepostViewModel> reposts, int timeout = 0)
         {
             try
             {

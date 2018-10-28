@@ -1,18 +1,16 @@
-export class VkResponse<T>
-{
-  public Response: VkResponseItems<T>;
+export class VkResponse<T> {
+  public response: VkResponseItems<T>;
 }
 
-export class VkResponseItems<T>
-{
-  public Count: number;
+export class VkResponseItems<T> {
+  public count: number;
   public Items: T;
-  public Groups: VkGroup[];
+  public groups: VkGroup[];
 }
 
 export class VkGroup {
-  public Id: number;
-  public Name: string;
+  public id: number;
+  public name: string;
 }
 
 export class VkMessage {
@@ -20,21 +18,21 @@ export class VkMessage {
   public owner_id: number;
   public from_id: number;
   public date: number;
-  public Text: string;
-  public Post_type: PostType;
-  public Copy_History: VkMessage[];
-  public Attachments: MessageAttachment[];
-  public Reposts: MessageReposts;
+  public text: string;
+  public post_type: PostType;
+  public copy_History: VkMessage[];
+  public attachments: MessageAttachment[];
+  public reposts: MessageReposts;
 }
 
 export class MessageReposts {
-  public User_reposted: boolean;
-  public Count: number;
+  public user_reposted: boolean;
+  public count: number;
 }
 
 
 export enum PostType {
-  Post = 0
+  post = 0
 }
 export enum MessageAttachmentType {
   photo = 0,
@@ -74,18 +72,18 @@ export enum MessageAttachmentType {
 
 
 export class MessageAttachment {
-  public Type: MessageAttachmentType;
-  public Photo: AttachmentPhoto;
+  public type: MessageAttachmentType;
+  public photo: AttachmentPhoto;
 }
 export class AttachmentPhoto {
   public id: number;
-  public Sizes: PhotoSize[];
+  public sizes: PhotoSize[];
 }
 export class PhotoSize {
-  public Width: number;
-  public Height: number;
-  public Type: PhotoSizeType;
-  public Url: string;
+  public width: number;
+  public height: number;
+  public type: PhotoSizeType;
+  public url: string;
 }
 export enum PhotoSizeType {
   m = 0,
@@ -107,4 +105,19 @@ export enum PhotoSizeType {
   z = 8,
 
   w = 9
+}
+
+export class VkRepostModel {
+  owner_id: number;
+  id: number;
+
+  constructor(owner_id: number, id: number) {
+    this.owner_id = owner_id;
+    this.id = id;
+  }
+}
+
+export class DataSourceResponseModel {
+  data: any;
+  total: number;
 }
