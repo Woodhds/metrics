@@ -1,0 +1,7 @@
+<div class="container-fluid">
+  <div *ngFor="let column of viewConfig.columns" class="k-form-field">
+    <kendo-textbox-container floatingLabel="column.title">
+      <input required kendoTextBox ngModel [(ngModel)]="column.name" class="k-textbox" type="text" [name]="column.name" />
+    </kendo-textbox-container>
+  </div>
+</div>

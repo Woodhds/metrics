@@ -19,6 +19,11 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { MessageImageComponent } from './message-image/message-image.component';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from '@progress/kendo-angular-tooltip';
+import { EntitiesComponent } from './entities/entities.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AddentityComponent } from './addentity/addentity.component';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
+
 
 
 @NgModule({
@@ -29,7 +34,10 @@ import { TooltipModule } from '@progress/kendo-angular-tooltip';
     LoginComponent,
     HomeComponent,
     UnixtimePipe,
-    MessageImageComponent
+    MessageImageComponent,
+    EntitiesComponent,
+    PageNotFoundComponent,
+    AddentityComponent
   ],
   imports: [
     GridModule,
@@ -43,7 +51,8 @@ import { TooltipModule } from '@progress/kendo-angular-tooltip';
     InputsModule,
     ToolBarModule,
     ButtonsModule,
-    TooltipModule
+    TooltipModule,
+    DialogsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }

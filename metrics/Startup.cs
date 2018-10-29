@@ -16,11 +16,12 @@ using metrics.Services.Abstract;
 using System;
 using DAL.Identity;
 using metrics.Services.Concrete;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using metrics.Services.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using NSwag.AspNetCore;
+using DAL.Services.Abstract;
+using Core.Services.Concrete;
 
 namespace metrics
 {
@@ -30,7 +31,6 @@ namespace metrics
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -113,6 +113,7 @@ namespace metrics
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddSingleton<IVkClient, VkClient>();
+            services.AddSingleton<IViewConfigService, ViewConfigService>();
             services.AddSwagger();
             services.AddSpaStaticFiles(e =>
             {
@@ -167,6 +168,7 @@ namespace metrics
 
             DataBaseInitializer.Init(serviceProvider);
             IdentityInitializer.Init(serviceProvider);
+            ViewConfigInitializer.Init(serviceProvider);
         }
     }
 }

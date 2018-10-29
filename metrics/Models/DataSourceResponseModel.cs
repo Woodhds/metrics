@@ -1,11 +1,11 @@
 namespace metrics.Models
 {
-    public class DataSourceResponseModel<T>
+    public class DataSourceResponseModel
     {
-        public T Data { get; set; }
-        public uint Total { get; set; }
+        public object Data { get; set; }
+        public int Total { get; set; }
 
-        public DataSourceResponseModel(T data, uint total) 
+        public DataSourceResponseModel(object data, int total) 
         {
             Data = data;
             Total = total;

@@ -10,7 +10,7 @@ namespace metrics.Services.Models
 
         public class VkResponseItems<T>
         {
-            public uint Count { get; set; }
+            public int Count { get; set; }
             public T Items { get; set; }
             public List<VkGroup> Groups { get; set; }
         }

@@ -3,7 +3,7 @@ import { State, toDataSourceRequestString } from '@progress/kendo-data-query';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VkResponse, VkMessage, VkRepostModel } from '../user/VkResponse';
-import { map } from 'rxjs/operators/map'
+import { map } from 'rxjs/operators/map';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 
 @Injectable({

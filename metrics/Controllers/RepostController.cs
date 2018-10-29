@@ -25,19 +25,17 @@ namespace metrics.Controllers
 
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public DataSourceResponseModel<List<VkMessage>> GetData(string userId, int page, int pageSize, string search = null)
+        public ActionResult<DataSourceResponseModel> GetData(string userId, int page, int pageSize, string search = null)
         {
             var data = _vkClient.GetReposts(userId, page, pageSize, search);
             var reposts = data.Response
                 .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.date))
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First()).Distinct().ToList();
-            return new DataSourceResponseModel<List<VkMessage>>(reposts, data.Response.Count);
+            return new DataSourceResponseModel(reposts, data.Response.Count);
         }
 
         [Authorize(Policy = "VkPolicy")]
         [HttpPost("repost")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
         public IActionResult Repost([FromBody]List<VkRepostViewModel> reposts, int timeout = 0)
         {
             try

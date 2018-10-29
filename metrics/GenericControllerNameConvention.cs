@@ -9,14 +9,14 @@ namespace metrics
     {
         public void Apply(ControllerModel controller)
         {
-            //if (controller.ControllerType.GetGenericTypeDefinition() != 
-            //    typeof(EntitiesController<>))
-            //{
-            //    return;
-            //}
+            if (controller.ControllerType.GetGenericTypeDefinition() != 
+                typeof(EntitiesController<>))
+            {
+                return;
+            }
 
-            //var entityType = controller.ControllerType.GenericTypeArguments[0];
-            //controller.ControllerName = entityType.Name;
+            var entityType = controller.ControllerType.GenericTypeArguments[0];
+            controller.ControllerName = entityType.Name;
         }
     }
 }
