@@ -12,7 +12,8 @@ import { DialogService } from '@progress/kendo-angular-dialog';
 @Component({
   selector: 'app-entities',
   templateUrl: './entities.component.html',
-  styleUrls: ['./entities.component.scss']
+  styleUrls: ['./entities.component.scss'],
+  entryComponents: [AddentityComponent]
 })
 export class EntitiesComponent implements OnInit {
   public viewConfig: Observable<ViewConfig>;
@@ -46,9 +47,15 @@ export class EntitiesComponent implements OnInit {
 
   addItem() {
     this.viewConfig.subscribe(z => {
-      this.dialogService.open({
-        content: AddentityComponent
+      const dialog = this.dialogService.open({
+        content: AddentityComponent,
+        title: 'Добавить',
+        height: 600,
+        width: 800
       });
+
+      const config = dialog.content.instance;
+      config.viewConfig = z;
     });
   }
 }

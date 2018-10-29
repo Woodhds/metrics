@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ViewConfig } from '../entities/view-config.model';
-import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-addentity',
@@ -8,7 +7,7 @@ import { EventEmitter } from 'protractor';
   styleUrls: ['./addentity.component.scss']
 })
 export class AddentityComponent implements OnInit {
-  @Output() save: EventEmitter = new EventEmitter();
+  @Output() save: EventEmitter<any> = new EventEmitter<any>();
   @Input() viewConfig: ViewConfig;
   constructor() { }
 
