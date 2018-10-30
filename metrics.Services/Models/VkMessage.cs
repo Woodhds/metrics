@@ -6,12 +6,12 @@ namespace metrics.Services.Models
 {
     public class VkMessage
     {
-        public uint id { get; set; }
-        public int owner_id { get; set; }
-        public int from_id { get; set; }
-        public uint date { get; set; }
+        public uint Id { get; set; }
+        public int Owner_Id { get; set; }
+        public int From_Id { get; set; }
+        public uint Date { get; set; }
         public string Text { get; set; }
-        public PostType Post_type { get; set; }
+        public PostType Post_Type { get; set; }
         public List<VkMessage> Copy_History { get; set; }
         public List<MessageAttachment> Attachments { get; set; }
         public MessageReposts Reposts { get; set; }
@@ -21,12 +21,12 @@ namespace metrics.Services.Models
     {
         public bool Equals(VkMessage x, VkMessage y)
         {
-            return x.owner_id == y.owner_id && x.id == y.id;
+            return x.Owner_Id == y.Owner_Id && x.Id == y.Id;
         }
 
         public int GetHashCode(VkMessage obj)
         {
-            return (obj.from_id + obj.id).GetHashCode();
+            return (obj.From_Id + obj.Id).GetHashCode();
         }
     }
 

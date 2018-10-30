@@ -137,7 +137,7 @@ namespace metrics.Services.Concrete
                     }
                     var @params = new NameValueCollection()
                     {
-                        { "object", $"wall{item.owner_id}_{item.id}" }
+                        { "object", $"wall{item.Owner_Id}_{item.Id}" }
                     };
                     PostVkAsync<RepostMessageResponse>(urls.Repost, null, @params);
                     Thread.Sleep(timeout * 1000);
@@ -157,7 +157,7 @@ namespace metrics.Services.Concrete
             }
             var @params = new NameValueCollection
             {
-                { "posts", string.Join(",", vkRepostViewModels.Select(c => $"{c.Owner_id}_{c.Id}")) },
+                { "posts", string.Join(",", vkRepostViewModels.Select(c => $"{c.Owner_Id}_{c.Id}")) },
                 { "extended", 1.ToString() }
             };
             return GetVkAsync<VkResponse<List<VkMessage>>>(urls.WallGetById, @params);

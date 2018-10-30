@@ -29,7 +29,7 @@ namespace metrics.Controllers
         {
             var data = _vkClient.GetReposts(userId, page, pageSize, search);
             var reposts = data.Response
-                .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.date))
+                .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.Date))
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First()).Distinct().ToList();
             return new DataSourceResponseModel(reposts, data.Response.Count);
         }

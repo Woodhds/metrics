@@ -20,20 +20,20 @@
         <div class="card small">
           <div class="card-header">
             <h4 class="card-title">
-              <a target="_blank" href="https://vk.com//wall{{dataItem.owner_id}}_{{dataItem.id}}">Пост</a>
+              <a target="_blank" href="https://vk.com//wall{{dataItem.Owner_Id}}_{{dataItem.Id}}">Пост</a>
             </h4>
-            <span class="card-subtitle">{{dataItem.date | unixtime | kendoDate: 'G' }}</span>
+            <span class="card-subtitle">{{dataItem.Date | unixtime | kendoDate: 'G' }}</span>
           </div>
           <div class="card-body">
             <div class="card-image">
-              <app-message-image [attachments]="dataItem.attachments"></app-message-image>
+              <app-message-image [attachments]="dataItem.Attachments"></app-message-image>
             </div>
             <div class="card-text">
-              {{dataItem.text}}
+              {{dataItem.Text}}
             </div>
           </div>
           <div class="card-footer">
-            <a title="Репост" kendoTooltip class="text-primary k-icon k-i-fav-outline" (click)="repost(dataItem.owner_id, dataItem.id, $event.currentTarget)">
+            <a title="Репост" kendoTooltip class="text-primary k-icon k-i-fav-outline" (click)="repost(dataItem.Owner_Id, dataItem.Id, $event.currentTarget)">
             </a>
           </div>
         </div>

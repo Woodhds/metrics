@@ -14,7 +14,7 @@ export class UserService {
 
   getReposts(userId: string, state: State, search: string = null): Observable<GridDataResult> {
     return this.httpClient.get<VkResponse<VkMessage[]>>(`/api/repost/user?userId=${userId}&search=${search}&${toDataSourceRequestString(state)}`)
-      .pipe(map(value => <GridDataResult>{ data: value['data'], total: value['total'] }));
+      .pipe(map(value => <GridDataResult>{ data: value['Data'], total: value['Total'] }));
   }
 
   repost(owner_id: number, id: number): void {

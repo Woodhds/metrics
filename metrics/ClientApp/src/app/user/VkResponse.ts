@@ -15,18 +15,18 @@ export class VkGroup {
 
 export class VkMessage {
   public Id: number;
-  public Owner_id: number;
-  public From_id: number;
+  public Owner_Id: number;
+  public From_Id: number;
   public Date: number;
   public Text: string;
-  public Post_type: PostType;
+  public Post_Type: PostType;
   public Copy_History: VkMessage[];
   public Attachments: MessageAttachment[];
   public Reposts: MessageReposts;
 }
 
 export class MessageReposts {
-  public User_reposted: boolean;
+  public User_Reposted: boolean;
   public Count: number;
 }
 
@@ -108,16 +108,16 @@ export enum PhotoSizeType {
 }
 
 export class VkRepostModel {
-  Owner_id: number;
+  Owner_Id: number;
   Id: number;
 
   constructor(owner_id: number, id: number) {
-    this.Owner_id = owner_id;
+    this.Owner_Id = owner_id;
     this.Id = id;
   }
 }
 
 export class DataSourceResponseModel {
-  data: any;
-  total: number;
+  Data: any;
+  Total: number;
 }
