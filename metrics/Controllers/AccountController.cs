@@ -11,6 +11,7 @@ using DAL.Entities;
 using metrics.Models;
 using metrics.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -44,7 +45,6 @@ namespace metrics.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<string>> Login([FromBody]LoginModel model)
         {
             using (var httpClient = _httpClientFactory.CreateClient())
@@ -54,7 +54,7 @@ namespace metrics.Controllers
                     {
                         ["v"] = Constants.ApiVersion,
                         ["access_token"] = model.Token,
-                        ["fields"] = string.Join(",", new List<string> {"first_name", "last_name"})
+                        ["fields"] = string.Join(",", new List<string> { "first_name", "last_name", "photo_50" })
                     }));
 
                 if (response.IsSuccessStatusCode)
@@ -70,7 +70,8 @@ namespace metrics.Controllers
                         new Claim(ClaimTypes.NameIdentifier, payload["response"].First["id"]?.ToString()),
                         new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
                         new Claim(ClaimTypes.Name,
-                            $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}")
+                            $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}"),
+                        new Claim("photo", payload["response"].First["photo_50"].ToString())
                     };
 
                     return Ok(new { accessToken = CreateToken(claims) });
@@ -78,6 +79,23 @@ namespace metrics.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet("info")]
+        [Authorize(Policy = "VkPolicy")]
+        public ActionResult<UserInfoModel> Info()
+        {
+            var ci = User.Identity as ClaimsIdentity;
+            if (ci == null)
+            {
+                return Ok();
+            }
+
+            return Ok(new UserInfoModel
+            {
+                FullName = ci.FindFirst(z => z.Type == ClaimTypes.Name)?.Value,
+                Avatar = ci.FindFirst(z => z.Type == "photo")?.Value
+            });
         }
 
         private string CreateToken(List<Claim> claims)

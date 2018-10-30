@@ -10,7 +10,7 @@ import {ApiInterceptor} from './services/apiinterceptor';
 import { UserComponent } from './user/user.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { UnixtimePipe } from './core/pipes/unixtime/unixtime.pipe';
 import { IntlModule } from '@progress/kendo-angular-intl';
 import { ToolBarModule } from '@progress/kendo-angular-toolbar';
@@ -52,7 +52,8 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
     ToolBarModule,
     ButtonsModule,
     TooltipModule,
-    DialogsModule
+    DialogsModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }

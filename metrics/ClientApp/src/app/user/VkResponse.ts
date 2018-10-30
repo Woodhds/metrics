@@ -1,33 +1,33 @@
 export class VkResponse<T> {
-  public response: VkResponseItems<T>;
+  public Response: VkResponseItems<T>;
 }
 
 export class VkResponseItems<T> {
-  public count: number;
+  public Count: number;
   public Items: T;
-  public groups: VkGroup[];
+  public Groups: VkGroup[];
 }
 
 export class VkGroup {
-  public id: number;
-  public name: string;
+  public Id: number;
+  public Name: string;
 }
 
 export class VkMessage {
-  public id: number;
-  public owner_id: number;
-  public from_id: number;
-  public date: number;
-  public text: string;
-  public post_type: PostType;
-  public copy_History: VkMessage[];
-  public attachments: MessageAttachment[];
-  public reposts: MessageReposts;
+  public Id: number;
+  public Owner_id: number;
+  public From_id: number;
+  public Date: number;
+  public Text: string;
+  public Post_type: PostType;
+  public Copy_History: VkMessage[];
+  public Attachments: MessageAttachment[];
+  public Reposts: MessageReposts;
 }
 
 export class MessageReposts {
-  public user_reposted: boolean;
-  public count: number;
+  public User_reposted: boolean;
+  public Count: number;
 }
 
 
@@ -72,18 +72,18 @@ export enum MessageAttachmentType {
 
 
 export class MessageAttachment {
-  public type: MessageAttachmentType;
-  public photo: AttachmentPhoto;
+  public Type: MessageAttachmentType;
+  public Photo: AttachmentPhoto;
 }
 export class AttachmentPhoto {
-  public id: number;
-  public sizes: PhotoSize[];
+  public Id: number;
+  public Sizes: PhotoSize[];
 }
 export class PhotoSize {
-  public width: number;
-  public height: number;
-  public type: PhotoSizeType;
-  public url: string;
+  public Width: number;
+  public Height: number;
+  public Type: PhotoSizeType;
+  public Url: string;
 }
 export enum PhotoSizeType {
   m = 0,
@@ -108,12 +108,12 @@ export enum PhotoSizeType {
 }
 
 export class VkRepostModel {
-  owner_id: number;
-  id: number;
+  Owner_id: number;
+  Id: number;
 
   constructor(owner_id: number, id: number) {
-    this.owner_id = owner_id;
-    this.id = id;
+    this.Owner_id = owner_id;
+    this.Id = id;
   }
 }
 

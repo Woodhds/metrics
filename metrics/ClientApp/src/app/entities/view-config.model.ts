@@ -1,11 +1,11 @@
 export class ViewConfig {
-  public name: string;
-  public lookupProperty: string;
-  public columns: ColumnView[] = [];
+  public Name: string;
+  public LookupProperty: string;
+  public Columns: ColumnView[] = [];
 }
 
 export class ColumnView {
-  public name: string;
-  public title: string;
+  public Name: string;
+  public Title: string;
 
 }

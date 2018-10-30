@@ -41,7 +41,7 @@ export class EntitiesComponent implements OnInit {
 
   fetchData() {
     this.viewConfig.subscribe(z => {
-      this.data = this.entitiesService.getData(z.name, this.state);
+      this.data = this.entitiesService.getData(z.Name, this.state);
     });
   }
 

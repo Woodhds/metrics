@@ -22,6 +22,7 @@ using System.Text;
 using NSwag.AspNetCore;
 using DAL.Services.Abstract;
 using Core.Services.Concrete;
+using Newtonsoft.Json.Serialization;
 
 namespace metrics
 {
@@ -92,7 +93,9 @@ namespace metrics
             
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
-                manager => { manager.FeatureProviders.Add(new GenericControllerFeatureProvider()); });
+                manager => { manager.FeatureProviders.Add(new GenericControllerFeatureProvider()); }).AddJsonOptions(z => {
+                    z.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                });
 
             services.AddAuthorization(z =>
             {

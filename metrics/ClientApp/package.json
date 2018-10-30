@@ -35,14 +35,14 @@
     "@progress/kendo-data-query": "^1.0.0",
     "@progress/kendo-drawing": "^1.0.0",
     "@progress/kendo-theme-bootstrap": "^2.14.2",
+    "@progress/kendo-theme-default": "latest",
     "bootstrap": "^4.1.3",
     "core-js": "^2.5.4",
     "font-fira-sans": "^1.0.0",
     "jquery": "^3.3.1",
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.0.0",
-    "zone.js": "~0.8.26",
-    "@progress/kendo-theme-default": "latest"
+    "zone.js": "~0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",

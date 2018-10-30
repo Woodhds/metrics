@@ -1,9 +1,9 @@
-<kendo-grid [data]="data | async" [pageable]="true" [skip]="state.skip" take="state.take">
+<kendo-grid [data]="data | async" [pageable]="true" [pageSize]="state.take" [skip]="state.skip" take="state.take">
   <ng-template kendoGridToolbarTemplate>
     <kendo-buttongroup>
       <button kendoTooltip kendoButton title="Добавить" (click)="addItem()" [icon]="'plus'"></button>
     </kendo-buttongroup>
   </ng-template>
-  <kendo-grid-column *ngFor="let column of viewConfig.columns" field="{{column.name}}" title="{{column.title}}"></kendo-grid-column>
+  <kendo-grid-column *ngFor="let column of (viewConfig | async)?.Columns" field="{{column.Name}}" title="{{column.Title}}"></kendo-grid-column>
 </kendo-grid>
 <div kendoDialogContainer></div>
