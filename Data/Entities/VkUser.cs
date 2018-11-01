@@ -8,10 +8,13 @@ namespace Data.Entities
     public class VkUser : BaseEntity
     {
         public int UserId { get; set; }
-        [ListView(Name = "Èìÿ")]
+        [ListView(Name = "Ð˜Ð¼Ñ", Required = true)]
         public string FirstName { get; set; }
-        [ListView(Name = "Ôàìèëèÿ")]
+        [ListView(Name = "Ð¤Ð°Ð¼Ð¸Ð»Ð¸Ñ", Required = true)]
         public string LastName { get; set; }
+
+        [ListView(Name = "Ð’Ð¾Ð·Ñ€Ð°ÑÑ‚")]
+        public int Age { get; set; }
 
         [NotMapped]
         public string FullName => FirstName + ' ' + LastName;

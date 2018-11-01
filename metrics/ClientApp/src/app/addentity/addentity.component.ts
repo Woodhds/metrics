@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ViewConfig } from '../entities/view-config.model';
+import { Component, OnInit, Input } from '@angular/core';
+import {PropertyDataType, ViewConfig} from '../entities/view-config.model';
+import {NgForm} from "@angular/forms";
+import {EntitiesService} from "../services/entities.service";
 
 @Component({
   selector: 'app-addentity',
@@ -7,13 +9,14 @@ import { ViewConfig } from '../entities/view-config.model';
   styleUrls: ['./addentity.component.scss']
 })
 export class AddentityComponent implements OnInit {
-  @Output() save: EventEmitter<any> = new EventEmitter<any>();
   @Input() viewConfig: ViewConfig;
-  constructor() { }
+  public dataType = PropertyDataType;
+  constructor(private entitiesService: EntitiesService) { }
 
   ngOnInit() {
   }
 
-  saveEntity() {
+  saveEntity(form:NgForm) {
+    this.entitiesService.save(this.viewConfig.Name, form.value);
   }
 }

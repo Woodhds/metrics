@@ -6,9 +6,9 @@ namespace metrics.Services.Models
 {
     public class VkResponse<T>
     {
-        public VkResponseItems<T> Response { get; set; }
+        public VkResponseItems Response { get; set; }
 
-        public class VkResponseItems<T>
+        public class VkResponseItems
         {
             public int Count { get; set; }
             public T Items { get; set; }

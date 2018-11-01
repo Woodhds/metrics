@@ -1,7 +1,15 @@
 <div class="container-fluid">
-  <div *ngFor="let column of viewConfig.Columns" class="k-form-field">
-    <kendo-textbox-container floatingLabel="{{column.Title}}">
-      <input kendoTextBox ngModel class="k-textbox" type="text" name="{{column.Name}}" />
-    </kendo-textbox-container>
-  </div>
+  <kendo-toolbar>
+    <kendo-toolbar-button [disabled]="!form.valid" (click)="saveEntity(form)" [text]="'Сохранить'"></kendo-toolbar-button>
+  </kendo-toolbar>
+  <form #form="ngForm" novalidate>
+    <div *ngFor="let column of viewConfig.Columns" [ngSwitch]="column.Type" class="k-form-field">
+      <kendo-textbox-container  floatingLabel="{{column.Title}}">
+        <kendo-numerictextbox *ngSwitchCase="dataType.Integer" ngModel [required]="column.Required"
+                              [name]="column.Name"></kendo-numerictextbox>
+        <input kendoTextBox *ngSwitchDefault ngModel [required]="column.Required" class="k-textbox" type="text"
+               name="{{column.Name}}" />
+      </kendo-textbox-container>
+    </div>
+  </form>
 </div>

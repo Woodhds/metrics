@@ -50,12 +50,21 @@ namespace Core.Services.Concrete
                     .Where(z => z.attr != null)
                     .Select(c => new ColumnView()
                     {
+                        Type = GetPropertyDataType(c.p.PropertyType),
                         Name = c.p.Name,
                         Title = c.attr.Name
                     }).ToList()
                 };
                 _configs.TryAdd(type.Name, config);
             }
+        }
+
+        public PropertyDataType GetPropertyDataType(Type type)
+        {
+            if (typeof(int).IsAssignableFrom(type))
+                return PropertyDataType.Integer;
+
+            return PropertyDataType.String;
         }
     }
 }

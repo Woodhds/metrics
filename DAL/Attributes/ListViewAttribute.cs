@@ -6,5 +6,6 @@ namespace DAL.Attributes
     public class ListViewAttribute : Attribute
     {
         public string Name { get; set; }
+        public bool Required { get; set; }
     }
 }

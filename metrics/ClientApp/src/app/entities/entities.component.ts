@@ -16,7 +16,7 @@ import { DialogService } from '@progress/kendo-angular-dialog';
   entryComponents: [AddentityComponent]
 })
 export class EntitiesComponent implements OnInit {
-  public viewConfig: Observable<ViewConfig>;
+  public viewConfig: ViewConfig;
   public data: Observable<GridDataResult>;
   public state: State = {
     skip: 0,
@@ -27,26 +27,25 @@ export class EntitiesComponent implements OnInit {
     private entitiesService: EntitiesService,
     private dialogService: DialogService
   ) {
-    this.viewConfig = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
+     this.route.paramMap.subscribe(
+       (params: ParamMap) =>
         this.entitiesService
-          .getConfig(params.get('entity'))
-      )
-    );
+          .getConfig(params.get('entity')).subscribe((config: ViewConfig) => {
+          this.viewConfig = config;
+          this.fetchData();
+        })
+      );
   }
 
   ngOnInit() {
-    this.fetchData();
-  }
+
+ }
 
   fetchData() {
-    this.viewConfig.subscribe(z => {
-      this.data = this.entitiesService.getData(z.Name, this.state);
-    });
+    this.data = this.entitiesService.getData(this.viewConfig.Name, this.state, this.viewConfig.Columns);
   }
 
   addItem() {
-    this.viewConfig.subscribe(z => {
       const dialog = this.dialogService.open({
         content: AddentityComponent,
         title: 'Добавить',
@@ -55,7 +54,6 @@ export class EntitiesComponent implements OnInit {
       });
 
       const config = dialog.content.instance;
-      config.viewConfig = z;
-    });
+      config.viewConfig = this.viewConfig;
   }
 }

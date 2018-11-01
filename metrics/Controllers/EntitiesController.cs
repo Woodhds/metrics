@@ -1,4 +1,3 @@
-using System.Net;
 using DAL;
 using DAL.Models;
 using DAL.Services.Abstract;
@@ -8,7 +7,8 @@ using System.Linq.Dynamic.Core;
 using System.Collections.Generic;
 using metrics.Models;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using DAL.Extensions;
+using Microsoft.EntityFrameworkCore.DynamicLinq;
 
 namespace metrics.Controllers
 {
@@ -26,11 +26,11 @@ namespace metrics.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<DataSourceResponseModel>> Read(int page, int pageSize)
+        public async Task<ActionResult<DataSourceResponseModel>> Read(int page, int pageSize, string[] columns)
         {
-            var query = _repository.Read().OrderByDescending(c => c.Id);
+            var query = _repository.Read().OrderByDescending(c => c.Id).Select(columns);
             var count = await query.CountAsync();
-            var data = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var data = query.Skip((page - 1) * pageSize).Take(pageSize).ToDynamicList();
             return Ok(new DataSourceResponseModel(data, count));
         }
 
