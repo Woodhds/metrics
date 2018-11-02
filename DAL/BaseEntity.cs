@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DAL.Attributes;
 
 namespace DAL
 {
@@ -7,6 +8,7 @@ namespace DAL
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ListView(Name = "ID")]
         public int Id { get; set; }
         public bool IsDeleted { get; set; }
         [Timestamp]

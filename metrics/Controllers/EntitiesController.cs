@@ -47,5 +47,19 @@ namespace metrics.Controllers
             return Ok(_repository.Read().Where($"{lookup}.StartWith(@0)", lookup));
 
         }
+
+        [HttpPost("")]
+        public async Task<ActionResult<bool>> Save(T model)
+        {
+            if (model.Id != 0)
+            {
+                await _repository.CreateAsync(model);
+            }
+            else
+            {
+                await _repository.UpdateAsync(model);
+            }
+            return Ok(true);
+        }
     }
 }
