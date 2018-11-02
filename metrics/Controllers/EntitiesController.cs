@@ -7,8 +7,13 @@ using System.Linq.Dynamic.Core;
 using System.Collections.Generic;
 using metrics.Models;
 using System.Threading.Tasks;
+using Data.EF;
+using Data.Entities;
 using DAL.Extensions;
+using metrics.Services.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace metrics.Controllers
 {
@@ -19,8 +24,12 @@ namespace metrics.Controllers
     {
         private readonly IRepository<T> _repository;
         private readonly IViewConfigService _viewConfigService;
-        public EntitiesController(IRepository<T> repository, IViewConfigService viewConfigService) 
+        private readonly IVkClient _vkClient;
+        private readonly DbContextOptions _options;
+        public EntitiesController(IRepository<T> repository, IViewConfigService viewConfigService, IVkClient vkClient, DbContextOptions options1)
         {
+            _options = options1;
+            _vkClient = vkClient;
             _repository = repository;
             _viewConfigService = viewConfigService;
         }
@@ -44,14 +53,28 @@ namespace metrics.Controllers
         public ActionResult<IEnumerable<T>> Filter(string startWith)
         {
             var lookup = _viewConfigService.GetConfig<T>()?.LookupProperty;
-            return Ok(_repository.Read().Where($"{lookup}.StartWith(@0)", lookup));
+            return Ok(_repository.Read().Where($"{lookup}.StartWith(@0)", startWith));
 
         }
 
         [HttpPost("")]
         public async Task<ActionResult<bool>> Save(T model)
         {
-            if (model.Id != 0)
+            var user = model as VkUser;
+            if (user != null)
+            {
+                var userInfo = _vkClient.GetUserInfo(user.UserId);
+                user.FirstName = userInfo.Response.First()?.First_name;
+                user.LastName = userInfo.Response.First()?.Last_Name;
+                using (var context = new DataContext(_options))
+                {
+                    context.Entry(user).State = EntityState.Added;
+                    await context.SaveChangesAsync();
+                    return Ok(true);
+                }
+            }
+            
+            if (model.Id == 0)
             {
                 await _repository.CreateAsync(model);
             }

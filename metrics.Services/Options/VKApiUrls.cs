@@ -13,5 +13,6 @@ namespace metrics.Services.Options
         public string Repost { get; set; }
         public string WallGetById { get; set; }
         public string GroupJoin { get; set; }
+        public string UserInfo { get; set; }
     }
 }

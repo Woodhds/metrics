@@ -48,11 +48,14 @@ namespace Core.Services.Concrete
                     LookupProperty = configAttr?.LookupProperty,
                     Columns = type.GetProperties().Select(c => new { p = c, attr = c.GetCustomAttribute<ListViewAttribute>() })
                     .Where(z => z.attr != null)
-                    .Select(c => new ColumnView()
+                    .Select(c => new ColumnView
                     {
                         Type = GetPropertyDataType(c.p.PropertyType),
                         Name = c.p.Name,
-                        Title = c.attr.Name
+                        Title = c.attr.Name,
+                        Required = c.attr.Required || !typeof(Nullable<>).IsAssignableFrom(c.p.PropertyType),
+                        Visible = c.attr.Visible,
+                        ReadOnly = c.attr.ReadOnly
                     }).ToList()
                 };
                 _configs.TryAdd(type.Name, config);

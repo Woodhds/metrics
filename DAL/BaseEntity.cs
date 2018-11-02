@@ -8,7 +8,7 @@ namespace DAL
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ListView(Name = "ID")]
+        [ListView(Name = "ID", Visible = false)]
         public int Id { get; set; }
         public bool IsDeleted { get; set; }
         [Timestamp]

@@ -31,6 +31,6 @@ export class EntitiesService {
   }
 
   save(config: string, data: any): void {
-    this.httpClient.post(`/api/${config}`, JSON.stringify(data)).subscribe(z => console.log(z));
+    this.httpClient.post(`/api/${config}`, data).subscribe(z => console.log(z));
   }
 }

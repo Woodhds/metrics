@@ -149,6 +149,17 @@ namespace metrics.Services.Concrete
             }
         }
 
+        public SimpleVkResponse<List<VkUserResponse>> GetUserInfo(string id)
+        {
+            var @params = new NameValueCollection
+            {
+                { "user_ids", id },
+                { "fields", "first_name,last_name,photo_50" }
+            };
+
+            return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(urls.UserInfo, @params);
+        }
+
         public VkResponse<List<VkMessage>> GetById(List<VkRepostViewModel> vkRepostViewModels)
         {
             if (vkRepostViewModels == null)

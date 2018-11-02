@@ -8,6 +8,8 @@ export class ColumnView {
   public Name: string;
   public Title: string;
   public Required: boolean;
+  public Visible: boolean;
+  public ReadOnly: boolean;
   public Type: PropertyDataType;
 }
 

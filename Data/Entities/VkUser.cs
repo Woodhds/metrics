@@ -7,13 +7,14 @@ namespace Data.Entities
     [ViewConfig(nameof(FullName))]
     public class VkUser : BaseEntity
     {
-        public int UserId { get; set; }
-        [ListView(Name = "Имя", Required = true)]
+        [ListView(Name = "Ид юзера", Required = true)]
+        public string UserId { get; set; }
+        [ListView(Name = "Имя", ReadOnly = true)]
         public string FirstName { get; set; }
-        [ListView(Name = "Фамилия", Required = true)]
+        [ListView(Name = "Фамилия", ReadOnly = true)]
         public string LastName { get; set; }
 
-        [ListView(Name = "Возраст")]
+        [ListView(Name = "Возраст", ReadOnly = true)]
         public int Age { get; set; }
 
         [NotMapped]

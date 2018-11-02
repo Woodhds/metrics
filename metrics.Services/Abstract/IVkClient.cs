@@ -8,5 +8,6 @@ namespace metrics.Services.Abstract
     {
         VkResponse<List<VkMessage>> GetReposts(string id, int skip, int take, string search = null);
         void Repost(List<VkRepostViewModel> reposts, int timeout = 0);
+        SimpleVkResponse<List<VkUserResponse>> GetUserInfo(string id);
     }
 }
