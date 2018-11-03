@@ -1,11 +1,13 @@
 <div class="user">
-  <kendo-grid selectable="'multiple'" [loading]="loading" [pageSize]="state.take" [pageable]="true" [data]="data" [skip]="state.skip">
+  <kendo-grid selectable="'multiple'" (dataStateChange)="fetch()" [loading]="loading" [pageSize]="state.take" [pageable]="true" [data]="data" [skip]="state.skip">
     <ng-template position="top" kendoGridToolbarTemplate>
       <form class="k-form row" #form="ngForm" novalidate>
         <div class="k-form-field col">
-          <kendo-textbox-container id="Filter" floatingLabel="Пользователь">
-            <input kendoTextBox [(ngModel)]="userId" name="Filter" required class="k-textbox" />
-          </kendo-textbox-container>
+          <kendo-combobox name="UserId" [(ngModel)]="userId" [allowCustom]="true" [textField]="'FullName'" [valueField]="'UserId'" [data]="users">
+            <ng-template kendoComboBoxItemTemplate let-dataItem>
+              <img class="img-responsive" [src]="dataItem.Avatar"/>{{ dataItem.FullName }}
+            </ng-template>
+          </kendo-combobox>
           <kendo-textbox-container id="Search" floatingLabel="Поиск">
             <input kendoTextBox name="Search" [(ngModel)]="search" class="k-textbox" />
           </kendo-textbox-container>

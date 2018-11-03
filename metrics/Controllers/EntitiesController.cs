@@ -66,6 +66,7 @@ namespace metrics.Controllers
                 var userInfo = _vkClient.GetUserInfo(user.UserId);
                 user.FirstName = userInfo.Response.First()?.First_name;
                 user.LastName = userInfo.Response.First()?.Last_Name;
+                user.Avatar = userInfo.Response.First()?.Photo_50;
                 using (var context = new DataContext(_options))
                 {
                     context.Entry(user).State = EntityState.Added;

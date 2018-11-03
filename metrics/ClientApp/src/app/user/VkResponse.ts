@@ -117,7 +117,8 @@ export class VkRepostModel {
   }
 }
 
-export class DataSourceResponseModel {
-  Data: any;
-  Total: number;
+export class VkUser {
+  public UserId: string;
+  public FullName: string;
+  public Avatar: string;
 }

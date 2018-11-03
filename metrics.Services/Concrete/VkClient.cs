@@ -75,39 +75,30 @@ namespace metrics.Services.Concrete
 
         public VkResponse<List<VkMessage>> GetReposts(string id, int skip, int take, string search = null)
         {
-            var workID = id.Replace(urls.MainDomain, string.Empty);
-            var userid = string.Empty;
-            var owner = string.Empty;
-            if (workID.StartsWith("id"))
-            {
-                userid = Regex.Match(workID, @"\d+")?.Value;
-            }
-            else
-            {
-                owner = workID;
-            }
 
             var @params = new NameValueCollection()
             {
                 { "count", take.ToString() },
                 { "offset", skip.ToString() },
-                { "filter", "owner" }
+                { "filter", "owner" },
+                { "owner_id", id }
             };
-            if (!string.IsNullOrEmpty(userid))
-            {
-                @params.Add("owner_id", userid);
-            }
-            else
-            {
-                @params.Add("domain", owner);
-            }
             string method = urls.Wall;
             if (!string.IsNullOrEmpty(search))
             {
                 method = urls.WallSearch;
                 @params.Add("query", search);
             }
-            return GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
+            var data =  GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
+            var reposts = data.Response
+                .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.Date))
+                .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First())
+                .Distinct().ToList();
+            var count = data.Response.Count;
+
+            var result = GetById(reposts.Select(c => new VkRepostViewModel() {Id = c.Id, Owner_Id = c.Owner_Id}));
+            result.Response.Count = count;
+            return result;
         }
 
         public void JoinGroup(int groupId)
@@ -160,7 +151,7 @@ namespace metrics.Services.Concrete
             return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(urls.UserInfo, @params);
         }
 
-        public VkResponse<List<VkMessage>> GetById(List<VkRepostViewModel> vkRepostViewModels)
+        public VkResponse<List<VkMessage>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels)
         {
             if (vkRepostViewModels == null)
             {

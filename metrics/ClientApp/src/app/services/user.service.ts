@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { State, toDataSourceRequestString } from '@progress/kendo-data-query';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { VkResponse, VkMessage, VkRepostModel } from '../user/VkResponse';
+import {VkResponse, VkMessage, VkRepostModel, VkUser} from '../user/VkResponse';
 import { map } from 'rxjs/operators/map';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 
@@ -19,5 +19,11 @@ export class UserService {
 
   repost(owner_id: number, id: number): void {
     this.httpClient.post(`api/repost/repost`, [ new VkRepostModel(owner_id, id) ]).subscribe();
+  }
+
+  getUsers() : Observable<GridDataResult> {
+    const params = new HttpParams({ fromObject: { columns: [ 'FullName', 'UserId', 'Avatar' ]} });
+    return this.httpClient.get<VkUser[]>(`/api/VkUser?pageSize=50&page=1`, { params: params })
+      .pipe(map(data => (<GridDataResult> { data: data['Data'], total: data['Total'] })));
   }
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {State} from '@progress/kendo-data-query';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { UserService } from '../services/user.service';
-import { MessageAttachmentType } from './VkResponse';
+import {VkUser} from "./VkResponse";
 
 @Component({
   selector: 'app-user',
@@ -12,9 +12,9 @@ import { MessageAttachmentType } from './VkResponse';
 })
 export class UserComponent implements OnInit {
   public data: GridDataResult;
-  public userId  = '';
+  public users: VkUser[] = [];
+  public userId: {FullName: '', UserId: ''};
   public search = '';
-  public attachmentType: MessageAttachmentType.photo;
   public loading = false;
   public state: State = {
     skip: 0,
@@ -22,12 +22,14 @@ export class UserComponent implements OnInit {
   };
   constructor(private userService: UserService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userService.getUsers().subscribe(data => this.users = data.data);
+  }
 
   handleSearch() {
     this.loading = true;
     this.userService
-      .getReposts(this.userId, this.state, this.search)
+      .getReposts(this.userId.UserId, this.state, this.search)
       .subscribe(data => {
         this.data = data;
         this.loading = false;

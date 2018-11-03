@@ -12,6 +12,7 @@ namespace DAL
         public int Id { get; set; }
         public bool IsDeleted { get; set; }
         [Timestamp]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public byte[] Version { get; set; }
     }
 }

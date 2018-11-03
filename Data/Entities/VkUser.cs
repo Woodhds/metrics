@@ -14,8 +14,8 @@ namespace Data.Entities
         [ListView(Name = "Фамилия", ReadOnly = true)]
         public string LastName { get; set; }
 
-        [ListView(Name = "Возраст", ReadOnly = true)]
-        public int Age { get; set; }
+        [ListView(Name = "Аватар", ReadOnly = true)]
+        public string Avatar { get; set; }
 
         [NotMapped]
         public string FullName => FirstName + ' ' + LastName;

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace metrics.Services.Models
 {
     public class VkMessage
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
         public int Owner_Id { get; set; }
         public int From_Id { get; set; }
         public uint Date { get; set; }
