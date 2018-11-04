@@ -1,5 +1,5 @@
 <div class="user">
-  <kendo-grid selectable="'multiple'" (dataStateChange)="fetch()" [loading]="loading" [pageSize]="state.take" [pageable]="true" [data]="data" [skip]="state.skip">
+  <kendo-grid selectable="'multiple'" (dataStateChange)="onStateChange($event)" [loading]="loading" [pageSize]="state.take" [pageable]="true" [data]="data" [skip]="state.skip">
     <ng-template position="top" kendoGridToolbarTemplate>
       <form class="k-form row" #form="ngForm" novalidate>
         <div class="k-form-field col">
@@ -37,6 +37,7 @@
           <div class="card-footer">
             <a title="Репост" kendoTooltip class="text-primary k-icon k-i-fav-outline" (click)="repost(dataItem.Owner_Id, dataItem.Id, $event.currentTarget)">
             </a>
+            <span class="card-text offset-1rt">{{dataItem.Reposts?.Count}}</span>
           </div>
         </div>
       </ng-template>

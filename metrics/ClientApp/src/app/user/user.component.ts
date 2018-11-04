@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {State} from '@progress/kendo-data-query';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import {DataStateChangeEvent, GridDataResult} from '@progress/kendo-angular-grid';
 import { UserService } from '../services/user.service';
 import {VkUser} from "./VkResponse";
 
@@ -34,6 +34,12 @@ export class UserComponent implements OnInit {
         this.data = data;
         this.loading = false;
       });
+  }
+
+  onStateChange(state: DataStateChangeEvent) {
+    this.state.skip = state.skip;
+    this.state.take = state.take;
+    this.handleSearch();
   }
 
   repost(owner_id: number, id: number, element: HTMLElement) {

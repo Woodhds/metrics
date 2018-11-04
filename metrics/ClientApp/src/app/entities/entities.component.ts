@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ViewConfig } from './view-config.model';
 import { EntitiesService } from '../services/entities.service';
@@ -55,5 +55,6 @@ export class EntitiesComponent implements OnInit {
 
       const config = dialog.content.instance;
       config.viewConfig = this.viewConfig;
+      config.onClose = this.fetchData();
   }
 }
