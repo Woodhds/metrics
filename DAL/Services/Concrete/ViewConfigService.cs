@@ -50,7 +50,8 @@ namespace Core.Services.Concrete
                     .Where(z => z.attr != null)
                     .Select(c => new ColumnView
                     {
-                        Type = GetPropertyDataType(c.p.PropertyType),
+                        Type = c.p.GetCustomAttribute<PropertyDataTypeAttribute>()?.Type ??
+                               GetPropertyDataType(c.p.PropertyType),
                         Name = c.p.Name,
                         Title = c.attr.Name,
                         Required = c.attr.Required || !typeof(Nullable<>).IsAssignableFrom(c.p.PropertyType),

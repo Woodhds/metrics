@@ -55,6 +55,6 @@ export class EntitiesComponent implements OnInit {
 
       const config = dialog.content.instance;
       config.viewConfig = this.viewConfig;
-      config.onClose = this.fetchData();
+      config.onClose.subscribe(() => this.fetchData());
   }
 }

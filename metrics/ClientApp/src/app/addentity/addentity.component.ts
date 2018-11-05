@@ -11,14 +11,21 @@ import {DialogRef} from "@progress/kendo-angular-dialog";
 })
 export class AddentityComponent implements OnInit {
   @Input() viewConfig: ViewConfig;
+  @Output() onClose: EventEmitter = new EventEmitter();
   public dataType = PropertyDataType;
-  constructor(private entitiesService: EntitiesService, private dialog: DialogRef) { }
+
+  constructor(private entitiesService: EntitiesService, private dialog: DialogRef) {
+  }
 
   ngOnInit() {
   }
 
-  saveEntity(form:NgForm) {
-    this.entitiesService.save(this.viewConfig.Name, form.value);
-    this.dialog.close();
+  saveEntity(form: NgForm) {
+    this.entitiesService.save(this.viewConfig.Name, form.value).subscribe(z => {
+      if (z) {
+        this.onClose.emit();
+        this.dialog.close();
+      }
+    });
   }
 }

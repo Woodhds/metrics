@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {State} from '@progress/kendo-data-query';
-import {DataStateChangeEvent, GridDataResult} from '@progress/kendo-angular-grid';
+import {DataStateChangeEvent, GridDataResult, SelectionEvent} from '@progress/kendo-angular-grid';
 import { UserService } from '../services/user.service';
-import {VkUser} from "./VkResponse";
+import {VkMessage, VkUser} from "./VkResponse";
 
 @Component({
   selector: 'app-user',
@@ -13,6 +13,7 @@ import {VkUser} from "./VkResponse";
 export class UserComponent implements OnInit {
   public data: GridDataResult;
   public users: VkUser[] = [];
+  public selected: VkMessage[] = [];
   public userId: {FullName: '', UserId: ''};
   public search = '';
   public loading = false;
@@ -34,6 +35,10 @@ export class UserComponent implements OnInit {
         this.data = data;
         this.loading = false;
       });
+  }
+
+  onSelectionChange(event: SelectionEvent) {
+    console.log(event);
   }
 
   onStateChange(state: DataStateChangeEvent) {

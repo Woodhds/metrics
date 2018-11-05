@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using DAL;
 using DAL.Attributes;
+using DAL.Models;
 
 namespace Data.Entities
 {
@@ -15,6 +16,7 @@ namespace Data.Entities
         public string LastName { get; set; }
 
         [ListView(Name = "Аватар", ReadOnly = true)]
+        [PropertyDataType(PropertyDataType.Image)]
         public string Avatar { get; set; }
 
         [NotMapped]

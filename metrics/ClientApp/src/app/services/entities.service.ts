@@ -30,7 +30,7 @@ export class EntitiesService {
       .pipe(map(response => (<GridDataResult> { data: response['Data'], total: parseInt(response['Total']) })));
   }
 
-  save(config: string, data: any): void {
-    this.httpClient.post(`/api/${config}`, data).subscribe(z => console.log(z));
+  save(config: string, data: any): Observable<boolean> {
+    return this.httpClient.post<boolean>(`/api/${config}`, data);
   }
 }
