@@ -11,7 +11,7 @@ import {DialogRef} from "@progress/kendo-angular-dialog";
 })
 export class AddentityComponent implements OnInit {
   @Input() viewConfig: ViewConfig;
-  @Output() onClose: EventEmitter = new EventEmitter();
+  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
   public dataType = PropertyDataType;
 
   constructor(private entitiesService: EntitiesService, private dialog: DialogRef) {
