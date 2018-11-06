@@ -41,12 +41,12 @@ namespace metrics.Controllers
             try
             {
                 _vkClient.Repost(reposts, timeout);
-                return Ok();
+                return Ok(true);
             }
             catch(Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return BadRequest();
+                return BadRequest(false);
             }
         }
     }

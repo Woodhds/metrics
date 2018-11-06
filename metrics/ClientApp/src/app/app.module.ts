@@ -24,6 +24,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AddentityComponent } from './addentity/addentity.component';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import {DropDownsModule} from "@progress/kendo-angular-dropdowns";
+import { NotificationModule } from '@progress/kendo-angular-notification';
+
 
 
 
@@ -55,7 +57,8 @@ import {DropDownsModule} from "@progress/kendo-angular-dropdowns";
     TooltipModule,
     DialogsModule,
     ReactiveFormsModule,
-    DropDownsModule
+    DropDownsModule,
+    NotificationModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }

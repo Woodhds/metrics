@@ -29,6 +29,7 @@
     "@progress/kendo-angular-inputs": "2 - 3",
     "@progress/kendo-angular-intl": "^1.4.0",
     "@progress/kendo-angular-l10n": "^1.1.0",
+    "@progress/kendo-angular-notification": "^1.0.0",
     "@progress/kendo-angular-popup": "^2.0.0",
     "@progress/kendo-angular-toolbar": "^0.3.0",
     "@progress/kendo-angular-tooltip": "^1.1.0",
