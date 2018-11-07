@@ -6,16 +6,11 @@ $font-stack-sans: 'Fira sans', Helvetica, Verdana, sans-serif;
 
 
 html {
-  background-color: #eee;
   color: $font-color;
   height: 100%;
 }
 
 body {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
   font-family: $font-stack-sans;
 }
 

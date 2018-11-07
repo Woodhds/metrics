@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {State} from '@progress/kendo-data-query';
-import {DataStateChangeEvent, GridDataResult, SelectionEvent} from '@progress/kendo-angular-grid';
+import {DataStateChangeEvent, GridDataResult} from '@progress/kendo-angular-grid';
 import { UserService } from '../services/user.service';
 import {VkMessage, VkRepostModel, VkUser} from "./VkResponse";
 import {NotificationService} from "@progress/kendo-angular-notification";
-import {NotificationSettings} from "@progress/kendo-angular-notification/dist/es2015/models/notification-settings";
 
 @Component({
   selector: 'app-user',

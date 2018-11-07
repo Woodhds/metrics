@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { UserInfo } from './user-info.model';
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-navbar',
@@ -9,12 +10,13 @@ import { UserInfo } from './user-info.model';
 })
 export class NavbarComponent implements OnInit {
 
-  public userInfo: UserInfo;
+  public userInfo: Observable<UserInfo>;
   constructor(private authService: AuthService) {
-    this.authService.getInfo().subscribe((info: UserInfo) => this.userInfo = info);
+    this.userInfo = this.authService;
    }
 
   ngOnInit() {
+    this.authService.getInfo();
   }
 
 }

@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Constants} from "../core/constants";
-import {FormGroup, NgForm} from "@angular/forms";
-import {Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -11,22 +10,17 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   public token: string;
-  public message: string;
   public clientId: string = Constants.ClientId;
-  constructor(private authService: AuthService, private router: Router) {
+  public redirectUrl = '';
+
+  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute) {
+    this.redirectUrl = activatedRoute.snapshot.queryParams['redirectUrl'];
   }
 
   ngOnInit() {
   }
 
   handleLogin(): void {
-    this.authService.auth(this.token).subscribe(data => {
-      if (data && data.accessToken != '') {
-        localStorage.setItem('metrics-token', data.accessToken)
-        this.router.navigate(['/user'])
-      } else {
-        this.message = 'Ошибка авторизации';
-      }
-    });
+    this.authService.auth(this.token, this.redirectUrl);
   }
 }

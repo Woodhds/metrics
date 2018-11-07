@@ -1,29 +1,42 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {LoginModel} from "../login/loginmodel";
-import { Observable } from 'rxjs';
-import { UserInfo } from '../navbar/user-info.model';
+import {BehaviorSubject} from 'rxjs';
+import {UserInfo} from '../navbar/user-info.model';
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService extends BehaviorSubject<UserInfo> {
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private router: Router) {
+    super({IsLogged: false, Avatar: '', FullName: ''});
   }
 
-  static isLogged(): boolean {
+  auth(token: string, redirect: string = ''): void {
+    this.httpClient.post<LoginModel>('/api/account/login', {'token': token}).subscribe(token => {
+      if (token && token.accessToken != '') {
+        localStorage.setItem('metrics-token', token.accessToken);
+        this.getInfo(redirect);
+      }
+    });
+  }
+
+  static isLogged() {
     const token = localStorage.getItem('metrics-token');
     return token != null && token !== '';
   }
 
-  auth(token: string): Observable<LoginModel> {
-    return this.httpClient.post<LoginModel>('/api/account/login', { 'token': token });
-  }
-
-  getInfo(): Observable<UserInfo> {
+  getInfo(redirect: string = ''): void {
     if (AuthService.isLogged()) {
-      return this.httpClient.get<UserInfo>(`/api/account/info`);
+      this.httpClient.get<UserInfo>(`/api/account/info`).subscribe(
+        e => {
+          super.next({IsLogged: true, Avatar: e.Avatar, FullName: e.FullName});
+          if (redirect && redirect != '') {
+            this.router.navigateByUrl(redirect)
+          }
+        });
     }
   }
 }

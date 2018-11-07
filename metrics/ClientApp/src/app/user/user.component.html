@@ -24,7 +24,7 @@
           <kendo-slider [disabled]="selectedKeys.length === 0" name="timeout" [min]="15" [smallStep]="2" [max]="60"
                         [(ngModel)]="timeout"></kendo-slider>
         </div>
-        <button kendoButton [primary]="true">Репост всего</button>
+        <button [disabled]="selectedKeys.length === 0" kendoButton [primary]="true">Репост всего</button>
       </form>
     </ng-template>
     <kendo-grid-column>

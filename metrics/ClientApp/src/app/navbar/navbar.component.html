@@ -62,9 +62,9 @@
         <li class="nav-item"><a class="nav-link" [routerLink]="['/entities', 'VkUser']">Entities</a></li>
       </ul>
     </div>
-    <div *ngIf="userInfo" class="navbar-nav nav flex align-items-center d-none d-sm-block">
-      <img class="img-circle mr-3" [src]="userInfo.Avatar" />
-      <div class="navbar-text">{{userInfo.FullName}}</div>
+    <div *ngIf="userInfo | async" class="navbar-nav nav flex align-items-center d-none d-sm-block">
+      <img class="img-circle mr-3" [src]="(userInfo | async)?.Avatar" />
+      <div class="navbar-text">{{(userInfo | async)?.FullName}}</div>
     </div>
   </div>
 </nav>
