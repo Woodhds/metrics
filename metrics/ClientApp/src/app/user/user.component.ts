@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {State} from '@progress/kendo-data-query';
 import {DataStateChangeEvent, GridDataResult, SelectionEvent} from '@progress/kendo-angular-grid';
 import { UserService } from '../services/user.service';
-import {VkMessage, VkUser} from "./VkResponse";
+import {VkMessage, VkRepostModel, VkUser} from "./VkResponse";
 import {NotificationService} from "@progress/kendo-angular-notification";
 import {NotificationSettings} from "@progress/kendo-angular-notification/dist/es2015/models/notification-settings";
 
@@ -18,7 +18,9 @@ export class UserComponent implements OnInit {
   public selected: VkMessage[] = [];
   public userId: {FullName: '', UserId: ''};
   public search = '';
+  public timeout: number = 15;
   public loading = false;
+  public selectedKeys: any[] = [];
   public state: State = {
     skip: 0,
     take: 100
@@ -39,18 +41,15 @@ export class UserComponent implements OnInit {
       });
   }
 
-  onSelectionChange(event: SelectionEvent) {
-    console.log(event);
-  }
-
   onStateChange(state: DataStateChangeEvent) {
     this.state.skip = state.skip;
     this.state.take = state.take;
     this.handleSearch();
   }
 
-  repost(owner_id: number, id: number, element: HTMLElement) {
-    this.userService.repost(owner_id, id).subscribe(z => {
+  repost(repost: VkRepostModel[], element: HTMLElement) {
+    this.loading = true;
+    this.userService.repost(repost).subscribe(z => {
       if (z) {
         this.notificationService.show(
           {content: 'Выполнено успешно',
@@ -60,9 +59,8 @@ export class UserComponent implements OnInit {
         element.classList.remove('k-i-fav-outline');
         element.classList.add('text-danger');
         element.classList.add('k-i-fav');
-
+        this.loading = true;
       }
     });
-
   }
 }

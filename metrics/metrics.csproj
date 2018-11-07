@@ -53,6 +53,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
     <PackageReference Include="NLog" Version="4.5.10" />
     <PackageReference Include="NLog.Web" Version="4.7.0" />

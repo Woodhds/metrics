@@ -42,11 +42,14 @@ namespace metrics
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+#if(!DEBUG)
             var connectionString = Configuration.GetConnectionString("DataContext");
             services.AddDbContext<DataContext>(opts => {
                 opts.UseNpgsql(connectionString);
             });
+#else
+            services.AddDbContext<DataContext>(opts => { opts.UseSqlite("Data Source=.\\lite.db;"); });
+#endif
             services.AddScoped<DbContext, DataContext>();
             services.AddHttpContextAccessor();
 
