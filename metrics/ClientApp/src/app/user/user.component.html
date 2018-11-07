@@ -49,7 +49,7 @@
           </div>
           <div class="card-footer">
             <a title="Репост" kendoTooltip class="text-primary k-icon k-i-fav-outline"
-               (click)="repost([{ Owner_id: dataItem.Owner_Id, Id: dataItem.Id }], $event.currentTarget)">
+               (click)="repostOne([{ Owner_id: dataItem.Owner_Id, Id: dataItem.Id }], $event.currentTarget)">
             </a>
             <span class="card-text offset-1">{{dataItem.Reposts?.Count}}</span>
           </div>
