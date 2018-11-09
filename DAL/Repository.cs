@@ -34,10 +34,14 @@ namespace DAL
             return entity;
         }
 
-        public async Task DeleteAsync(TEntity entity)
+        public async Task DeleteAsync(int id)
         {
-            _context.Set<TEntity>().Remove(entity);
-            await _context.SaveChangesAsync();
+            var entity = await Find(id);
+            if (entity != null)
+            {
+                _context.Set<TEntity>().Remove(entity);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<TEntity> Find(int id)

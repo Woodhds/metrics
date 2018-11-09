@@ -53,7 +53,7 @@ namespace metrics.Controllers
         public ActionResult<IEnumerable<T>> Filter(string startWith)
         {
             var lookup = _viewConfigService.GetConfig<T>()?.LookupProperty;
-            return Ok(_repository.Read().Where($"{lookup}.StartWith(@0)", startWith));
+            return Ok(_repository.Read().Where($"it.{lookup}.StartWith(@0)", startWith));
 
         }
 
@@ -83,6 +83,13 @@ namespace metrics.Controllers
             {
                 await _repository.UpdateAsync(model);
             }
+            return Ok(true);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async ValueTask<ActionResult<bool>> Delete(int id)
+        {
+            await _repository.DeleteAsync(id);
             return Ok(true);
         }
     }

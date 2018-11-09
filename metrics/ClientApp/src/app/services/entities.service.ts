@@ -33,4 +33,8 @@ export class EntitiesService {
   save(config: string, data: any): Observable<boolean> {
     return this.httpClient.post<boolean>(`/api/${config}`, data);
   }
+
+  delete(config: string, id: number) : Observable<boolean> {
+    return this.httpClient.delete<boolean>(`/api/${config}/${id}`);
+  }
 }

@@ -13,7 +13,7 @@ namespace DAL
         Task<TEntity> CreateAsync(TEntity entity);
         IQueryable<TEntity> Read();
         Task<TEntity> UpdateAsync(TEntity entity);
-        Task DeleteAsync(TEntity entity);
+        Task DeleteAsync(int id);
         Task<TEntity> Find(int id);
     }
 }
