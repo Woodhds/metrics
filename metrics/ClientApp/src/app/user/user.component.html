@@ -1,5 +1,5 @@
 <div class="user">
-  <kendo-grid [selectable]="'multiple'" [kendoGridSelectBy]="'Id'" [selectedKeys]="selectedKeys"
+  <kendo-grid [selectable]="'multiple'" (selectionChange)="onSelectionChange($event)" [kendoGridSelectBy]="'Id'" [selectedKeys]="selectedKeys"
               (dataStateChange)="onStateChange($event)" [loading]="loading" [pageSize]="state.take" [pageable]="true"
               [data]="data" [skip]="state.skip">
     <ng-template position="top" kendoGridToolbarTemplate>
@@ -20,11 +20,11 @@
         </div>
         <div class="k-form-field col">
           <span>{{timeout}}</span>
-          <span>{{ selectedKeys }}</span>
           <kendo-slider [disabled]="selectedKeys.length === 0" name="timeout" [min]="15" [smallStep]="2" [max]="60"
                         [(ngModel)]="timeout"></kendo-slider>
         </div>
-        <button [disabled]="selectedKeys.length === 0" kendoButton [primary]="true">Репост всего</button>
+        <button [disabled]="selectedKeys.length === 0" (click)="repostAll()" kendoButton [primary]="true">Репост всего
+        </button>
       </form>
     </ng-template>
     <kendo-grid-column>

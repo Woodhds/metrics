@@ -42,10 +42,17 @@ export class UserComponent implements OnInit {
       });
   }
 
+  onSelectionChange(event) {
+    console.log(event)
+  }
+
   onStateChange(state: DataStateChangeEvent) {
     this.state.skip = state.skip;
     this.state.take = state.take;
     this.handleSearch();
+  }
+  repostAll() {
+    console.log(this.selectedKeys);
   }
 
   repostOne(repost: VkRepostModel[], element: HTMLElement) {
@@ -54,9 +61,6 @@ export class UserComponent implements OnInit {
       element.classList.add('text-danger');
       element.classList.add('k-i-fav');
     })
-  }
-
-  repostAll() {
   }
 
   repost(repost: VkRepostModel[], timeout: number, callback: Function) {
@@ -72,7 +76,7 @@ export class UserComponent implements OnInit {
         if (callback) {
           callback();
         }
-        this.loading = true;
+        this.loading = false;
       }
     });
   }
