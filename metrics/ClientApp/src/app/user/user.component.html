@@ -1,5 +1,5 @@
 <div class="user">
-  <kendo-grid [selectable]="'multiple'" (selectionChange)="onSelectionChange($event)" [kendoGridSelectBy]="'Id'" [selectedKeys]="selectedKeys"
+  <kendo-grid [selectable]="'multiple'" (selectionChange)="onSelectionChange($event)" [kendoGridSelectBy]="'Id'"
               (dataStateChange)="onStateChange($event)" [loading]="loading" [pageSize]="state.take" [pageable]="true"
               [data]="data" [skip]="state.skip">
     <ng-template position="top" kendoGridToolbarTemplate>

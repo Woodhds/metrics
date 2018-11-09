@@ -17,8 +17,8 @@ export class UserService {
       .pipe(map(value => <GridDataResult>{ data: value['Data'], total: value['Total'] }));
   }
 
-  repost(model: VkRepostModel[]): Observable<boolean> {
-    return this.httpClient.post<boolean>(`api/repost/repost`, model);
+  repost(model: VkRepostModel[], timeout: number): Observable<boolean> {
+    return this.httpClient.post<boolean>(`api/repost/repost?timeout=${timeout}`, model);
   }
 
   getUsers() : Observable<GridDataResult> {

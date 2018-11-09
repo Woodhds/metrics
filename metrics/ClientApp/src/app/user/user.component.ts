@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {State} from '@progress/kendo-data-query';
-import {DataStateChangeEvent, GridDataResult} from '@progress/kendo-angular-grid';
+import {DataStateChangeEvent, GridDataResult, SelectionEvent} from '@progress/kendo-angular-grid';
 import {UserService} from '../services/user.service';
 import {VkMessage, VkRepostModel, VkUser} from "./VkResponse";
 import {NotificationService} from "@progress/kendo-angular-notification";
@@ -14,12 +14,11 @@ import {NotificationService} from "@progress/kendo-angular-notification";
 export class UserComponent implements OnInit {
   public data: GridDataResult;
   public users: VkUser[] = [];
-  public selected: VkMessage[] = [];
   public userId: { FullName: '', UserId: '' };
   public search = '';
   public timeout: number = 15;
   public loading = false;
-  public selectedKeys: any[] = [];
+  public selectedKeys: VkRepostModel[] = [];
   public state: State = {
     skip: 0,
     take: 100
@@ -42,8 +41,17 @@ export class UserComponent implements OnInit {
       });
   }
 
-  onSelectionChange(event) {
-    console.log(event)
+  onSelectionChange(event: SelectionEvent) {
+    if (event.selectedRows.length > 0) {
+      event.selectedRows.forEach((item) => {
+        this.selectedKeys.push({Id: item.dataItem.Id, Owner_Id: item.dataItem.Owner_Id});
+      })
+    }
+    if (event.deselectedRows.length > 0) {
+      event.deselectedRows.forEach((item) => {
+        this.selectedKeys = this.selectedKeys.filter((l) => item.dataItem.Owner_Id != l.Owner_Id && item.dataItem.Id != l.Id);
+      });
+    }
   }
 
   onStateChange(state: DataStateChangeEvent) {
@@ -52,7 +60,7 @@ export class UserComponent implements OnInit {
     this.handleSearch();
   }
   repostAll() {
-    console.log(this.selectedKeys);
+    this.repost(this.selectedKeys, this.timeout, null);
   }
 
   repostOne(repost: VkRepostModel[], element: HTMLElement) {
@@ -65,7 +73,7 @@ export class UserComponent implements OnInit {
 
   repost(repost: VkRepostModel[], timeout: number, callback: Function) {
     this.loading = true;
-    this.userService.repost(repost).subscribe(z => {
+    this.userService.repost(repost, timeout).subscribe(z => {
       if (z) {
         this.notificationService.show(
           {
