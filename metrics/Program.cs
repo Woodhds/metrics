@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using NLog.Web;
 
@@ -8,13 +9,14 @@ namespace metrics
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseNLog()
-            .UseStartup<Startup>();
+                .UseShutdownTimeout(TimeSpan.FromSeconds(10))
+                .UseNLog()
+                .UseStartup<Startup>();
     }
 }

@@ -22,9 +22,11 @@ using System.Text;
 using NSwag.AspNetCore;
 using DAL.Services.Abstract;
 using Core.Services.Concrete;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
+[assembly: HostingStartup(typeof(metrics.Startup))]
 namespace metrics
 {
     public class Startup
@@ -69,6 +71,7 @@ namespace metrics
             .AddEntityFrameworkStores<DataContext>();
 
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
+            services.Configure<CompetitionOptions>(Configuration.GetSection("Competition"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
@@ -128,6 +131,8 @@ namespace metrics
             {
                 e.RootPath = "dist";
             });
+
+            services.AddSingleton<IHostedService, CompetitionsService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)

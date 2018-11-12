@@ -38,6 +38,7 @@
     <EmbeddedResource Remove="ViewComponents\**" />
     <None Remove="%2a%2a\**" />
     <None Remove="ViewComponents\**" />
+    <None Include="transform.xslt" />
   </ItemGroup>
 
   <ItemGroup>

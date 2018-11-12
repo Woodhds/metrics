@@ -7,7 +7,6 @@ using System.Linq;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using metrics.Models;
-using System.Net;
 
 namespace metrics.Controllers
 {
