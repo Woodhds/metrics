@@ -91,8 +91,8 @@ namespace metrics.Services.Models
         z = 8,
         w = 9
     }
-    
-    public abstract class Owner
+
+    public class Owner
     {
         public int Id { get; set; }
         public string Screen_Name { get; set; }
