@@ -4,9 +4,13 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
 using System.Linq;
+using System.Threading.Tasks;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using metrics.Models;
+using metrics.Services.Options;
+using Microsoft.Extensions.Options;
+using Nest;
 
 namespace metrics.Controllers
 {
@@ -16,16 +20,23 @@ namespace metrics.Controllers
     {
         private readonly IVkClient _vkClient;
         private readonly ILogger<RepostController> _logger;
-        public RepostController(IVkClient vkClient, ILogger<RepostController> logger)
+        private readonly CompetitionOptions _options;
+        public RepostController(IVkClient vkClient, ILogger<RepostController> logger, IOptions<CompetitionOptions> options)
         {
+            _options = options.Value;
             _vkClient = vkClient;
             _logger = logger;
         }
 
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
-        public ActionResult<DataSourceResponseModel> GetData(string userId, int page, int pageSize, string search = null)
+        public async Task<ActionResult<DataSourceResponseModel>> GetData(string userId, int page, int pageSize, string search = null)
         {
+            var connectionSettings = new ConnectionSettings(new Uri(_options.Address)).DisableDirectStreaming();
+            var es = new ElasticClient(connectionSettings);
+            var d = await es.SearchAsync<VkMessage>(z => z.Index(_options.Index).Query(t =>
+                t.Bool(g => g.Must(l => l.MatchPhrase(e => e.Field(h => h.Text).Query("13 ноября"))))));
+            
             var data = _vkClient.GetReposts(userId, page, pageSize, search);
             var reposts = data.Response
                 .Items.Where(c => c.Reposts != null && !c.Reposts.User_reposted)

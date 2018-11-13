@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Nest;
 
 namespace metrics.Services.Models
 {
+    [ElasticsearchType(IdProperty = nameof(Identifier), Name = nameof(VkMessage))]
     public class VkMessage
     {
         public int Id { get; set; }
@@ -13,6 +15,8 @@ namespace metrics.Services.Models
         public List<VkMessage> Copy_History { get; set; }
         public List<MessageAttachment> Attachments { get; set; }
         public MessageReposts Reposts { get; set; }
+        public Owner Owner { get; set; }
+        public string Identifier => Owner_Id + "_" + Id;
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>
@@ -86,5 +90,22 @@ namespace metrics.Services.Models
         y = 7,
         z = 8,
         w = 9
+    }
+    
+    public abstract class Owner
+    {
+        public int Id { get; set; }
+        public string Screen_Name { get; set; }
+    }
+
+    public class Profile : Owner
+    {
+        public string First_Name { get; set; }
+        public string Last_Name { get; set; }
+    }
+
+    public class Group : Owner
+    {
+        public string Name { get; set; }
     }
 }
