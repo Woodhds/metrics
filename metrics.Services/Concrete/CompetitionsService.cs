@@ -92,7 +92,7 @@ namespace metrics.Services.Concrete
                         {
                             new KeyValuePair<string, string>("page_num", i.ToString()),
                             new KeyValuePair<string, string>("our", string.Empty),
-                            new KeyValuePair<string, string>("city_id", 97.ToString())
+                            new KeyValuePair<string, string>("city_id", string.Empty)
                         });
                         var result = await client.PostAsync("https://wingri.ru/main/getPosts", formContent);
                         
@@ -109,7 +109,8 @@ namespace metrics.Services.Concrete
                         fs.Seek(0, SeekOrigin.Begin);
                         var data = fileStream.Deserialize(fs);
                         var posts = await GetPosts(data as List<VkRepostViewModel>);
-                        await es.IndexManyAsync(posts, _options.Index, nameof(VkMessage));
+                        await es.BulkAsync(e => e.UpdateMany(posts,
+                            (descriptor, message) => descriptor.Index(_options.Index).Doc(message).DocAsUpsert()));
                     }
                 }
                 catch (Exception e)
