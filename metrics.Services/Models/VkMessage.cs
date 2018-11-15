@@ -103,9 +103,4 @@ namespace metrics.Services.Models
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
     }
-
-    public class Group : Owner
-    {
-        public string Name { get; set; }
-    }
 }

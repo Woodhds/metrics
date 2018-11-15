@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Services", "metrics.Services\metrics.Services.csproj", "{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.Tests", "DAL.Tests\DAL.Tests.csproj", "{063BF785-707A-4475-A284-25FE0628AAC2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{833A025E-104E-43BB-9792-270BF4D45428}"
 EndProject
 Global
@@ -37,10 +35,6 @@ Global
 		{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}.Release|Any CPU.Build.0 = Release|Any CPU
-		{063BF785-707A-4475-A284-25FE0628AAC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{063BF785-707A-4475-A284-25FE0628AAC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{063BF785-707A-4475-A284-25FE0628AAC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{063BF785-707A-4475-A284-25FE0628AAC2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{833A025E-104E-43BB-9792-270BF4D45428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{833A025E-104E-43BB-9792-270BF4D45428}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{833A025E-104E-43BB-9792-270BF4D45428}.Release|Any CPU.ActiveCfg = Release|Any CPU

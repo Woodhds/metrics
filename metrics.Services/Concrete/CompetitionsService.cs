@@ -17,7 +17,6 @@ using Microsoft.Extensions.Options;
 using Nest;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Group = metrics.Services.Models.Group;
 using Profile = metrics.Services.Models.Profile;
 
 namespace metrics.Services.Concrete
@@ -57,38 +56,28 @@ namespace metrics.Services.Concrete
                     {
                         var response = await client.GetAsync("https://api.vk.com/method/wall.getById?v=5.85" +
                                                              "&access_token=00af0c15d3aef805fadf299ddc3c173647192af2becb3ea9c679157b2d03bcafd7caa759f527e59d95d7e&post" +
-                                                             $"&posts={string.Join(",", list.Select(c => c.Owner_Id + "_" + c.Id))}&extended=1");
+                                                             $"&posts={string.Join(",", list.Select(c => c.Owner_Id + "_" + c.Id))}&extended=1&fields=description");
                         var json = await response.Content.ReadAsStringAsync();
                         var jobject = JObject.Parse(json);
                         var groupsJ = jobject["response"]["groups"];
-                        var profilesJ = jobject["response"]["profiles"];
-                        var groups = new List<Group>();
-                        var profiles = new List<Profile>();
+                        var groups = new List<VkGroup>();
                         if (groupsJ.HasValues)
                         {
-                            groups = groupsJ.ToObject<List<Group>>();
-                        }
-
-                        if (profilesJ.HasValues)
-                        {
-                            profiles = profilesJ.ToObject<List<Profile>>();
+                            groups = groupsJ.ToObject<List<VkGroup>>();
                         }
 
                         var posts = jobject["response"]["items"].ToObject<List<VkMessage>>();
+                        await es.IndexManyAsync(groups, nameof(VkGroup).ToLower());
                         posts.ForEach(post =>
                         {
                             post.Owner = groups.FirstOrDefault(z => z.Id == -post.Owner_Id);
-                            if (post.Owner == null)
-                            {
-                                post.Owner = profiles.FirstOrDefault(z => z.Id == post.Owner_Id);
-                            }
                         });
                         return posts;
                     }
 
                     using (var fs = new MemoryStream())
                     {
-                        var formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+                        var formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
                         {
                             new KeyValuePair<string, string>("page_num", i.ToString()),
                             new KeyValuePair<string, string>("our", string.Empty),
@@ -109,8 +98,7 @@ namespace metrics.Services.Concrete
                         fs.Seek(0, SeekOrigin.Begin);
                         var data = fileStream.Deserialize(fs);
                         var posts = await GetPosts(data as List<VkRepostViewModel>);
-                        await es.BulkAsync(e => e.UpdateMany(posts,
-                            (descriptor, message) => descriptor.Index(_options.Index).Doc(message).DocAsUpsert()));
+                        await es.IndexManyAsync(posts, _options.Index, typeof(VkMessage));
                     }
                 }
                 catch (Exception e)

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Nest;
 
 namespace metrics.Services.Models
 {
-    public class VkGroup
+    [ElasticsearchType(Name = nameof(VkGroup), IdProperty = nameof(Id))]
+    public class VkGroup : Owner
     {
-        public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

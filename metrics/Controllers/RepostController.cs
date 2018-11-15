@@ -32,14 +32,9 @@ namespace metrics.Controllers
         [HttpGet("user")]
         public async Task<ActionResult<DataSourceResponseModel>> GetData(string userId, int page, int pageSize, string search = null)
         {
-            var connectionSettings = new ConnectionSettings(new Uri(_options.Address)).DisableDirectStreaming();
-            var es = new ElasticClient(connectionSettings);
-            var d = await es.SearchAsync<VkMessage>(z => z.Index(_options.Index).Query(t =>
-                t.Bool(g => g.Must(l => l.MatchPhrase(e => e.Field(h => h.Text).Query(search))))));
-            
             var data = _vkClient.GetReposts(userId, page, pageSize, search);
             var reposts = data.Response
-                .Items.Union(d.Documents).Where(c => c.Reposts != null && !c.Reposts.User_reposted)
+                .Items.Where(c => c.Reposts != null && !c.Reposts.User_reposted)
                 .OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.Date)).Distinct().ToList();
             return new DataSourceResponseModel(reposts, data.Response.Count);
         }
