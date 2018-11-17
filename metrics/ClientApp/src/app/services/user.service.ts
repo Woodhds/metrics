@@ -12,8 +12,8 @@ import { GridDataResult } from '@progress/kendo-angular-grid';
 export class UserService {
   constructor(private httpClient: HttpClient) { }
 
-  getReposts(userId: string, state: State, search: string = null): Observable<GridDataResult> {
-    return this.httpClient.get<VkResponse<VkMessage[]>>(`/api/repost/user?userId=${userId}&search=${search}&${toDataSourceRequestString(state)}`)
+  getReposts(userId: string, state: State, search: string = null, fromRepo: boolean = false): Observable<GridDataResult> {
+    return this.httpClient.get<VkResponse<VkMessage[]>>(`/api/repost/user?userId=${userId}&search=${search}&fromRepo=${fromRepo}&${toDataSourceRequestString(state)}`)
       .pipe(map(value => <GridDataResult>{ data: value['Data'], total: value['Total'] }));
   }
 

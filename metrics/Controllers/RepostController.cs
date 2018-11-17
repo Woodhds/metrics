@@ -30,13 +30,26 @@ namespace metrics.Controllers
 
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
-        public async Task<ActionResult<DataSourceResponseModel>> GetData(string userId, int page, int pageSize, string search = null)
+        public async Task<ActionResult<DataSourceResponseModel>> GetData(string userId, int page, int pageSize,
+            string search = null, bool fromRepo = false)
         {
-            var data = _vkClient.GetReposts(userId, page, pageSize, search);
-            var reposts = data.Response
-                .Items.Where(c => c.Reposts != null && !c.Reposts.User_reposted)
-                .OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.Date)).Distinct().ToList();
-            return new DataSourceResponseModel(reposts, data.Response.Count);
+            if (!fromRepo)
+            {
+                var data = _vkClient.GetReposts(userId, page, pageSize, search);
+                var reposts = data.Response
+                    .Items.Where(c => c.Reposts != null && !c.Reposts.User_reposted)
+                    .OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.Date)).Distinct().ToList();
+                return new DataSourceResponseModel(reposts, data.Response.Count);
+            }
+
+            var connectionSettings = new ConnectionSettings(new Uri(_options.Address)).DisableDirectStreaming();
+            var es = new ElasticClient(connectionSettings);
+            var messages = await es.SearchAsync<VkMessage>(descriptor =>
+                descriptor.Index(_options.Index).Query(z =>
+                        z.Bool(r => r.Must(q =>
+                            q.MatchPhrase(queryDescriptor => queryDescriptor.Field("text").Query(search)))))
+                    .Take(pageSize).Skip((page - 1) * pageSize));
+            return new DataSourceResponseModel(messages.Documents, messages.Total);
         }
 
         [Authorize(Policy = "VkPolicy")]

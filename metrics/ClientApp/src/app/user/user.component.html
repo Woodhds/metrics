@@ -3,9 +3,11 @@
               (dataStateChange)="onStateChange($event)" [loading]="loading" [pageSize]="state.take" [pageable]="true"
               [data]="data" [skip]="state.skip">
     <ng-template position="top" kendoGridToolbarTemplate>
+
       <form class="k-form row" #form="ngForm" novalidate>
         <div class="k-form-field col">
-          <kendo-combobox required="true" name="UserId" [(ngModel)]="userId" [allowCustom]="true"
+          <kendo-switch name="FromRepo" [(ngModel)]="fromRepo"></kendo-switch>
+          <kendo-combobox  *ngIf="!fromRepo" required="true" name="UserId" [(ngModel)]="userId" [allowCustom]="true"
                           [textField]="'FullName'" [valueField]="'UserId'" [data]="users">
             <ng-template kendoComboBoxItemTemplate let-dataItem>
               <img class="img-responsive" [src]="dataItem.Avatar"/>{{ dataItem.FullName }}

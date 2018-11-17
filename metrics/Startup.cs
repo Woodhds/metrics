@@ -19,7 +19,6 @@ using metrics.Services.Concrete;
 using metrics.Services.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using NSwag.AspNetCore;
 using DAL.Services.Abstract;
 using Core.Services.Concrete;
 using Microsoft.Extensions.Hosting;
@@ -126,7 +125,6 @@ namespace metrics
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddSingleton<IVkClient, VkClient>();
             services.AddSingleton<IViewConfigService, ViewConfigService>();
-            services.AddSwagger();
             services.AddSpaStaticFiles(e =>
             {
                 e.RootPath = "dist";
@@ -173,11 +171,6 @@ namespace metrics
                 {
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200/");
                 }
-            });
-
-            app.UseSwaggerUi3WithApiExplorer(settings =>
-            {
-                settings.GeneratorSettings.DefaultPropertyNameHandling = NJsonSchema.PropertyNameHandling.CamelCase;
             });
 
             DataBaseInitializer.Init(serviceProvider);

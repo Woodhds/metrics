@@ -16,6 +16,7 @@ export class UserComponent implements OnInit {
   public users: VkUser[] = [];
   public userId: { FullName: '', UserId: '' };
   public search = '';
+  public fromRepo = false;
   public timeout: number = 15;
   public loading = false;
   public selectedKeys: VkRepostModel[] = [];
@@ -34,7 +35,7 @@ export class UserComponent implements OnInit {
   handleSearch() {
     this.loading = true;
     this.userService
-      .getReposts(this.userId.UserId, this.state, this.search)
+      .getReposts(this.userId != null ? this.userId.UserId : '', this.state, this.search, this.fromRepo)
       .subscribe(data => {
         this.data = data;
         this.loading = false;
