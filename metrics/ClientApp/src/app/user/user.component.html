@@ -42,11 +42,10 @@
             <span class="card-subtitle">{{dataItem.Date | unixtime | kendoDate: 'G' }}</span>
           </div>
           <div class="card-body">
-            <div class="card-image">
+            <div class="card-image text-center">
               <app-message-image [attachments]="dataItem.Attachments"></app-message-image>
             </div>
-            <div class="card-text">
-              {{dataItem.Text}}
+            <div class="card-text" [innerHTML]="dataItem.Text | safehtml">
             </div>
           </div>
           <div class="card-footer">

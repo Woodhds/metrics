@@ -25,6 +25,7 @@ import { AddentityComponent } from './addentity/addentity.component';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import {DropDownsModule} from "@progress/kendo-angular-dropdowns";
 import { NotificationModule } from '@progress/kendo-angular-notification';
+import { SafehtmlPipe } from './core/pipes/safehtml/safehtml.pipe';
 
 
 
@@ -40,7 +41,8 @@ import { NotificationModule } from '@progress/kendo-angular-notification';
     MessageImageComponent,
     EntitiesComponent,
     PageNotFoundComponent,
-    AddentityComponent
+    AddentityComponent,
+    SafehtmlPipe
   ],
   imports: [
     GridModule,
