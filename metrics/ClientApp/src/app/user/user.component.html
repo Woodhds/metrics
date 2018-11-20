@@ -5,7 +5,7 @@
     <ng-template position="top" kendoGridToolbarTemplate>
 
       <form class="k-form row" #form="ngForm" novalidate>
-        <div class="k-form-field col">
+        <div class="k-form-field col-sm-12 col-md-6">
           <kendo-switch [onLabel]="'С'" [offLabel]="'Ю'" name="FromRepo" [(ngModel)]="fromRepo"></kendo-switch>
           <kendo-combobox  *ngIf="!fromRepo" required="true" name="UserId" [(ngModel)]="userId" [allowCustom]="true"
                           [textField]="'FullName'" [valueField]="'UserId'" [data]="users">
@@ -20,13 +20,13 @@
                   type="submit">Получить
           </button>
         </div>
-        <div class="k-form-field col">
-          <span>{{timeout}}</span>
+        <div class="k-form-field k-display-flex col-sm-12 col-md-6 flex-column k-align-items-center">
+          <span>Задержка между репостами: {{timeout}} сек</span>
           <kendo-slider [disabled]="selectedKeys.length === 0 || loading" name="timeout" [min]="15" [smallStep]="2" [max]="60"
                         [(ngModel)]="timeout"></kendo-slider>
+          <button [disabled]="selectedKeys.length === 0 || loading" (click)="repostAll()" kendoButton [primary]="true">Репост всего
+          </button>
         </div>
-        <button [disabled]="selectedKeys.length === 0 || loading" (click)="repostAll()" kendoButton [primary]="true">Репост всего
-        </button>
       </form>
     </ng-template>
     <kendo-grid-column>

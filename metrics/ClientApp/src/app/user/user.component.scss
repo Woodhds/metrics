@@ -2,10 +2,10 @@
   .k-grid {
     tr {
       float: left;
-      width: 100%;
+      width: 50%;
 
-      @media screen and (min-width: 540px) {
-        width: 50%;
+      @media screen and (max-width: 768px) {
+        width: 100%;
       }
     }
   }
