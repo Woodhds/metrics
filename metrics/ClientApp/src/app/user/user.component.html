@@ -6,7 +6,7 @@
 
       <form class="k-form row" #form="ngForm" novalidate>
         <div class="k-form-field col">
-          <kendo-switch name="FromRepo" [(ngModel)]="fromRepo"></kendo-switch>
+          <kendo-switch [onLabel]="'С'" [offLabel]="'Ю'" name="FromRepo" [(ngModel)]="fromRepo"></kendo-switch>
           <kendo-combobox  *ngIf="!fromRepo" required="true" name="UserId" [(ngModel)]="userId" [allowCustom]="true"
                           [textField]="'FullName'" [valueField]="'UserId'" [data]="users">
             <ng-template kendoComboBoxItemTemplate let-dataItem>
@@ -16,16 +16,16 @@
           <kendo-textbox-container id="Search" floatingLabel="Поиск">
             <input kendoTextBox name="Search" [(ngModel)]="search" class="k-textbox"/>
           </kendo-textbox-container>
-          <button [disabled]="!form.valid" (click)="handleSearch()" [icon]="'search'" kendoButton [primary]="true"
+          <button [disabled]="!form.valid || loading" (click)="handleSearch()" [icon]="'search'" kendoButton [primary]="true"
                   type="submit">Получить
           </button>
         </div>
         <div class="k-form-field col">
           <span>{{timeout}}</span>
-          <kendo-slider [disabled]="selectedKeys.length === 0" name="timeout" [min]="15" [smallStep]="2" [max]="60"
+          <kendo-slider [disabled]="selectedKeys.length === 0 || loading" name="timeout" [min]="15" [smallStep]="2" [max]="60"
                         [(ngModel)]="timeout"></kendo-slider>
         </div>
-        <button [disabled]="selectedKeys.length === 0" (click)="repostAll()" kendoButton [primary]="true">Репост всего
+        <button [disabled]="selectedKeys.length === 0 || loading" (click)="repostAll()" kendoButton [primary]="true">Репост всего
         </button>
       </form>
     </ng-template>
@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="card-footer">
-            <a title="Репост" kendoTooltip class="text-primary k-icon k-i-fav-outline"
+            <a title="Репост" kendoTooltip class="text-primary k-icon {{ dataItem.Reposts?.User_reposted == true ? 'k-i-fav text-danger' : ' k-i-fav-outline' }}"
                (click)="repostOne([{ Owner_id: dataItem.Owner_Id, Id: dataItem.Id }], $event.currentTarget)">
             </a>
             <span class="card-text offset-1">{{dataItem.Reposts?.Count}}</span>

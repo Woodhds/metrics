@@ -16,7 +16,7 @@ namespace metrics.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RepostController : Controller
+    public class RepostController : ControllerBase
     {
         private readonly IVkClient _vkClient;
         private readonly ILogger<RepostController> _logger;
@@ -48,7 +48,9 @@ namespace metrics.Controllers
                         z.Bool(r => r.Must(q =>
                             q.MatchPhrase(queryDescriptor => queryDescriptor.Field(e => e.Text).Query(search)))))
                     .Take(pageSize).Skip((page - 1) * pageSize));
-            return new DataSourceResponseModel(messages.Documents.Distinct(), messages.Total);
+            var response = _vkClient.GetById(messages.Documents.Distinct()
+                .Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.Owner_Id}));
+            return new DataSourceResponseModel(response.Response.Items, messages.Total);
         }
 
         [Authorize(Policy = "VkPolicy")]

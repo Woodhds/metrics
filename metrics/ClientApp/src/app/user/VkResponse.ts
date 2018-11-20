@@ -26,7 +26,7 @@ export class VkMessage {
 }
 
 export class MessageReposts {
-  public User_Reposted: boolean;
+  public User_reposted: boolean;
   public Count: number;
 }
 
