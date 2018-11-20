@@ -36,10 +36,9 @@ namespace metrics.Controllers
             if (!fromRepo)
             {
                 var data = _vkClient.GetReposts(userId, page, pageSize, search);
-                var reposts = data.Response
-                    .Items.Where(c => c.Reposts != null && !c.Reposts.User_reposted)
-                    .OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.Date)).Distinct().ToList();
-                return new DataSourceResponseModel(reposts, data.Response.Count);
+                if(data.Response.Items == null)
+                    data.Response.Items = new List<VkMessage>();
+                return new DataSourceResponseModel(data.Response.Items, data.Response.Count);
             }
 
             var connectionSettings = new ConnectionSettings(new Uri(_options.Address)).DisableDirectStreaming();
@@ -47,9 +46,9 @@ namespace metrics.Controllers
             var messages = await es.SearchAsync<VkMessage>(descriptor =>
                 descriptor.Index(_options.Index).Query(z =>
                         z.Bool(r => r.Must(q =>
-                            q.MatchPhrase(queryDescriptor => queryDescriptor.Field("text").Query(search)))))
+                            q.MatchPhrase(queryDescriptor => queryDescriptor.Field(e => e.Text).Query(search)))))
                     .Take(pageSize).Skip((page - 1) * pageSize));
-            return new DataSourceResponseModel(messages.Documents, messages.Total);
+            return new DataSourceResponseModel(messages.Documents.Distinct(), messages.Total);
         }
 
         [Authorize(Policy = "VkPolicy")]

@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Linq;
 using System.Threading;
 
@@ -97,6 +95,8 @@ namespace metrics.Services.Concrete
             var count = data.Response.Count;
 
             var result = GetById(reposts.Select(c => new VkRepostViewModel() {Id = c.Id, Owner_Id = c.Owner_Id}));
+            if (result.Response == null)
+                result.Response = new VkResponse<List<VkMessage>>.VkResponseItems();
             result.Response.Count = count;
             return result;
         }

@@ -17,6 +17,7 @@ export class MessageImageComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.images = [];
     if (this.attachments && this.attachments.length > 0) {
         for (let i = 0; i < this.attachments.length; i++) {
           const photo = this.attachments[i].Photo;

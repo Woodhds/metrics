@@ -2,7 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {State} from '@progress/kendo-data-query';
 import {DataStateChangeEvent, GridDataResult, SelectionEvent} from '@progress/kendo-angular-grid';
 import {UserService} from '../services/user.service';
-import {VkMessage, VkRepostModel, VkUser} from "./VkResponse";
+import {VkRepostModel, VkUser} from "./VkResponse";
 import {NotificationService} from "@progress/kendo-angular-notification";
 
 @Component({
