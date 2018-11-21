@@ -49,9 +49,8 @@ namespace metrics.Controllers
                             q.MatchPhrase(queryDescriptor => queryDescriptor.Field(e => e.Text).Query(search)))))
                     .Sort(z => z.Field(fieldDescriptor => fieldDescriptor.Descending().Field(e => e.Date)))
                     .Take(pageSize).Skip((page - 1) * pageSize));
-            var response = _vkClient.GetById(messages.Documents.Distinct()
-                .Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.Owner_Id}));
-            return new DataSourceResponseModel(response.Response.Items, messages.Total);
+
+            return new DataSourceResponseModel(messages.Documents, messages.Total);
         }
 
         [Authorize(Policy = "VkPolicy")]
