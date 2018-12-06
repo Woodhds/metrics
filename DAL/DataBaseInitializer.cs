@@ -11,7 +11,8 @@ namespace DAL
         public static void Init(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<DbContext>();
-            context.Database.Migrate();
+            context.Database.EnsureCreated();
+            //context.Database.Migrate();
         }
     }
 }

@@ -5,12 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Entities;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using metrics.Models;
-using metrics.Services.Options;
-using Microsoft.Extensions.Options;
-using Nest;
+using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Controllers
 {
@@ -20,12 +19,12 @@ namespace metrics.Controllers
     {
         private readonly IVkClient _vkClient;
         private readonly ILogger<RepostController> _logger;
-        private readonly CompetitionOptions _options;
-        public RepostController(IVkClient vkClient, ILogger<RepostController> logger, IOptions<CompetitionOptions> options)
+        private readonly DbContext _dataContext;
+        public RepostController(IVkClient vkClient, ILogger<RepostController> logger, DbContext dataContext)
         {
-            _options = options.Value;
             _vkClient = vkClient;
             _logger = logger;
+            _dataContext = dataContext;
         }
 
         [Authorize(Policy = "VkPolicy")]
@@ -41,16 +40,15 @@ namespace metrics.Controllers
                 return new DataSourceResponseModel(data.Response.Items, data.Response.Count);
             }
 
-            var connectionSettings = new ConnectionSettings(new Uri(_options.Address)).DisableDirectStreaming();
-            var es = new ElasticClient(connectionSettings);
-            var messages = await es.SearchAsync<VkMessage>(descriptor =>
-                descriptor.Index(_options.Index).Query(z =>
-                        z.Bool(r => r.Must(q =>
-                            q.MatchPhrase(queryDescriptor => queryDescriptor.Field(e => e.Text).Query(search)))))
-                    .Sort(z => z.Field(fieldDescriptor => fieldDescriptor.Descending().Field(e => e.Date)))
-                    .Take(pageSize).Skip((page - 1) * pageSize));
+            var messages = _dataContext.Set<ParseMessage>().Where(c => c.Text.Contains(search));
+            var count = await messages.CountAsync();
+            var vkresponse = await messages.OrderByDescending(c => c.Date).Skip((page - 1) * pageSize).Take(pageSize)
+                .ToListAsync();
 
-            return new DataSourceResponseModel(messages.Documents, messages.Total);
+            var response =
+                _vkClient.GetById(vkresponse.Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.OwnerId}));
+            
+            return new DataSourceResponseModel(response.Response.Items, count);
         }
 
         [Authorize(Policy = "VkPolicy")]

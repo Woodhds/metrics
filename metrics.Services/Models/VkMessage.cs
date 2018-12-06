@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using Nest;
 
 namespace metrics.Services.Models
 {
-    [ElasticsearchType(IdProperty = nameof(Identifier), Name = nameof(VkMessage))]
     public class VkMessage
     {
         public int Id { get; set; }
@@ -11,7 +9,6 @@ namespace metrics.Services.Models
         public int From_Id { get; set; }
         public uint Date { get; set; }
         public string Text { get; set; }
-        public PostType Post_Type { get; set; }
         public List<VkMessage> Copy_History { get; set; }
         public List<MessageAttachment> Attachments { get; set; }
         public MessageReposts Reposts { get; set; }
@@ -34,7 +31,8 @@ namespace metrics.Services.Models
 
     public enum PostType
     {
-        Post = 0
+        Post = 0,
+        Video = 1
     }
 
     public enum MessageAttachmentType

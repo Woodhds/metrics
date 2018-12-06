@@ -14,6 +14,7 @@ using metrics.Options;
 using metrics.Services;
 using metrics.Services.Abstract;
 using System;
+using System.Linq;
 using DAL.Identity;
 using metrics.Services.Concrete;
 using metrics.Services.Options;
@@ -25,7 +26,6 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
-[assembly: HostingStartup(typeof(metrics.Startup))]
 namespace metrics
 {
     public class Startup
@@ -43,14 +43,8 @@ namespace metrics
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-#if(!DEBUG)
-            var connectionString = Configuration.GetConnectionString("DataContext");
-            services.AddDbContext<DataContext>(opts => {
-                opts.UseNpgsql(connectionString);
-            });
-#else
+
             services.AddDbContext<DataContext>(opts => { opts.UseSqlite("Data Source=.\\lite.db;"); });
-#endif
             services.AddScoped<DbContext, DataContext>();
             services.AddHttpContextAccessor();
 
@@ -127,7 +121,7 @@ namespace metrics
             services.AddSingleton<IViewConfigService, ViewConfigService>();
             services.AddSpaStaticFiles(e =>
             {
-                e.RootPath = "dist";
+                e.RootPath = "wwwroot/ClientApp";
             });
 
             services.AddSingleton<IHostedService, CompetitionsService>();
