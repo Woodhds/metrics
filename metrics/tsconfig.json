@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": ".",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "module": "es2015",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "target": "es5",
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false
+  },
+  "include": [
+    "./Content/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ]
+}

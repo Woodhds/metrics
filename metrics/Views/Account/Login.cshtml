@@ -1,0 +1,23 @@
+@model LoginModel
+@using metrics.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<VkontakteOptions> options
+@{
+    ViewBag.Title = "Логин";
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <form method="post" class="rounded shadow-md rounded px-8 pt-6 pb-8 mb-4" asp-antiforgery="true">
+        <div asp-validation-summary="All"></div>
+        <div class="mb-4">
+            <a class="text-blue no-underline hover:text-blue-dark" target="_blank"
+               href="https://oauth.vk.com/authorize?client_id=@(options.Value.ClientId)&display=page&redirect_uri=http://vk.com/blank.php&scope=111111111&response_type=token&v=5.85">Получить токен</a>
+        </div>
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" asp-for="Token">Токен</label>
+            <input class="shadow appearance-none border rounded  md:w-1/2 sm:w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" asp-for="Token"/>
+        </div>
+        <button type="submit" class="shadow cursor-pointer bg-blue hover:bg-blue-dark focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Отправить</button>
+    </form>
+}

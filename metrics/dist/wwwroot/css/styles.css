@@ -17,14 +17,6 @@ html {
   border: 0 solid #efefef;
 }
 
-.loading {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #efefef;
-  opacity: .5;
-}
-
 .container {
   width: 100%;
 }
@@ -4333,10 +4325,6 @@ html {
 
 .fill-current {
   fill: currentColor;
-}
-
-.fill-red {
-  fill: red;
 }
 
 .stroke-current {
@@ -27949,5 +27937,3 @@ html {
   }
 }
 
-
-/*# sourceMappingURL=styles.css.map*/

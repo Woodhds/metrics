@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Entities;
+using metrics.Extensions;
 using metrics.Models;
 using metrics.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,7 @@ using Newtonsoft.Json.Linq;
 
 namespace metrics.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : Controller
     {
         private readonly SignInManager<User> _signInManager;
         private readonly IHttpClientFactory _httpClientFactory;
@@ -44,8 +43,15 @@ namespace metrics.Controllers
             return LocalRedirect("/");
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<string>> Login([FromBody]LoginModel model)
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View(new LoginModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login([FromForm] LoginModel model, string redirectUrl)
         {
             using (var httpClient = _httpClientFactory.CreateClient())
             {
@@ -54,7 +60,7 @@ namespace metrics.Controllers
                     {
                         ["v"] = Constants.ApiVersion,
                         ["access_token"] = model.Token,
-                        ["fields"] = string.Join(",", new List<string> { "first_name", "last_name", "photo_50" })
+                        ["fields"] = string.Join(",", new List<string> {"first_name", "last_name", "photo_50"})
                     }));
 
                 if (response.IsSuccessStatusCode)
@@ -65,37 +71,31 @@ namespace metrics.Controllers
                         ModelState.AddModelError("", error.Value<string>());
                     }
 
+                    var id = payload["response"].First["id"]?.ToString();
+                    var name = $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}";
+
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.NameIdentifier, payload["response"].First["id"]?.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, id),
                         new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
-                        new Claim(ClaimTypes.Name,
-                            $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}"),
+                        new Claim(ClaimTypes.Name, name),
                         new Claim("photo", payload["response"].First["photo_50"].ToString())
                     };
+                    var ci = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    return Ok(new { accessToken = CreateToken(claims) });
+                    await HttpContext.SignInAsync(new ClaimsPrincipal(ci), new AuthenticationProperties());
+
+                    return Redirect(Url.GetLocalUrl(redirectUrl));
                 }
             }
 
-            return Ok();
+            return View(model);
         }
 
-        [HttpGet("info")]
         [Authorize(Policy = "VkPolicy")]
-        public ActionResult<UserInfoModel> Info()
+        public ActionResult<string> Token()
         {
-            var ci = User.Identity as ClaimsIdentity;
-            if (ci == null)
-            {
-                return Ok();
-            }
-
-            return Ok(new UserInfoModel
-            {
-                FullName = ci.FindFirst(z => z.Type == ClaimTypes.Name)?.Value,
-                Avatar = ci.FindFirst(z => z.Type == "photo")?.Value
-            });
+            return Ok(CreateToken(User.Claims.ToList()));
         }
 
         private string CreateToken(List<Claim> claims)
@@ -104,9 +104,9 @@ namespace metrics.Controllers
             claims.Add(new Claim(JwtRegisteredClaimNames.Aud, _jwtBearerOptions.Audience));
             claims.Add(new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.ToString()));
             var token = new JwtSecurityToken(
-                issuer: _jwtBearerOptions.Issuer,
-                audience: _jwtBearerOptions.Audience,
-                claims: claims,
+                _jwtBearerOptions.Issuer,
+                _jwtBearerOptions.Audience,
+                claims,
                 expires: DateTime.Now.Add(TimeSpan.FromHours(24)),
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtBearerOptions.Key)),

@@ -1,0 +1,16 @@
+@using metrics.Extensions
+@if (!User.Identity.IsAuthenticated)
+{
+    <ul class="hover:bg-grey list-reset">
+        <li class="">
+            <a asp-action="Login" asp-controller="Account" class="no-underline text-white hover:bg-black px-5 py-5 block">Логин</a>
+        </li>
+    </ul>
+}
+else
+{
+    <figure class="md:flex md:flex-row md:items-center hidden">
+        <img class="rounded-full" src="@User.Identity.GetPhoto()"/>
+        <figcaption class="text-white ml-5">@User.Identity.Name</figcaption>
+    </figure>
+}

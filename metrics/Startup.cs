@@ -1,4 +1,4 @@
-﻿using Data.EF;
+using Data.EF;
 using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,7 +14,6 @@ using metrics.Options;
 using metrics.Services;
 using metrics.Services.Abstract;
 using System;
-using System.Linq;
 using DAL.Identity;
 using metrics.Services.Concrete;
 using metrics.Services.Options;
@@ -22,9 +21,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DAL.Services.Abstract;
 using Core.Services.Concrete;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace metrics
 {
@@ -34,6 +35,7 @@ namespace metrics
         {
             Configuration = configuration;
         }
+
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -49,27 +51,32 @@ namespace metrics
             services.AddHttpContextAccessor();
 
             services.AddDefaultIdentity<User>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedEmail = true;
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = false;
-            })
-            .AddRoles<Role>()
-            .AddRoleManager<RoleManager<Role>>()
-            .AddDefaultTokenProviders()
-            .AddEntityFrameworkStores<DataContext>();
+                {
+                    options.User.RequireUniqueEmail = true;
+                    options.SignIn.RequireConfirmedEmail = true;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = false;
+                })
+                .AddRoles<Role>()
+                .AddRoleManager<RoleManager<Role>>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<DataContext>();
 
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
             services.Configure<CompetitionOptions>(Configuration.GetSection("Competition"));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-
+            services.AddAuthentication(opts =>
+                {
+                    opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    opts.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    opts.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
                 {
-                    opts.TokenValidationParameters = new TokenValidationParameters()
+                    opts.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateAudience = true,
                         ValidateIssuer = true,
@@ -79,7 +86,11 @@ namespace metrics
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 })
-                .AddCookie();
+                .AddCookie(opts =>
+                {
+                    opts.LoginPath = new PathString("/Account/Login");
+                    opts.LogoutPath = new PathString("/Account/Logout");
+                });
 
             services.ConfigureApplicationCookie(z =>
             {
@@ -92,19 +103,12 @@ namespace metrics
 
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).ConfigureApplicationPartManager(
-                manager => { manager.FeatureProviders.Add(new GenericControllerFeatureProvider()); }).AddJsonOptions(
-                z =>
-                {
-                    z.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(
+                z => { z.SerializerSettings.ContractResolver = new DefaultContractResolver(); });
 
             services.AddAuthorization(z =>
             {
-                z.AddPolicy("VKPolicy", e =>
-                {
-                    e.RequireClaim(Constants.VK_TOKEN_CLAIM);
-                });
+                z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
             });
 
             services.Configure<MailOptions>(Configuration.GetSection("Mail"));
@@ -119,12 +123,8 @@ namespace metrics
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddSingleton<IVkClient, VkClient>();
             services.AddSingleton<IViewConfigService, ViewConfigService>();
-            services.AddSpaStaticFiles(e =>
-            {
-                e.RootPath = "wwwroot/ClientApp";
-            });
 
-            services.AddSingleton<IHostedService, CompetitionsService>();
+            //services.AddSingleton<IHostedService, CompetitionsService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
@@ -139,33 +139,12 @@ namespace metrics
                 app.UseHsts();
             }
 
-            app.UseSpaStaticFiles();
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseCors(opts =>
-            {
-                opts.AllowAnyMethod();
-                opts.AllowAnyOrigin();
-                opts.AllowAnyHeader();
-            });
-            
-            app.UseMvc(builder =>
-            {
-                builder.MapRoute("default", "{controller}/{action}/{id?}",
-                    new {controller = "Home", action = "Index"});
-            });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200/");
-                }
-            });
+            app.UseMvcWithDefaultRoute();
 
             DataBaseInitializer.Init(serviceProvider);
             IdentityInitializer.Init(serviceProvider);
