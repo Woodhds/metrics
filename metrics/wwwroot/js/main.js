@@ -2551,7 +2551,11 @@ var UserComponent = /** @class */ (function (_super) {
         this.selected = user;
     };
     UserComponent.prototype.repost = function (owner_id, id) {
-        axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/repost/repost', [{ owner_id: owner_id, id: id }]);
+        var _this = this;
+        this.isLoading = true;
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/repost/repost', [{ owner_id: owner_id, id: id }]).then(function () {
+            _this.isLoading = false;
+        });
     };
     UserComponent = __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({

@@ -70,7 +70,10 @@
         }
 
         repost(owner_id: number, id: number) {
-            axios.post('/api/repost/repost', [{owner_id, id}]);
+            this.isLoading = true;
+            axios.post('/api/repost/repost', [{owner_id, id}]).then(() => {
+                this.isLoading = false;
+            });
         }
     }
 </script>

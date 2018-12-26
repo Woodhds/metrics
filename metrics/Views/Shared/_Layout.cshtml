@@ -12,6 +12,8 @@
         <link rel="stylesheet" href="~/fonts/firasans/firasans.css"/>
     </environment>
     <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/fonts/firasans/firasans.css" asp-append-version="true"/>
     </environment>
 </head>
 <body class="flex flex-col h-full">
@@ -27,8 +29,11 @@
             </li>
             @if (User.Identity.IsAuthenticated)
             {
-                <li class="">
+                <li>
                     <a asp-action="Index" asp-controller="User" class="no-underline text-white block hover:bg-black px-5 py-5">Пользователь</a>
+                </li>
+                <li>
+                    <a asp-action="Add" asp-controller="User" class="no-underline text-white block hover:bg-black px-5 py-5">Добавить</a>
                 </li>
             }
         </ul>
@@ -48,7 +53,8 @@
     <script src="~/js/styles.js"></script>
 </environment>
 <environment exclude="Development">
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    <script src="~/js/styles.js" asp-append-version="true"></script>
 </environment>
 
 @RenderSection("Scripts", required: false)
