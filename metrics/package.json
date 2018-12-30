@@ -30,6 +30,7 @@
     "webpack-hot-middleware": "^2.24.3"
   },
   "scripts": {
-    "build": "webpack --mode development --watch"
+    "build": "webpack --mode development --watch",
+    "prod": "webpack --mode production"
   }
 }

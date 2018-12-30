@@ -19,7 +19,7 @@ export class VkMessage {
   public From_Id: number;
   public Date: number;
   public Text: string;
-  public Post_Type: PostType;
+  public Post_Type: string;
   public Copy_History: VkMessage[];
   public Attachments: MessageAttachment[];
   public Reposts: MessageReposts;

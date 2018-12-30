@@ -13,6 +13,11 @@
         </form>
         <div v-if="messages.length > 0" class="flex flex-row flex-wrap">
             <div v-for="message of messages" :key="message.Id + message.Owner_Id" class="md:w-1/2 sm:w-full border shadow px-4 py-4">
+                <a class="block absolute" target="_blank" :href="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id">
+                    <svg class="w-4 h-4" viewBox="0 0 25 25">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/icons.svg#key"/>
+                    </svg>
+                </a>
                 <figure class="flex flex-col items-center">
                     <img class="w-auto h-32"
                          :src="message.Attachments && message.Attachments.length > 0 && message.Attachments[0].Photo ? message.Attachments[0].Photo.Sizes[4].Url : ''"/>

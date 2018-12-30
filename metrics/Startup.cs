@@ -146,9 +146,9 @@ namespace metrics
 
             app.UseMvcWithDefaultRoute();
 
-            DataBaseInitializer.Init(serviceProvider);
-            IdentityInitializer.Init(serviceProvider);
-            ViewConfigInitializer.Init(serviceProvider);
+            //DataBaseInitializer.Init(serviceProvider);
+            //IdentityInitializer.Init(serviceProvider);
+            //ViewConfigInitializer.Init(serviceProvider);
         }
     }
 }
