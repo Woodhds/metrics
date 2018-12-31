@@ -34,7 +34,7 @@ namespace metrics.Controllers
         {
             if (!fromRepo)
             {
-                var data = _vkClient.GetReposts(userId, page, pageSize, search);
+                var data = _vkClient.GetReposts(userId.Trim(), page, pageSize, search);
                 if(data.Response.Items == null)
                     data.Response.Items = new List<VkMessage>();
                 return new DataSourceResponseModel(data.Response.Items, data.Response.Count);

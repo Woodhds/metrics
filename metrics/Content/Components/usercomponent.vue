@@ -12,42 +12,30 @@
             </button>
         </form>
         <div v-if="messages.length > 0" class="flex flex-row flex-wrap">
-            <div v-for="message of messages" :key="message.Id + message.Owner_Id" class="md:w-1/2 sm:w-full border shadow px-4 py-4">
-                <a class="block absolute" target="_blank" :href="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id">
-                    <svg class="w-4 h-4" viewBox="0 0 25 25">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/icons.svg#key"/>
-                    </svg>
-                </a>
-                <figure class="flex flex-col items-center">
-                    <img class="w-auto h-32"
-                         :src="message.Attachments && message.Attachments.length > 0 && message.Attachments[0].Photo ? message.Attachments[0].Photo.Sizes[4].Url : ''"/>
-                    <figcaption class="text-sm" v-html="message.Text"></figcaption>
-                </figure>
-                <div class="flex flex-row mt-6">
-                    <a :class="message.Reposts.User_reposted ? 'fill-red' : ''"
-                       @click="repost(message.Owner_Id, message.Id)">
-                        <span>{{ message.Reposts.Count }}</span>
-                        <svg class="w-4 h-4" viewBox="0 0 32 32">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href='/images/icons.svg#thumbup'/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
+            <Message v-for="message of messages" :message="message" :key="message.Id + message.Owner_Id"
+                 class="md:w-1/2 sm:w-full border shadow px-4 py-4">
+            </Message>
+            <ul class="flex list-reset mt-6" v-if="totalPages.length > 1">
+                <li class="px-4 py-2 cursor-pointer" @click="page = item"
+                    :class="[ item === page ? 'bg-blue text-white': '' ]" v-for="item of totalPages">{{item}}
+                </li>
+            </ul>
         </div>
         <div v-if="isLoading" class="loading"></div>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component} from 'vue-property-decorator';
+    import {Component, Watch} from 'vue-property-decorator';
     import axios from 'axios';
     import Vue from 'vue';
     import {VkUser} from "../models/user";
     import Dropdown from "./dropdown.vue";
     import {DataSourceResponse, VkMessage} from "../models/VkMessage";
+    import Message from './message.vue';
 
     @Component({
-        components: {Dropdown}
+        components: {Dropdown, Message}
     })
     export default class UserComponent extends Vue {
         users: VkUser[] = [];
@@ -55,6 +43,15 @@
         selected: VkUser | null = null;
         messages: VkMessage[] = [];
         isLoading: boolean = false;
+        pageSize: number = 100;
+        page: number = 1;
+        total: number = 0;
+
+        @Watch('page')
+        pageChange() {
+            this.searchMessages();
+            window.scroll({top: 0, behavior: "smooth"});
+        }
 
         beforeMount(): void {
             axios.get<VkUser[]>('/user/users').then(response => {
@@ -64,9 +61,12 @@
 
         searchMessages(): void {
             this.isLoading = true;
-            axios.get<DataSourceResponse<VkMessage>>(`api/repost/user?search=${this.search}&userId=${this.selected ? this.selected.UserId : null}&page=1&pageSize=100`)
+            axios.get<DataSourceResponse<VkMessage>>(`api/repost/user?search=${this.search}
+                    &userId=${this.selected ? this.selected.UserId : null}
+                    &page=${this.page}&pageSize=${this.pageSize}`)
                 .then(response => {
                     this.messages = response.data.Data;
+                    this.total = response.data.Total;
                 }).then(() => (this.isLoading = false));
         }
 
@@ -74,11 +74,13 @@
             this.selected = user;
         }
 
-        repost(owner_id: number, id: number) {
-            this.isLoading = true;
-            axios.post('/api/repost/repost', [{owner_id, id}]).then(() => {
-                this.isLoading = false;
-            });
+        get totalPages(): number[] {
+            let arr = [];
+            for (let i = 1; i <= Math.ceil(this.total / this.pageSize); i++) {
+                arr.push(i)
+            }
+
+            return arr;
         }
     }
 </script>
