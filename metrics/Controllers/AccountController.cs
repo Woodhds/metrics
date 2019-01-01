@@ -6,14 +6,13 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.Entities;
 using metrics.Extensions;
 using metrics.Models;
 using metrics.Options;
+using metrics.Services.Abstract;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
@@ -22,28 +21,29 @@ using Newtonsoft.Json.Linq;
 
 namespace metrics.Controllers
 {
+    [Authorize(Policy = "VkPolicy")]
     public class AccountController : Controller
     {
-        private readonly SignInManager<User> _signInManager;
         private readonly IHttpClientFactory _httpClientFactory;
         private JwtOptions _jwtBearerOptions;
+        private readonly IVkClient _vkClient;
 
-        public AccountController(SignInManager<User> signInManager, IHttpClientFactory httpClientFactory,
-            IOptions<JwtOptions> jwtBearerOptions)
+        public AccountController(IHttpClientFactory httpClientFactory, IOptions<JwtOptions> jwtBearerOptions, IVkClient vkClient)
         {
             _httpClientFactory = httpClientFactory;
-            _signInManager = signInManager;
             _jwtBearerOptions = jwtBearerOptions.Value;
+            _vkClient = vkClient;
         }
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync();
             return LocalRedirect("/");
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View(new LoginModel());
@@ -51,6 +51,7 @@ namespace metrics.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> Login([FromForm] LoginModel model, string redirectUrl)
         {
             using (var httpClient = _httpClientFactory.CreateClient())
@@ -96,6 +97,20 @@ namespace metrics.Controllers
         public ActionResult<string> Token()
         {
             return Ok(CreateToken(User.Claims.ToList()));
+        }
+
+        public IActionResult Drop(string exclude = null, int count = 1000, int offset = 0)
+        {
+            var groups = _vkClient.GetGroups(count, offset)?.Response?.Items;
+            if (!string.IsNullOrEmpty(exclude))
+            {
+                groups = groups.Where(c => !c.Name.ToLower().Contains(exclude.ToLower())).ToList();
+            }
+            foreach (var group in groups)
+            {
+                _vkClient.LeaveGroup(group.Id);
+            }
+            return Ok();
         }
 
         private string CreateToken(List<Claim> claims)

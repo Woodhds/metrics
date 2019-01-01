@@ -164,5 +164,26 @@ namespace metrics.Services.Concrete
             };
             return GetVkAsync<VkResponse<List<VkMessage>>>(urls.WallGetById, @params);
         }
+
+        public VkResponse<List<VkGroup>> GetGroups(int count, int offset)
+        {
+            var @params = new NameValueCollection
+            {
+                { "count", $"{count}" },
+                { "fields", "name, description" },
+                { "extended", "1" },
+                { "offset", $"{offset}" }
+            };
+            return GetVkAsync<VkResponse<List<VkGroup>>>(urls.Groups, @params);
+        }
+
+        public void LeaveGroup(int groupId)
+        {
+            var @params = new NameValueCollection
+            {
+                { "group_id", $"{groupId}" }
+            };
+            GetVkAsync<SimpleVkResponse<string>>(urls.LeaveGroup, @params);
+        }
     }
 }

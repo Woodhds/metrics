@@ -14,5 +14,7 @@ namespace metrics.Services.Options
         public string WallGetById { get; set; }
         public string GroupJoin { get; set; }
         public string UserInfo { get; set; }
+        public string Groups { get; set; }
+        public string LeaveGroup { get; set; }
     }
 }

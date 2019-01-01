@@ -10,5 +10,7 @@ namespace metrics.Services.Abstract
         void Repost(List<VkRepostViewModel> reposts, int timeout = 0);
         SimpleVkResponse<List<VkUserResponse>> GetUserInfo(string id);
         VkResponse<List<VkMessage>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels);
+        VkResponse<List<VkGroup>> GetGroups(int count, int offset);
+        void LeaveGroup(int groupId);
     }
 }
