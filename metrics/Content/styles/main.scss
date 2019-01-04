@@ -1,6 +1,5 @@
 html {
-  font: #{16px}/#{1.5} 'Fira Sans', Arial, sans-serif;
-
+  font-size:  #{16px}/#{1.5};
   position: relative;
 
   height: 100%;
@@ -13,16 +12,40 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
-*, *:after, *:before {
-  box-sizing: border-box;
-  margin: 0;
-  border: 0 solid #efefef;
-}
-
 .loading {
   position: absolute;
   width: 100%;
   height: 100%;
   background: #efefef;
   opacity: 0.5;
+}
+
+
+.form-switch {
+  @apply relative select-none w-12 mr-2 leading-normal;
+}
+.form-switch-checkbox {
+  @apply hidden;
+}
+.form-switch-label {
+  @apply block overflow-hidden cursor-pointer bg-white border rounded-full h-6 shadow-inner;
+
+  transition: background-color 0.2s ease-in;
+}
+.form-switch-label:before {
+  @apply absolute block bg-white pin-y w-6 border rounded-full -ml-1;
+
+  right: 50%;
+  content: "";
+  transition: all 0.2s ease-in;
+}
+.form-switch-checkbox:checked + .form-switch-label,
+.form-switch-checkbox:checked + .form-switch-label:before {
+
+}
+.form-switch-checkbox:checked + .form-switch-label {
+  @apply bg-green shadow-none;
+}
+.form-switch-checkbox:checked + .form-switch-label:before {
+  @apply pin-r;
 }

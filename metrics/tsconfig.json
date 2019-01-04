@@ -7,7 +7,7 @@
     "module": "es2015",
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es2015",
     "experimentalDecorators": true,
     "strictPropertyInitialization": false
   },

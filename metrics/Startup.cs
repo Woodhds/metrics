@@ -1,28 +1,20 @@
 using Data.EF;
 using DAL;
-using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
-using metrics.Services;
 using metrics.Services.Abstract;
 using System;
-using DAL.Identity;
 using metrics.Services.Concrete;
 using metrics.Services.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using DAL.Services.Abstract;
-using Core.Services.Concrete;
-using Microsoft.AspNetCore.SpaServices.Webpack;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -50,23 +42,7 @@ namespace metrics
             services.AddScoped<DbContext, DataContext>();
             services.AddHttpContextAccessor();
 
-            services.AddDefaultIdentity<User>(options =>
-                {
-                    options.User.RequireUniqueEmail = true;
-                    options.SignIn.RequireConfirmedEmail = true;
-                    options.Password.RequireDigit = true;
-                    options.Password.RequiredLength = 6;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireLowercase = true;
-                    options.Password.RequireUppercase = false;
-                })
-                .AddRoles<Role>()
-                .AddRoleManager<RoleManager<Role>>()
-                .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<DataContext>();
-
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
-            services.Configure<CompetitionOptions>(Configuration.GetSection("Competition"));
             services.AddAuthentication(opts =>
                 {
                     opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -111,20 +87,12 @@ namespace metrics
                 z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
             });
 
-            services.Configure<MailOptions>(Configuration.GetSection("Mail"));
-            services.Configure<GoogleRecaptcha>(Configuration.GetSection("GoogleRecaptcha"));
-            services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
-            services.AddScoped<IEmailService, EmailService>();
             services.AddHttpClient();
             services.AddLogging();
             services.AddScoped<IBaseHttpClient, BaseHttpClient>();
-            services.AddScoped<IUserManagerService, UserManagerService>();
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
-            services.AddSingleton<IVkClient, VkClient>();
-            services.AddSingleton<IViewConfigService, ViewConfigService>();
-
-            //services.AddSingleton<IHostedService, CompetitionsService>();
+            services.AddScoped<IVkClient, VkClient>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
@@ -147,8 +115,6 @@ namespace metrics
             app.UseMvcWithDefaultRoute();
 
             DataBaseInitializer.Init(serviceProvider);
-            //IdentityInitializer.Init(serviceProvider);
-            //ViewConfigInitializer.Init(serviceProvider);
         }
     }
 }

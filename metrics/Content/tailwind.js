@@ -191,18 +191,17 @@ module.exports = {
 
   fonts: {
     'sans': [
+      'Fira Sans',
+      'Roboto',
       'system-ui',
+      'Helvetica Neue',
       'BlinkMacSystemFont',
       '-apple-system',
-      'Segoe UI',
-      'Roboto',
       'Oxygen',
       'Ubuntu',
       'Cantarell',
-      'Fira Sans',
       'Droid Sans',
-      'Helvetica Neue',
-      'sans-serif',
+      'sans-serif'
     ],
     'serif': [
       'Constantia',

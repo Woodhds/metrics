@@ -10,6 +10,7 @@ using metrics.Extensions;
 using metrics.Models;
 using metrics.Options;
 using metrics.Services.Abstract;
+using metrics.Services.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -93,18 +94,40 @@ namespace metrics.Controllers
             return View(model);
         }
 
-        [Authorize(Policy = "VkPolicy")]
         public ActionResult<string> Token()
         {
             return Ok(CreateToken(User.Claims.ToList()));
         }
 
-        public IActionResult Drop(string exclude = null, int count = 1000, int offset = 0)
+        [HttpGet]
+        public IActionResult Drop()
         {
-            var groups = _vkClient.GetGroups(count, offset)?.Response?.Items;
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Drop(string exclude = null, string identity = null, int count = 1000, int offset = 0)
+        {
+            var total = 0;
+            var workCount = count;
+            var workOffset = offset;
+            var groups = new List<VkGroup>();
+            do
+            {
+                var response = _vkClient.GetGroups(workCount, workOffset);
+                groups.AddRange(response?.Response?.Items ?? new List<VkGroup>());
+                total = response?.Response?.Count ?? 0;
+                workOffset += workCount;
+            } while (total <= workOffset + workCount);
             if (!string.IsNullOrEmpty(exclude))
             {
                 groups = groups.Where(c => !c.Name.ToLower().Contains(exclude.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(identity))
+            {
+                var ids = identity.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+                groups = groups.Where(d => ids.Contains(d.Id)).ToList();
             }
             foreach (var group in groups)
             {

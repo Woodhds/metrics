@@ -12,7 +12,6 @@ using System.Xml.Xsl;
 using Data.EF;
 using DAL.Entities;
 using metrics.Services.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
