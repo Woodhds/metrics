@@ -12,6 +12,7 @@ namespace metrics.Services.Models
         public List<VkMessage> Copy_History { get; set; }
         public List<MessageAttachment> Attachments { get; set; }
         public MessageReposts Reposts { get; set; }
+        public VkLike Likes { get; set; }
         public Owner Owner { get; set; }
         public string Identifier => Owner_Id + "_" + Id;
     }

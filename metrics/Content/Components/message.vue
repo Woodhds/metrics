@@ -14,11 +14,17 @@
             <figcaption class="text-sm leading-normal" v-html="message.Text"></figcaption>
         </figure>
         <div class="flex flex-row mt-6">
-            <a :class="message.Reposts.User_reposted ? 'fill-red' : ''" class="cursor-pointer"
+            <a :class="message.Reposts.User_reposted ? 'fill-red' : ''" class="cursor-pointer mr-4"
                @click="repost(message.Owner_Id, message.Id)">
                 <span>{{ message.Reposts.Count }}</span>
                 <svg class="w-4 h-4" viewBox="0 0 32 32">
                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href='/images/icons.svg#thumbup'/>
+                </svg>
+            </a>
+            <a :class="message.Likes.User_Likes ? 'fill-red' : ''">
+                <span>{{message.Likes.Count}}</span>
+                <svg class="w-4 h-4" viewBox="0 0 32 32">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href='/images/icons.svg#heart'/>
                 </svg>
             </a>
         </div>

@@ -23,6 +23,7 @@ export class VkMessage {
   public Copy_History: VkMessage[];
   public Attachments: MessageAttachment[];
   public Reposts: MessageReposts;
+  public Likes: VkLike;
 }
 
 export class MessageReposts {
@@ -120,4 +121,9 @@ export class VkRepostModel {
 export class DataSourceResponse<T>{
   Total: number;
   Data: Array<T>;
+}
+
+export class VkLike {
+  public Count: number;
+  public User_Likes: boolean;
 }
