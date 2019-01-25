@@ -12,7 +12,7 @@
                         :disabled="!selected">Поиск
                 </button>
             </form>
-            <div class="sm:w-full md:w-1/3 flex flex-col" v-if="allRepostMessages.length > 0">
+            <div class="sm:w-full md:w-1/3 flex flex-col" v-if="selectedMess">
                 <div class="mb-4 relative">
                     <label for="timeout" class="text-sm font-bold text-grey block">Таймаут с сек.</label>
                     <select id="timeout" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="timeout">
@@ -55,8 +55,8 @@
     import {VkMessage, VkRepostModel} from "../models/VkMessage";
     import Message from './message.vue';
     import {FilterType} from "../models/FilterType";
-    import {SelectMessageModel} from "../models/SelectMessageModel";
     import {searchMessages, repost} from '../services/MessageService';
+    import {SelectMessageModel} from "../models/SelectMessageModel";
 
     @Component({
         components: {Dropdown, Message}
@@ -72,7 +72,6 @@
         total: number = 0;
         filterType: FilterType = FilterType.None;
         timeout: number = 0;
-        allRepostMessages: VkRepostModel[] = [];
 
         @Watch('page')
         pageChange() {
@@ -106,14 +105,22 @@
         handleSortCount(): void {
             this.filterType = FilterType.RepostCount;
         }
+        
+        showLoading() {
+            this.isLoading = true;
+        }
+        
+        hideLoading() {
+            this.isLoading = false;
+        }
 
         searchMessages(): void {
-            this.isLoading = true;
+            this.showLoading();
             searchMessages(this.search, this.selected != null ? this.selected.UserId : 0, this.page, this.pageSize)
                 .then(response => {
                     this.messages = response.data.Data;
                     this.total = response.data.Total;
-                }).then(() => (this.isLoading = false));
+                }).then(() => (this.hideLoading()));
         }
 
         handleSelect(user: VkUser): void {
@@ -137,19 +144,24 @@
             return arr;
         }
         
-        onSelect(repostMessage: SelectMessageModel) {
-            if(repostMessage.IsSelect) {
-                this.allRepostMessages.push(new VkRepostModel(repostMessage.Owner_Id, repostMessage.Id))
-            } else {
-                this.allRepostMessages = this.allRepostMessages.filter(r => r.Id !== repostMessage.Id && r.Owner_Id !== repostMessage.Owner_Id)
+        onSelect(model: SelectMessageModel) {
+            let idx = this.messages.findIndex(d => d.Owner_Id == model.Owner_Id && d.Id == model.Id);
+            if(idx !== -1) {
+                this.messages[idx].IsSelected = model.IsSelect;
             }
         }
         
+        get selectedMess(): boolean {
+            return this.messages.some(d => d.IsSelected); 
+        }
+        
         repostAll() {
-            this.isLoading = true;
-            repost(this.allRepostMessages, this.timeout).then().then(d => {
-                this.isLoading = false;
-                this.allRepostMessages = [];
+            this.showLoading();
+            let mess = this.messages.filter(d => d.IsSelected);
+            const reposts = mess.map(e => new VkRepostModel(e.Owner_Id, e.Id));
+            repost(reposts, this.timeout).then().then(d => {
+                this.hideLoading();
+                mess.forEach(e => e.IsSelected = false);
             });
         }
     }

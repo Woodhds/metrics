@@ -6,7 +6,7 @@
             </svg>
         </a>
         <div class="absolute block pin-r">
-            <SwitchComponent @switchChange="switchChange" onText="" offText="" :isToggleOn="false"></SwitchComponent>
+            <SwitchComponent @switchChange="switchChange" onText="" offText="" :isToggleOn="message.IsSelect"></SwitchComponent>
         </div>
         <figure class="flex flex-col items-center">
             <img class="w-auto h-32 mb-3"
@@ -21,7 +21,8 @@
                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href='/images/icons.svg#thumbup'/>
                 </svg>
             </a>
-            <a :class="message.Likes.User_Likes ? 'fill-red' : ''">
+            <a :class="message.Likes.User_Likes ? 'fill-red' : ''" class="cursor-pointer"
+            @click="like">
                 <span>{{message.Likes.Count}}</span>
                 <svg class="w-4 h-4" viewBox="0 0 32 32">
                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href='/images/icons.svg#heart'/>
@@ -36,8 +37,8 @@
     import { Component, Prop } from 'vue-property-decorator';
     import {VkMessage, VkRepostModel} from "../models/VkMessage";
     import SwitchComponent from './switch.vue';
+    import {repost, like} from '../services/MessageService'
     import {SelectMessageModel} from "../models/SelectMessageModel";
-    import {repost} from '../services/MessageService'
     
     @Component({
         components: {SwitchComponent}
@@ -46,19 +47,38 @@
         @Prop({default: null}) message: VkMessage;
         
         repost(owner_id: number, id: number) {
+            const vue = this;
+            vue.$emit('showLoading');
             const model = new VkRepostModel(owner_id, id);
             repost([model]).then(() => {
                 this.message.Reposts.User_reposted = true;
+            }).then(() => {
+                vue.$emit('hideLoading');
             });
         }
         
         switchChange(value: boolean) {
-            const payload: SelectMessageModel = {
-                Id: this.message.Id,
+            this.message.IsSelected = value;
+            this.$emit('select', <SelectMessageModel>{
                 IsSelect: value,
+                Id: this.message.Id,
+                Owner_Id: this.message.Owner_Id
+            })
+        }
+        
+        like() {
+            const vue = this;
+            vue.$emit('showLoading');
+            const model: VkRepostModel = {
+                Id: this.message.Id,
                 Owner_Id: this.message.Owner_Id
             };
-            this.$emit('select', payload)
+            
+            like(model).then(() => {
+                this.message.Likes.User_Likes = true;
+            }).then(() => {
+                vue.$emit('hideLoading');
+            })
         }
     }
 </script>

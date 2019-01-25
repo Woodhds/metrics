@@ -185,5 +185,16 @@ namespace metrics.Services.Concrete
             };
             GetVkAsync<SimpleVkResponse<string>>(urls.LeaveGroup, @params);
         }
+
+        public SimpleVkResponse<VkResponseLikeModel> Like(VkRepostViewModel model)
+        {
+            var @params = new NameValueCollection
+            {
+                { "owner_id", $"{model.Owner_Id}" },
+                { "item_id", $"{model.Id}" },
+                { "type", "post" }
+            };
+            return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(urls.Like, @params);
+        }
     }
 }

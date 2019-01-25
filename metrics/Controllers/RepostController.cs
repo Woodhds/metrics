@@ -66,5 +66,20 @@ namespace metrics.Controllers
                 return BadRequest(false);
             }
         }
+
+        [Authorize(Policy = "VkPolicy")]
+        [HttpGet("like")]
+        public IActionResult Like([FromQuery] VkRepostViewModel model)
+        {
+            try
+            {
+                _vkClient.Like(model);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

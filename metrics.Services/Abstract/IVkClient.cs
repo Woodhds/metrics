@@ -11,5 +11,6 @@ namespace metrics.Services.Abstract
         VkResponse<List<VkMessage>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels);
         VkResponse<List<VkGroup>> GetGroups(int count, int offset);
         void LeaveGroup(int groupId);
+        SimpleVkResponse<VkResponseLikeModel> Like(VkRepostViewModel model);
     }
 }

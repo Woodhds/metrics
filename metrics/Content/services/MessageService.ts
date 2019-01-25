@@ -11,3 +11,7 @@ export function searchMessages(search: string, userId: number, page: number, pag
 export function repost(model: VkRepostModel[], timeout: number = 0) : AxiosPromise {
   return axios.post(`/api/repost/repost?timeout=${timeout}`, model);
 }
+
+export function like(model: VkRepostModel): AxiosPromise {
+  return axios.get(`/api/repost/like?owner_id=${model.Owner_Id}&id=${model.Id}`);
+}

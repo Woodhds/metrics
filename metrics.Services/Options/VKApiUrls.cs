@@ -16,5 +16,6 @@ namespace metrics.Services.Options
         public string UserInfo { get; set; }
         public string Groups { get; set; }
         public string LeaveGroup { get; set; }
+        public string Like { get; set; }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DAL
 {
@@ -19,11 +18,10 @@ namespace DAL
             _set = _context.Set<TEntity>();
         }
 
-        public async Task<CommittableTransaction> BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        public async Task<IDbContextTransaction> BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            var transaction = new CommittableTransaction(new TransactionOptions { IsolationLevel = isolationLevel});
             await _context.Database.OpenConnectionAsync();
-            _context.Database.EnlistTransaction(transaction);
+            var transaction = _context.Database.BeginTransaction(isolationLevel);
             return transaction;
         }
 
@@ -56,7 +54,7 @@ namespace DAL
 
         public Task<TEntity> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(_set.Update(entity).Entity);
         }
     }
 }

@@ -24,6 +24,7 @@ export class VkMessage {
   public Attachments: MessageAttachment[];
   public Reposts: MessageReposts;
   public Likes: VkLike;
+  public IsSelected: boolean;
 }
 
 export class MessageReposts {
