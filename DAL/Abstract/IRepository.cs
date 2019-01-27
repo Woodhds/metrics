@@ -7,7 +7,6 @@ namespace DAL
 {
     public interface IRepository<TEntity> where TEntity : BaseEntity
     {
-        Task<IDbContextTransaction> BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);
         Task<TEntity> CreateAsync(TEntity entity);
         IQueryable<TEntity> Read();
         Task<TEntity> UpdateAsync(TEntity entity);

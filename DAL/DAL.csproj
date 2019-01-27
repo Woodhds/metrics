@@ -11,8 +11,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.9" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Abstract" />
-  </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using metrics.Services.Abstract;
 using metrics.Services.Helpers;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace metrics.Services.Concrete
 {
@@ -23,13 +24,18 @@ namespace metrics.Services.Concrete
             try
             {
                 var uri = @params.BuildUrl(url);
-                var response = await _httpClient.PostAsJsonAsync(uri, content);
+                var httpMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+                var stringContent = new StringContent(JsonConvert.SerializeObject(content));
+                stringContent.Headers.ContentType = 
+                    new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                httpMessage.Content = stringContent;
+                var response = await _httpClient.SendAsync(httpMessage);
                 if (!response.IsSuccessStatusCode)
                 {
                     return default;
                 }
 
-                return await response.Content.ReadAsAsync<T>();
+                return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
             }
             catch (Exception e)
             {
@@ -47,7 +53,9 @@ namespace metrics.Services.Concrete
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsAsync<T>();
+                    return JsonConvert.DeserializeObject<T>(
+                        response.Content.ReadAsStringAsync().Result
+                    );
                 }
 
                 return default;

@@ -18,13 +18,6 @@ namespace DAL
             _set = _context.Set<TEntity>();
         }
 
-        public async Task<IDbContextTransaction> BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
-        {
-            await _context.Database.OpenConnectionAsync();
-            var transaction = _context.Database.BeginTransaction(isolationLevel);
-            return transaction;
-        }
-
         public async Task<TEntity> CreateAsync(TEntity entity)
         {
             _context.Set<TEntity>().Add(entity);
@@ -52,9 +45,11 @@ namespace DAL
             return _set.AsNoTracking().AsQueryable();
         }
 
-        public Task<TEntity> UpdateAsync(TEntity entity)
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            return Task.FromResult(_set.Update(entity).Entity);
+            var entityEntry = _set.Update(entity);
+            await _context.SaveChangesAsync();
+            return await Task.FromResult(entityEntry.Entity);
         }
     }
 }

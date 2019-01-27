@@ -76,7 +76,7 @@ namespace metrics.Controllers
                 _vkClient.Like(model);
                 return Ok();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
