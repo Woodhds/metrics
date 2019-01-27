@@ -55,19 +55,8 @@ namespace metrics.Services.Concrete
                                                                  $"&posts={string.Join(",", list.Select(c => c.Owner_Id + "_" + c.Id))}&extended=1&fields=description");
                             var json = await response.Content.ReadAsStringAsync();
                             var jobject = JObject.Parse(json);
-                            /*var groupsJ = jobject["response"]["groups"];
-                            var groups = new List<VkGroup>();
-                            if (groupsJ.HasValues)
-                            {
-                                groups = groupsJ.ToObject<List<VkGroup>>();
-                            }*/
 
                             var posts = jobject["response"]["items"].ToObject<List<VkMessage>>();
-                            /*await es.IndexManyAsync(groups, nameof(VkGroup).ToLower());
-                            posts.ForEach(post =>
-                            {
-                                post.Owner = groups.FirstOrDefault(z => z.Id == -post.Owner_Id);
-                            });*/
                             return posts;
                         }
 
