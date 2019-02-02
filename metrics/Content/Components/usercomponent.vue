@@ -53,7 +53,7 @@
     import {VkUser} from "../models/user";
     import Dropdown from "./dropdown.vue";
     import {VkMessage, VkRepostModel} from "../models/VkMessage";
-    import Message from './message.vue';
+    import Message from "./message.vue";
     import {FilterType} from "../models/FilterType";
     import {searchMessages, repost} from '../services/MessageService';
     import {SelectMessageModel} from "../models/SelectMessageModel";
@@ -72,6 +72,7 @@
         total: number = 0;
         filterType: FilterType = FilterType.None;
         timeout: number = 0;
+        selectedMess: SelectMessageModel[] = [];
 
         @Watch('page')
         pageChange() {
@@ -145,14 +146,14 @@
         }
         
         onSelect(model: SelectMessageModel) {
-            let idx = this.messages.findIndex(d => d.Owner_Id == model.Owner_Id && d.Id == model.Id);
-            if(idx !== -1) {
-                this.messages[idx].IsSelected = model.IsSelect;
+            if (!model.IsSelect) {
+                let idx = this.selectedMess.findIndex(d => d.Owner_Id == model.Owner_Id && d.Id == model.Id);
+                if (idx !== -1) {
+                    this.selectedMess.splice(idx, 1);
+                }
+            } else {
+                this.selectedMess.push(model)
             }
-        }
-        
-        get selectedMess(): boolean {
-            return this.messages.some(d => d.IsSelected); 
         }
         
         repostAll() {

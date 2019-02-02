@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace metrics.Services.Options
+﻿namespace metrics.Services.Options
 {
     public class VKApiUrls
     {

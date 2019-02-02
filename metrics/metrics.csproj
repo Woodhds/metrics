@@ -29,12 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="nlog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\ClientApp\favicon.ico" />
     <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbold.ttf" />
     <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbold.woff" />
