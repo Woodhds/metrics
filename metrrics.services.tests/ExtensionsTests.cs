@@ -9,11 +9,11 @@ namespace metrics.services.test
     public class ExtensionsTests
     {
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void BuildUrlTestCheckNUll()
         {
             var nvc = new NameValueCollection();
-            var url = nvc.BuildUrl(null);
-            Assert.AreEqual(url, string.Empty);
+            nvc.BuildUrl(null);
         }
 
         [TestMethod]

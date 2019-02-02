@@ -6,7 +6,7 @@ namespace metrics.Services.Abstract
     public interface IVkClient : IBaseHttpClient
     {
         VkResponse<List<VkMessage>> GetReposts(string id, int skip, int take, string search = null);
-        void Repost(List<VkRepostViewModel> reposts, int timeout = 0);
+        List<SimpleVkResponse<VkRepostMessage>> Repost(List<VkRepostViewModel> reposts, int timeout = 0);
         SimpleVkResponse<List<VkUserResponse>> GetUserInfo(string id);
         VkResponse<List<VkMessage>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels);
         VkResponse<List<VkGroup>> GetGroups(int count, int offset);

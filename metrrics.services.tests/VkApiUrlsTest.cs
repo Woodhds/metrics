@@ -18,12 +18,7 @@ namespace metrrics.services.tests
         [TestMethod]
         public void UrlsTest()
         {
-            var builder = new ConfigurationBuilder();
-            builder.AddJsonFile(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../metrics/appsettings.json"));
-            var config = builder.Build();
-            var urls = new VKApiUrls();
-            config.GetSection("VkApiUrls").Bind(urls);
+            var urls = TestOptions.GetUrls();
             Assert.AreEqual(urls.Like, "likes.add");
             Assert.AreEqual(urls.Wall, "wall.get");
             Assert.AreEqual(urls.Domain, "https://api.vk.com/method/");

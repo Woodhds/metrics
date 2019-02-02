@@ -111,10 +111,11 @@ namespace metrics.Services.Concrete
             GetVkAsync<SimpleVkResponse<bool>>(urls.GroupJoin, @params);
         }
 
-        public void Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0)
+        public List<SimpleVkResponse<VkRepostMessage>> Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0)
         {
             if (vkRepostViewModels == null)
                 throw new ArgumentNullException(nameof(vkRepostViewModels));
+            var result = new List<SimpleVkResponse<VkRepostMessage>>();
 
             var posts = GetById(vkRepostViewModels);
             foreach (var item in posts.Response.Items.Where(c => c.Reposts != null 
@@ -130,7 +131,7 @@ namespace metrics.Services.Concrete
                     {
                         { "object", $"wall{item.Owner_Id}_{item.Id}" }
                     };
-                    PostVkAsync<RepostMessageResponse>(urls.Repost, null, @params);
+                    result.Add(PostVkAsync<SimpleVkResponse<VkRepostMessage>>(urls.Repost, null, @params));
                     Thread.Sleep(timeout * 1000);
                 }
                 catch (Exception e)
@@ -138,6 +139,8 @@ namespace metrics.Services.Concrete
                     _logger.LogError(e, e.Message);
                 }
             }
+
+            return result;
         }
 
         public SimpleVkResponse<List<VkUserResponse>> GetUserInfo(string id)

@@ -9,7 +9,7 @@ namespace metrics.Services.Helpers
         public static string BuildUrl(this NameValueCollection @params, string url)
         {
             if (string.IsNullOrEmpty(url))
-                return string.Empty;
+                throw new ArgumentNullException(nameof(url));
 
             var builder = new UriBuilder(url);
             if (@params != null)

@@ -7,9 +7,4 @@ namespace metrics.Services.Models
         public uint Reposts_Count { get; set; }
         public uint Likes_Count { get; set; }
     }
-
-    public class RepostMessageResponse
-    {
-        public VkRepostMessage Response { get; set; }
-    }
 }

@@ -9,7 +9,6 @@ namespace metrics.test
         [TestMethod]
         public void UsersTests()
         {
-            new VkClient()
         }
     }
 }
