@@ -1,5 +1,5 @@
 <template>
-    <div class="md:w-1/2 sm:w-full border shadow px-4 py-4 relative" ref="messages">
+    <div class="vk-message border shadow px-4 py-4 relative mr-2 mb-2" ref="messages">
         <a class="block absolute" target="_blank" :href="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id">
             <svg class="w-4 h-4" viewBox="0 0 25 25">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/icons.svg#key"/>
@@ -11,7 +11,7 @@
         <figure class="flex flex-col items-center">
             <img class="w-auto h-32 mb-3"
                  :src="message.Attachments && message.Attachments.length > 0 && message.Attachments[0].Photo ? message.Attachments[0].Photo.Sizes[4].Url : ''"/>
-            <figcaption class="text-sm leading-normal" v-html="message.Text"></figcaption>
+            <figcaption class="text-sm leading-normal word-break" v-html="message.Text"></figcaption>
         </figure>
         <div class="flex flex-row mt-6">
             <a :class="message.Reposts.User_reposted ? 'fill-red' : ''" class="cursor-pointer mr-4"

@@ -13,13 +13,22 @@ html {
 }
 
 .loading {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #efefef;
-  opacity: 0.5;
+  @apply absolute w-full h-full bg-grey opacity-50;
 }
 
+@screen md {
+  .vk-message {
+    width: 49%;
+  }
+}
+
+.vk-message:nth-child(even) {
+  @apply mr-0;
+}
+
+.word-break {
+  word-break: break-all;
+}
 
 .form-switch {
   @apply relative select-none w-12 mr-2 leading-normal;

@@ -12,7 +12,7 @@
                         :disabled="!selected">Поиск
                 </button>
             </form>
-            <div class="sm:w-full md:w-1/3 flex flex-col" v-if="selectedMess">
+            <div class="sm:w-full md:w-1/3 flex flex-col" v-if="selectedMess.length > 0">
                 <div class="mb-4 relative">
                     <label for="timeout" class="text-sm font-bold text-grey block">Таймаут с сек.</label>
                     <select id="timeout" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="timeout">
@@ -32,8 +32,7 @@
                 <a @click="handleSortCount" class="no-underline cursor-pointer ml-4" nohref>Кол-ву репостов</a>
             </div>
             <div class="flex flex-row flex-wrap">
-                <Message v-for="message of messages" @select="onSelect" :message="message" :key="message.Id + message.Owner_Id"
-                         class="md:w-1/2 sm:w-full border shadow px-4 py-4">
+                <Message v-for="message of messages" @select="onSelect" :message="message" :key="message.Id + message.Owner_Id">
                 </Message>
             </div>
             <ul class="flex list-reset mt-6" v-if="totalPages.length > 1">

@@ -13,8 +13,22 @@ html {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #efefef;
+  background-color: #b8c2cc;
   opacity: .5;
+}
+
+@media (min-width: 768px) {
+  .vk-message {
+    width: 49%;
+  }
+}
+
+.vk-message:nth-child(even) {
+  margin-right: 0;
+}
+
+.word-break {
+  word-break: break-all;
 }
 
 .form-switch {
