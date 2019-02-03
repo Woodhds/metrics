@@ -118,8 +118,7 @@ namespace metrics.Services.Concrete
             var result = new List<SimpleVkResponse<VkRepostMessage>>();
 
             var posts = GetById(vkRepostViewModels);
-            foreach (var item in posts.Response.Items.Where(c => c.Reposts != null 
-                && !c.Reposts.User_reposted))
+            foreach (var item in posts.Response.Items.Where(c => c.Reposts != null)) 
             {
                 try
                 {

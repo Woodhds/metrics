@@ -30,10 +30,8 @@ namespace metrics.Services.Concrete
                     new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 httpMessage.Content = stringContent;
                 var response = await _httpClient.SendAsync(httpMessage);
-                if (!response.IsSuccessStatusCode)
-                {
-                    return default;
-                }
+
+                response.EnsureSuccessStatusCode();
 
                 return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
             }
@@ -51,14 +49,11 @@ namespace metrics.Services.Concrete
                 var uri = @params.BuildUrl(url);
                 var response = await _httpClient.GetAsync(uri);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonConvert.DeserializeObject<T>(
-                        response.Content.ReadAsStringAsync().Result
-                    );
-                }
+                response.EnsureSuccessStatusCode();
 
-                return default;
+                return JsonConvert.DeserializeObject<T>(
+                    response.Content.ReadAsStringAsync().Result
+                );
             }
             catch (Exception e)
             {
