@@ -11,7 +11,7 @@
         <figure class="flex flex-col items-center">
             <img class="w-auto h-32 mb-3"
                  :src="message.Attachments && message.Attachments.length > 0 && message.Attachments[0].Photo ? message.Attachments[0].Photo.Sizes[4].Url : ''"/>
-            <figcaption class="text-sm leading-normal word-break" v-html="message.Text"></figcaption>
+            <figcaption class="text-sm leading-normal word-break max-h-screen overflow-y-auto" v-html="message.Text"></figcaption>
         </figure>
         <div class="flex flex-row mt-6">
             <a :class="message.Reposts.User_reposted ? 'fill-red' : ''" class="cursor-pointer mr-4"

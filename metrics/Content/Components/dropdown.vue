@@ -1,13 +1,13 @@
 <template>
     <div class="mb-4 relative">
-        <label class="text-sm font-bold text-grey">{{Label}}</label>
-        <div @click="toggleOpen" :class="opened ? 'focus:outline-shadow': ''" class="px-10 py-4 shadow appearance-none cursor-pointer rounded">
+        <label class="text-sm font-bold text-grey-darker font-bold">{{Label}}</label>
+        <div @click="toggleOpen" :class="opened ? 'outline-none shadow-outline': ''" class="px-10 py-4 shadow appearance-none cursor-pointer rounded">
             <figure v-if="Selected" class="flex items-center">
                 <img class="w-16 h-16 rounded" :src="Selected.Avatar" :alt="Selected.FullName"/>
                 <figcaption class="ml-3">{{ Selected.FullName }}</figcaption>
             </figure>
         </div>
-        <ul v-if="List && opened" class="list-reset absolute p-4 z-20 bg-white w-full border shadow">
+        <ul v-if="List && opened" class="list-reset dropdown-list absolute p-4 z-20 bg-white w-full border shadow">
             <li class="flex flex-row items-center p-2 cursor-pointer" @click="select(item)" v-for="item of List" :key="item.UserId" >
                 <img class="mr-4" :src="item.Avatar" :alt="item.FullName"/>
                 <span>{{item.FullName}}</span>

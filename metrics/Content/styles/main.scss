@@ -58,3 +58,11 @@ html {
 .form-switch-checkbox:checked + .form-switch-label:before {
   @apply pin-r;
 }
+
+.dropdown-list {
+  top: 103%;
+  
+  &__arrow {
+    top: 1.7rem;
+  }
+}

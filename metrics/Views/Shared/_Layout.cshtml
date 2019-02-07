@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="~/fonts/firasans/firasans.css" asp-append-version="true"/>
     </environment>
 </head>
-<body class="flex flex-col h-full">
+<body class="flex flex-col h-full items-center">
 <nav class="fixed w-full bg-grey-darkest flex items-center z-50">
     <div class="container flex flex-row items-center m-auto">
         <ul class="flex flex-row list-reset flex-1 items-center">
@@ -46,7 +46,7 @@
     </div>
 </nav>
 
-<main class="container mx-auto pt-16" role="main">
+<main class="container h-full pt-16" role="main">
     @RenderBody()
 </main>
 <footer class="bg-dark"></footer>
