@@ -16,10 +16,13 @@
         <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" version="2.2.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc" version="2.2.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
+      <ProjectReference Include="..\metrics\metrics.csproj" />
     </ItemGroup>
 
 </Project>

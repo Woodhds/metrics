@@ -14,6 +14,9 @@ namespace metrics
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseShutdownTimeout(TimeSpan.FromSeconds(10))
+                .UseKestrel(d => {
+                    d.ListenLocalhost(5000);
+                })
                 .UseStartup<Startup>();
     }
 }

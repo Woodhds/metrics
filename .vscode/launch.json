@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/metrics/bin/Debug/netcoreapp2.1/metrics.dll",
+            "program": "${workspaceFolder}/metrics/bin/Debug/netcoreapp2.2/metrics.dll",
             "args": [],
             "cwd": "${workspaceFolder}/metrics",
             "stopAtEntry": false,
@@ -32,7 +32,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
+                "/Views": "${workspaceFolder}/metrics/Views"
             }
         },
         {

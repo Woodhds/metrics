@@ -6,7 +6,7 @@
             </svg>
         </a>
         <div class="absolute block pin-r">
-            <SwitchComponent @switchChange="switchChange" onText="" offText="" :isToggleOn="message.IsSelect"></SwitchComponent>
+            <SwitchComponent @switchChange="switchChange" :value="message.IsSelect"></SwitchComponent>
         </div>
         <figure class="flex flex-col items-center">
             <img class="w-auto h-32 mb-3"

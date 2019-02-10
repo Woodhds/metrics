@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Data.Models;
 
 namespace metrics.Controllers
 {
@@ -18,23 +19,31 @@ namespace metrics.Controllers
     {
         private readonly IRepository<VkUser> _vkUserRepository;
         private readonly IVkClient _vkClient;
-        private readonly DataContext _dataContext;
-        public UserController(IRepository<VkUser> vkUserRepository, IVkClient vkClient, DataContext dataContext)
+
+        public UserController(IRepository<VkUser> vkUserRepository, IVkClient vkClient)
         {
             _vkUserRepository = vkUserRepository;
             _vkClient = vkClient;
-            _dataContext = dataContext;
         }
         
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<VkUser>>> Users()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<VkUserModel>>> Users()
         {
             var users = await _vkUserRepository.Read()
-                .Select(c => new {c.FullName, c.Avatar, c.UserId}).ToListAsync();
+                .Select(c => new VkUserModel 
+                { 
+                    FullName = c.FullName, 
+                    Avatar = c.Avatar, 
+                    UserId = c.UserId
+                }
+            ).ToListAsync();
+
             return Ok(users);
         }
 
@@ -52,7 +61,7 @@ namespace metrics.Controllers
 
             var userInfo = _vkClient.GetUserInfo(userId);
             var user = new VkUser { UserId = userId};
-            if (_dataContext.Set<VkUser>().Any(c => c.UserId == userId))
+            if (_vkUserRepository.Read().Any(c => c.UserId == userId))
             {
                 ModelState.AddModelError("", "Пользователь уже существует");
                 return View();
@@ -60,8 +69,7 @@ namespace metrics.Controllers
             user.FirstName = userInfo.Response.First()?.First_name;
             user.LastName = userInfo.Response.First()?.Last_Name;
             user.Avatar = userInfo.Response.First()?.Photo_50;
-            _dataContext.Entry(user).State = EntityState.Added;
-            await _dataContext.SaveChangesAsync();
+            await _vkUserRepository.CreateAsync(user);
             ViewBag.Result = "Пользователь добавлен";
             return View();
         }

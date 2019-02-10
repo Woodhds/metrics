@@ -1,7 +1,12 @@
 using System;
 using System.IO;
+using metrics.Services.Abstract;
+using metrics.Services.Concrete;
 using metrics.Services.Options;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace metrrics.services.tests
 {
@@ -16,6 +21,13 @@ namespace metrrics.services.tests
             var urls = new VKApiUrls();
             config.GetSection("VkApiUrls").Bind(urls);
             return urls;
+        }
+
+        public static IVkClient GetClient()
+        {
+            var urls = GetUrls();
+            return new VkClient(new TestHttpClientFactory(), new HttpContextAccessor { HttpContext = new TestHttpContext() },
+                new OptionsWrapper<VKApiUrls>(urls), new NullLogger<VkClient>());
         }
     }
 }

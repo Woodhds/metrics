@@ -3437,11 +3437,7 @@ var render = function() {
         { staticClass: "absolute block pin-r" },
         [
           _c("SwitchComponent", {
-            attrs: {
-              onText: "",
-              offText: "",
-              isToggleOn: _vm.message.IsSelect
-            },
+            attrs: { value: _vm.message.IsSelect },
             on: { switchChange: _vm.switchChange }
           })
         ],
@@ -3748,9 +3744,11 @@ var render = function() {
                         }
                       },
                       _vm._l(_vm.seconds, function(second) {
-                        return _c("option", { domProps: { value: second } }, [
-                          _vm._v(_vm._s(second))
-                        ])
+                        return _c(
+                          "option",
+                          { key: second, domProps: { value: second } },
+                          [_vm._v(_vm._s(second))]
+                        )
                       }),
                       0
                     ),
@@ -3848,6 +3846,7 @@ var render = function() {
                     return _c(
                       "li",
                       {
+                        key: item,
                         staticClass: "px-4 py-2 cursor-pointer",
                         class: [item === _vm.page ? "bg-blue text-white" : ""],
                         on: {

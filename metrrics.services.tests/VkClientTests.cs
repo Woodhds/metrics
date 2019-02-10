@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using metrics.Services.Abstract;
 using metrics.Services.Concrete;
 using metrics.Services.Models;
 using metrics.Services.Options;
@@ -12,14 +13,7 @@ namespace metrrics.services.tests
     [TestClass]
     public class VkClientTests
     {
-        private VkClient _vkClient;
-        [TestInitialize]
-        public void Setup()
-        {
-            var urls = TestOptions.GetUrls();
-            _vkClient = new VkClient(new TestHttpClientFactory(), new HttpContextAccessor { HttpContext = new TestHttpContext() },
-                new OptionsWrapper<VKApiUrls>(urls), new NullLogger<VkClient>());
-        }
+        private IVkClient _vkClient = TestOptions.GetClient();
 
         [TestMethod]
         public void TestLike()
