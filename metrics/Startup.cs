@@ -90,6 +90,7 @@ namespace metrics
             services.AddHttpClient();
             services.AddLogging();
             services.AddScoped<IBaseHttpClient, BaseHttpClient>();
+            services.AddScoped<ICompetitionsService, CompetitionsService>();
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddScoped<IVkClient, VkClient>();

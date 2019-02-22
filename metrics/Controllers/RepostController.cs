@@ -19,36 +19,25 @@ namespace metrics.Controllers
     {
         private readonly IVkClient _vkClient;
         private readonly ILogger<RepostController> _logger;
-        private readonly DbContext _dataContext;
-        public RepostController(IVkClient vkClient, ILogger<RepostController> logger, DbContext dataContext)
+        private readonly ICompetitionsService _competitionsService;
+
+        public RepostController(IVkClient vkClient, ILogger<RepostController> logger,
+            ICompetitionsService competitionsService)
         {
             _vkClient = vkClient;
             _logger = logger;
-            _dataContext = dataContext;
+            _competitionsService = competitionsService;
         }
 
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
         public async Task<ActionResult<DataSourceResponseModel>> GetData(string userId, int page, int pageSize,
-            string search = null, bool fromRepo = false)
+            string search = null)
         {
-            if (!fromRepo)
-            {
-                var data = _vkClient.GetReposts(userId.Trim(), page, pageSize, search);
-                if(data.Response.Items == null)
-                    data.Response.Items = new List<VkMessage>();
-                return new DataSourceResponseModel(data.Response.Items, data.Response.Count);
-            }
-
-            var messages = _dataContext.Set<ParseMessage>().Where(c => c.Text.Contains(search));
-            var count = await messages.CountAsync();
-            var vkresponse = await messages.OrderByDescending(c => c.Date).Skip((page - 1) * pageSize).Take(pageSize)
-                .ToListAsync();
-
-            var response =
-                _vkClient.GetById(vkresponse.Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.OwnerId}));
-            
-            return new DataSourceResponseModel(response.Response.Items, count);
+            var data = _vkClient.GetReposts(userId.Trim(), page, pageSize, search);
+            if(data.Response.Items == null)
+                data.Response.Items = new List<VkMessage>();
+            return new DataSourceResponseModel(data.Response.Items, data.Response.Count);
         }
 
         [Authorize(Policy = "VkPolicy")]
@@ -75,6 +64,21 @@ namespace metrics.Controllers
             {
                 _vkClient.Like(model);
                 return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Policy = "VkPolicy")]
+        [HttpGet("site")]
+        public async Task<ActionResult<DataSourceResponseModel>> GetFromSite()
+        {
+            try
+            {
+                var data = await _competitionsService.Fetch();
+                return new DataSourceResponseModel(data, data.Count);
             }
             catch (Exception)
             {

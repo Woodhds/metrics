@@ -8,6 +8,10 @@ export function searchMessages(search: string, userId: number, page: number, pag
                     &page=${page}&pageSize=${pageSize}`);
 }
 
+export function getFromSite() : AxiosPromise<DataSourceResponse<VkMessage>> {
+  return axios.get<DataSourceResponse<VkMessage>>(`api/repost/site`);
+}
+
 export function repost(model: VkRepostModel[], timeout: number = 0) : AxiosPromise {
   return axios.post(`/api/repost/repost?timeout=${timeout}`, model);
 }
