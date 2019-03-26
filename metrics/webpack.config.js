@@ -24,7 +24,7 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [require('tailwindcss')('./Content/tailwind.js'), require('autoprefixer')]
+              plugins: [require('tailwindcss')('./Content/tailwind.config.js'), require('autoprefixer')]
             }
           }, 'sass-loader']
       },

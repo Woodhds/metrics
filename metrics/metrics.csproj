@@ -1,158 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
-    <UserSecretsId>37a3abed-c8fa-407d-9fd6-40af533e3630</UserSecretsId>
+    <TypeScriptToolsVersion>3.3.4000</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="transform.xslt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview3-19153-02" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\favicon.ico" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbold.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbold.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbold.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbolditalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbolditalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbolditalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbook.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbook.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbook.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbookitalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbookitalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansbookitalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextrabold.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextrabold.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextrabold.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextrabolditalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextrabolditalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextrabolditalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextralight.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextralight.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextralight.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextralightitalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextralightitalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansextralightitalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansheavy.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansheavy.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansheavy.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansheavyitalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansheavyitalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansheavyitalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansitalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansitalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansitalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanslight.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanslight.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanslight.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanslightitalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanslightitalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanslightitalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansmedium.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansmedium.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansmedium.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansmediumitalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansmediumitalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansmediumitalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansregular.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansregular.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasansregular.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanssemibold.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanssemibold.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanssemibold.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanssemibolditalic.ttf" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanssemibolditalic.woff" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\Firasanssemibolditalic.woff2" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\index.html" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\main.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\main.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\polyfills.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\polyfills.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\runtime.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\runtime.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\scripts.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\scripts.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\styles.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\styles.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\vendor.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\ClientApp\vendor.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\3rdpartylicenses.txt" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\favicon.ico" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\index.html" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\main.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\main.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\polyfills.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\polyfills.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\runtime.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\runtime.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\styles.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\styles.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\vendor.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\dist\vendor.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\images\products\borsch_thumbnail.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.css.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.min.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.min.css.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.css.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.min.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.min.css.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.css.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.min.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.min.css.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.min.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\.bower.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\.bower.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation\LICENSE.md" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\.bower.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\kendo\jquery.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\kendo\jquery.min.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\kendo\jszip.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\kendo\kendo.all.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\kendo\kendo.all.min.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\kendo\kendo.aspnetmvc.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\kendo\kendo.aspnetmvc.min.js.map" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,22 +1,24 @@
-using metrics.Services.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Specialized;
+using metrics.Services.Helpers;
+using NUnit.Framework;
 
-namespace metrics.services.test
+namespace metrics.services.tests
 {
-    [TestClass]
+    [TestFixture]
     public class ExtensionsTests
     {
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void BuildUrlTestCheckNUll()
         {
-            var nvc = new NameValueCollection();
-            nvc.BuildUrl(null);
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var nvc = new NameValueCollection();
+                nvc.BuildUrl(null);
+            });
         }
 
-        [TestMethod]
+        [Test]
         public void BuildUrlValidUrlOneParam()
         {
             var nvc = new NameValueCollection()
@@ -27,7 +29,7 @@ namespace metrics.services.test
             Assert.AreEqual(url.ToLower(), "http://test:80/?s=123");
         }
 
-        [TestMethod]
+        [Test]
         public void BuildUrlValidUrlSeveralParams()
         {
             var nvc = new NameValueCollection()
@@ -39,15 +41,17 @@ namespace metrics.services.test
             Assert.AreEqual(url.ToLower(), "http://test:80/?param1=test&param2=test2");
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UriFormatException))]
+        [Test]
         public void BuildUrlInvalid()
         {
-            NameValueCollection nvc = null;
-            nvc.BuildUrl("ftp://test.\"ru");
+            Assert.Throws<UriFormatException>(() =>
+            {
+                NameValueCollection nvc = null;
+                nvc.BuildUrl("ftp://test.\"ru");
+            });
         }
 
-        [TestMethod]
+        [Test]
         public void BuildUrlCollectionNull()
         {
             NameValueCollection nvc = null;

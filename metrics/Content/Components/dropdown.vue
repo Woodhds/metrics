@@ -1,6 +1,6 @@
 <template>
     <div class="mb-4 relative">
-        <label class="text-sm font-bold text-grey-darker font-bold">{{Label}}</label>
+        <label class="text-sm font-bold text-gray-800 font-bold">{{Label}}</label>
         <div @click="toggleOpen" :class="opened ? 'outline-none shadow-outline': ''" class="px-10 py-4 shadow appearance-none cursor-pointer rounded">
             <figure v-if="Selected" class="flex items-center">
                 <img class="w-16 h-16 rounded" :src="Selected.Avatar" :alt="Selected.FullName"/>

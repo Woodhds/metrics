@@ -1,12 +1,12 @@
 ﻿using Data.EF;
 using Data.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 
 namespace DAL.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class RepositoryTests
     {
         private Repository<VkUser> _repository;
@@ -17,14 +17,14 @@ namespace DAL.Tests
             _repository = new Repository<VkUser>(dataContext);
         }
 
-        [TestMethod]
+        [Test]
         public void ReadTest()
         {
             var count = _repository.Read().Count();
             Assert.IsTrue(count > 0);
         }
 
-        [TestMethod]
+        [Test]
         public void CreateTest()
         {
             var entity = _repository.CreateAsync(new VkUser()).GetAwaiter().GetResult();
@@ -32,7 +32,7 @@ namespace DAL.Tests
             Assert.IsTrue(entity.Id != 0);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTestFalse()
         {
             _repository.DeleteAsync(34).GetAwaiter().GetResult();
@@ -40,7 +40,7 @@ namespace DAL.Tests
             Assert.IsFalse(count == 0);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteTestTrue()
         {
             _repository.DeleteAsync(1).GetAwaiter().GetResult();
@@ -48,7 +48,7 @@ namespace DAL.Tests
             Assert.AreEqual(count, 0);
         }
 
-        [TestMethod]
+        [Test]
         public void UpdateTestTrue()
         {
             var obj = _repository.Find(1).GetAwaiter().GetResult();
@@ -56,12 +56,12 @@ namespace DAL.Tests
             obj = _repository.UpdateAsync(obj).GetAwaiter().GetResult();
             Assert.AreEqual(obj.FirstName, "Test");
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(DbUpdateConcurrencyException))]
+        
+        [Test]
         public void UpdateTestFalse()
         {
-            var obj = _repository.UpdateAsync(new VkUser() { Id = 32, FirstName = "Test" }).GetAwaiter().GetResult();
+            Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
+                await _repository.UpdateAsync(new VkUser {Id = 32, FirstName = "Test"}));
         }
     }
 }

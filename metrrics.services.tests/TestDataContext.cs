@@ -1,7 +1,7 @@
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace metrics.test
+namespace metrics.services.tests
 {
     public class TestDataContext : DbContext
     {

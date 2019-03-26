@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
-using metrics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 
-namespace metrrics.services.tests
+namespace metrics.services.tests
 {
     public class TestHttpContext : HttpContext
     {

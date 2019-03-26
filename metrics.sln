@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Services", "metrics
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.Tests", "DAL.Tests\DAL.Tests.csproj", "{E5D7B9C2-E1D8-4EAD-B948-D4A12776455C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.test", "metrics.test\metrics.test.csproj", "{AD743E15-FE32-4A36-8115-78B5E1690768}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.services.tests", "metrrics.services.tests\metrics.services.tests.csproj", "{0FB5D7BE-C534-4EFE-9FF2-11EC998166F8}"
 EndProject
 Global
@@ -43,10 +41,6 @@ Global
 		{E5D7B9C2-E1D8-4EAD-B948-D4A12776455C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5D7B9C2-E1D8-4EAD-B948-D4A12776455C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5D7B9C2-E1D8-4EAD-B948-D4A12776455C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD743E15-FE32-4A36-8115-78B5E1690768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD743E15-FE32-4A36-8115-78B5E1690768}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD743E15-FE32-4A36-8115-78B5E1690768}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD743E15-FE32-4A36-8115-78B5E1690768}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0FB5D7BE-C534-4EFE-9FF2-11EC998166F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FB5D7BE-C534-4EFE-9FF2-11EC998166F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB5D7BE-C534-4EFE-9FF2-11EC998166F8}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
-namespace metrrics.services.tests
+namespace metrics.services.tests
 {
     public static class TestOptions
     {

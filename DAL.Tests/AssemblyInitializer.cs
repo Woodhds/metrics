@@ -1,18 +1,18 @@
 ﻿using Data.EF;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace DAL.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class AssemblyInitializer
     {
         public static DbContextOptions Options;
 
-        [AssemblyInitialize]
-        public static async Task Init(TestContext context)
+        [OneTimeSetUp]
+        public static async Task Init()
         {
             var builder = new DbContextOptionsBuilder();
             builder.UseSqlite("Data Source=testdb.db;");

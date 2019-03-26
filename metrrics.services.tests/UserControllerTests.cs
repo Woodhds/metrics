@@ -1,25 +1,19 @@
-using metrics.Services.Concrete;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using metrics.Controllers;
-using DAL;
-using Data.EF;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory;
-using Data.Entities;
-using metrrics.services.tests;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DAL;
+using Data.Entities;
 using Data.Models;
-using System;
+using metrics.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using NUnit.Framework;
 
-namespace metrics.test
+namespace metrics.services.tests
 {
-    [TestClass]
+    [TestFixture]
     public class UserControllerTests
     {
-        [TestMethod]
+        [Test]
         public async Task UsersTests()
         {
             using(var context = new TestDataContext()) 
@@ -30,7 +24,7 @@ namespace metrics.test
                 var controller = new UserController(repository, client);
                 var result = await controller.Users();
                 var objectResult = result.Result as ObjectResult;
-                Assert.IsInstanceOfType(objectResult.Value, typeof(IEnumerable<VkUserModel>));
+                Assert.IsInstanceOf<IEnumerable<VkUserModel>>(objectResult.Value);
                 Assert.IsNotNull(objectResult.Value);
                 var list = objectResult.Value as IEnumerable<VkUserModel>;
                 Assert.IsTrue(list.Count() > 0);
