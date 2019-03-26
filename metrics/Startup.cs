@@ -1,8 +1,6 @@
 using Data.EF;
 using DAL;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +11,10 @@ using metrics.Services.Abstract;
 using System;
 using metrics.Services.Concrete;
 using metrics.Services.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Newtonsoft.Json.Serialization;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Hosting;
 
 namespace metrics
 {
@@ -50,18 +47,6 @@ namespace metrics
                     opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     opts.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
-                {
-                    opts.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = true,
-                        ValidateIssuer = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                    };
-                })
                 .AddCookie(opts =>
                 {
                     opts.LoginPath = new PathString("/Account/Login");
@@ -79,8 +64,10 @@ namespace metrics
 
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(
-                z => { z.SerializerSettings.ContractResolver = new DefaultContractResolver(); });
+            services.AddMvc().AddNewtonsoftJson(z =>
+            {
+                z.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
 
             services.AddAuthorization(z =>
             {
@@ -94,6 +81,10 @@ namespace metrics
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddScoped<IVkClient, VkClient>();
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)

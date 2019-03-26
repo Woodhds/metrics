@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using metrics.Extensions;
 using metrics.Models;
@@ -17,7 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 
 namespace metrics.Controllers
@@ -26,13 +23,11 @@ namespace metrics.Controllers
     public class AccountController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private JwtOptions _jwtBearerOptions;
         private readonly IVkClient _vkClient;
 
-        public AccountController(IHttpClientFactory httpClientFactory, IOptions<JwtOptions> jwtBearerOptions, IVkClient vkClient)
+        public AccountController(IHttpClientFactory httpClientFactory, IVkClient vkClient)
         {
             _httpClientFactory = httpClientFactory;
-            _jwtBearerOptions = jwtBearerOptions.Value;
             _vkClient = vkClient;
         }
 
@@ -94,11 +89,6 @@ namespace metrics.Controllers
             return View(model);
         }
 
-        public ActionResult<string> Token()
-        {
-            return Ok(CreateToken(User.Claims.ToList()));
-        }
-
         [HttpGet]
         public IActionResult Drop()
         {
@@ -134,23 +124,6 @@ namespace metrics.Controllers
                 _vkClient.LeaveGroup(group.Id);
             }
             return Ok();
-        }
-
-        private string CreateToken(List<Claim> claims)
-        {
-            claims.Add(new Claim(JwtRegisteredClaimNames.Iss, _jwtBearerOptions.Issuer));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Aud, _jwtBearerOptions.Audience));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.ToString()));
-            var token = new JwtSecurityToken(
-                _jwtBearerOptions.Issuer,
-                _jwtBearerOptions.Audience,
-                claims,
-                expires: DateTime.Now.Add(TimeSpan.FromHours(24)),
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtBearerOptions.Key)),
-                    SecurityAlgorithms.HmacSha256)
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

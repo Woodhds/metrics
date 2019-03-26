@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace metrrics.services.tests
+namespace metrics.services.tests
 {
     public class TestHttpClientFactory : IHttpClientFactory
     {

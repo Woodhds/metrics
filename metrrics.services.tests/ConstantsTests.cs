@@ -1,12 +1,11 @@
-using metrics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
-namespace metrrics.services.tests
+namespace metrics.services.tests
 {
-    [TestClass]
+    [TestFixture]
     public class ConstantsTests
     {
-        [TestMethod]
+        [Test]
         public void ConstantTest()
         {
             Assert.AreEqual(Constants.ApiVersion, "5.85");

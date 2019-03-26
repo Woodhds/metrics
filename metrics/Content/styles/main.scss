@@ -13,7 +13,7 @@ html {
 }
 
 .loading {
-  @apply absolute w-full h-full bg-grey opacity-50;
+  @apply absolute w-full h-full bg-gray-800 opacity-50;
 }
 
 @screen md {
@@ -42,7 +42,7 @@ html {
   transition: background-color 0.2s ease-in;
 }
 .form-switch-label:before {
-  @apply absolute block bg-white pin-y w-6 border rounded-full -ml-1;
+  @apply absolute block bg-white inset-y-0 w-6 border rounded-full -ml-1;
 
   right: 50%;
   content: "";
@@ -53,10 +53,10 @@ html {
 
 }
 .form-switch-checkbox:checked + .form-switch-label {
-  @apply bg-green shadow-none;
+  @apply bg-green-500 shadow-none;
 }
 .form-switch-checkbox:checked + .form-switch-label:before {
-  @apply pin-r;
+  @apply right-0;
 }
 
 .dropdown-list {

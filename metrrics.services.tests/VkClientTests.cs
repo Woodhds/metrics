@@ -1,28 +1,23 @@
 using System.Collections.Generic;
 using metrics.Services.Abstract;
-using metrics.Services.Concrete;
 using metrics.Services.Models;
-using metrics.Services.Options;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
-namespace metrrics.services.tests
+namespace metrics.services.tests
 {
-    [TestClass]
+    [TestFixture]
     public class VkClientTests
     {
         private IVkClient _vkClient = TestOptions.GetClient();
 
-        [TestMethod]
+        [Test]
         public void TestLike()
         {
             var response = _vkClient.Like(new VkRepostViewModel() { Id = 16248, Owner_Id = -63771035 });
             Assert.IsNotNull(response?.Response);
         }
 
-        [TestMethod]
+        [Test]
         public void TestRepost()
         {
             var response = _vkClient.Repost(new List<VkRepostViewModel>()
@@ -33,7 +28,7 @@ namespace metrrics.services.tests
             Assert.IsTrue(response[0].Response.Success);
         }
 
-        [TestMethod]
+        [Test]
         public void GetMessageTest()
         {
             var response = _vkClient.GetById(new List<VkRepostViewModel> {
@@ -50,7 +45,7 @@ namespace metrrics.services.tests
             Assert.AreEqual(response.Response.Items[0].Id, 16248);
         }
 
-        [TestMethod]
+        [Test]
         public void GetGroupsTest()
         {
             var response = _vkClient.GetGroups(5, 0);
@@ -58,7 +53,7 @@ namespace metrrics.services.tests
             Assert.IsTrue(response.Response.Items.Count == 5);
         }
 
-        [TestMethod]
+        [Test]
         public void GetUserInfoTest()
         {
             var userId = 68868143;
@@ -68,7 +63,7 @@ namespace metrrics.services.tests
             Assert.AreEqual(response.Response[0].Id, userId);
         }
 
-        [TestMethod]
+        [Test]
         public void GetUserInfoInvalidUserId()
         {
             var userId = "piama2006";

@@ -17,7 +17,7 @@
     </environment>
 </head>
 <body class="flex flex-col h-full items-center">
-<nav class="fixed w-full bg-grey-darkest flex items-center z-50">
+<nav class="fixed w-full bg-gray-800 flex items-center z-50">
     <div class="container flex flex-row items-center m-auto">
         <ul class="flex flex-row list-reset flex-1 items-center">
             <li>
@@ -30,13 +30,13 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <li>
-                    <a asp-action="Index" asp-controller="User" class="no-underline text-white block hover:bg-black px-5 py-5">Пользователь</a>
+                    <a asp-action="Index" asp-controller="User" class="no-underline text-white block hover:bg-gray-900 px-5 py-5">Пользователь</a>
                 </li>
                 <li>
-                    <a asp-action="Add" asp-controller="User" class="no-underline text-white block hover:bg-black px-5 py-5">Добавить</a>
+                    <a asp-action="Add" asp-controller="User" class="no-underline text-white block hover:bg-gray-900 px-5 py-5">Добавить</a>
                 </li>
                 <li>
-                    <a asp-action="Drop" asp-controller="Account" class="no-underline text-white block hover:bg-black px-5 py-5">Удалить группы</a>
+                    <a asp-action="Drop" asp-controller="Account" class="no-underline text-white block hover:bg-gray-900 px-5 py-5">Удалить группы</a>
                 </li>
             }
         </ul>
@@ -46,10 +46,10 @@
     </div>
 </nav>
 
-<main class="container h-full pt-16" role="main">
+<main class="container h-full pt-20" role="main">
     @RenderBody()
 </main>
-<footer class="bg-dark"></footer>
+<footer class="bg-gray-800"></footer>
 
 <environment include="Development">
     <script src="~/js/main.js"></script>

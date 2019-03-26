@@ -1,21 +1,11 @@
-using System;
-using System.IO;
-using System.Reflection;
-using metrics.Services.Options;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
-namespace metrrics.services.tests
+namespace metrics.services.tests
 {
-    [TestClass]
+    [TestFixture]
     public class VkApiUrlsTest
     {
-        [TestMethod]
+        [Test]
         public void UrlsTest()
         {
             var urls = TestOptions.GetUrls();
