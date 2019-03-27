@@ -2,7 +2,6 @@ using Data.EF;
 using DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,8 +11,9 @@ using System;
 using metrics.Services.Concrete;
 using metrics.Services.Options;
 using Newtonsoft.Json.Serialization;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
 
 namespace metrics
@@ -85,9 +85,10 @@ namespace metrics
             {
                 options.AllowSynchronousIO = true;
             });
+            services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {

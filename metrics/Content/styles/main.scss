@@ -1,15 +1,6 @@
 html {
-  font-size:  #{16px}/#{1.5};
-  position: relative;
-
-  height: 100%;
-
-  word-spacing: 1px;
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
+  @apply h-full relative;
+  font-family: "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .loading {
@@ -63,6 +54,13 @@ html {
   top: 103%;
   
   &__arrow {
-    top: 1.7rem;
+    top: 2.2rem;
+  }
+}
+
+.logo {
+  transition: transform 1s ease;
+  &:hover {
+    transform: rotateY(360deg);
   }
 }

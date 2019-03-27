@@ -9,6 +9,7 @@ using DAL.Entities;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using metrics.Models;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Controllers
