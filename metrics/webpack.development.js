@@ -1,5 +1,10 @@
-module.exports = {
-  devTool: 'eval-sourcemap',
+const merge = require('webpack-merge');
+const base = require('./webpack.base');
+
+module.exports = merge(base, {
+  mode: 'development',
+  watch: true,
+  devtool: 'cheap-eval-source-map',
   devServer: {
     port: 9000,
     color: true,
@@ -10,4 +15,4 @@ module.exports = {
       '*': 'https://localhost:5001/'
     }
   }
-};
+})

@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/metrics/bin/Debug/netcoreapp2.2/metrics.dll",
+            "program": "${workspaceFolder}/metrics/bin/Debug/netcoreapp3.0/metrics.dll",
             "args": [],
             "cwd": "${workspaceFolder}/metrics",
             "stopAtEntry": false,

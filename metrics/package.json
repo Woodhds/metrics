@@ -18,6 +18,7 @@
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "purgecss-webpack-plugin": "^1.4.0",
     "ts-loader": "^5.3.1",
     "typescript": "^3.2.2",
     "url-loader": "^1.1.2",
@@ -27,10 +28,11 @@
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-hot-middleware": "^2.24.3",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "uglifyjs-webpack-plugin": "^2.1.2"
   },
   "scripts": {
-    "build": "webpack --mode development --watch",
-    "prod": "webpack --mode production"
+    "build": "webpack --config webpack.development.js",
+    "prod": "webpack --config webpack.production.js"
   }
 }
