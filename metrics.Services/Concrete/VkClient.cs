@@ -115,6 +115,8 @@ namespace metrics.Services.Concrete
         {
             if (vkRepostViewModels == null)
                 throw new ArgumentNullException(nameof(vkRepostViewModels));
+            vkRepostViewModels = vkRepostViewModels.Distinct().ToList();
+            
             var result = new List<SimpleVkResponse<VkRepostMessage>>();
 
             var posts = GetById(vkRepostViewModels);

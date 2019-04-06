@@ -1,18 +1,25 @@
 const merge = require('webpack-merge');
 const base = require('./webpack.base');
+const webpack = require('webpack');
 
 module.exports = merge(base, {
   mode: 'development',
-  watch: true,
+  output: {
+    publicPath: '/wds/'
+  },
   devtool: 'cheap-eval-source-map',
   devServer: {
     port: 9000,
-    color: true,
     host: '0.0.0.0',
     hot: true,
-    publicPath: '/wds/',
     proxy: {
-      '*': 'https://localhost:5001/'
+      '*': {
+        target: 'http://localhost:5000/',
+        changeOrigin: true
+      }
     }
-  }
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ]
 })

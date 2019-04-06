@@ -7,10 +7,6 @@
     <title>@ViewBag.Title - metrics</title>
 
     @RenderSection("styles", false)
-    <environment include="Development">
-        <link rel="stylesheet" href="~/css/styles.css"/>
-        <link rel="stylesheet" href="~/fonts/firasans/firasans.css"/>
-    </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true"/>
         <link rel="stylesheet" href="~/fonts/firasans/firasans.css" asp-append-version="true"/>
@@ -52,8 +48,8 @@
 <footer class="bg-gray-800"></footer>
 
 <environment include="Development">
-    <script src="~/js/main.js"></script>
-    <script src="~/js/styles.js"></script>
+    <script src="~/wds/js/styles.js" type="text/javascript"></script>
+    <script src="~/wds/js/main.js"></script>
 </environment>
 <environment exclude="Development">
     <script src="~/js/main.js" asp-append-version="true"></script>

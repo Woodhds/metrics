@@ -23,7 +23,7 @@
           <select id="timeout"
                   class="block appearance-none w-full bg-white border border-gray-100 hover:border-gray-300 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                   v-model="timeout">
-            <option v-for="second of seconds" :value="second">{{second}}</option>
+            <option v-for="second of seconds" :value="second" :key="second">{{second}}</option>
           </select>
           <div class="pointer-events-none dropdown-list__arrow absolute right-0 flex items-center px-2 text-gray-900">
             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -49,7 +49,7 @@
         </Message>
       </div>
       <ul class="flex mt-6" v-if="totalPages.length > 1">
-        <li class="px-4 py-2 cursor-pointer" @click="page = item"
+        <li class="px-4 py-2 cursor-pointer" @click="page = item" :key="item"
             :class="[ item === page ? 'bg-blue-800 text-white': '' ]" v-for="item of totalPages">{{item}}
         </li>
       </ul>
@@ -84,7 +84,7 @@
     page: number = 1;
     total: number = 0;
     filterType: FilterType = FilterType.None;
-    timeout: number = 0;
+    timeout: number = 40;
     selectedMess: SelectMessageModel[] = [];
     switchFromUser: boolean = false;
 
@@ -174,11 +174,9 @@
     }
 
     onSelect(model: SelectMessageModel) {
-      if (!model.IsSelect) {
-        let idx = this.selectedMess.findIndex(d => d.Owner_Id == model.Owner_Id && d.Id == model.Id);
-        if (idx !== -1) {
+      let idx = this.selectedMess.findIndex(d => d.Owner_Id == model.Owner_Id && d.Id == model.Id);
+      if (!model.IsSelect && idx !== -1) {
           this.selectedMess.splice(idx, 1);
-        }
       } else {
         this.selectedMess.push(model)
       }

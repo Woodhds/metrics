@@ -28,11 +28,12 @@
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-hot-middleware": "^2.24.3",
+    "webpack-dev-server": "^3.2.1",
     "webpack-merge": "^4.2.1",
-    "uglifyjs-webpack-plugin": "^2.1.2"
+    "terser-webpack-plugin": "^1.2.3"
   },
   "scripts": {
-    "build": "webpack --config webpack.development.js",
-    "prod": "webpack --config webpack.production.js"
+    "build": "SET NODE_ENV=development&& webpack-dev-server",
+    "prod": "SET NODE_ENV=production&& webpack"
   }
 }
