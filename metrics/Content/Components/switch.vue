@@ -13,9 +13,9 @@
 
   @Component
   export default class SwitchComponent extends Vue {
-    @Prop({type: String, default: ''}) offText: string = '';
-    @Prop({type: String, default: ''}) onText: string = '';
-    @Prop({type: Boolean, default: false}) value: boolean = false;
+    @Prop({type: String, default: ''}) offText: string;
+    @Prop({type: String, default: ''}) onText: string ;
+    @Prop({type: Boolean, default: false}) value: boolean;
 
     isToggleOn: boolean = false;
 

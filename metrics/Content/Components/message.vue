@@ -8,31 +8,8 @@
     <div class="absolute block right-0">
       <SwitchComponent @switchChange="switchChange" :value="message.IsSelect"></SwitchComponent>
     </div>
-    <figure class="flex flex-col items-center">
-      <div class="flex items-center">
-        <a @click="prev" v-if="totalImage > 1" nohref class="border border-gray-300 hover:shadow rounded-full block cursor-pointer p-4 mr-6">
-          <svg class="fill-current h-4 w-4" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <use xlink:href="/images/icons.svg#arrow-left"></use>
-          </svg>
-        </a>
-        <div class="flex flex-col mb-2">
-          <img v-if="totalImage > 0" class="w-auto h-32 mb-2"
-             :src="message.Attachments && message.Attachments.length > 0 && message.Attachments[currentImage].Photo ? message.Attachments[currentImage].Photo.Sizes[4].Url : ''"/>
-          <ul class="flex flex-wrap items-center justify-center">
-            <li @click="setCurrent(image)" v-for="image of imagePoints" :key="image" class="rounded-full relative border border-gray-300 h-4 w-4 p-1 ml-2 cursor-pointer">
-              <span style="top: 1px;left: 1px;" v-if="image === currentImage" class="bg-gray-500 top-0 left-0 w-3 h-3 absolute rounded-full block"></span>
-            </li>
-          </ul>
-        </div>
-        <a @click="next" v-if="totalImage > 1" nohref class="border border-gray-300 hover:shadow rounded-full block cursor-pointer p-4 ml-6">
-          <svg class="fill-current h-4 w-4" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <use xlink:href="/images/icons.svg#arrow-right"></use>
-          </svg>
-        </a>
-      </div>
-      <figcaption class="text-sm leading-normal word-break max-h-screen overflow-y-auto"
-                  v-html="message.Text"></figcaption>
-    </figure>
+    <ImageL :src="Images" :figcaption="message.Text" >
+    </ImageL>
     <div class="flex flex-row mt-6">
       <a :class="message.Reposts.User_reposted ? 'text-red-600' : ''" class="cursor-pointer items-center flex mr-5"
          @click="repost(message.Owner_Id, message.Id)">
@@ -57,11 +34,12 @@
   import {Component, Prop} from 'vue-property-decorator';
   import {VkMessage, VkRepostModel} from "../models/VkMessage";
   import SwitchComponent from './switch.vue';
+  import ImageL from './image.vue';
   import {repost, like} from '../services/MessageService'
   import {SelectMessageModel} from "../models/SelectMessageModel";
 
   @Component({
-    components: {SwitchComponent}
+    components: {SwitchComponent, ImageL}
   })
   export default class VkMessageComponent extends Vue {
     @Prop({default: null}) message: VkMessage;
@@ -77,29 +55,13 @@
         vue.$emit('hideLoading');
       });
     }
-    
-    get imagePoints(): number[] {
-      return Array.from(Array(this.totalImage).keys());
-    }
 
-    get totalImage(): number {
-      return this.message.Attachments.filter(value => value.Photo).length;
-    }
-
-    next() {
-      if (this.currentImage < this.totalImage - 1) {
-        this.currentImage++;
+    get Images(): string[] {
+      if(this.message.Attachments) {
+        return this.message.Attachments.filter(img => img.Photo && img.Photo.Sizes[4]).map(item => item.Photo.Sizes[4].Url)
       }
-    }
 
-    prev() {
-      if (this.currentImage > 0) {
-        this.currentImage--;
-      }
-    }
-    
-    setCurrent(image: number) {
-      this.currentImage = image;
+      return [];
     }
 
     switchChange(value: boolean) {
@@ -127,3 +89,11 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .image-point {
+    top: 1px;
+    left: 1px;
+    transition: transform 0.5s ease;
+  }
+</style>

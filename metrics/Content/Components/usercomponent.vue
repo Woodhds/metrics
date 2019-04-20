@@ -40,12 +40,12 @@
     <div v-if="messages.length > 0" class="flex flex-col">
       <div class="mb-4 flex flex-row items-center">
         <label class="text-sm font-bold text-gray-800 ml-4">Фильтровать по:</label>
-        <a @click="handleSortDate" class="no-underline cursor-pointer ml-4" nohref>Дате</a>
-        <a @click="handleSortCount" class="no-underline cursor-pointer ml-4" nohref>Кол-ву репостов</a>
+        <a @click="handleSortDate" class="no-underline cursor-pointer ml-4">Дате</a>
+        <a @click="handleSortCount" class="no-underline cursor-pointer ml-4">Кол-ву репостов</a>
       </div>
       <div class="flex flex-row flex-wrap">
         <Message v-for="message of messages" @select="onSelect" :message="message"
-                 :key="message.Id + message.Owner_Id">
+                 :key="message.Id + '_' + message.Owner_Id">
         </Message>
       </div>
       <ul class="flex mt-6" v-if="totalPages.length > 1">

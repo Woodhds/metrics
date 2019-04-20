@@ -67,7 +67,7 @@ namespace metrics
             services.AddMvc().AddNewtonsoftJson(z =>
             {
                 z.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            });
+            }).AddRazorRuntimeCompilation();
 
             services.AddAuthorization(z =>
             {

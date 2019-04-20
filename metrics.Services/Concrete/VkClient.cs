@@ -61,12 +61,13 @@ namespace metrics.Services.Concrete
         {
             @params = AddVkParams(@params);
             T result;
-            lock (locker)
-            {
-                var url = new Uri(new Uri(urls.Domain), method).AbsoluteUri;
-                result = base.PostAsync<T>(url, content, @params).GetAwaiter().GetResult();
-                Thread.Sleep(500);
-            }
+            Monitor.Enter(locker);
+            
+            var url = new Uri(new Uri(urls.Domain), method).AbsoluteUri;
+            result = base.PostAsync<T>(url, content, @params).GetAwaiter().GetResult();
+            Thread.Sleep(500);
+
+            Monitor.Exit(locker);
 
             return result;
         }
@@ -116,7 +117,7 @@ namespace metrics.Services.Concrete
             if (vkRepostViewModels == null)
                 throw new ArgumentNullException(nameof(vkRepostViewModels));
             vkRepostViewModels = vkRepostViewModels.Distinct().ToList();
-            
+
             var result = new List<SimpleVkResponse<VkRepostMessage>>();
 
             var posts = GetById(vkRepostViewModels);
