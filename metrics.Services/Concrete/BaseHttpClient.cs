@@ -26,7 +26,7 @@ namespace metrics.Services.Concrete
                 var uri = @params.BuildUrl(url);
                 var httpMessage = new HttpRequestMessage(HttpMethod.Post, uri);
                 var stringContent = new StringContent(JsonConvert.SerializeObject(content));
-                stringContent.Headers.ContentType = 
+                stringContent.Headers.ContentType =
                     new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 httpMessage.Content = stringContent;
                 var response = await _httpClient.SendAsync(httpMessage);

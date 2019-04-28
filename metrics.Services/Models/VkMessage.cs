@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace metrics.Services.Models
 {
@@ -7,6 +10,7 @@ namespace metrics.Services.Models
         public int Id { get; set; }
         public int Owner_Id { get; set; }
         public int From_Id { get; set; }
+        [JsonConverter(typeof(UnixDateTimeConverter))]
         public uint Date { get; set; }
         public string Text { get; set; }
         public List<VkMessage> Copy_History { get; set; }

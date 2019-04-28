@@ -62,7 +62,7 @@ namespace metrics.Services.Concrete
             @params = AddVkParams(@params);
             T result;
             Monitor.Enter(locker);
-            
+
             var url = new Uri(new Uri(urls.Domain), method).AbsoluteUri;
             result = base.PostAsync<T>(url, content, @params).GetAwaiter().GetResult();
             Thread.Sleep(500);
@@ -88,21 +88,21 @@ namespace metrics.Services.Concrete
                 method = urls.WallSearch;
                 @params.Add("query", search);
             }
-            var data =  GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
+            var data = GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
             var reposts = data.Response
-                .Items.OrderByDescending(c => DateTimeOffset.FromUnixTimeSeconds(c.Date))
+                .Items.OrderByDescending(c => c.Date)
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0).Select(c => c.Copy_History.First())
                 .Distinct().ToList();
             var count = data.Response.Count;
 
-            var result = GetById(reposts.Select(c => new VkRepostViewModel() {Id = c.Id, Owner_Id = c.Owner_Id}));
+            var result = GetById(reposts.Select(c => new VkRepostViewModel() { Id = c.Id, Owner_Id = c.Owner_Id }));
             if (result.Response == null)
                 result.Response = new VkResponse<List<VkMessage>>.VkResponseItems();
             result.Response.Count = count;
             return result;
         }
 
-        public void JoinGroup(int groupId)
+        public void JoinGroup(int groupId, int timeout = 0)
         {
             var @params = new NameValueCollection
             {
@@ -110,6 +110,7 @@ namespace metrics.Services.Concrete
             };
 
             GetVkAsync<SimpleVkResponse<bool>>(urls.GroupJoin, @params);
+            Thread.Sleep(timeout * 1000);
         }
 
         public List<SimpleVkResponse<VkRepostMessage>> Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0)
@@ -121,14 +122,21 @@ namespace metrics.Services.Concrete
             var result = new List<SimpleVkResponse<VkRepostMessage>>();
 
             var posts = GetById(vkRepostViewModels);
-            foreach (var item in posts.Response.Items.Where(c => c.Reposts != null)) 
+            foreach (var group in posts.Response.Groups)
             {
                 try
                 {
-                    foreach(var group in posts.Response.Groups)
-                    {
-                        JoinGroup(group.Id);
-                    }
+                    JoinGroup(group.Id, timeout);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, e.Message);
+                }
+            }
+            foreach (var item in posts.Response.Items.Where(c => c.Reposts != null))
+            {
+                try
+                {
                     var @params = new NameValueCollection()
                     {
                         { "object", $"wall{item.Owner_Id}_{item.Id}" }

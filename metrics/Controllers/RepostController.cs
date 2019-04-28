@@ -35,10 +35,17 @@ namespace metrics.Controllers
         public async Task<ActionResult<DataSourceResponseModel>> GetData(string userId, int page, int pageSize,
             string search = null)
         {
-            var data = _vkClient.GetReposts(userId.Trim(), page, pageSize, search);
-            if(data.Response.Items == null)
-                data.Response.Items = new List<VkMessage>();
-            return new DataSourceResponseModel(data.Response.Items, data.Response.Count);
+            try
+            {
+                var data = _vkClient.GetReposts(userId.Trim(), page, pageSize, search);
+                if (data.Response.Items == null)
+                    data.Response.Items = new List<VkMessage>();
+                return new DataSourceResponseModel(data.Response.Items, data.Response.Count);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize(Policy = "VkPolicy")]
@@ -50,7 +57,7 @@ namespace metrics.Controllers
                 _vkClient.Repost(reposts, timeout);
                 return Ok(true);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
                 return BadRequest(false);

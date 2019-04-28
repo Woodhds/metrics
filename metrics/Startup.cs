@@ -64,10 +64,13 @@ namespace metrics
 
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddMvc().AddNewtonsoftJson(z =>
+            services.AddMvc(a =>
+            {
+                a.EnableEndpointRouting = false;
+            }).AddNewtonsoftJson(z =>
             {
                 z.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            }).AddRazorRuntimeCompilation();
+            });
 
             services.AddAuthorization(z =>
             {
