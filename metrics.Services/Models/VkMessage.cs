@@ -11,7 +11,7 @@ namespace metrics.Services.Models
         public int Owner_Id { get; set; }
         public int From_Id { get; set; }
         [JsonConverter(typeof(UnixDateTimeConverter))]
-        public uint Date { get; set; }
+        public DateTime Date { get; set; }
         public string Text { get; set; }
         public List<VkMessage> Copy_History { get; set; }
         public List<MessageAttachment> Attachments { get; set; }
