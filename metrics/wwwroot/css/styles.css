@@ -117,12 +117,21 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 
+html {
+  line-height: 1.15; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
 /* Sections
    ========================================================================== */
 
 /**
  * Remove the margin in all browsers.
  */
+
+body {
+  margin: 0;
+}
 
 /**
  * Render the `main` element consistently in IE.
@@ -136,6 +145,11 @@ main {
  * Correct the font size and margin on `h1` elements within `section` and
  * `article` contexts in Chrome, Firefox, and Safari.
  */
+
+h1 {
+  font-size: 2em;
+  margin: .67em 0;
+}
 
 /* Grouping content
    ========================================================================== */
@@ -179,6 +193,11 @@ strong {
  * 1. Correct the inheritance and scaling of font size in all browsers.
  * 2. Correct the odd `em` font sizing in all browsers.
  */
+
+code {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
 
 /**
  * Add the correct font size in all browsers.
@@ -391,6 +410,11 @@ template {
  * 2. Change the default font family in all browsers (opinionated)
  */
 
+html {
+  box-sizing: border-box; /* 1 */
+  font-family: sans-serif; /* 2 */
+}
+
 *,
 *::before,
 *::after {
@@ -402,7 +426,11 @@ template {
  */
 
 
-figure {
+h1,
+h2,
+h3,
+figure,
+p {
   margin: 0;
 }
 
@@ -437,6 +465,11 @@ ul {
  * 2. Use Tailwind's default "normal" line-height so the user isn't forced
  * to override it to ensure consistency even when using the default theme.
  */
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 1 */
+  line-height: 1.5; /* 2 */
+}
 
 /**
  * Allow adding a border to an element by just adding a border-width.
@@ -501,6 +534,13 @@ button,
   cursor: pointer;
 }
 
+h1,
+h2,
+h3 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 /**
  * Reset links to optimize for opt-in styling instead of
  * opt-out.
@@ -534,6 +574,11 @@ select {
  * 'mono' font family.
  */
 
+
+code {
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 /**
  * Make replaced elements `display: block` by default as that's
  * the behavior you want almost all of the time. Inspired by
@@ -561,6 +606,34 @@ img {
   height: auto;
 }
 
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
 .appearance-none {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -581,6 +654,10 @@ img {
 
 .bg-blue-800 {
   background-color: #2c5282;
+}
+
+.hover\:bg-gray-800:hover {
+  background-color: #2d3748;
 }
 
 .hover\:bg-gray-900:hover {
@@ -631,6 +708,10 @@ img {
   display: flex;
 }
 
+.hidden {
+  display: none;
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -655,6 +736,10 @@ img {
   justify-content: space-between;
 }
 
+.flex-1 {
+  flex: 1 1 0%;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -667,6 +752,10 @@ img {
   height: 1rem;
 }
 
+.h-8 {
+  height: 2rem;
+}
+
 .h-16 {
   height: 4rem;
 }
@@ -675,12 +764,25 @@ img {
   height: 8rem;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .leading-tight {
   line-height: 1.25;
 }
 
 .leading-normal {
   line-height: 1.5;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .mr-2 {
@@ -721,6 +823,10 @@ img {
 
 .mb-5 {
   margin-bottom: 1.25rem;
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
 }
 
 .mt-6 {
@@ -773,6 +879,11 @@ img {
   padding-right: .5rem;
 }
 
+.px-3 {
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -793,17 +904,43 @@ img {
   padding-right: 1.25rem;
 }
 
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
 }
 
 .pr-8 {
   padding-right: 2rem;
 }
 
+.pb-8 {
+  padding-bottom: 2rem;
+}
+
+.pt-16 {
+  padding-top: 4rem;
+}
+
 .pointer-events-none {
   pointer-events: none;
+}
+
+.fixed {
+  position: fixed;
 }
 
 .absolute {
@@ -866,8 +1003,16 @@ img {
   color: #e53e3e;
 }
 
+.text-blue-800 {
+  color: #2c5282;
+}
+
 .hover\:text-red-600:hover {
   color: #e53e3e;
+}
+
+.hover\:text-blue-900:hover {
+  color: #2a4365;
 }
 
 .text-xs {
@@ -894,6 +1039,10 @@ img {
   width: 1rem;
 }
 
+.w-8 {
+  width: 2rem;
+}
+
 .w-16 {
   width: 4rem;
 }
@@ -902,12 +1051,26 @@ img {
   width: auto;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
 .w-full {
   width: 100%;
 }
 
 .z-20 {
   z-index: 20;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+html {
+  height: 100%;
+  position: relative;
+  font-family: "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .loading {
@@ -991,6 +1154,17 @@ img {
   top: 2.2rem;
 }
 
+.logo {
+  transition: -webkit-transform 1s ease;
+  transition: transform 1s ease;
+  transition: transform 1s ease, -webkit-transform 1s ease;
+}
+
+.logo:hover {
+  -webkit-transform: rotateY(360deg);
+          transform: rotateY(360deg);
+}
+
 @media (min-width: 640px) {
 
   .sm\:mb-4 {
@@ -1003,6 +1177,18 @@ img {
 }
 
 @media (min-width: 768px) {
+
+  .md\:flex {
+    display: flex;
+  }
+
+  .md\:flex-row {
+    flex-direction: row;
+  }
+
+  .md\:items-center {
+    align-items: center;
+  }
 
   .md\:w-1\/2 {
     width: 50%;
