@@ -5,6 +5,7 @@ const terserJs = require('terser-webpack-plugin');
 const purgecss = require('purgecss-webpack-plugin');
 const glob = require('globby');
 const path = require('path')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 class TailwindExtractor {
   static extract(content) {
@@ -17,7 +18,7 @@ module.exports = merge(base, {
   optimization: {
     minimizer: [new terserJs({
       sourceMap: true
-    })]
+    }), new OptimizeCSSAssetsPlugin({})]
   },
   devtool: 'source-map',
   plugins: [
