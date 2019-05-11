@@ -10,7 +10,7 @@
           <label class="text-sm font-bold text-gray-900 block" for="search">Поиск</label>
           <input id="search" name="search"
                  class="shadow px-5 py-2 leading-tight appearance-none rounded focus:outline-none focus:shadow-outline"
-                 v-model="search"/>
+                 v-model.trim="search"/>
         </div>
         <button type="submit" class="appearance-none bg-gray-800 hover:bg-gray-900 text-white py-2 px-5 rounded"
                 :disabled="!selected">Поиск
