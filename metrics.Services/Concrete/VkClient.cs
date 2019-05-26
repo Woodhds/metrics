@@ -17,16 +17,14 @@ namespace metrics.Services.Concrete
     public class VkClient : BaseHttpClient, IVkClient
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly VKApiUrls urls;
-        private readonly ILogger<VkClient> _logger;
+        private readonly VKApiUrls _urls;
         private object locker = new object();
         public VkClient(IHttpClientFactory httpClientFactory,
             IHttpContextAccessor httpContextAccessor, IOptions<VKApiUrls> options,
-            ILogger<VkClient> logger) : base(httpClientFactory, logger)
+            ILogger<BaseHttpClient> logger) : base(httpClientFactory, logger)
         {
             _httpContextAccessor = httpContextAccessor;
-            urls = options.Value;
-            _logger = logger;
+            _urls = options.Value;
         }
 
         private NameValueCollection AddVkParams(NameValueCollection @params)
@@ -47,7 +45,7 @@ namespace metrics.Services.Concrete
         {
             @params = AddVkParams(@params);
             T result;
-            var url = new Uri(new Uri(urls.Domain), method).AbsoluteUri;
+            var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
             lock (locker)
             {
                 result = base.GetAsync<T>(url, @params).GetAwaiter().GetResult();
@@ -63,7 +61,7 @@ namespace metrics.Services.Concrete
             T result;
             Monitor.Enter(locker);
 
-            var url = new Uri(new Uri(urls.Domain), method).AbsoluteUri;
+            var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
             result = base.PostAsync<T>(url, content, @params).GetAwaiter().GetResult();
             Thread.Sleep(500);
 
@@ -72,20 +70,20 @@ namespace metrics.Services.Concrete
             return result;
         }
 
-        public VkResponse<List<VkMessage>> GetReposts(string id, int skip, int take, string search = null)
+        public VkResponse<List<VkMessage>> GetReposts(string id, int page, int take, string search = null)
         {
 
             var @params = new NameValueCollection()
             {
                 { "count", take.ToString() },
-                { "offset", skip.ToString() },
+                { "offset", ((page - 1) * take).ToString() },
                 { "filter", "owner" },
                 { "owner_id", id }
             };
-            string method = urls.Wall;
+            string method = _urls.Wall;
             if (!string.IsNullOrEmpty(search))
             {
-                method = urls.WallSearch;
+                method = _urls.WallSearch;
                 @params.Add("query", search);
             }
             var data = GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
@@ -109,7 +107,7 @@ namespace metrics.Services.Concrete
                 { "group_id", groupId.ToString() }
             };
 
-            GetVkAsync<SimpleVkResponse<bool>>(urls.GroupJoin, @params);
+            GetVkAsync<SimpleVkResponse<bool>>(_urls.GroupJoin, @params);
             Thread.Sleep(timeout * 1000);
         }
 
@@ -130,23 +128,23 @@ namespace metrics.Services.Concrete
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, e.Message);
+                    Logger.LogError(e, e.Message);
                 }
             }
             foreach (var item in posts.Response.Items.Where(c => c.Reposts != null))
             {
                 try
                 {
-                    var @params = new NameValueCollection()
+                    var @params = new NameValueCollection
                     {
                         { "object", $"wall{item.Owner_Id}_{item.Id}" }
                     };
-                    result.Add(PostVkAsync<SimpleVkResponse<VkRepostMessage>>(urls.Repost, null, @params));
+                    result.Add(PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params));
                     Thread.Sleep(timeout * 1000);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, e.Message);
+                    Logger.LogError(e, e.Message);
                 }
             }
 
@@ -161,7 +159,7 @@ namespace metrics.Services.Concrete
                 { "fields", "first_name,last_name,photo_50" }
             };
 
-            return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(urls.UserInfo, @params);
+            return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(_urls.UserInfo, @params);
         }
 
         public VkResponse<List<VkMessage>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels)
@@ -175,7 +173,7 @@ namespace metrics.Services.Concrete
                 { "posts", string.Join(",", vkRepostViewModels.Select(c => $"{c.Owner_Id}_{c.Id}")) },
                 { "extended", 1.ToString() }
             };
-            return GetVkAsync<VkResponse<List<VkMessage>>>(urls.WallGetById, @params);
+            return GetVkAsync<VkResponse<List<VkMessage>>>(_urls.WallGetById, @params);
         }
 
         public VkResponse<List<VkGroup>> GetGroups(int count, int offset)
@@ -187,7 +185,7 @@ namespace metrics.Services.Concrete
                 { "extended", "1" },
                 { "offset", $"{offset}" }
             };
-            return GetVkAsync<VkResponse<List<VkGroup>>>(urls.Groups, @params);
+            return GetVkAsync<VkResponse<List<VkGroup>>>(_urls.Groups, @params);
         }
 
         public void LeaveGroup(int groupId)
@@ -196,7 +194,7 @@ namespace metrics.Services.Concrete
             {
                 { "group_id", $"{groupId}" }
             };
-            GetVkAsync<SimpleVkResponse<string>>(urls.LeaveGroup, @params);
+            GetVkAsync<SimpleVkResponse<string>>(_urls.LeaveGroup, @params);
         }
 
         public SimpleVkResponse<VkResponseLikeModel> Like(VkRepostViewModel model)
@@ -207,7 +205,7 @@ namespace metrics.Services.Concrete
                 { "item_id", $"{model.Id}" },
                 { "type", "post" }
             };
-            return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(urls.Like, @params);
+            return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(_urls.Like, @params);
         }
     }
 }

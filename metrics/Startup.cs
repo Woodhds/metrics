@@ -35,7 +35,10 @@ namespace metrics
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<DataContext>(opts => { opts.UseSqlite("Data Source=.\\lite.db;"); });
+            services.AddDbContext<DataContext>(opts =>
+            {
+                opts.UseSqlite(Configuration.GetConnectionString("DataContext"));
+            });
             services.AddScoped<DbContext, DataContext>();
             services.AddHttpContextAccessor();
 
@@ -78,7 +81,6 @@ namespace metrics
             });
 
             services.AddHttpClient();
-            services.AddLogging();
             services.AddScoped<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<ICompetitionsService, CompetitionsService>();
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));

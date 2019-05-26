@@ -48,7 +48,7 @@
                  :key="message.Id + '_' + message.Owner_Id">
         </Message>
       </div>
-      <ul class="flex mt-6" v-if="totalPages.length > 1">
+      <ul class="flex mt-6 flex-wrap" v-if="totalPages.length > 1">
         <li class="px-4 py-2 cursor-pointer" @click="page = item" :key="item"
             :class="[ item === page ? 'bg-blue-800 text-white': '' ]" v-for="item of totalPages">{{item}}
         </li>

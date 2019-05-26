@@ -1,14 +1,15 @@
 <template>
 <VObserver @intersect="intersect">
-  <figure class="flex flex-col items-center post_image">
-      <div v-if="totalImage > 0" class="flex items-center">
+  <div class="flex flex-col items-center post_image">
+      <div class="flex items-center">
           <a @click="prev" v-if="totalImage > 1" class="border border-gray-300 hover:shadow rounded-full block cursor-pointer p-4 mr-6">
               <svg class="fill-current h-4 w-4" xmlns:xlink="http://www.w3.org/1999/xlink">
               <use xlink:href="/images/icons.svg#arrow-left"></use>
               </svg>
           </a>
           <div class="flex flex-col mb-2">
-              <img class="w-auto h-32 mb-2" :src="isLoad ? src.length > 0 ? src[currentImage] : '' : ''"/>
+              <div v-if="!isLoad" class="lds-ripple"><div></div><div></div></div>
+              <img v-else class="w-auto h-32 mb-2" :src="isLoad && src.length > 0 ? src[currentImage] : `images/nophoto.jpg`"/>
               <ul class="flex flex-wrap items-center justify-center">
               <li @click="setCurrent(image)" v-for="image of imagePoints" :key="image" class="rounded-full relative border border-gray-300 h-4 w-4 p-1 ml-2 cursor-pointer">
                   <span :style="{transform: 'translateX(' + (currentImage * 24) + 'px)' }" v-if="image === 0" class="bg-gray-500 top-0 image-point left-0 w-3 h-3 absolute rounded-full block"></span>
@@ -21,9 +22,9 @@
               </svg>
           </a>
       </div>
-      <figcaption v-html="figcaption" class="text-sm leading-normal word-break max-h-screen overflow-y-auto">
-      </figcaption>
-  </figure>
+      <div v-html="figcaption" class="text-sm leading-normal word-break max-h-screen overflow-y-auto">
+      </div>
+  </div>
 </VObserver>
 </template>
 

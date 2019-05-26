@@ -12,11 +12,11 @@ namespace metrics.Services.Concrete
     public class BaseHttpClient : IBaseHttpClient
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<BaseHttpClient> _logger;
+        protected readonly ILogger<BaseHttpClient> Logger;
         public BaseHttpClient(IHttpClientFactory httpClientFactory, ILogger<BaseHttpClient> logger)
         {
+            Logger = logger;
             _httpClient = httpClientFactory.CreateClient();
-            _logger = logger;
         }
 
         protected virtual async Task<T> PostAsync<T>(string url, object content, NameValueCollection @params = null)
@@ -33,11 +33,11 @@ namespace metrics.Services.Concrete
 
                 response.EnsureSuccessStatusCode();
 
-                return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return default;
             }
         }
@@ -50,14 +50,17 @@ namespace metrics.Services.Concrete
                 var response = await _httpClient.GetAsync(uri);
 
                 response.EnsureSuccessStatusCode();
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (responseContent.Length < 1024)
+                {
+                    Logger.LogInformation(responseContent);
+                }
 
-                return JsonConvert.DeserializeObject<T>(
-                    response.Content.ReadAsStringAsync().Result
-                );
+                return JsonConvert.DeserializeObject<T>(responseContent);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return default;
             }
         }

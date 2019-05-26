@@ -1,13 +1,13 @@
 ﻿using DAL;
-using Data.Entities;
 using DAL.Entities;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.EF
 {
     public sealed class DataContext : BaseContext
     {
-        public DbSet<ParseMessage> ParseMessages { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         public DataContext(DbContextOptions options) : base(options)
         {
@@ -17,7 +17,6 @@ namespace Data.EF
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<VkUser>();
-            modelBuilder.Entity<ParseMessage>().HasKey(c => new { c.Id, c.OwnerId });
         }
     }
 }

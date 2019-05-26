@@ -5,7 +5,7 @@
   "author": "Borodin.S.V.",
   "license": "MIT",
   "dependencies": {
-    "tailwindcss": "^1.0.0-beta.3",
+    "tailwindcss": "^1.0.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {

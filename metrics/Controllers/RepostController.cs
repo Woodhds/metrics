@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
-using System.Linq;
 using System.Threading.Tasks;
-using DAL.Entities;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using metrics.Models;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Controllers
 {
@@ -32,7 +28,7 @@ namespace metrics.Controllers
 
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
-        public async Task<ActionResult<DataSourceResponseModel>> GetData(string userId, int page, int pageSize,
+        public ActionResult<DataSourceResponseModel> GetData(string userId, int page, int pageSize,
             string search = null)
         {
             try
@@ -44,6 +40,7 @@ namespace metrics.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message, e);
                 return BadRequest();
             }
         }
