@@ -120,7 +120,7 @@ namespace metrics.Services.Concrete
             var result = new List<SimpleVkResponse<VkRepostMessage>>();
 
             var posts = GetById(vkRepostViewModels);
-            foreach (var group in posts.Response.Groups)
+            foreach (var group in posts.Response.Groups.Where(c => !c.Is_member))
             {
                 try
                 {
@@ -171,7 +171,8 @@ namespace metrics.Services.Concrete
             var @params = new NameValueCollection
             {
                 { "posts", string.Join(",", vkRepostViewModels.Select(c => $"{c.Owner_Id}_{c.Id}")) },
-                { "extended", 1.ToString() }
+                { "extended", 1.ToString() },
+                { "fields", "is_member" }
             };
             return GetVkAsync<VkResponse<List<VkMessage>>>(_urls.WallGetById, @params);
         }

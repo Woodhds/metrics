@@ -1,0 +1,4 @@
+2019-06-30 12:25:18.0453 Info Message Template Auto Format enabled
+2019-06-30 12:25:18.1325 Info Loading assembly: NLog.Web.AspNetCore
+2019-06-30 12:25:18.4117 Info Adding target DatabaseTarget(Name=database)
+2019-06-30 12:25:18.6288 Info Found 23 configuration items
