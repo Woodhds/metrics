@@ -3,8 +3,8 @@ const merge = require('webpack-merge');
 const base = require('./webpack.base');
 const terserJs = require('terser-webpack-plugin');
 const purgecss = require('purgecss-webpack-plugin');
-const glob = require('globby');
-const path = require('path')
+const glob = require('glob-all');
+const path = require('path');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 class TailwindExtractor {
@@ -20,13 +20,16 @@ module.exports = merge(base, {
       sourceMap: true
     }), new OptimizeCSSAssetsPlugin({})]
   },
-  devtool: 'source-map',
+  devtool: '@eval-source-map',
   plugins: [
     new MiniCssExtractPlugin({
       filename: './css/[name].css'
     }),
     new purgecss({
-      paths: glob.sync([path.join(__dirname, './Content/Components/**/*.vue'), path.join(__dirname, './views/**/*.cshtml')]),
+      paths: glob.sync([
+        path.join(__dirname, './Content/Components/**/*.vue'), 
+        path.join(__dirname, './views/**/*.cshtml')
+      ]),
       extractors: [{
         extractor: TailwindExtractor,
         extensions: ['html', 'js', 'cshtml', 'vue']

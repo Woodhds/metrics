@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Content\" />
-    <Folder Include="ViewComponents" />
     <Folder Include="wwwroot\fonts" />
     <Folder Include="wwwroot\js" />
   </ItemGroup>
