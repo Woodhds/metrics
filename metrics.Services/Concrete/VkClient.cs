@@ -11,6 +11,9 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Linq;
 using System.Threading;
+using Base.Extensions;
+using metrics.Services.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace metrics.Services.Concrete
 {
@@ -18,12 +21,17 @@ namespace metrics.Services.Concrete
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly VKApiUrls _urls;
+        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IEventStorage _eventStorage;
+        private string UserId => _httpContextAccessor.HttpContext.User.Identity.GetId();
         private object locker = new object();
         public VkClient(IHttpClientFactory httpClientFactory,
             IHttpContextAccessor httpContextAccessor, IOptions<VKApiUrls> options,
-            ILogger<BaseHttpClient> logger) : base(httpClientFactory, logger)
+            ILogger<BaseHttpClient> logger, IHubContext<NotificationHub> hubContext, IEventStorage eventStorage) : base(httpClientFactory, logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _hubContext = hubContext;
+            _eventStorage = eventStorage;
             _urls = options.Value;
         }
 
@@ -111,15 +119,15 @@ namespace metrics.Services.Concrete
             Thread.Sleep(timeout * 1000);
         }
 
-        public List<SimpleVkResponse<VkRepostMessage>> Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0)
+        public void Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0)
         {
             if (vkRepostViewModels == null)
                 throw new ArgumentNullException(nameof(vkRepostViewModels));
             vkRepostViewModels = vkRepostViewModels.Distinct().ToList();
 
-            var result = new List<SimpleVkResponse<VkRepostMessage>>();
-
             var posts = GetById(vkRepostViewModels);
+            var reposts = posts.Response.Items.Where(c => c.Reposts != null).ToArray();
+            Notify(_eventStorage.AddEvents(UserId, reposts.Length));
             foreach (var group in posts.Response.Groups.Where(c => !c.Is_member))
             {
                 try
@@ -131,15 +139,17 @@ namespace metrics.Services.Concrete
                     Logger.LogError(e, e.Message);
                 }
             }
-            foreach (var item in posts.Response.Items.Where(c => c.Reposts != null))
+
+            for (var i = 0; i < reposts.Length; i++)
             {
                 try
                 {
                     var @params = new NameValueCollection
                     {
-                        { "object", $"wall{item.Owner_Id}_{item.Id}" }
+                        { "object", $"wall{reposts[i].Owner_Id}_{reposts[i].Id}" }
                     };
-                    result.Add(PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params));
+                    PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params);
+                    Notify(_eventStorage.AddEvents(UserId, -1));
                     Thread.Sleep(timeout * 1000);
                 }
                 catch (Exception e)
@@ -147,8 +157,6 @@ namespace metrics.Services.Concrete
                     Logger.LogError(e, e.Message);
                 }
             }
-
-            return result;
         }
 
         public SimpleVkResponse<List<VkUserResponse>> GetUserInfo(string id)
@@ -207,6 +215,11 @@ namespace metrics.Services.Concrete
                 { "type", "post" }
             };
             return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(_urls.Like, @params);
+        }
+
+        private void Notify(int count)
+        {
+            _hubContext.Clients.User(UserId).SendAsync("count", count);
         }
     }
 }

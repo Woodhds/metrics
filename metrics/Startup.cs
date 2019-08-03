@@ -9,6 +9,8 @@ using metrics.Options;
 using metrics.Services.Abstract;
 using System;
 using metrics.Services.Concrete;
+using metrics.Services.Helpers;
+using metrics.Services.Hubs;
 using metrics.Services.Options;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -79,6 +81,7 @@ namespace metrics
             {
                 z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
             });
+            services.AddSignalR();
 
             services.AddHttpClient();
             services.AddScoped<IBaseHttpClient, BaseHttpClient>();
@@ -86,6 +89,8 @@ namespace metrics
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddScoped<IVkClient, VkClient>();
+            services.AddSingleton<IEventStorage, EventStorage>();
+            
             services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
@@ -107,8 +112,12 @@ namespace metrics
             }
 
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseRouting();
+            
+            app.UseEndpoints(endpoints => { endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy"); });
 
             app.UseMvcWithDefaultRoute();
 

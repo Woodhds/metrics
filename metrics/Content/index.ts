@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import UserComponent from './Components/usercomponent.vue';
+import './notifications';
 
 document.addEventListener("DOMContentLoaded", function () {
   const user = document.getElementById('user');

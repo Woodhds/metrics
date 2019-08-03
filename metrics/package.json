@@ -7,7 +7,8 @@
   "dependencies": {
     "axios": "^0.19.0",
     "tailwindcss": "^1.0.4",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "@aspnet/signalr": "^1.1.4"
   },
   "devDependencies": {
     "dotenv": "^8.0.0",
