@@ -10,6 +10,12 @@
 }
 else
 {
+    <div id="actions-count" class="relative hidden fill-current text-white mr-2">
+        <svg class="h-10 w-10" viewBox="0 0 32 32">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href='/images/icons.svg#notification'/>
+        </svg>
+        <small class="count absolute rounded-full top-0 bg-red-700 px-2 right-0"></small>
+    </div>
     <figure class="md:flex md:flex-row md:items-center hidden">
         <img class="rounded-full" src="@User.Identity.GetPhoto()"/>
         <figcaption class="text-white ml-5">@User.Identity.Name</figcaption>
