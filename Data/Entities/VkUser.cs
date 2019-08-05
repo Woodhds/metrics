@@ -8,10 +8,6 @@ namespace Data.Entities
         public string UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        
         public string Avatar { get; set; }
-
-        [NotMapped]
-        public string FullName => FirstName + ' ' + LastName;
     }
 }

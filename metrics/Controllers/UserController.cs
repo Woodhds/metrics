@@ -36,7 +36,7 @@ namespace metrics.Controllers
             var users = await _vkUserRepository.Read()
                 .Select(c => new VkUserModel 
                 { 
-                    FullName = c.FullName, 
+                    FullName = c.FirstName + ' ' + c.LastName, 
                     Avatar = c.Avatar, 
                     UserId = c.UserId
                 }
