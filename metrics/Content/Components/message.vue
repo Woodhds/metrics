@@ -9,6 +9,7 @@
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/icons.svg#key"></use>
       </svg>
     </a>
+    <time class="absolute bottom-0 text-gray-400 right-0 text-xs">{{ message.Date | unixtime }}</time>
     <div class="absolute block right-0">
       <SwitchComponent @switchChange="switchChange" :value="message.IsSelect"></SwitchComponent>
     </div>
@@ -48,7 +49,12 @@ import { repost, like } from "../services/MessageService";
 import { SelectMessageModel } from "../models/SelectMessageModel";
 
 @Component({
-  components: { SwitchComponent, ImageL }
+  components: { SwitchComponent, ImageL },
+  filters: {
+    unixtime(value: number):string {
+      return new Date(value * 1000).toLocaleString();
+    }
+  }
 })
 export default class VkMessageComponent extends Vue {
   @Prop({ default: null }) message: VkMessage;

@@ -15,7 +15,7 @@ namespace metrics.Services.Concrete
 
         public int GetCurrentCount(string userId)
         {
-            if (_users.TryGetValue(userId, out var count))
+            if (!string.IsNullOrEmpty(userId) && _users.TryGetValue(userId, out var count))
             {
                 return count;
             }

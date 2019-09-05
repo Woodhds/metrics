@@ -80,7 +80,10 @@ namespace metrics.Controllers
                     };
                     var ci = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    await HttpContext.SignInAsync(new ClaimsPrincipal(ci), new AuthenticationProperties());
+                    await HttpContext.SignInAsync(new ClaimsPrincipal(ci), new AuthenticationProperties() {
+                        IssuedUtc = DateTime.Now,
+                        ExpiresUtc = DateTimeOffset.Now.Add(TimeSpan.FromDays(14))
+                    });
 
                     return Redirect(Url.GetLocalUrl(redirectUrl));
                 }

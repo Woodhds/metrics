@@ -9,7 +9,6 @@ using metrics.Options;
 using metrics.Services.Abstract;
 using System;
 using metrics.Services.Concrete;
-using metrics.Services.Helpers;
 using metrics.Services.Hubs;
 using metrics.Services.Options;
 using Newtonsoft.Json.Serialization;
@@ -116,8 +115,10 @@ namespace metrics
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
-            
-            app.UseEndpoints(endpoints => { endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy"); });
+
+            app.UseEndpoints(endpoints => {
+                 endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy"); 
+            });
 
             app.UseMvcWithDefaultRoute();
 

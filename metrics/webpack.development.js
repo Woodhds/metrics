@@ -9,13 +9,14 @@ module.exports = merge(base, {
   },
   devtool: 'cheap-eval-source-map',
   devServer: {
-    port: 9001,
+    port: 9000,
     host: '0.0.0.0',
     hot: true,
     proxy: {
       '*': {
-        target: 'http://localhost:5000/',
-        changeOrigin: true
+        target: 'https://localhost:5001/',
+        changeOrigin: true,
+        secure: false
       }
     }
   },
