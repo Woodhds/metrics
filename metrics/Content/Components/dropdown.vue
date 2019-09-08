@@ -8,12 +8,13 @@
         <figcaption class="ml-3">{{ Selected.FullName }}</figcaption>
       </figure>
     </div>
-    <ul v-if="List && opened" class="dropdown-list absolute p-4 z-20 bg-white w-full border shadow">
-      <li class="flex flex-row items-center p-2 cursor-pointer" @click="select(item)" v-for="item of List"
-          :key="item.UserId">
-        <img class="mr-4" :src="item.Avatar" :alt="item.FullName"/>
-        <span>{{item.FullName}}</span>
-      </li>
+    <ul :class="{'open': opened}" 
+      class="dropdown-list absolute p-4 z-20 bg-white w-full border shadow">
+        <li class="flex flex-row items-center p-2 cursor-pointer" @click="select(item)" v-for="item of List"
+            :key="item.UserId">
+          <img class="mr-4 h-8 w-8" :src="item.Avatar" :alt="item.FullName"/>
+          <span>{{item.FullName}}</span>
+        </li>
     </ul>
   </div>
 </template>
@@ -43,3 +44,7 @@
     };
   }
 </script>
+
+<style lang="scss">
+
+</style>

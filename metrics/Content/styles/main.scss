@@ -82,9 +82,20 @@ html {
 
 .dropdown-list {
   top: 103%;
+  height: 0;
+  transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  max-height: 30rem;
+  overflow-y: auto;
+  transition-property: height, opacity;
+  opacity: 0;
   
   &__arrow {
     top: 2.2rem;
+  }
+
+  &.open {
+    height: inherit;
+    opacity: 1;
   }
 }
 

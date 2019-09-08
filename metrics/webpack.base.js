@@ -12,7 +12,6 @@ module.exports = {
     publicPath: ".",
     filename: "./js/[name].js"
   },
-
   module: {
     rules: [
       {

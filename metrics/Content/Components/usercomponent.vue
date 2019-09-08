@@ -38,11 +38,6 @@
       </div>
     </div>
     <div v-if="messages.length > 0" class="flex flex-col">
-      <div class="mb-4 flex flex-row items-center">
-        <label class="text-sm font-bold text-gray-800 ml-4">Фильтровать по:</label>
-        <a @click="handleSortDate" class="no-underline cursor-pointer ml-4">Дате</a>
-        <a @click="handleSortCount" class="no-underline cursor-pointer ml-4">Кол-ву репостов</a>
-      </div>
       <div class="flex flex-row flex-wrap">
         <Message v-for="message of messages" @select="onSelect" :message="message"
                  :key="message.Id + '_' + message.Owner_Id">
@@ -66,7 +61,6 @@
   import Dropdown from "./dropdown.vue";
   import {VkMessage, VkRepostModel} from "../models/VkMessage";
   import Message from "./message.vue";
-  import {FilterType} from "../models/FilterType";
   import {searchMessages, repost, getFromSite} from '../services/MessageService';
   import {SelectMessageModel} from "../models/SelectMessageModel";
   import SwitchComponent from "./switch.vue";
@@ -83,7 +77,6 @@
     pageSize: number = 100;
     page: number = 1;
     total: number = 0;
-    filterType: FilterType = FilterType.None;
     timeout: number = 40;
     selectedMess: SelectMessageModel[] = [];
     switchFromUser: boolean = false;
@@ -104,19 +97,6 @@
       }
     }
 
-    @Watch('filterType')
-    filterChange() {
-      switch (this.filterType) {
-        case FilterType.Date:
-        case FilterType.None:
-          this.messages.sort((a, b) => b.Date - a.Date);
-          break;
-        case FilterType.RepostCount:
-          this.messages.sort((a, b) => a.Reposts.Count - b.Reposts.Count);
-          break;
-      }
-    }
-
     beforeMount(): void {
       axios.get<VkUser[]>('/user/users').then(response => {
         this.users = response.data;
@@ -125,14 +105,6 @@
 
     switchChange(value: boolean): void {
       this.switchFromUser = value;
-    }
-
-    handleSortDate(): void {
-      this.filterType = FilterType.Date;
-    }
-
-    handleSortCount(): void {
-      this.filterType = FilterType.RepostCount;
     }
 
     showLoading() {
