@@ -105,3 +105,11 @@ html {
     transform: rotateY(360deg);
   }
 }
+
+.nav-link {
+  @apply no-underline text-white block px-5 py-5;
+
+  &:hover {
+    @apply bg-gray-900;
+  }
+}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
-using System.Threading.Tasks;
 using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using metrics.Models;
@@ -16,14 +15,11 @@ namespace metrics.Controllers
     {
         private readonly IVkClient _vkClient;
         private readonly ILogger<RepostController> _logger;
-        private readonly ICompetitionsService _competitionsService;
-
         public RepostController(IVkClient vkClient, ILogger<RepostController> logger,
             ICompetitionsService competitionsService)
         {
             _vkClient = vkClient;
             _logger = logger;
-            _competitionsService = competitionsService;
         }
 
         [Authorize(Policy = "VkPolicy")]
@@ -69,21 +65,6 @@ namespace metrics.Controllers
             {
                 _vkClient.Like(model);
                 return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
-
-        [Authorize(Policy = "VkPolicy")]
-        [HttpGet("site")]
-        public async Task<ActionResult<DataSourceResponseModel>> GetFromSite()
-        {
-            try
-            {
-                var data = await _competitionsService.Fetch();
-                return new DataSourceResponseModel(data, data.Count);
             }
             catch (Exception)
             {

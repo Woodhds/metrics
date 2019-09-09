@@ -1,33 +1,13 @@
 <template>
   <div class="px-5 py-5 flex flex-col relative flex-wrap">
-    <SwitchComponent
-      class="mb-3"
-      @switchChange="switchChange"
-      onText="Сайт"
-      offText="Юзер"
-      :value="switchFromUser"
-    ></SwitchComponent>
     <div class="flex flex-row mb-5 flex-wrap justify-between">
       <form
-        v-if="!switchFromUser"
         @submit.prevent="searchMessages"
         class="rounded px-5 py-5 shadow-md sm:w-full md:w-1/2 sm:mb-4"
       >
         <Dropdown label="Пользователь" :List="users" @select="handleSelect"></Dropdown>
-        <div class="mb-4 flex flex-col">
-          <label class="text-sm font-bold text-gray-900 block" for="search">Поиск</label>
-          <input
-            id="search"
-            name="search"
-            class="shadow px-5 py-2 leading-tight appearance-none rounded focus:outline-none focus:shadow-outline"
-            v-model.trim="search"
-          />
-        </div>
-        <button
-          type="submit"
-          class="appearance-none bg-gray-800 hover:bg-gray-900 text-white py-2 px-5 rounded"
-          :disabled="!selected"
-        >Поиск</button>
+        <FormGroup label="Поиск" id="search" v-model.trim="search"></FormGroup>
+        <Button :disabled="!selected" text="Поиск"></Button>
       </form>
       <div
         class="sm:w-full rounded px-5 py-5 shadow-md md:w-1/3 flex flex-col"
@@ -91,9 +71,11 @@ import {
 import { SelectMessageModel } from "../models/SelectMessageModel";
 import SwitchComponent from "./switch.vue";
 import PagerComponent from "./pager.vue";
+import FormGroup from './form-group.vue';
+import Button from './button.vue';
 
 @Component({
-  components: { Dropdown, Message, SwitchComponent, PagerComponent }
+  components: { Dropdown, Message, SwitchComponent, PagerComponent, FormGroup, Button }
 })
 export default class UserComponent extends Vue {
   users: VkUser[] = [];
@@ -114,24 +96,10 @@ export default class UserComponent extends Vue {
     window.scroll({ top: 0, behavior: "smooth" });
   }
 
-  @Watch("switchFromUser")
-  fetchFromSite() {
-    if (this.switchFromUser) {
-      getFromSite().then(response => {
-        this.messages = response.data.Data;
-        this.total = response.data.Total;
-      });
-    }
-  }
-
   beforeMount(): void {
     axios.get<VkUser[]>("/user/users").then(response => {
       this.users = response.data;
     });
-  }
-
-  switchChange(value: boolean): void {
-    this.switchFromUser = value;
   }
 
   showLoading() {

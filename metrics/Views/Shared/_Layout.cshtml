@@ -28,13 +28,16 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <li>
-                    <a asp-action="Index" asp-controller="User" class="no-underline text-white block hover:bg-gray-900 px-5 py-5">Пользователь</a>
+                    <a asp-action="Index" asp-controller="User" class="nav-link">Пользователь</a>
                 </li>
                 <li>
-                    <a asp-action="Add" asp-controller="User" class="no-underline text-white block hover:bg-gray-900 px-5 py-5">Добавить</a>
+                    <a asp-action="Index" asp-controller="Site" class="nav-link">Сайт</a>
                 </li>
                 <li>
-                    <a asp-action="Drop" asp-controller="Account" class="no-underline text-white block hover:bg-gray-900 px-5 py-5">Удалить группы</a>
+                    <a asp-action="Add" asp-controller="User" class="nav-link">Добавить</a>
+                </li>
+                <li>
+                    <a asp-action="Drop" asp-controller="Account" class="nav-link">Удалить группы</a>
                 </li>
             }
         </ul>

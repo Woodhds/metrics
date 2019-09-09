@@ -9,7 +9,7 @@ export function searchMessages(search: string, userId: number, page: number, pag
 }
 
 export function getFromSite() : AxiosPromise<DataSourceResponse<VkMessage>> {
-  return axios.get<DataSourceResponse<VkMessage>>(`api/repost/site`);
+  return axios.get<DataSourceResponse<VkMessage>>(`api/site/get`);
 }
 
 export function repost(model: VkRepostModel[], timeout: number = 0) : AxiosPromise {
