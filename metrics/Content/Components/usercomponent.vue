@@ -6,39 +6,10 @@
         class="rounded px-5 py-5 shadow-md sm:w-full md:w-1/2 sm:mb-4"
       >
         <Dropdown label="Пользователь" :List="users" @select="handleSelect"></Dropdown>
-        <FormGroup label="Поиск" id="search" v-model.trim="search"></FormGroup>
+        <FormGroup label="Поиск" @input="e => search = e" id="search" :value="search"></FormGroup>
         <Button :disabled="!selected" text="Поиск"></Button>
       </form>
-      <div
-        class="sm:w-full rounded px-5 py-5 shadow-md md:w-1/3 flex flex-col"
-        v-if="selectedMess.length > 0"
-      >
-        <div class="mb-4 relative">
-          <label for="timeout" class="text-sm font-bold text-gray-800 block">Таймаут с сек.</label>
-          <select
-            id="timeout"
-            class="block appearance-none w-full bg-white border border-gray-100 hover:border-gray-300 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-            v-model="timeout"
-          >
-            <option v-for="second of seconds" :value="second" :key="second">{{second}}</option>
-          </select>
-          <div
-            class="pointer-events-none dropdown-list__arrow absolute right-0 flex items-center px-2 text-gray-900"
-          >
-            <svg
-              class="fill-current h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
-        </div>
-        <button
-          @click="repostAll"
-          class="appearance-none bg-blue-800 hover:bg-blue-900 text-white py-2 px-5 rounded"
-        >Репост всего</button>
-      </div>
+      <RepostComponent class="sm:w-full md:w-1/3" :timeout="timeout"></RepostComponent>
     </div>
     <div v-if="messages.length > 0" class="flex flex-col">
       <div class="flex flex-row flex-wrap">
@@ -46,6 +17,7 @@
           v-for="message of messages"
           @select="onSelect"
           :message="message"
+          :is-select="selectedMess.some(d => d.Id === message.Id && d.Owner_Id === message.Owner_Id)"
           :key="message.Id + '_' + message.Owner_Id"
         ></Message>
       </div>
@@ -56,28 +28,34 @@
 </template>
 
 <script lang="ts">
-import { Component, Watch } from "vue-property-decorator";
+import { Component, Watch, Mixins } from "vue-property-decorator";
 import axios from "axios";
 import Vue from "vue";
 import { VkUser } from "../models/user";
 import Dropdown from "./dropdown.vue";
 import { VkMessage, VkRepostModel } from "../models/VkMessage";
 import Message from "./message.vue";
-import {
-  searchMessages,
-  repost,
-  getFromSite
-} from "../services/MessageService";
+import { searchMessages, repost } from "../services/MessageService";
 import { SelectMessageModel } from "../models/SelectMessageModel";
 import SwitchComponent from "./switch.vue";
 import PagerComponent from "./pager.vue";
-import FormGroup from './form-group.vue';
-import Button from './button.vue';
+import FormGroup from "./form-group.vue";
+import Button from "./button.vue";
+import BaseMixin from "../mixins/base";
+import RepostComponent from './repostcomponent.vue';
 
 @Component({
-  components: { Dropdown, Message, SwitchComponent, PagerComponent, FormGroup, Button }
+  components: {
+    Dropdown,
+    Message,
+    SwitchComponent,
+    PagerComponent,
+    FormGroup,
+    Button,
+    RepostComponent
+  }
 })
-export default class UserComponent extends Vue {
+export default class UserComponent extends Mixins(BaseMixin) {
   users: VkUser[] = [];
   search: string = "";
   selected: VkUser | null = null;
@@ -87,7 +65,6 @@ export default class UserComponent extends Vue {
   page: number = 1;
   total: number = 0;
   timeout: number = 40;
-  selectedMess: SelectMessageModel[] = [];
   switchFromUser: boolean = false;
 
   @Watch("page")
@@ -102,14 +79,6 @@ export default class UserComponent extends Vue {
     });
   }
 
-  showLoading() {
-    this.isLoading = true;
-  }
-
-  hideLoading() {
-    this.isLoading = false;
-  }
-
   searchMessages(): void {
     this.showLoading();
     searchMessages(
@@ -119,6 +88,7 @@ export default class UserComponent extends Vue {
       this.pageSize
     )
       .then(response => {
+        this.$set(this, "selectedMessa", new Array<SelectMessageModel>());
         this.messages = response.data.Data;
         this.total = response.data.Total;
       })
@@ -138,39 +108,8 @@ export default class UserComponent extends Vue {
     return arr;
   }
 
-  get seconds(): number[] {
-    let arr = [];
-    for (let i = 30; i <= 60; i++) {
-      arr.push(i);
-    }
-    return arr;
-  }
-
-  onSelect(model: SelectMessageModel) {
-    let idx = this.selectedMess.findIndex(
-      d => d.Owner_Id == model.Owner_Id && d.Id == model.Id
-    );
-    if (!model.IsSelect && idx !== -1) {
-      this.selectedMess.splice(idx, 1);
-    } else {
-      this.selectedMess.push(model);
-    }
-  }
-
   onChangePage(page: number): void {
     this.page = page;
-  }
-
-  repostAll() {
-    this.showLoading();
-    let mess = this.messages.filter(d => d.IsSelected);
-    const reposts = mess.map(e => new VkRepostModel(e.Owner_Id, e.Id));
-    repost(reposts, this.timeout)
-      .then()
-      .then(d => {
-        this.hideLoading();
-        mess.forEach(e => (e.IsSelected = false));
-      });
   }
 }
 </script>

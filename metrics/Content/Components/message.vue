@@ -11,7 +11,7 @@
     </a>
     <time class="absolute bottom-0 text-gray-400 right-0 text-xs">{{ message.Date | unixtime }}</time>
     <div class="absolute block right-0">
-      <SwitchComponent @switchChange="switchChange" :value="message.IsSelect"></SwitchComponent>
+      <SwitchComponent @switchChange="switchChange" :value="isSelect"></SwitchComponent>
     </div>
     <ImageL :src="Images" :figcaption="message.Text"></ImageL>
     <div class="flex flex-row mt-6">
@@ -58,6 +58,7 @@ import { SelectMessageModel } from "../models/SelectMessageModel";
 })
 export default class VkMessageComponent extends Vue {
   @Prop({ default: null }) message: VkMessage;
+  @Prop() isSelect: boolean = false;
   currentImage: number = 0;
 
   repost(owner_id: number, id: number) {

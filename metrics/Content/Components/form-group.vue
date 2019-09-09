@@ -5,9 +5,9 @@
       :id="id"
       :type="type"
       :name="id"
-      @input="e => $emit('input', e.target.value)"
+      @input="onInput($event.target.value)"
       class="shadow px-5 py-2 leading-tight appearance-none rounded focus:outline-none focus:shadow-outline"
-      v-model="model"
+      :value="value"
     />
   </div>
 </template>
@@ -18,9 +18,13 @@ import { Prop, Component, Model } from "vue-property-decorator";
 
 @Component
 export default class FormGroup extends Vue {
-  @Prop() type: String = "text";
-  @Prop({ required: true }) id: String = "";
-  @Model() model: String;
-  @Prop() label: String = '';
+  @Prop({ default: 'text' }) type: String;
+  @Prop({ required: true }) id: String;
+  @Model() value: String;
+  @Prop({ default: '' }) label: String;
+
+  onInput(value: String): void {
+    this.$emit("input", value.trim());
+  }
 }
 </script>
