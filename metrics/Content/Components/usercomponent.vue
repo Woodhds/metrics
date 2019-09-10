@@ -9,10 +9,10 @@
         <FormGroup label="Поиск" @input="e => search = e" id="search" :value="search"></FormGroup>
         <Button :disabled="!selected" text="Поиск"></Button>
       </form>
-      <RepostComponent class="sm:w-full md:w-1/3" :timeout="timeout"></RepostComponent>
+      <RepostComponent @select="e => selectedMess = [...e]" class="sm:w-full md:w-1/3" :timeout="timeout"></RepostComponent>
     </div>
     <div v-if="messages.length > 0" class="flex flex-col">
-      <div class="flex flex-row flex-wrap">
+      <div class="flex flex-row flex-wrap justify-center">
         <Message
           v-for="message of messages"
           @select="onSelect"
@@ -21,7 +21,12 @@
           :key="message.Id + '_' + message.Owner_Id"
         ></Message>
       </div>
-      <PagerComponent :page="page" :total-pages="totalPages" @changePage="onChangePage"></PagerComponent>
+      <PagerComponent
+        v-if="selectedMess.length > 0"
+        :page="page"
+        :total-pages="totalPages"
+        @changePage="onChangePage"
+      ></PagerComponent>
     </div>
     <div v-show="isLoading" class="loading"></div>
   </div>
@@ -42,7 +47,7 @@ import PagerComponent from "./pager.vue";
 import FormGroup from "./form-group.vue";
 import Button from "./button.vue";
 import BaseMixin from "../mixins/base";
-import RepostComponent from './repostcomponent.vue';
+import RepostComponent from "./repostcomponent.vue";
 
 @Component({
   components: {
@@ -66,6 +71,7 @@ export default class UserComponent extends Mixins(BaseMixin) {
   total: number = 0;
   timeout: number = 40;
   switchFromUser: boolean = false;
+  selectedMess: SelectMessageModel[] = [];
 
   @Watch("page")
   pageChange() {

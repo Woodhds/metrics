@@ -22,7 +22,7 @@
               </svg>
           </a>
       </div>
-      <div v-html="figcaption" class="text-sm leading-normal word-break max-h-screen overflow-y-auto">
+      <div v-html="figcaption" class="text-sm leading-normal max-h-screen overflow-y-auto break-all">
       </div>
   </div>
 </VObserver>

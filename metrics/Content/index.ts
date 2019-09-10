@@ -2,6 +2,7 @@ import Vue from 'vue';
 import UserComponent from './Components/usercomponent.vue';
 import SiteComponent from './Components/sitecomponent.vue';
 import './notifications';
+import './events';
 
 document.addEventListener("DOMContentLoaded", function () {
   const user = document.getElementById('user');

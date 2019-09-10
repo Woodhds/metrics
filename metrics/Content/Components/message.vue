@@ -47,6 +47,8 @@ import SwitchComponent from "./switch.vue";
 import ImageL from "./image.vue";
 import { repost, like } from "../services/MessageService";
 import { SelectMessageModel } from "../models/SelectMessageModel";
+import { eventBus } from '../eventbus';
+import { Events } from '../events';
 
 @Component({
   components: { SwitchComponent, ImageL },
@@ -86,7 +88,7 @@ export default class VkMessageComponent extends Vue {
 
   switchChange(value: boolean) {
     this.message.IsSelected = value;
-    this.$emit("select", <SelectMessageModel>{
+    eventBus.$emit(Events[Events.SelectMessage], <SelectMessageModel>{
       IsSelect: value,
       Id: this.message.Id,
       Owner_Id: this.message.Owner_Id
