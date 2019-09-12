@@ -9,7 +9,7 @@
         <FormGroup label="Поиск" @input="e => search = e" id="search" :value="search"></FormGroup>
         <Button :disabled="!selected" text="Поиск"></Button>
       </form>
-      <RepostComponent @select="e => selectedMess = [...e]" class="sm:w-full md:w-1/3" :timeout="timeout"></RepostComponent>
+      <RepostComponent @select="e => selectedMess = [...e]" class="sm:w-full md:w-1/3"></RepostComponent>
     </div>
     <div v-if="messages.length > 0" class="flex flex-col">
       <div class="flex flex-row flex-wrap justify-center">
@@ -69,7 +69,6 @@ export default class UserComponent extends Mixins(BaseMixin) {
   pageSize: number = 100;
   page: number = 1;
   total: number = 0;
-  timeout: number = 40;
   switchFromUser: boolean = false;
   selectedMess: SelectMessageModel[] = [];
 

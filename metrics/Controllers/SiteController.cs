@@ -23,11 +23,11 @@ namespace metrics.Controllers
             return View();
         }
         
-        public async Task<ActionResult<DataSourceResponseModel>> Get()
+        public async Task<ActionResult<DataSourceResponseModel>> Get(int page = 0)
         {
             try
             {
-                var data = await _competitionsService.Fetch();
+                var data = await _competitionsService.Fetch(page);
                 return new DataSourceResponseModel(data, data.Count);
             }
             catch (Exception)

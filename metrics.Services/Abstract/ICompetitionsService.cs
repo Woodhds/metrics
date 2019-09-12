@@ -6,6 +6,6 @@ namespace metrics.Services.Abstract
 {
     public interface ICompetitionsService
     {
-        Task<List<VkMessage>> Fetch();
+        Task<List<VkMessage>> Fetch(int page = 1);
     }
 }

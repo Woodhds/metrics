@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.Xsl;
+using HtmlAgilityPack;
 using metrics.Services.Abstract;
 using metrics.Services.Models;
+using System.Linq;
 
 namespace metrics.Services.Concrete
 {
@@ -19,49 +17,39 @@ namespace metrics.Services.Concrete
         {
             _vkClient = vkClient;
         }
-        
-        public async Task<List<VkMessage>> Fetch()
+
+        public async Task<List<VkMessage>> Fetch(int page = 1)
         {
             var client = new HttpClient();
-            var transform = new XslTransform();
-            transform.Load("transform.xslt");
             var messages = new List<VkMessage>();
-            for (int i = 1; i < 50; i++)
+            try
             {
-                try
-                {
 
-                    using (var fs = new MemoryStream())
-                    {
-                        var formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                using (var fs = new MemoryStream())
+                {
+                    var formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
                         {
-                            new KeyValuePair<string, string>("page_num", i.ToString()),
+                            new KeyValuePair<string, string>("page_num", page.ToString()),
                             new KeyValuePair<string, string>("our", string.Empty),
                             new KeyValuePair<string, string>("city_id", "5")
                         });
-                        var result = await client.PostAsync("https://wingri.ru/main/getPosts", formContent);
+                    var result = await client.PostAsync("https://wingri.ru/main/getPosts", formContent);
 
-                        var content = await result.Content.ReadAsStringAsync();
-                        content = Regex.Replace("<div>" + content + "</div>", @"<br\s*?\/>|<br>", string.Empty);
+                    var content = await result.Content.ReadAsStringAsync();
 
-                        var doc = new XmlDocument();
-                        content = content.Replace("&", "");
-                        doc.LoadXml(content);
-                        var fileStream = new XmlSerializer(typeof(List<VkRepostViewModel>),
-                            new XmlRootAttribute("PostItems"));
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(content);
+                    var data = doc.DocumentNode.SelectNodes("//div[@class='grid-item']/div[@class='post_container']/div[@class='post_footer']/a/@href").Where(d => d.Attributes.Any(d => d.Name == "href" && !string.IsNullOrEmpty(d.Value)))
+                        .Select(d => d.GetAttributeValue("href", "").Replace("https://vk.com/wall", "").Split('_'))
+                        .Select(d => new VkRepostViewModel { Owner_Id = int.Parse(d[0]), Id = int.Parse(d[1]) });
 
-                        transform.Transform(doc.CreateNavigator(), null, fs);
-                        fs.Seek(0, SeekOrigin.Begin);
-                        var data = fileStream.Deserialize(fs);
-                        var posts = _vkClient.GetById(data as List<VkRepostViewModel>);
-                        messages.AddRange(posts.Response?.Items);
-                    }
-                }
-                catch (Exception)
-                {
+                    var posts = _vkClient.GetById(data);
+                    messages.AddRange(posts.Response?.Items);
                 }
             }
-
+            catch (Exception)
+            {
+            }
             return messages;
         }
     }

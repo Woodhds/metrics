@@ -33,8 +33,8 @@ import { SelectMessageModel } from "../models/SelectMessageModel";
 import { VkRepostModel } from "../models/VkMessage";
 import { repost } from "../services/MessageService";
 import Button from "./button.vue";
-import { eventBus } from '../eventbus';
-import { Events } from '../events';
+import { eventBus } from "../eventbus";
+import { Events } from "../events";
 
 @Component({
   components: {
@@ -42,9 +42,9 @@ import { Events } from '../events';
   }
 })
 export default class RepostComponent extends Vue {
-  @Prop() timeout: number = 40;
-
+  timeout: number = 40;
   selectedMess: SelectMessageModel[] = [];
+
   get seconds(): number[] {
     let arr = [];
     for (let i = 30; i <= 60; i++) {
@@ -54,7 +54,7 @@ export default class RepostComponent extends Vue {
   }
 
   repostAll() {
-    this.$emit('repost');
+    this.$emit("repost");
     const reposts = this.selectedMess.map(
       e => new VkRepostModel(e.Owner_Id, e.Id)
     );
@@ -74,10 +74,10 @@ export default class RepostComponent extends Vue {
     } else {
       this.selectedMess.push(model);
     }
-    this.$emit('select', this.selectedMess);
+    this.$emit("select", this.selectedMess);
   }
 
-  mounted():void {
+  mounted(): void {
     eventBus.$on(Events[Events.SelectMessage], this.onSelect);
   }
 
