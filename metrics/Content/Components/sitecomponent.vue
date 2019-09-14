@@ -1,12 +1,22 @@
 <template>
   <div>
     <div class="flex flex-col items-center">
-      <RepostComponent class="sm:w-full md:w-1/3 justify-center"></RepostComponent>
+      <div class="flex flex-wrap w-full justify-between">
+        <FormGroup
+          label="Поиск"
+          class="sm:w-full md:w-1/3"
+          @input="e => search = e"
+          id="search"
+          :value="search"
+        ></FormGroup>
+        <RepostComponent class="sm:w-full md:w-1/3 justify-center"></RepostComponent>
+      </div>
       <div class="flex flex-wrap">
         <Message
-          v-for="message of messages"
+          v-for="message of showMessage"
           @select="onSelect"
           :message="message"
+          F
           :key="message.Id + '_' + message.Owner_Id"
         ></Message>
       </div>
@@ -35,7 +45,8 @@ import RepostComponent from "./repostcomponent.vue";
     Button,
     Message,
     PagerComponent,
-    RepostComponent
+    RepostComponent,
+    FormGroup
   }
 })
 export default class SiteComponent extends Vue {
@@ -43,6 +54,7 @@ export default class SiteComponent extends Vue {
   page: number = 0;
   isLoading: boolean = false;
   render: boolean = false;
+  search: string = "";
 
   getFromSite() {
     this.isLoading = true;
@@ -51,6 +63,12 @@ export default class SiteComponent extends Vue {
       this.isLoading = false;
       this.$set(this, "messages", [...this.messages, ...response.data.Data]);
     });
+  }
+
+  get showMessage(): VkMessage[] {
+    return this.search === ""
+      ? this.messages
+      : this.messages.filter(d => d.Text.includes(this.search));
   }
 
   onChangePage(page: number): void {
