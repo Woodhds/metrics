@@ -1,6 +1,6 @@
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 
-const connection = new signalR.HubConnectionBuilder().withUrl('/notifications').build();
+const connection = new signalR.HubConnectionBuilder().withUrl('/notifications').withAutomaticReconnect().build();
 
 connection.on('count', (count: number) => {
   let el = document.getElementById('actions-count');

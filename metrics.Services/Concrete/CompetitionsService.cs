@@ -42,9 +42,12 @@ namespace metrics.Services.Concrete
 
                     var doc = new HtmlDocument();
                     doc.LoadHtml(content);
-                    var models = doc.DocumentNode.SelectNodes("//div[@class='grid-item']/div[@class='post_container']/div[@class='post_footer']/a/@href").Where(d => d.Attributes.Any(d => d.Name == "href" && !string.IsNullOrEmpty(d.Value)))
+                    var models = doc.DocumentNode
+                        .SelectNodes(
+                            "//div[@class='grid-item']/div[@class='post_container']/div[@class='post_footer']/a/@href")
+                        .Where(d => d.Attributes.Any(h => h.Name == "href" && !string.IsNullOrEmpty(h.Value)))
                         .Select(d => d.GetAttributeValue("href", "").Replace("https://vk.com/wall", "").Split('_'))
-                        .Select(d => new VkRepostViewModel { Owner_Id = int.Parse(d[0]), Id = int.Parse(d[1]) });
+                        .Select(d => new VkRepostViewModel {Owner_Id = int.Parse(d[0]), Id = int.Parse(d[1])});
 
                     data.AddRange(models);
                 }
