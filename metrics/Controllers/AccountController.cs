@@ -14,13 +14,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 
 namespace metrics.Controllers
 {
     [Authorize(Policy = "VkPolicy")]
-    public class AccountController : Controller
+    [Route("api/[controller]")]
+    public class AccountController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IVkClient _vkClient;
@@ -35,14 +35,7 @@ namespace metrics.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return LocalRedirect("/");
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Login()
-        {
-            return View(new LoginModel());
+            return Ok();
         }
 
         [HttpPost]
@@ -89,13 +82,7 @@ namespace metrics.Controllers
                 }
             }
 
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult Drop()
-        {
-            return View();
+            return Ok();
         }
         
         [HttpPost]

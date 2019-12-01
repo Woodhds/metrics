@@ -38,7 +38,7 @@ namespace metrics
 
             services.AddDbContext<DataContext>(opts =>
             {
-                opts.UseSqlite(Configuration.GetConnectionString("DataContext"));
+                opts.UseNpgsql(Configuration.GetConnectionString("DataContext"));
             });
             services.AddScoped<DbContext, DataContext>();
             services.AddHttpContextAccessor();
@@ -89,7 +89,7 @@ namespace metrics
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddScoped<IVkClient, VkClient>();
             services.AddSingleton<IEventStorage, EventStorage>();
-            
+
             services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
@@ -108,19 +108,19 @@ namespace metrics
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
                 app.UseHttpsRedirection();
-            }
+            }            
 
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => {
-                 endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy"); 
-            });
+            app.UseAuthorization();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy");
+            });
 
             DataBaseInitializer.Init(serviceProvider);
         }

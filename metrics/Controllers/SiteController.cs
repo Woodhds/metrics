@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace metrics.Controllers
 {
     [Authorize(Policy = "VkPolicy")]
-    public class SiteController : Controller
+    [Route("api/[controller]")]
+    public class SiteController : ControllerBase
     {
 
         private readonly ICompetitionsService _competitionsService;
@@ -18,11 +19,6 @@ namespace metrics.Controllers
             _competitionsService = competitionsService;
         }
 
-        public ViewResult Index()
-        {
-            return View();
-        }
-        
         public async Task<ActionResult<DataSourceResponseModel>> Get(int page = 0)
         {
             try

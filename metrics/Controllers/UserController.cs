@@ -13,7 +13,8 @@ using Data.Models;
 namespace metrics.Controllers
 {
     [Authorize(Policy = "VkPolicy")]
-    public class UserController : Controller
+    [Route("api/[controller]")]
+    public class UserController : ControllerBase
     {
         private readonly IRepository<VkUser> _vkUserRepository;
         private readonly IVkClient _vkClient;
@@ -22,12 +23,6 @@ namespace metrics.Controllers
         {
             _vkUserRepository = vkUserRepository;
             _vkClient = vkClient;
-        }
-        
-        [HttpGet]
-        public ActionResult Index()
-        {
-            return View();
         }
 
         [HttpGet]
@@ -45,31 +40,23 @@ namespace metrics.Controllers
             return Ok(users);
         }
 
-        [HttpGet]
-        public IActionResult Add()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> Add([Required]string userId)
         {
             if (!ModelState.IsValid)
-                return View();
+                return BadRequest();
 
             var userInfo = _vkClient.GetUserInfo(userId);
             var user = new VkUser { UserId = userId};
             if (_vkUserRepository.Read().Any(c => c.UserId == userId))
             {
-                ModelState.AddModelError("", "Пользователь уже существует");
-                return View();
+                return BadRequest("Пользователь уже существует");
             }
             user.FirstName = userInfo.Response.First()?.First_name;
             user.LastName = userInfo.Response.First()?.Last_Name;
             user.Avatar = userInfo.Response.First()?.Photo_50;
             await _vkUserRepository.CreateAsync(user);
-            ViewBag.Result = "Пользователь добавлен";
-            return View();
+            return Ok();
         }
     }
 }
