@@ -95,6 +95,11 @@ namespace metrics
                 options.AllowSynchronousIO = true;
             });
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
@@ -105,15 +110,24 @@ namespace metrics
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
                 app.UseHttpsRedirection();
+                app.UseSpaStaticFiles();
             }            
 
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                }
+            });
 
             app.UseAuthorization();
 
