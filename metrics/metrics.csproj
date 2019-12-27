@@ -39,10 +39,6 @@
     <Content Include="ClientApp\src\styles\main.scss" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-    <None Include="ClientApp\extra-webpack.config.ts" />
-    <None Include="ClientApp\src\app\models\AppConfig.ts" />
-    <None Include="ClientApp\src\app\services\abstract\IAppConfigService.ts" />
-    <None Include="ClientApp\src\app\services\concrete\AppConfig\AppConfigService.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
