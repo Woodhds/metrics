@@ -113,7 +113,7 @@ namespace metrics
                 app.UseHsts();
                 app.UseHttpsRedirection();
                 app.UseSpaStaticFiles();
-            }            
+            }
 
             app.UseAuthentication();
             app.UseStaticFiles();
