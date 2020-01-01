@@ -6,9 +6,13 @@ import {AppConfig} from "../../../models/AppConfig";
   providedIn: 'root'
 })
 export class AppConfigService extends IAppConfigService {
-  config: AppConfig;
+  config: AppConfig = new AppConfig();
 
-  getConfig(key) {
+  constructor() {
+    super();
+  }
 
+  getConfig() : AppConfig {
+    return this.config;
   }
 }

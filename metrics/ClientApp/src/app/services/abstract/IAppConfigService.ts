@@ -1,3 +1,5 @@
+import {AppConfig} from "../../models/AppConfig";
+
 export abstract class IAppConfigService {
-  abstract getConfig(key);
+  abstract getConfig() : AppConfig;
 }

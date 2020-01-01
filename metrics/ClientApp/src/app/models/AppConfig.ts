@@ -1,3 +1,4 @@
 export class AppConfig {
-  vkToken: string;
+  ClientId: string = '5662498';
+  ClientSecret: string = '';
 }

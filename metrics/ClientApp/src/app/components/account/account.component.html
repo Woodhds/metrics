@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <p>
-    <a href="/">Получить</a>
+    <a [href]="href" target="_blank">Получить</a>
   </p>
   <mat-form-field class="md:w-1/4 w-full" [floatLabel]="form.value.token.floatLabel">
     <input matInput placeholder="Токен" formControlName="token" required/>
