@@ -10,8 +10,8 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
     let request = req.clone();
-    if (this.auth.currentUser && this.auth.currentUser.token) {
-      request.headers.set('Authorization', `bearer ${this.auth.currentUser.token}`)
+    if (this.auth.currentUser && this.auth.currentUser.Token) {
+      request.headers.set('Authorization', `bearer ${this.auth.currentUser.Token}`)
     }
 
     return next.handle(request);

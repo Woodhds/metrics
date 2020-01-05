@@ -9,15 +9,21 @@ import {AppConfigService} from "../../services/concrete/AppConfig/AppConfigServi
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
-  constructor(private authService: IAuthService, private appConfigService: AppConfigService) {}
+  constructor(private authService: IAuthService) {}
 
-  public user: User;
+  public user: User = null;
 
   ngOnInit() {
-    this.user = this.authService.currentUser;
+    this.authService.currentUser.subscribe(d => {
+      this.user = d;
+    });
   }
 
   public get isAuthenticated(): Boolean {
     return this.user != null;
+  }
+
+  logout() : void {
+    this.authService.logout();
   }
 }

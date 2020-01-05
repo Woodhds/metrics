@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
-using metrics.Extensions;
 using metrics.Models;
 using metrics.Options;
 using metrics.Services.Abstract;
 using metrics.Services.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 
 namespace metrics.Controllers
 {
-    [Authorize(Policy = "VkPolicy")]
+    [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "VkPolicy")]
     public class AccountController : ControllerBase
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
         private readonly IVkClient _vkClient;
+        private readonly JwtOptions _jwtOptions;
 
-        public AccountController(IHttpClientFactory httpClientFactory, IVkClient vkClient)
+        public AccountController(IHttpClientFactory httpClientFactory, IVkClient vkClient, IOptions<JwtOptions> jwtOptions)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClientFactory.CreateClient();
             _vkClient = vkClient;
+            _jwtOptions = jwtOptions.Value;
         }
 
         [HttpPost]
@@ -38,54 +43,60 @@ namespace metrics.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult> Login([FromForm] LoginModel model, string redirectUrl)
+        public async Task<ActionResult> Login([FromBody] LoginModel model)
         {
-            using (var httpClient = _httpClientFactory.CreateClient())
-            {
-                var response = await httpClient.GetAsync(QueryHelpers.AddQueryString(
-                    VkontakteOptions.UserInformationEndpoint, new Dictionary<string, string>
-                    {
-                        ["v"] = Constants.ApiVersion,
-                        ["access_token"] = model.Token,
-                        ["fields"] = string.Join(",", new List<string> {"first_name", "last_name", "photo_50"})
-                    }));
-
-                if (response.IsSuccessStatusCode)
+            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString(
+                VkontakteOptions.UserInformationEndpoint, new Dictionary<string, string>
                 {
-                    var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
-                    if (payload.TryGetValue("error", out var error))
-                    {
-                        ModelState.AddModelError("", error.Value<string>());
-                    }
+                    ["v"] = Constants.ApiVersion,
+                    ["access_token"] = model.Token,
+                    ["fields"] = string.Join(",", new List<string> {"first_name", "last_name", "photo_50"})
+                }));
 
-                    var id = payload["response"].First["id"]?.ToString();
-                    var name = $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}";
-
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, id),
-                        new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
-                        new Claim(ClaimTypes.Name, name),
-                        new Claim("photo", payload["response"].First["photo_50"].ToString())
-                    };
-                    var ci = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    await HttpContext.SignInAsync(new ClaimsPrincipal(ci), new AuthenticationProperties() {
-                        IssuedUtc = DateTime.Now,
-                        ExpiresUtc = DateTimeOffset.Now.Add(TimeSpan.FromDays(14))
-                    });
-
-                    return Redirect(Url.GetLocalUrl(redirectUrl));
+            if (response.IsSuccessStatusCode)
+            {
+                var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
+                if (payload.TryGetValue("error", out var error))
+                {
+                    ModelState.AddModelError("", error.Value<string>());
                 }
+
+                var id = payload["response"].First["id"]?.ToString();
+                var name = $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}";
+                var avatar = payload["response"].First["photo_50"].ToString();
+
+                var claims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.NameId, id),
+                    new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
+                    new Claim(JwtRegisteredClaimNames.GivenName, name),
+                    new Claim("photo", avatar)
+                };
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
+                var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var securityToken = new JwtSecurityToken(
+                    _jwtOptions.Issuer,
+                    _jwtOptions.Audience,
+                    claims,
+                    null,
+                    DateTime.Now.AddDays(1),
+                    signInCredentials
+                );
+                return Ok(new
+                {
+                    Id = id,
+                    Avatar = avatar,
+                    FullName = name,
+                    Token = new JwtSecurityTokenHandler().WriteToken(securityToken)
+                });
             }
 
             return Ok();
         }
         
-        [HttpPost]
+        [HttpPost("drop")]
         public IActionResult Drop(string exclude = null, string identity = null, int count = 1000, int offset = 0)
         {
             var total = 0;

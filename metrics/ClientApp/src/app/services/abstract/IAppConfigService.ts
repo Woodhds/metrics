@@ -1,5 +1,6 @@
 import {AppConfig} from "../../models/AppConfig";
+import {Observable} from "rxjs";
 
 export abstract class IAppConfigService {
-  abstract getConfig() : AppConfig;
+  abstract getConfig() : Observable<AppConfig>;
 }

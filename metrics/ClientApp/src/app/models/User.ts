@@ -3,5 +3,4 @@ export interface User {
   fullName: String;
   avatar: String;
   token: String;
-  refreshToken: String;
 }

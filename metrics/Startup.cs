@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
 using metrics.Services.Abstract;
 using System;
+using System.Text;
 using metrics.Services.Concrete;
 using metrics.Services.Hubs;
 using metrics.Services.Options;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace metrics
 {
@@ -27,6 +29,8 @@ namespace metrics
         }
 
         public IConfiguration Configuration { get; }
+
+        private readonly string CorsPolicy = nameof(CorsPolicy);
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -42,8 +46,16 @@ namespace metrics
             });
             services.AddScoped<DbContext, DataContext>();
             services.AddHttpContextAccessor();
+            services.AddControllers();
 
-            services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
+            var jwtOptions = new JwtOptions();
+            Configuration.GetSection("Jwt").Bind(jwtOptions);
+            services.Configure<JwtOptions>(z =>
+            {
+                z.Audience = jwtOptions.Audience;
+                z.Issuer = jwtOptions.Issuer;
+                z.Key = jwtOptions.Key;
+            });
             services.AddAuthentication(opts =>
                 {
                     opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -55,6 +67,19 @@ namespace metrics
                 {
                     opts.LoginPath = new PathString("/Account/Login");
                     opts.LogoutPath = new PathString("/Account/Logout");
+                })
+                .AddJwtBearer(opts =>
+                {
+                    opts.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
+                        ValidIssuer = jwtOptions.Issuer,
+                        ValidAudience = jwtOptions.Audience
+                    };
                 });
 
             services.ConfigureApplicationCookie(z =>
@@ -68,13 +93,6 @@ namespace metrics
 
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddMvc(a =>
-            {
-                a.EnableEndpointRouting = false;
-            }).AddNewtonsoftJson(z =>
-            {
-                z.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            });
 
             services.AddAuthorization(z =>
             {
@@ -100,6 +118,14 @@ namespace metrics
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(CorsPolicy, z =>
+                {
+                    z.WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
@@ -120,6 +146,17 @@ namespace metrics
             app.UseCookiePolicy();
             app.UseRouting();
 
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+
+                endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy");
+            });
+
+            app.UseCors(CorsPolicy);
+            
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
@@ -128,13 +165,7 @@ namespace metrics
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy");
-            });
+            
 
             DataBaseInitializer.Init(serviceProvider);
         }

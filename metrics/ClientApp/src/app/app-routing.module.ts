@@ -4,7 +4,8 @@ import {AccountComponent} from "./components/account/account.component";
 
 
 const routes: Routes = [
-  { path: 'login', component: AccountComponent }
+  { path: 'login', component: AccountComponent },
+  { path: 'repost', loadChildren: './modules/repost/repost.module#RepostModule' }
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form class="flex flex-col items-start" [formGroup]="form" (ngSubmit)="onSubmit()">
   <p>
     <a [href]="href" target="_blank">Получить</a>
   </p>
@@ -6,4 +6,5 @@
     <input matInput placeholder="Токен" formControlName="token" required/>
     <mat-error *ngIf="form.get('token')?.invalid && form.dirty">Введите токен</mat-error>
   </mat-form-field>
+  <button [disabled]="!form.valid" mat-button color="primary" type="submit">Отправить</button>
 </form>
