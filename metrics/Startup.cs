@@ -40,11 +40,6 @@ namespace metrics
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<DataContext>(opts =>
-            {
-                opts.UseNpgsql(Configuration.GetConnectionString("DataContext"));
-            });
-            services.AddScoped<DbContext, DataContext>();
             services.AddHttpContextAccessor();
             services.AddControllers();
 
@@ -101,12 +96,12 @@ namespace metrics
             services.AddSignalR();
 
             services.AddHttpClient();
-            services.AddScoped<IBaseHttpClient, BaseHttpClient>();
+            services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<ICompetitionsService, CompetitionsService>();
+            services.AddSingleton<IVkTokenAccessor, VkTokenAccessor>();
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddScoped<IVkClient, VkClient>();
-            services.AddSingleton<IEventStorage, EventStorage>();
 
             services.Configure<IISServerOptions>(options =>
             {
@@ -165,9 +160,6 @@ namespace metrics
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
-            
-
-            DataBaseInitializer.Init(serviceProvider);
         }
     }
 }

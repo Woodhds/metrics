@@ -8,43 +8,33 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Linq;
 using System.Threading;
-using Base.Extensions;
-using metrics.Services.Hubs;
-using Microsoft.AspNetCore.SignalR;
 
 namespace metrics.Services.Concrete
 {
     public class VkClient : BaseHttpClient, IVkClient
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IVkTokenAccessor _vkTokenAccessor;
         private readonly VKApiUrls _urls;
-        private readonly IHubContext<NotificationHub> _hubContext;
-        private readonly IEventStorage _eventStorage;
-        private string UserId => _httpContextAccessor.HttpContext.User.Identity.GetId();
         private object locker = new object();
         public VkClient(IHttpClientFactory httpClientFactory,
-            IHttpContextAccessor httpContextAccessor, IOptions<VKApiUrls> options,
-            ILogger<BaseHttpClient> logger, IHubContext<NotificationHub> hubContext, IEventStorage eventStorage) : base(httpClientFactory, logger)
+            IVkTokenAccessor vkTokenAccessor, IOptions<VKApiUrls> options,
+            ILogger<BaseHttpClient> logger) : base(httpClientFactory, logger)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _hubContext = hubContext;
-            _eventStorage = eventStorage;
+            _vkTokenAccessor = vkTokenAccessor;
             _urls = options.Value;
         }
 
         private NameValueCollection AddVkParams(NameValueCollection @params)
         {
-            var ci = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
-            if (ci == null || @params == null)
+            if (@params == null)
             {
-                return @params;
+                @params = new NameValueCollection();
             }
-            var token = ci.Claims.FirstOrDefault(c => c.Type == Constants.VK_TOKEN_CLAIM)?.Value;
+            
             @params.Add("v", Constants.ApiVersion);
-            @params.Add("access_token", token);
+            @params.Add("access_token", _vkTokenAccessor.GetToken());
 
             return @params;
         }
@@ -127,7 +117,6 @@ namespace metrics.Services.Concrete
 
             var posts = GetById(vkRepostViewModels);
             var reposts = posts.Response.Items.Where(c => c.Reposts != null).ToArray();
-            Notify(_eventStorage.AddEvents(UserId, reposts.Length));
             foreach (var group in posts.Response.Groups.Where(c => !c.Is_member))
             {
                 try
@@ -149,7 +138,6 @@ namespace metrics.Services.Concrete
                         { "object", $"wall{reposts[i].Owner_Id}_{reposts[i].Id}" }
                     };
                     PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params);
-                    Notify(_eventStorage.AddEvents(UserId, -1));
                     Thread.Sleep(timeout * 1000);
                 }
                 catch (Exception e)
@@ -215,11 +203,6 @@ namespace metrics.Services.Concrete
                 { "type", "post" }
             };
             return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(_urls.Like, @params);
-        }
-
-        private void Notify(int count)
-        {
-            _hubContext.Clients.User(UserId).SendAsync("count", count);
         }
     }
 }
