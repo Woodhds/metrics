@@ -5,9 +5,9 @@
 </ng-template>
 <ng-template #authenticated>
   <div class="flex flex-wrap items-center">
-    <div class="mr-4">{{user.fullName}}</div>
+    <div class="mr-4">{{user.FullName}}</div>
     <button class="h-12 w-12 bg-center bg-cover rounded-full hidden md:block outline-none focus:outline-none"
-            [matMenuTriggerFor]="menu" [ngStyle]="{ 'background-image': 'url(' + user.avatar + ')' }"></button>
+            [matMenuTriggerFor]="menu" [ngStyle]="{ 'background-image': 'url(' + user.Avatar + ')' }"></button>
     <mat-menu #menu="matMenu">
       <button class="focus:outline-none" (click)="logout()" mat-menu-item>Выйти</button>
     </mat-menu>

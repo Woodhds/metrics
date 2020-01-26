@@ -1,6 +1,6 @@
 export interface User {
-  id: number;
-  fullName: String;
-  avatar: String;
-  token: String;
+  Id: number;
+  FullName: String;
+  Avatar: String;
+  Token: String;
 }
