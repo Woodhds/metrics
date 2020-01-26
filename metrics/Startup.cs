@@ -1,8 +1,6 @@
-using Data.EF;
 using DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
@@ -12,12 +10,12 @@ using System.Text;
 using metrics.Services.Concrete;
 using metrics.Services.Hubs;
 using metrics.Services.Options;
-using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 
 namespace metrics
 {
@@ -41,7 +39,10 @@ namespace metrics
             });
 
             services.AddHttpContextAccessor();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(opts =>
+            {
+                opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
 
             var jwtOptions = new JwtOptions();
             Configuration.GetSection("Jwt").Bind(jwtOptions);
