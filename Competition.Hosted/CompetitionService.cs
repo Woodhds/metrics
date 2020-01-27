@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Base.Abstractions;
 using metrics.Services.Abstract;
 using Microsoft.Extensions.Hosting;
 using Nest;

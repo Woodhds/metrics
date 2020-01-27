@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using Base.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
-using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using metrics.Models;
 

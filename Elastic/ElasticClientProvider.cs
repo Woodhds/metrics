@@ -1,10 +1,10 @@
 using System;
-using metrics.Services.Models;
-using metrics.Services.Options;
+using Base.Contracts;
+using Base.Contracts.Options;
 using Microsoft.Extensions.Options;
 using Nest;
 
-namespace Competition.Hosted
+namespace Base.Abstractions
 {
     public interface IElasticClientProvider
     {

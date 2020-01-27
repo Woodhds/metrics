@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace metrics.Services.Models
+namespace Base.Contracts
 {
     public class VkResponse<T>
     {

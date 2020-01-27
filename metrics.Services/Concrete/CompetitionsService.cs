@@ -4,8 +4,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using metrics.Services.Abstract;
-using metrics.Services.Models;
 using System.Linq;
+using Base.Contracts;
 
 namespace metrics.Services.Concrete
 {

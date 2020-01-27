@@ -1,5 +1,5 @@
+using Base.Contracts.Options;
 using metrics.Services.Abstract;
-using metrics.Services.Options;
 using Microsoft.Extensions.Options;
 
 namespace Competition.Hosted

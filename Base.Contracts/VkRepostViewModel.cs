@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace metrics.Services.Models
+﻿namespace Base.Contracts
 {
     public class VkRepostViewModel
     {

@@ -1,5 +1,5 @@
-﻿using metrics.Services.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Base.Contracts;
 
 namespace metrics.Services.Abstract
 {

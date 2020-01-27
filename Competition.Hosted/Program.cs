@@ -1,4 +1,4 @@
-﻿using metrics.Services.Options;
+﻿using Base.Contracts.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +22,7 @@ namespace Competition.Hosted
                 .ConfigureWebHostDefaults(builder =>
                 {
                     builder.UseStartup<Startup>();
+                    builder.UseUrls("http://localhost:5274", "https://localhost:5275");
                 })
                 .ConfigureServices((context, services) =>
                 {

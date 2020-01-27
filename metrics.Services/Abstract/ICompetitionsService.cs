@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using metrics.Services.Models;
+using Base.Contracts;
 
 namespace metrics.Services.Abstract
 {

@@ -1,4 +1,4 @@
-namespace metrics.Services.Models
+namespace Base.Contracts
 {
     public class VkLike
     {

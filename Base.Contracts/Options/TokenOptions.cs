@@ -1,4 +1,4 @@
-namespace metrics.Services.Options
+namespace Base.Contracts.Options
 {
     public class TokenOptions
     {

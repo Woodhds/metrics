@@ -1,7 +1,5 @@
 ﻿using metrics.Services.Abstract;
 using metrics.Services.Models;
-using metrics.Services.Options;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -10,6 +8,8 @@ using System.Collections.Specialized;
 using System.Net.Http;
 using System.Linq;
 using System.Threading;
+using Base.Contracts;
+using Base.Contracts.Options;
 
 namespace metrics.Services.Concrete
 {
