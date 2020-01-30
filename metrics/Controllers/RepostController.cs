@@ -15,8 +15,7 @@ namespace metrics.Controllers
     {
         private readonly IVkClient _vkClient;
         private readonly ILogger<RepostController> _logger;
-        public RepostController(IVkClient vkClient, ILogger<RepostController> logger,
-            ICompetitionsService competitionsService)
+        public RepostController(IVkClient vkClient, ILogger<RepostController> logger)
         {
             _vkClient = vkClient;
             _logger = logger;

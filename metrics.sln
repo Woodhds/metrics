@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elastic", "Elastic\Elastic.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts", "Base.Contracts\Base.Contracts.csproj", "{1BAD446C-794D-4A4E-BF70-465C09CFE5B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elastic.Tests", "Elastic.Tests\Elastic.Tests.csproj", "{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{1BAD446C-794D-4A4E-BF70-465C09CFE5B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BAD446C-794D-4A4E-BF70-465C09CFE5B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BAD446C-794D-4A4E-BF70-465C09CFE5B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

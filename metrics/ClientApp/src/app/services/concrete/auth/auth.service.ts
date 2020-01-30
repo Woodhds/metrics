@@ -11,14 +11,17 @@ import { map } from "rxjs/operators";
 })
 export class AuthService implements IAuthService {
   private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  public currentUserObs: Observable<User>;
+  public get currentUser(): User {
+    return this.currentUserSubject.value;
+  }
 
   constructor(private httpClient: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("vkUser"))
     );
 
-    this.currentUser = this.currentUserSubject.asObservable();
+    this.currentUserObs = this.currentUserSubject.asObservable();
   }
 
   login(form: string): Observable<User> {

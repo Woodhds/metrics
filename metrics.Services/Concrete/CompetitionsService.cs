@@ -23,7 +23,6 @@ namespace metrics.Services.Concrete
         public async Task<List<VkMessage>> Fetch(int page = 1)
         {
             var client = _httpClientFactory.CreateClient();
-            var messages = new List<VkMessage>();
             try
             {
                 var data = new List<VkRepostViewModel>();
@@ -56,7 +55,7 @@ namespace metrics.Services.Concrete
             catch (Exception)
             {
             }
-            return messages;
+            return default;
         }
     }
 }

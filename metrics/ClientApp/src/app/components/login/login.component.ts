@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
-import { User } from "src/app/models/User";
-import { IAuthService } from "src/app/services/abstract/IAuth";
+import {Component, OnInit} from "@angular/core";
+import {User} from "src/app/models/User";
+import {IAuthService} from "src/app/services/abstract/IAuth";
 
 @Component({
   selector: "app-login",
@@ -8,12 +8,13 @@ import { IAuthService } from "src/app/services/abstract/IAuth";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
-  constructor(private authService: IAuthService) {}
+  constructor(private authService: IAuthService) {
+  }
 
   public user: User = null;
 
   ngOnInit() {
-    this.authService.currentUser.subscribe(d => {
+    this.authService.currentUserObs.subscribe(d => {
       this.user = d;
     });
   }
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
     return this.user != null;
   }
 
-  logout() : void {
+  logout(): void {
     this.authService.logout();
   }
 }

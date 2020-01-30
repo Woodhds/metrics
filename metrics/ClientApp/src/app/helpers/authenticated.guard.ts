@@ -13,12 +13,10 @@ export class AuthenticatedGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    this.authService.currentUser.subscribe(user => {
-      if (user) {
-        this.router.navigate(['/']);
-        return true;
-      }
-    });
+    if (this.authService.currentUser) {
+      this.router.navigate(['/']);
+      return true;
+    }
 
     return true;
   }

@@ -1,0 +1,5 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit">
+  <mat-form-field [floatLabel]="form.value.name.floatLabel">
+    <input formControlName="name" matInput placeholder="Юзер" />
+  </mat-form-field>
+</form>
