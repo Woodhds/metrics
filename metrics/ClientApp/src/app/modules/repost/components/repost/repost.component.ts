@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {VkUserServiceService} from "../../services/vk-user-service.service";
+import {VkUserService} from "../../services/vk-user.service";
 
 @Component({
   selector: 'app-repost',
@@ -10,7 +10,7 @@ import {VkUserServiceService} from "../../services/vk-user-service.service";
 export class RepostComponent implements OnInit {
 
   form: FormGroup;
-  constructor(private formBuilder: FormBuilder, private userVkService: VkUserServiceService) {
+  constructor(private formBuilder: FormBuilder, private userVkService: VkUserService) {
     this.form = formBuilder.group({
       name: ''
     })

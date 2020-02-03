@@ -81,7 +81,7 @@ namespace metrics.Controllers
                     _jwtOptions.Audience,
                     claims,
                     null,
-                    DateTime.Now.AddDays(1),
+                    DateTime.Now.AddDays(14),
                     signInCredentials
                 );
                 return Ok(new

@@ -24,8 +24,10 @@ namespace Base.Abstractions
         {
             var connection =
                 new ConnectionSettings(new Uri(_options.Host))
+                    .DisableDirectStreaming()
                     .DefaultMappingFor<VkMessage>(descriptor =>
-                    descriptor.IdProperty(model => model.Identifier).IndexName("vk_message"));
+                    descriptor.IdProperty(model => model.Identifier).IndexName("vk_message"))
+                    .DefaultMappingFor<VkUserModel>(z => z.IndexName("vk_user"));
             return new ElasticClient(connection);
         }
     }

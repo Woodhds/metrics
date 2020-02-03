@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { VkUserServiceService } from './vk-user-service.service';
+import { VkUserService } from './vk-user.service';
 
 describe('VkUserServiceService', () => {
-  let service: VkUserServiceService;
+  let service: VkUserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(VkUserServiceService);
+    service = TestBed.inject(VkUserService);
   });
 
   it('should be created', () => {

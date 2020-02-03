@@ -1,0 +1,62 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Base.Abstractions;
+using Base.Contracts;
+using metrics.Services.Abstract;
+using Nest;
+
+namespace metrics.Services.Concrete
+{
+    public class VkUserService : IVkUserService
+    {
+        private readonly IElasticClientProvider _elasticClientProvider;
+        private readonly IVkClient _vkClient;
+
+        public VkUserService(IElasticClientProvider elasticClientProvider, IVkClient vkClient)
+        {
+            _elasticClientProvider = elasticClientProvider;
+            _vkClient = vkClient;
+        }
+
+        public async Task<VkUserModel> CreateAsync(string userId, CancellationToken token = default)
+        {
+            var userInfo = _vkClient.GetUserInfo(userId);
+            var user = new VkUserModel
+            {
+                Id = userInfo.Response.First().Id,
+                FullName = userInfo.Response.First()?.First_name + " " + userInfo.Response.First()?.Last_Name,
+                Avatar = userInfo.Response.First()?.Photo_50
+            };
+            if (user.Id > 0)
+            {
+                await _elasticClientProvider.GetClient().IndexDocumentAsync(user, token);
+            }
+
+            return user;
+        }
+
+        public async Task<IEnumerable<VkUserModel>> SearchAsync(string searchStr)
+        {
+            var result = await _elasticClientProvider.GetClient().SearchAsync<VkUserModel>(z =>
+                z.Index<VkUserModel>()
+                    .Query(t =>
+                        t.QueryString(a =>
+                            a.Query(searchStr)
+                                .Fields(e => e.Field(g => g.FullName))
+                                .Analyzer("russian")
+                        )
+                    )
+            );
+            
+
+            if (result.IsValid)
+            {
+                return result.Documents;
+            }
+
+            return Enumerable.Empty<VkUserModel>();
+        }
+    }
+}

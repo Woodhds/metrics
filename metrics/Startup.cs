@@ -7,10 +7,12 @@ using metrics.Options;
 using metrics.Services.Abstract;
 using System;
 using System.Text;
+using System.Threading.Tasks;
+using Base.Abstractions;
 using Base.Contracts.Options;
 using metrics.Services.Concrete;
 using metrics.Services.Hubs;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
@@ -54,15 +56,10 @@ namespace metrics
             });
             services.AddAuthentication(opts =>
                 {
-                    opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opts.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opts.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                })
-                .AddCookie(opts =>
-                {
-                    opts.LoginPath = new PathString("/Account/Login");
-                    opts.LogoutPath = new PathString("/Account/Logout");
+                    opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opts.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opts.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(opts =>
                 {
@@ -77,15 +74,6 @@ namespace metrics
                         ValidAudience = jwtOptions.Audience
                     };
                 });
-
-            services.ConfigureApplicationCookie(z =>
-            {
-                z.LoginPath = "/Account/Login";
-                z.ReturnUrlParameter = "returnUrl";
-                z.Cookie.HttpOnly = true;
-                z.SlidingExpiration = true;
-                z.ExpireTimeSpan = TimeSpan.FromDays(1);
-            });
 
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -102,7 +90,10 @@ namespace metrics
             services.AddSingleton<IVkTokenAccessor, VkTokenAccessor>();
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
-            services.AddScoped<IVkClient, VkClient>();
+            services.Configure<ElasticOptions>(Configuration.GetSection("ElasticOptions"));
+            services.AddSingleton<IVkClient, VkClient>();
+            services.AddSingleton<IElasticClientProvider, ElasticClientProvider>();
+            services.AddSingleton<IVkUserService, VkUserService>();
 
             services.Configure<IISServerOptions>(options =>
             {

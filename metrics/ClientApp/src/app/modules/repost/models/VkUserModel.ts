@@ -1,5 +1,5 @@
-class VkUserModel {
+export default class VkUserModel {
   FullName: string;
   Avatar: string;
-  UserId: number;
+  Id: number;
 }

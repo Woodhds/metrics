@@ -1,14 +1,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
-using Data.Entities;
-using DAL;
+using Base.Contracts;
 using metrics.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Data.Models;
 
 namespace metrics.Controllers
 {
@@ -16,47 +12,23 @@ namespace metrics.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IRepository<VkUser> _vkUserRepository;
-        private readonly IVkClient _vkClient;
+        private readonly IVkUserService _vkUserService;
 
-        public UserController(IRepository<VkUser> vkUserRepository, IVkClient vkClient)
+        public UserController(IVkUserService vkUserService)
         {
-            _vkUserRepository = vkUserRepository;
-            _vkClient = vkClient;
+            _vkUserService = vkUserService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VkUserModel>>> Users()
+        public async Task<ActionResult<IEnumerable<VkUserModel>>> Users(string searchStr = "")
         {
-            var users = await _vkUserRepository.Read()
-                .Select(c => new VkUserModel 
-                { 
-                    FullName = c.FirstName + ' ' + c.LastName, 
-                    Avatar = c.Avatar, 
-                    UserId = c.UserId
-                }
-            ).ToListAsync();
-
-            return Ok(users);
+            return Ok(await _vkUserService.SearchAsync(searchStr));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([Required]string userId)
+        public async Task<ActionResult<VkUserModel>> Add([Required]string userId)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            var userInfo = _vkClient.GetUserInfo(userId);
-            var user = new VkUser { UserId = userId};
-            if (_vkUserRepository.Read().Any(c => c.UserId == userId))
-            {
-                return BadRequest("Пользователь уже существует");
-            }
-            user.FirstName = userInfo.Response.First()?.First_name;
-            user.LastName = userInfo.Response.First()?.Last_Name;
-            user.Avatar = userInfo.Response.First()?.Photo_50;
-            await _vkUserRepository.CreateAsync(user);
-            return Ok();
+            return Ok(await _vkUserService.CreateAsync(userId));
         }
     }
 }

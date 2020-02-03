@@ -28,5 +28,11 @@ namespace Elastic.Tests
             Assert.IsTrue(result.IsValid);
             Assert.IsNotEmpty(result.Documents);
         }
+
+        [Test]
+        public async Task Test2()
+        {
+            _elasticClientProvider.Indices.Delete(Indices.Index<VkUserModel>());
+        }
     }
 }

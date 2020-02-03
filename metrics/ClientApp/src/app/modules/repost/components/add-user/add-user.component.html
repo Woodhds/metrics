@@ -1,0 +1,8 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field [floatLabel]="form.value.userId.floatLabel">
+    <input required placeholder="ИД Юзера" matInput formControlName="userId" />
+  </mat-form-field>
+  <p>
+    <button [disabled]="!form.valid" mat-button color="primary" type="submit">Отправить</button>
+  </p>
+</form>

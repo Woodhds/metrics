@@ -1,4 +1,4 @@
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http'
+import {HttpInterceptor, HttpRequest, HttpHandler, HttpHeaders} from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { IAuthService } from '../services/abstract/IAuth';
 
@@ -9,11 +9,15 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
-    let request = req.clone();
-    if (this.auth.currentUser && this.auth.currentUser.Token) {
-      request.headers.set('Authorization', `bearer ${this.auth.currentUser.Token}`)
+    const user = this.auth.currentUser;
+    if (user && user.Token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${user.Token}`
+        }
+      })
     }
 
-    return next.handle(request);
+    return next.handle(req);
   }
 }

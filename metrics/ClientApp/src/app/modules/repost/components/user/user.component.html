@@ -1,1 +1,25 @@
-<p>user works!</p>
+<form [formGroup]="form">
+  <mat-form-field class="w-1/4">
+    <input required type="text" placeholder="Пользователь" matInput formControlName="user" [matAutocomplete]="auto"/>
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option class="h-32" *ngFor="let user of users | async" [value]="user.Id">
+        <figure class="flex py-2">
+          <div class="bg-no-repeat bg-cover"
+               [ngStyle]="{ 'background-image': 'url(' + user.Avatar + ')', height: '50px', width: '50px' }">
+          </div>
+          <figcaption>
+            {{user.FullName}}
+          </figcaption>
+        </figure>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <p>
+    <mat-form-field class="w-1/4">
+      <input required type="text" placeholder="Текст" matInput formControlName="search"/>
+    </mat-form-field>
+  </p>
+  <p>
+    <button [disabled]="!form.valid" mat-button color="primary" type="submit">Отправить</button>
+  </p>
+</form>
