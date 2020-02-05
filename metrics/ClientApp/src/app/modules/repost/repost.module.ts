@@ -11,6 +11,8 @@ import { AuthInterceptor } from "../../http-interceptors/auth-interceptor";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AddUserComponent } from "./components/add-user/add-user.component";
 import { UserComponent } from './components/user/user.component';
+import {MatCardModule} from "@angular/material/card";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 const routes: Routes = [
   { path: "", canActivate: [AuthGuard], component: RepostComponent },
@@ -27,7 +29,9 @@ const routes: Routes = [
     MatAutocompleteModule,
     ReactiveFormsModule,
     MatButtonModule,
-    HttpClientModule
+    HttpClientModule,
+    MatCardModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor }

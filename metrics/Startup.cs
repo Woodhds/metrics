@@ -1,4 +1,3 @@
-using DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +6,6 @@ using metrics.Options;
 using metrics.Services.Abstract;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 using Base.Abstractions;
 using Base.Contracts.Options;
 using metrics.Services.Concrete;
@@ -74,9 +72,6 @@ namespace metrics
                         ValidAudience = jwtOptions.Audience
                     };
                 });
-
-
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddAuthorization(z =>
             {

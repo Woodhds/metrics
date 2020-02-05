@@ -16,6 +16,8 @@ namespace Competition.Hosted
             services.AddSingleton<IVkTokenAccessor, ConsoleTokenAccessor>();
             services.AddSingleton<IElasticClientProvider, ElasticClientProvider>();
             services.AddSingleton<ICompetitionsService, CompetitionsService>();
+            services.AddSingleton<ICompetitionsService, VkUserCompetitionService>();
+            services.AddSingleton<IVkUserService, VkUserService>();
         }
 
         public void Configure(IWebHostEnvironment env)

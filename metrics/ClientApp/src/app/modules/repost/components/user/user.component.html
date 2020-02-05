@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="mb-3">
   <mat-form-field class="w-1/4">
     <input required type="text" placeholder="Пользователь" matInput formControlName="user" [matAutocomplete]="auto"/>
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
@@ -23,3 +23,19 @@
     <button [disabled]="!form.valid" mat-button color="primary" type="submit">Отправить</button>
   </p>
 </form>
+<div class="h-full w-full flex flex-wrap justify-center">
+  <mat-spinner *ngIf="loading; else card"></mat-spinner>
+  <ng-template #card>
+    <mat-card class="flex flex-wrap w-1/2" *ngFor="let message of messages">
+      <mat-card-header>
+        <mat-card-title>
+          <a target="_blank" [href]="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id">Пост</a>
+        </mat-card-title>
+        <mat-card-subtitle>{{fromUnixTime(message.Date)}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        {{ message.Text }}
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

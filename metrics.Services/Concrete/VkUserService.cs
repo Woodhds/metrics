@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Base.Abstractions;
 using Base.Contracts;
 using metrics.Services.Abstract;
-using Nest;
 
 namespace metrics.Services.Concrete
 {

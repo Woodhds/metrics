@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {interval, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import VkUserModel from "../../models/VkUserModel";
 import {VkUserService} from "../../services/vk-user.service";
-import {debounceTime, distinctUntilChanged, map} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, finalize, map} from "rxjs/operators";
 import {VkMessage} from "../../models/VkMessageModel";
+import {VkMessageService} from "../../services/vk-message.service";
 
 @Component({
   selector: 'app-user',
@@ -14,11 +15,14 @@ import {VkMessage} from "../../models/VkMessageModel";
 export class UserComponent implements OnInit {
   form: FormGroup;
   users: Observable<VkUserModel[]>;
-  messages: Observable<VkMessage[]>;
-  constructor(private userService: VkUserService, private fb: FormBuilder) { }
+  messages: VkMessage[];
+  loading: boolean = false;
+
+  constructor(private userService: VkUserService, private fb: FormBuilder, private vkMessageService: VkMessageService) {
+  }
 
   ngOnInit() {
-    this.form =  this.fb.group({
+    this.form = this.fb.group({
       user: '',
       search: ''
     });
@@ -31,6 +35,22 @@ export class UserComponent implements OnInit {
   }
 
   private _normalizeValue(value: string): string {
+    if (!value) return value;
     return value.toLowerCase().replace(/\s/g, '');
+  }
+
+  onSubmit() {
+    this.loading = true;
+    this.vkMessageService.getFromUser(
+      this.form.get('user').value, 1, 100,
+      this.form.get('search').value)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe(data => {
+        this.messages = data.Data;
+      })
+  }
+
+  fromUnixTime(value: number): string {
+    return new Date(value * 1000).toLocaleString();
   }
 }
