@@ -87,8 +87,9 @@ namespace metrics
             services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.Configure<ElasticOptions>(Configuration.GetSection("ElasticOptions"));
             services.AddSingleton<IVkClient, VkClient>();
-            services.AddSingleton<IElasticClientProvider, ElasticClientProvider>();
+            services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
             services.AddSingleton<IVkUserService, VkUserService>();
+            services.AddSingleton<IVkMessageService, VkMessageService>();
 
             services.Configure<IISServerOptions>(options =>
             {

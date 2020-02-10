@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Base.Contracts;
 using metrics.Models;
 using metrics.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;

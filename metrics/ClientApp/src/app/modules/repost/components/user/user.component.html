@@ -1,41 +1,54 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="mb-3">
-  <mat-form-field class="w-1/4">
-    <input required type="text" placeholder="Пользователь" matInput formControlName="user" [matAutocomplete]="auto"/>
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option class="h-32" *ngFor="let user of users | async" [value]="user.Id">
-        <figure class="flex py-2">
-          <div class="bg-no-repeat bg-cover"
-               [ngStyle]="{ 'background-image': 'url(' + user.Avatar + ')', height: '50px', width: '50px' }">
-          </div>
-          <figcaption>
-            {{user.FullName}}
-          </figcaption>
-        </figure>
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <p>
-    <mat-form-field class="w-1/4">
-      <input required type="text" placeholder="Текст" matInput formControlName="search"/>
+<div class="flex flex-wrap mb-3">
+  <form class="w-1/2" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input type="text" placeholder="Текст" matInput formControlName="search"/>
     </mat-form-field>
-  </p>
-  <p>
-    <button [disabled]="!form.valid" mat-button color="primary" type="submit">Отправить</button>
-  </p>
-</form>
+    <p>
+      <button [disabled]="!form.valid" mat-button color="primary" type="submit">Отправить</button>
+    </p>
+  </form>
+  <div class="w-1/2">
+    <button (click)="repostAll()" mat-button [color]="'primary'" [disabled]="selectedMessages.length === 0">Репост всех
+    </button>
+    <mat-slider thumbLabel [value]="timeout" (valueChange)="sliderChange($event)" [step]="1" [min]="30" [max]="60"
+                [disabled]="selectedMessages.length === 0"></mat-slider>
+  </div>
+</div>
 <div class="h-full w-full flex flex-wrap justify-center">
   <mat-spinner *ngIf="loading; else card"></mat-spinner>
   <ng-template #card>
     <mat-card class="flex flex-wrap w-1/2" *ngFor="let message of messages">
       <mat-card-header>
-        <mat-card-title>
-          <a target="_blank" [href]="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id">Пост</a>
+        <mat-card-title class="flex items-center">
+          <a target="_blank" class="block flex-1" [href]="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id">Пост</a>
+          <mat-slide-toggle [color]="'accent'" (change)="onSelect($event, message)"
+                            [checked]="message.IsSelected"></mat-slide-toggle>
         </mat-card-title>
         <mat-card-subtitle>{{fromUnixTime(message.Date)}}</mat-card-subtitle>
+
       </mat-card-header>
-      <mat-card-content>
-        {{ message.Text }}
+      <app-vk-image [src]="images(message)"></app-vk-image>
+      <mat-card-content [innerHTML]="message.Text" class="h-64 overflow-auto">
+
       </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="like(message.Owner_Id, message.Id)">
+          <mat-icon [color]="message.Likes.User_Likes ? 'warn': 'primary'">thumbs_up</mat-icon>
+          {{message.Likes.Count}}
+        </button>
+        <button mat-button (click)="repost(message.Owner_Id, message.Id)">
+          <mat-icon [color]="message.Reposts.User_reposted ? 'warn': 'primary'">share</mat-icon>
+          {{message.Reposts.Count}}
+        </button>
+      </mat-card-actions>
     </mat-card>
   </ng-template>
+  <mat-paginator [showFirstLastButtons]="true"
+                 (page)="onChangePage($event)"
+                 [pageSize]="pageSize"
+                 [length]="total"
+                 [pageIndex]="page"
+                 [pageSizeOptions]="pageSizeOptions">
+
+  </mat-paginator>
 </div>

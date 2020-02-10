@@ -1,4 +1,4 @@
-namespace metrics.Models
+namespace Base.Contracts
 {
     public class DataSourceResponseModel
     {

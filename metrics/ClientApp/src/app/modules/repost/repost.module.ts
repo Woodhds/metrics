@@ -8,11 +8,16 @@ import { MatButtonModule } from "@angular/material/button";
 import { RepostComponent } from "./components/repost/repost.component";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AuthInterceptor } from "../../http-interceptors/auth-interceptor";
-import { ReactiveFormsModule } from "@angular/forms";
 import { AddUserComponent } from "./components/add-user/add-user.component";
 import { UserComponent } from './components/user/user.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatIconModule} from "@angular/material/icon";
+import { VkImageComponent } from './components/vk-image/vk-image.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatSliderModule} from "@angular/material/slider";
+import {ReactiveFormsModule} from "@angular/forms";
 
 const routes: Routes = [
   { path: "", canActivate: [AuthGuard], component: RepostComponent },
@@ -21,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [RepostComponent, AddUserComponent, UserComponent],
+  declarations: [RepostComponent, AddUserComponent, UserComponent, VkImageComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -31,7 +36,11 @@ const routes: Routes = [
     MatButtonModule,
     HttpClientModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatSliderModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor }

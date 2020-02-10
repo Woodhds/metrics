@@ -6,21 +6,20 @@ using Nest;
 
 namespace Base.Abstractions
 {
-    public interface IElasticClientProvider
-    {
-        IElasticClient GetClient();
-    }
-    
-    public class ElasticClientProvider : IElasticClientProvider
+    public class ElasticClientFactory : IElasticClientFactory
     {
         private readonly ElasticOptions _options;
-        public ElasticClientProvider(IOptions<ElasticOptions> options)
+        public ElasticClientFactory(IOptions<ElasticOptions> options)
         {
             _options = options.Value;
         }
 
+        public ElasticClientFactory(ElasticOptions options)
+        {
+            _options = options;
+        }
 
-        public IElasticClient GetClient()
+        public IElasticClient Create()
         {
             var connection =
                 new ConnectionSettings(new Uri(_options.Host))

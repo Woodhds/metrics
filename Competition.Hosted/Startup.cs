@@ -14,7 +14,7 @@ namespace Competition.Hosted
             services.AddHttpClient();
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddSingleton<IVkTokenAccessor, ConsoleTokenAccessor>();
-            services.AddSingleton<IElasticClientProvider, ElasticClientProvider>();
+            services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
             services.AddSingleton<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<ICompetitionsService, VkUserCompetitionService>();
             services.AddSingleton<IVkUserService, VkUserService>();

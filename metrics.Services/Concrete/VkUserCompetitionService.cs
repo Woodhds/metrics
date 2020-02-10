@@ -22,10 +22,15 @@ namespace metrics.Services.Concrete
             var users = await _vkUserService.SearchAsync(null);
             foreach (var user in users)
             {
-                var response = _vkClient.GetReposts(user.Id.ToString(), page, 80);
-                if (response?.Response?.Items != null)
+                for (var i = page; i < 4; i++)
                 {
-                    data.AddRange(response.Response.Items);
+                    var response = _vkClient.GetReposts(user.Id.ToString(), i, 80);
+                    if (response?.Response?.Items != null)
+                    {
+                        data.AddRange(response.Response.Items);
+                    }
+
+                    await Task.Delay(9000);
                 }
             }
 

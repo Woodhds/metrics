@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Base.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using metrics.Services.Abstract;
@@ -14,24 +16,23 @@ namespace metrics.Controllers
     public class RepostController : ControllerBase
     {
         private readonly IVkClient _vkClient;
+        private readonly IVkMessageService _vkMessageService;
         private readonly ILogger<RepostController> _logger;
-        public RepostController(IVkClient vkClient, ILogger<RepostController> logger)
+        public RepostController(IVkClient vkClient, ILogger<RepostController> logger, IVkMessageService vkMessageService)
         {
             _vkClient = vkClient;
             _logger = logger;
+            _vkMessageService = vkMessageService;
         }
 
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
-        public ActionResult<DataSourceResponseModel> GetData(string userId, int page, int pageSize,
+        public async Task<ActionResult<DataSourceResponseModel>> GetData(int page, int pageSize,
             string search = null)
         {
             try
             {
-                var data = _vkClient.GetReposts(userId.Trim(), page, pageSize, search);
-                if (data.Response.Items == null)
-                    data.Response.Items = new List<VkMessage>();
-                return new DataSourceResponseModel(data.Response.Items, data.Response.Count);
+                return await _vkMessageService.GetMessages(page, pageSize, search);
             }
             catch (Exception e)
             {

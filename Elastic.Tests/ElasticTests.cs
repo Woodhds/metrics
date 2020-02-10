@@ -18,7 +18,7 @@ namespace Elastic.Tests
             var mock = new Mock<IOptions<ElasticOptions>>();
             mock.SetupGet(options => options.Value)
                 .Returns(new ElasticOptions() {Host = "http://localhost:9200"});
-            _elasticClientProvider = new ElasticClientProvider(mock.Object).GetClient();
+            _elasticClientProvider = new ElasticClientFactory(mock.Object).Create();
         }
 
         [Test]
@@ -27,12 +27,6 @@ namespace Elastic.Tests
             var result = await _elasticClientProvider.SearchAsync<VkMessage>();
             Assert.IsTrue(result.IsValid);
             Assert.IsNotEmpty(result.Documents);
-        }
-
-        [Test]
-        public async Task Test2()
-        {
-            _elasticClientProvider.Indices.Delete(Indices.Index<VkUserModel>());
         }
     }
 }

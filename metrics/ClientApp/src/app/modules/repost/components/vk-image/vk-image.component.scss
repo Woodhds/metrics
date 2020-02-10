@@ -1,0 +1,12 @@
+.action-btn {
+  @apply absolute;
+  top: 40%
+}
+
+.action-btn__left {
+  @apply left-0;
+}
+
+.action-btn__right {
+  @apply right-0;
+}

@@ -11,10 +11,10 @@ namespace Competition.Hosted
 {
     public class CompetitionService : BackgroundService
     {
-        private readonly IElasticClientProvider _elasticClientProvider;
+        private readonly IElasticClientFactory _elasticClientProvider;
         private readonly IServiceProvider _serviceProvider;
 
-        public CompetitionService(IElasticClientProvider elasticClientProvider, IServiceProvider serviceProvider)
+        public CompetitionService(IElasticClientFactory elasticClientProvider, IServiceProvider serviceProvider)
         {
             _elasticClientProvider = elasticClientProvider;
             _serviceProvider = serviceProvider;
@@ -27,7 +27,7 @@ namespace Competition.Hosted
                 foreach (var service in _serviceProvider.GetServices<ICompetitionsService>())
                 {
                     var data = await service.Fetch();
-                    await _elasticClientProvider.GetClient().IndexManyAsync(data, cancellationToken: stoppingToken);
+                    await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: stoppingToken);
                     await Task.Delay(900 * 10, stoppingToken);
                 }
                 

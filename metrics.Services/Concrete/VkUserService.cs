@@ -10,10 +10,10 @@ namespace metrics.Services.Concrete
 {
     public class VkUserService : IVkUserService
     {
-        private readonly IElasticClientProvider _elasticClientProvider;
+        private readonly IElasticClientFactory _elasticClientProvider;
         private readonly IVkClient _vkClient;
 
-        public VkUserService(IElasticClientProvider elasticClientProvider, IVkClient vkClient)
+        public VkUserService(IElasticClientFactory elasticClientProvider, IVkClient vkClient)
         {
             _elasticClientProvider = elasticClientProvider;
             _vkClient = vkClient;
@@ -30,7 +30,7 @@ namespace metrics.Services.Concrete
             };
             if (user.Id > 0)
             {
-                await _elasticClientProvider.GetClient().IndexDocumentAsync(user, token);
+                await _elasticClientProvider.Create().IndexDocumentAsync(user, token);
             }
 
             return user;
@@ -38,7 +38,7 @@ namespace metrics.Services.Concrete
 
         public async Task<IEnumerable<VkUserModel>> SearchAsync(string searchStr)
         {
-            var result = await _elasticClientProvider.GetClient().SearchAsync<VkUserModel>(z =>
+            var result = await _elasticClientProvider.Create().SearchAsync<VkUserModel>(z =>
                 z.Index<VkUserModel>()
                     .Query(t =>
                         t.QueryString(a =>

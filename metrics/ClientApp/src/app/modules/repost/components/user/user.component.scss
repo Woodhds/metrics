@@ -1,0 +1,7 @@
+:host {
+  @apply flex flex-col;
+}
+
+.mat-card-title {
+  display: flex !important;
+}
