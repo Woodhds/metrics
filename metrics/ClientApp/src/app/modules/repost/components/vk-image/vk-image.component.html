@@ -7,7 +7,7 @@
   <div class="flex flex-col mb-2">
     <mat-spinner *ngIf="!isLoad; else loaded"></mat-spinner>
     <ng-template #loaded>
-      <img matCardImage [src]="isLoad && src.length > 0 ? src[currentImage] : 'images/nophoto.png'"/>
+      <img class="h-64 w-64" matCardImage [src]="isLoad && src.length > 0 ? src[currentImage] : 'assets/images/nophoto.png'"/>
     </ng-template>
     <ul class="flex flex-wrap items-center justify-center">
       <li (click)="setCurrent(image)" *ngFor="let image of imagePoints"

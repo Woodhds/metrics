@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Base.Contracts\Base.Contracts.csproj" />
-    <ProjectReference Include="..\Base\Base.csproj" />
     <ProjectReference Include="..\Elastic\Elastic.csproj" />
   </ItemGroup>
 

@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics", "metrics\metrics.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Services", "metrics.Services\metrics.Services.csproj", "{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base", "Base\Base.csproj", "{E6D7DE37-1511-4169-913E-0B2B3D6583B5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Competition.Hosted", "Competition.Hosted\Competition.Hosted.csproj", "{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elastic", "Elastic\Elastic.csproj", "{B842060E-EB09-475F-B410-C205C9BA63E1}"
@@ -33,10 +31,6 @@ Global
 		{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6D7DE37-1511-4169-913E-0B2B3D6583B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6D7DE37-1511-4169-913E-0B2B3D6583B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6D7DE37-1511-4169-913E-0B2B3D6583B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6D7DE37-1511-4169-913E-0B2B3D6583B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7}.Release|Any CPU.ActiveCfg = Release|Any CPU

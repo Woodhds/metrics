@@ -25,7 +25,6 @@ export class VkImageComponent implements OnInit {
           this.observer.disconnect()
         }
       });
-
       this.observer.observe(this.elementRef.nativeElement)
     })
   }
