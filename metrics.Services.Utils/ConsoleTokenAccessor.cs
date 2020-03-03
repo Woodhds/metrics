@@ -1,8 +1,8 @@
 using Base.Contracts.Options;
-using metrics.Services.Abstract;
+using metrics.Services.Abstractions;
 using Microsoft.Extensions.Options;
 
-namespace Competition.Hosted
+namespace metrics.Services.Utils
 {
     public class ConsoleTokenAccessor : IVkTokenAccessor
     {

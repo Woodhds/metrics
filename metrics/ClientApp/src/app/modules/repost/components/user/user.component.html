@@ -33,7 +33,7 @@
       </mat-card-content>
       <mat-card-actions>
         <button mat-button (click)="like(message.Owner_Id, message.Id)">
-          <mat-icon [color]="message.Likes.User_Likes ? 'warn': 'primary'">thumbs_up</mat-icon>
+          <mat-icon [color]="message.Likes.User_Likes ? 'warn': 'primary'">thumb_up</mat-icon>
           {{message.Likes.Count}}
         </button>
         <button mat-button (click)="repost(message.Owner_Id, message.Id)">

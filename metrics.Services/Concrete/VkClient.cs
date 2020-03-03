@@ -1,5 +1,4 @@
-﻿using metrics.Services.Abstract;
-using metrics.Services.Models;
+﻿using metrics.Services.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -10,6 +9,8 @@ using System.Linq;
 using System.Threading;
 using Base.Contracts;
 using Base.Contracts.Options;
+using metrics.Services.Abstractions;
+using metrics.Services.Utils;
 
 namespace metrics.Services.Concrete
 {

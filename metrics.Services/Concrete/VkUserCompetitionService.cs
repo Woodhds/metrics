@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Base.Contracts;
-using metrics.Services.Abstract;
+using metrics.Services.Abstractions;
 
 namespace metrics.Services.Concrete
 {

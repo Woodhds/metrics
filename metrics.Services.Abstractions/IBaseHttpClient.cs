@@ -1,4 +1,4 @@
-﻿namespace metrics.Services.Abstract
+﻿namespace metrics.Services.Abstractions
 {
     public interface IBaseHttpClient
     {

@@ -7,6 +7,7 @@
     
     <ItemGroup>
       <ProjectReference Include="..\Elastic\Elastic.csproj" />
+      <ProjectReference Include="..\metrics.Services.Utils\metrics.Services.Utils.csproj" />
       <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
       <ProjectReference Include="..\metrics\metrics.csproj" />
     </ItemGroup>

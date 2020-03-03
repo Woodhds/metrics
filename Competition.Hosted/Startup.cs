@@ -1,6 +1,7 @@
 using Base.Abstractions;
-using metrics.Services.Abstract;
+using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
+using metrics.Services.Utils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 

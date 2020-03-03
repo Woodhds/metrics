@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Base.Abstractions;
-using Base.Contracts.Options;
-using Microsoft.ML;
+using metrics.Services.Abstractions;
+using metrics.Services.Concrete;
+using metrics.Services.Utils;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Competition.ML
 {
@@ -9,11 +10,9 @@ namespace Competition.ML
     {
         static async Task Main(string[] args)
         {
-            var context = new MLContext();
-            var elasticClient = new ElasticClientFactory(new ElasticOptions
-            {
-                Host = "http://localhost:9200"
-            });
+            var services = new ServiceCollection();
+            services.AddVkClientConsole();
+            services.AddSingleton<IVkClient, VkClient>();
         }
     }
 }

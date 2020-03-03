@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Models;
 using metrics.Options;
-using metrics.Services.Abstract;
+using metrics.Services.Abstractions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

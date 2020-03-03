@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using metrics.Services.Abstract;
 using System.Linq;
 using Base.Contracts;
+using metrics.Services.Abstractions;
 
 namespace metrics.Services.Concrete
 {

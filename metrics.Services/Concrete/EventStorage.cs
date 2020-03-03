@@ -1,5 +1,5 @@
 using System.Collections.Concurrent;
-using metrics.Services.Abstract;
+using metrics.Services.Abstractions;
 
 namespace metrics.Services.Concrete
 {

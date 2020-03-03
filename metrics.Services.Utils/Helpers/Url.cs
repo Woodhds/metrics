@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace metrics.Services.Helpers
+namespace metrics.Services.Utils.Helpers
 {
     public static class Url
     {

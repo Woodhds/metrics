@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Base.Contracts;
 
-namespace metrics.Services.Abstract
+namespace metrics.Services.Abstractions
 {
     public interface IVkClient : IBaseHttpClient
     {

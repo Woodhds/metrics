@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Base.Contracts;
 using Microsoft.AspNetCore.Authorization;
-using metrics.Services.Abstract;
 using Microsoft.Extensions.Logging;
-using metrics.Models;
+using metrics.Services.Abstractions;
 
 namespace metrics.Controllers
 {

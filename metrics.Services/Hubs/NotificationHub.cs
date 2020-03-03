@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using metrics.Services.Abstract;
+using metrics.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 

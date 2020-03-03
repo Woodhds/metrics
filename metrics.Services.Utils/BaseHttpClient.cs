@@ -2,18 +2,22 @@
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Threading.Tasks;
-using metrics.Services.Abstract;
-using metrics.Services.Helpers;
+using metrics.Services.Abstractions;
+using metrics.Services.Utils.Helpers;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace metrics.Services.Concrete
+namespace metrics.Services.Utils
 {
     public class BaseHttpClient : IBaseHttpClient
     {
         private readonly HttpClient _httpClient;
         protected readonly ILogger<BaseHttpClient> Logger;
-        public BaseHttpClient(IHttpClientFactory httpClientFactory, ILogger<BaseHttpClient> logger)
+
+        public BaseHttpClient(
+            IHttpClientFactory httpClientFactory,
+            ILogger<BaseHttpClient> logger
+        )
         {
             Logger = logger;
             _httpClient = httpClientFactory.CreateClient();

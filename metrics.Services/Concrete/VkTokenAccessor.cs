@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Security.Claims;
-using metrics.Services.Abstract;
+using metrics.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 
 namespace metrics.Services.Concrete
