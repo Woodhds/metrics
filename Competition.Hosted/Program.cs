@@ -1,11 +1,13 @@
-﻿using System;
-using Base.Contracts.Options;
+﻿using Base.Contracts.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using NLog.Web;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Competition.Hosted
 {
@@ -13,7 +15,6 @@ namespace Competition.Hosted
     {
         public static void Main(string[] args)
         {
-            NLogBuilder.ConfigureNLog("nlog.config");
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -28,9 +29,16 @@ namespace Competition.Hosted
                     builder.UseStartup<Startup>();
                     builder.UseUrls("http://localhost:5274", "https://localhost:5275");
                 })
-                .ConfigureLogging(builder =>
+                .ConfigureLogging((context, builder) =>
                 {
+                    ConfigSettingLayoutRenderer.DefaultConfiguration = context.Configuration;
+
                     builder.ClearProviders();
+
+                    var logConfig = new NLogLoggingConfiguration(context.Configuration.GetSection("NLog"));
+                    LogManager.Configuration = logConfig;
+
+                    builder.AddProvider(new NLogLoggerProvider(NLogAspNetCoreOptions.Default, new LogFactory(logConfig)));
                     builder.SetMinimumLevel(LogLevel.Trace);
                 })
                 .ConfigureServices((context, services) =>
