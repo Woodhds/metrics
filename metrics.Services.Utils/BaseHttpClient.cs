@@ -36,6 +36,11 @@ namespace metrics.Services.Utils
                 var response = await _httpClient.SendAsync(httpMessage);
 
                 response.EnsureSuccessStatusCode();
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (responseContent.Length < 1024)
+                {
+                    Logger.LogInformation(responseContent);
+                }
 
                 return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
             }
