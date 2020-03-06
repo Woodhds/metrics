@@ -1,8 +1,11 @@
-﻿using Base.Contracts.Options;
+﻿using System;
+using Base.Contracts.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace Competition.Hosted
 {
@@ -10,6 +13,7 @@ namespace Competition.Hosted
     {
         public static void Main(string[] args)
         {
+            NLogBuilder.ConfigureNLog("nlog.config");
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -24,12 +28,20 @@ namespace Competition.Hosted
                     builder.UseStartup<Startup>();
                     builder.UseUrls("http://localhost:5274", "https://localhost:5275");
                 })
+                .ConfigureLogging(builder =>
+                {
+                    builder.ClearProviders();
+                    builder.SetMinimumLevel(LogLevel.Trace);
+                })
                 .ConfigureServices((context, services) =>
                 {
-                    services.Configure<ElasticOptions>(context.Configuration.GetSection("ElasticOptions"));
-                    services.Configure<VKApiUrls>(context.Configuration.GetSection("VkApiUrls"));
+                    services.Configure<ElasticOptions>(context.Configuration.GetSection(nameof(ElasticOptions)));
+                    services.Configure<VkApiUrls>(context.Configuration.GetSection(nameof(VkApiUrls)));
                     services.Configure<TokenOptions>(context.Configuration.GetSection("Token"));
+                    services.Configure<CompetitionOptions>(
+                        context.Configuration.GetSection(nameof(CompetitionOptions)));
                     services.AddHostedService<CompetitionService>();
-                });
+                })
+                .UseNLog();
     }
 }

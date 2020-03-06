@@ -17,10 +17,10 @@ namespace metrics.Services.Concrete
     public class VkClient : BaseHttpClient, IVkClient
     {
         private readonly IVkTokenAccessor _vkTokenAccessor;
-        private readonly VKApiUrls _urls;
+        private readonly VkApiUrls _urls;
         private object locker = new object();
         public VkClient(IHttpClientFactory httpClientFactory,
-            IVkTokenAccessor vkTokenAccessor, IOptions<VKApiUrls> options,
+            IVkTokenAccessor vkTokenAccessor, IOptions<VkApiUrls> options,
             ILogger<BaseHttpClient> logger) : base(httpClientFactory, logger)
         {
             _vkTokenAccessor = vkTokenAccessor;

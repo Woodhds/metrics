@@ -1,6 +1,6 @@
 ﻿namespace Base.Contracts.Options
 {
-    public class VKApiUrls
+    public class VkApiUrls
     {
         public string Domain { get; set; }
         public string MainDomain { get; set; }

@@ -12,11 +12,9 @@ namespace Competition.Hosted
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IVkClient, VkClient>();
-            services.AddHttpClient();
-            services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
-            services.AddSingleton<IVkTokenAccessor, ConsoleTokenAccessor>();
+            services.AddVkClientConsole();
             services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
-            services.AddSingleton<ICompetitionsService, CompetitionsService>();
+            services.AddTransient<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<ICompetitionsService, VkUserCompetitionService>();
             services.AddSingleton<IVkUserService, VkUserService>();
         }

@@ -19,7 +19,7 @@ export class UserComponent implements OnInit {
   page: number = 0;
   pageSize: number = 20;
   total: number = 0;
-  pageSizeOptions: Array<number> = [20, 40, 60, 80, 100];
+  pageSizeOptions: Array<number> = [20, 40, 60, 80, 100, 200, 400, 600, 800, 1000];
   timeout: number = 30;
 
   constructor(private userService: VkUserService, private fb: FormBuilder, private vkMessageService: VkMessageService) {

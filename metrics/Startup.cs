@@ -85,7 +85,7 @@ namespace metrics
             services.AddScoped<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<IVkTokenAccessor, VkTokenAccessor>();
             services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
-            services.Configure<VKApiUrls>(Configuration.GetSection("VKApiUrls"));
+            services.Configure<VkApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.Configure<ElasticOptions>(Configuration.GetSection("ElasticOptions"));
             services.AddSingleton<IVkClient, VkClient>();
             services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
