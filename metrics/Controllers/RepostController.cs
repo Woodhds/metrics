@@ -26,11 +26,11 @@ namespace metrics.Controllers
         [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
         public async Task<ActionResult<DataSourceResponseModel>> GetData(int page, int pageSize,
-            string search = null)
+            string search = null, string user = null)
         {
             try
             {
-                return await _vkMessageService.GetMessages(page, pageSize, search);
+                return await _vkMessageService.GetMessages(page, pageSize, search, user);
             }
             catch (Exception e)
             {

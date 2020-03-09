@@ -27,6 +27,10 @@ namespace metrics.Services.Concrete
                     var response = _vkClient.GetReposts(user.Id.ToString(), i, 80);
                     if (response?.Response?.Items != null)
                     {
+                        response.Response.Items.ForEach(e =>
+                        {
+                            e.RepostedFrom = user.Id;
+                        });
                         data.AddRange(response.Response.Items);
                     }
 

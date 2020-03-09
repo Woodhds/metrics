@@ -14,13 +14,14 @@ export class VkMessageService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public get(page: number = 1, pageSize: number = 50, search: string = ''): Observable<DataSourceResponse<VkMessage>> {
+  public get(page: number = 1, pageSize: number = 50, search: string = '', user: string = ''): Observable<DataSourceResponse<VkMessage>> {
     return this.httpClient.get<DataSourceResponse<VkMessage>>(`${this.routePrefix}/user`,
       {
         params: new HttpParams()
           .set('page', page.toString())
           .set('pageSize', pageSize.toString())
           .set('search', search)
+          .set('user', user)
       }
     )
   }

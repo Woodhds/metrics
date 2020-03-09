@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using Base.Abstractions;
 using Base.Contracts.Options;
+using metrics.logging;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Hubs;
@@ -110,6 +111,8 @@ namespace metrics
                     z.WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                 });
             });
+
+            services.AddLogging(c => c.AddMetricsLogging(Configuration));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)

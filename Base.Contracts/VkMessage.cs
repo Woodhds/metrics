@@ -19,6 +19,8 @@ namespace Base.Contracts
         public VkLike Likes { get; set; }
         public Owner Owner { get; set; }
         public int Identifier => (From_Id ^ Id).GetHashCode();
+        
+        public int RepostedFrom { get; set; }
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>

@@ -1,4 +1,6 @@
-﻿using Base.Contracts.Options;
+﻿using System;
+using Base.Contracts.Options;
+using metrics.logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +17,16 @@ namespace Competition.Hosted
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                
+                CreateHostBuilder(args).Build().Run();
+                Console.WriteLine($"Started at: {DateTime.Now}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -31,15 +42,7 @@ namespace Competition.Hosted
                 })
                 .ConfigureLogging((context, builder) =>
                 {
-                    ConfigSettingLayoutRenderer.DefaultConfiguration = context.Configuration;
-
-                    builder.ClearProviders();
-
-                    var logConfig = new NLogLoggingConfiguration(context.Configuration.GetSection("NLog"));
-                    LogManager.Configuration = logConfig;
-
-                    builder.AddProvider(new NLogLoggerProvider(NLogAspNetCoreOptions.Default, new LogFactory(logConfig)));
-                    builder.SetMinimumLevel(LogLevel.Trace);
+                    builder.AddMetricsLogging(context.Configuration);
                 })
                 .ConfigureServices((context, services) =>
                 {

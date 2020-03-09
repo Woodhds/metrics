@@ -1,33 +1,18 @@
-import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-vk-image',
-  templateUrl: './vk-image.component.html',
-  styleUrls: ['./vk-image.component.scss']
+  selector: "app-vk-image",
+  templateUrl: "./vk-image.component.html",
+  styleUrls: ["./vk-image.component.scss"]
 })
 export class VkImageComponent implements OnInit {
-
   @Input() src: string[];
-
-  observer: IntersectionObserver;
   isLoad: Boolean = true;
   currentImage: number = 0;
 
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-    this.observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        const {isIntersecting} = entry;
-        if (isIntersecting) {
-          this.isLoad = false;
-          this.observer.disconnect()
-        }
-      });
-      this.observer.observe(this.elementRef.nativeElement)
-    })
-  }
+  ngOnInit(): void {}
 
   get totalImage() {
     return this.src.length;
@@ -51,5 +36,11 @@ export class VkImageComponent implements OnInit {
 
   setCurrent(image: number) {
     this.currentImage = image;
+  }
+
+  get srcImg(): string {
+    return this.isLoad && this.src.length > 0
+      ? this.src[this.currentImage]
+      : "assets/images/nophoto.png";
   }
 }
