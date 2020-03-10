@@ -55,7 +55,12 @@ export class UserComponent implements OnInit {
   onSubmit() {
     this.loading = true;
     this.vkMessageService
-      .get(this.page, this.pageSize, this.form.get("search").value)
+      .get(
+        this.page,
+        this.pageSize,
+        this.form.get("search").value,
+        (<VkUserModel>this.form.get("user").value).Id.toString()
+      )
       .pipe(finalize(() => (this.loading = false)))
       .subscribe(data => {
         this.messages = data.Data;

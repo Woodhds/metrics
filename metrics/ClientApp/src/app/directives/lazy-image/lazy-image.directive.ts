@@ -9,8 +9,8 @@ export class LazyImageDirective {
       entries.forEach(x => {
         if (x.isIntersecting) {
           let el = elementRef.nativeElement as HTMLImageElement;
-          el.src = this.src;
-          imgObserver.unobserve(elementRef.nativeElement);
+          el.src = this.appLazyImage;
+          imgObserver.unobserve(x.target);
         }
       });
     });
@@ -18,5 +18,5 @@ export class LazyImageDirective {
     observer.observe(elementRef.nativeElement);
   }
 
-  @Input("appLazyImage") src: string;
+  @Input("appLazyImage") appLazyImage: string;
 }

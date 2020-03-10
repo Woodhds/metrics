@@ -11,7 +11,7 @@
     </a>
   </div>
   <div class="flex flex-col mb-2">
-    <img class="h-64 w-64" matCardImage [appLazyImage]="srcImg" />
+    <img #img class="h-64 w-64" matCardImage [appLazyImage]="srcImg" />
     <ul class="flex flex-wrap items-center justify-center">
       <li
         (click)="setCurrent(image)"
