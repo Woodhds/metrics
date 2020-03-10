@@ -20,36 +20,25 @@ namespace metrics.Services.Concrete
         {
             var client = _elasticClientFactory.Create();
 
-            var query = new BoolQuery
-            {
-                Filter = new QueryContainer[]
+            var response = await client.SearchAsync<VkMessage>(z => z
+                .From(page * take)
+                .Take(take)
+                .Query(f =>
                 {
-                    new MatchPhraseQuery
-                    {
-                        Field = nameof(VkMessage.Text),
-                        Query = search
-                    }
-                },
-                Must = !string.IsNullOrEmpty(user)
-                    ? new QueryContainer[]
-                    {
-                        new TermQuery
-                        {
-                            Field = nameof(VkMessage.RepostedFrom), 
-                            Value = user
-                        }
-                    }
-                    : new QueryContainer[0]
-            };
+                    var q = f
+                        .Bool(e => e
+                            .Filter(g => g
+                                .MatchPhrase(q => q
+                                    .Field(message => message.Text)
+                                    .Query(search)
+                                )
+                            )
+                        );
+                    if (string.IsNullOrEmpty(user)) return q;
 
-            var searchQuery = new SearchRequest(Indices.Index<VkMessage>())
-            {
-                From = page * take,
-                Query = query,
-                Size = take
-            };
-
-            var response = await client.SearchAsync<VkMessage>(searchQuery);
+                    return q && f.Match(t => t.Query(user).Field(t => t.RepostedFrom));
+                })
+            );
 
             return new DataSourceResponseModel(response.Documents, response.Total);
         }

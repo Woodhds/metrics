@@ -54,12 +54,13 @@ export class UserComponent implements OnInit {
 
   onSubmit() {
     this.loading = true;
+    const user = this.form.get("user").value;
     this.vkMessageService
       .get(
         this.page,
         this.pageSize,
         this.form.get("search").value,
-        (<VkUserModel>this.form.get("user").value).Id.toString()
+        user ? (<VkUserModel>user).Id.toString() : ""
       )
       .pipe(finalize(() => (this.loading = false)))
       .subscribe(data => {
