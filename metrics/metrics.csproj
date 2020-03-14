@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
     <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />
     <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
   </ItemGroup>

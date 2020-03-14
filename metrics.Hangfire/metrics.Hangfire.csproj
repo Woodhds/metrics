@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-metrics.Hangfire-D95048AA-28AA-4D96-8C15-4EFD9F9AB23D</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Hangfire" Version="1.7.9" />
+        <PackageReference Include="Hangfire.PostgreSql" Version="1.6.4.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\metrics.Data.Sql\metrics.Data.Sql.csproj" />
+      <ProjectReference Include="..\metrics.Hangfire.Abstractions\metrics.Hangfire.Abstractions.csproj" />
+    </ItemGroup>
+</Project>

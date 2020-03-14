@@ -36,7 +36,12 @@ namespace metrics.Services.Concrete
                         );
                     if (string.IsNullOrEmpty(user)) return q;
 
-                    return q && f.Match(t => t.Query(user).Field(t => t.RepostedFrom));
+                    return q &&
+                           f
+                               .Term(t => t
+                                   .Value(user)
+                                   .Field(l => l.RepostedFrom)
+                               );
                 })
             );
 

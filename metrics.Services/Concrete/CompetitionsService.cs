@@ -7,6 +7,7 @@ using System.Linq;
 using Base.Contracts;
 using Base.Contracts.Options;
 using metrics.Services.Abstractions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace metrics.Services.Concrete
@@ -16,16 +17,19 @@ namespace metrics.Services.Concrete
         private readonly IVkClient _vkClient;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly CompetitionOptions _competitionOptions;
-        const int Take = 10;
+        private const int Take = 10;
+        private readonly ILogger<CompetitionsService> _logger;
 
         public CompetitionsService(
             IVkClient vkClient,
             IHttpClientFactory httpClientFactory,
-            IOptionsMonitor<CompetitionOptions> optionsMonitor
+            IOptionsMonitor<CompetitionOptions> optionsMonitor,
+            ILogger<CompetitionsService> logger
         )
         {
             _vkClient = vkClient;
             _httpClientFactory = httpClientFactory;
+            _logger = logger;
             _competitionOptions = optionsMonitor.CurrentValue;
         }
 
@@ -60,10 +64,11 @@ namespace metrics.Services.Concrete
                     data.AddRange(models);
                 }
 
-                return _vkClient.GetById(data)?.Response.Items;
+                return (await _vkClient.GetById(data))?.Response.Items;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError("ERROR Parsing", e.Message);
             }
 
             return default;

@@ -24,7 +24,7 @@ namespace metrics.Services.Concrete
             {
                 for (var i = page; i < 4; i++)
                 {
-                    var response = _vkClient.GetReposts(user.Id.ToString(), i, 80);
+                    var response = await _vkClient.GetReposts(user.Id.ToString(), i, 80);
                     if (response?.Response?.Items != null)
                     {
                         response.Response.Items.ForEach(e =>

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
-using System;
 using System.Text;
 using Base.Abstractions;
 using Base.Contracts.Options;
@@ -115,7 +114,7 @@ namespace metrics
             services.AddLogging(c => c.AddMetricsLogging(Configuration));
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

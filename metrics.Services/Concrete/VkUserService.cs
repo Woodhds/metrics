@@ -21,7 +21,7 @@ namespace metrics.Services.Concrete
 
         public async Task<VkUserModel> CreateAsync(string userId, CancellationToken token = default)
         {
-            var userInfo = _vkClient.GetUserInfo(userId);
+            var userInfo = await _vkClient.GetUserInfo(userId);
             var user = new VkUserModel
             {
                 Id = userInfo.Response.First().Id,

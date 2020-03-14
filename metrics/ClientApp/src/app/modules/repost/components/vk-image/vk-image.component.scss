@@ -10,3 +10,7 @@
 .action-btn__right {
   @apply right-0;
 }
+
+.image-point {
+  transition: transform .15s linear;
+}

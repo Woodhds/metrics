@@ -123,11 +123,7 @@ export class UserComponent implements OnInit {
         this.selectedMessages.map(x => new VkRepostModel(x.Owner_Id, x.Id)),
         this.timeout
       )
-      .subscribe(() => {
-        for (let message of this.messages) {
-          message.IsSelected = false;
-        }
-      });
+      .subscribe(() => {});
   }
 
   onSelect(ev: MatSlideToggleChange, message: VkMessage) {
@@ -144,5 +140,10 @@ export class UserComponent implements OnInit {
 
   displayFn(user: VkUserModel): string {
     return user ? user.FullName : "";
+  }
+
+  clearUser(e: MouseEvent) {
+    e.preventDefault();
+    this.form.controls["user"].setValue("");
   }
 }

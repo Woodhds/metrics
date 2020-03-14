@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
   selector: "app-vk-image",
@@ -7,12 +8,18 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 })
 export class VkImageComponent implements OnInit {
   @Input() src: string[];
+  currentImageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentImage: number = 0;
   @ViewChild("img") img: ElementRef;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentImageSubject.subscribe(f => {
+      this.currentImage = f;
+      this.assignSrc();
+    });
+  }
 
   get totalImage() {
     return this.src.length;
@@ -24,25 +31,26 @@ export class VkImageComponent implements OnInit {
 
   next() {
     if (this.currentImage < this.totalImage - 1) {
-      this.currentImage++;
-      this.assignSrc();
+      this.currentImageSubject.next(++this.currentImage);
     }
   }
 
   prev() {
     if (this.currentImage > 0) {
-      this.currentImage--;
-      this.assignSrc();
+      this.currentImageSubject.next(--this.currentImage);
     }
   }
 
-  private assignSrc() {
+  private assignSrc(): void {
+    if (!this.img) return;
     let el = this.img.nativeElement as HTMLImageElement;
+
+    if (!el) return;
     el.src = this.srcImg;
   }
 
   setCurrent(image: number) {
-    this.currentImage = image;
+    this.currentImageSubject.next(image);
   }
 
   get srcImg(): string {

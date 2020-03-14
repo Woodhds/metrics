@@ -2,9 +2,10 @@
   <form class="w-1/2" [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-form-field class="w-1/3 mr-6">
       <input
-        type="text"
+        type="search"
         placeholder="Текст"
         matInput
+        autocomplete="off"
         formControlName="search"
       />
     </mat-form-field>
@@ -16,6 +17,15 @@
         formControlName="user"
         [matAutocomplete]="auto"
       />
+      <button
+        *ngIf="form.get('user').value"
+        (click)="clearUser($event)"
+        matSuffix
+        mat-button
+        mat-icon-button
+      >
+        <mat-icon>close</mat-icon>
+      </button>
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let option of users" [value]="option">
           <figure class="flex items-center">
@@ -79,6 +89,7 @@
             >Пост</a
           >
           <mat-slide-toggle
+            *ngIf="!message.Reposts.User_reposted"
             [color]="'accent'"
             (change)="onSelect($event, message)"
             [checked]="message.IsSelected"

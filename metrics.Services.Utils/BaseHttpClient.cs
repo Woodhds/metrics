@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using metrics.Services.Abstractions;
 using metrics.Services.Utils.Helpers;
@@ -28,19 +29,10 @@ namespace metrics.Services.Utils
             try
             {
                 var uri = @params.BuildUrl(url);
-                var httpMessage = new HttpRequestMessage(HttpMethod.Post, uri);
-                var stringContent = new StringContent(JsonConvert.SerializeObject(content));
-                stringContent.Headers.ContentType =
-                    new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                httpMessage.Content = stringContent;
-                var response = await _httpClient.SendAsync(httpMessage);
+                var stringContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(uri, stringContent);
 
                 response.EnsureSuccessStatusCode();
-                var responseContent = await response.Content.ReadAsStringAsync();
-                if (responseContent.Length < 1024)
-                {
-                    Logger.LogInformation(responseContent);
-                }
 
                 return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
             }
@@ -56,16 +48,7 @@ namespace metrics.Services.Utils
             try
             {
                 var uri = @params.BuildUrl(url);
-                var response = await _httpClient.GetAsync(uri);
-
-                response.EnsureSuccessStatusCode();
-                var responseContent = await response.Content.ReadAsStringAsync();
-                if (responseContent.Length < 1024)
-                {
-                    Logger.LogInformation(responseContent);
-                }
-
-                return JsonConvert.DeserializeObject<T>(responseContent);
+                return JsonConvert.DeserializeObject<T>(await _httpClient.GetStringAsync(uri));
             }
             catch (Exception e)
             {

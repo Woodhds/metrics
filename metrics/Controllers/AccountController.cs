@@ -29,7 +29,8 @@ namespace metrics.Controllers
         private readonly IVkClient _vkClient;
         private readonly JwtOptions _jwtOptions;
 
-        public AccountController(IHttpClientFactory httpClientFactory, IVkClient vkClient, IOptions<JwtOptions> jwtOptions)
+        public AccountController(IHttpClientFactory httpClientFactory, IVkClient vkClient,
+            IOptions<JwtOptions> jwtOptions)
         {
             _httpClient = httpClientFactory.CreateClient();
             _vkClient = vkClient;
@@ -55,49 +56,52 @@ namespace metrics.Controllers
                     ["fields"] = string.Join(",", new List<string> {"first_name", "last_name", "photo_50"})
                 }));
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
+                return Ok();
+
+            var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
+            if (payload.TryGetValue("error", out var error))
             {
-                var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
-                if (payload.TryGetValue("error", out var error))
-                {
-                    ModelState.AddModelError("", error.Value<string>());
-                }
-
-                var id = payload["response"].First["id"]?.ToString();
-                var name = $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}";
-                var avatar = payload["response"].First["photo_50"].ToString();
-
-                var claims = new List<Claim>
-                {
-                    new Claim(JwtRegisteredClaimNames.NameId, id),
-                    new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
-                    new Claim(JwtRegisteredClaimNames.GivenName, name),
-                    new Claim("photo", avatar)
-                };
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
-                var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var securityToken = new JwtSecurityToken(
-                    _jwtOptions.Issuer,
-                    _jwtOptions.Audience,
-                    claims,
-                    null,
-                    DateTime.Now.AddDays(14),
-                    signInCredentials
-                );
-                return Ok(new
-                {
-                    Id = id,
-                    Avatar = avatar,
-                    FullName = name,
-                    Token = new JwtSecurityTokenHandler().WriteToken(securityToken)
-                });
+                ModelState.AddModelError("", error.Value<string>());
             }
 
-            return Ok();
+            var id = payload["response"].First["id"]?.ToString();
+            var name = $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}";
+            var avatar = payload["response"].First["photo_50"].ToString();
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.NameId, id),
+                new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
+                new Claim(JwtRegisteredClaimNames.GivenName, name),
+                new Claim("photo", avatar)
+            };
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
+            var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var securityToken = new JwtSecurityToken(
+                _jwtOptions.Issuer,
+                _jwtOptions.Audience,
+                claims,
+                null,
+                DateTime.Now.AddDays(14),
+                signInCredentials
+            );
+            return Ok(new
+            {
+                Id = id,
+                Avatar = avatar,
+                FullName = name,
+                Token = new JwtSecurityTokenHandler().WriteToken(securityToken)
+            });
         }
-        
+
         [HttpPost("drop")]
-        public IActionResult Drop(string exclude = null, string identity = null, int count = 1000, int offset = 0)
+        public async Task<IActionResult> Drop(
+            string exclude = null,
+            string identity = null,
+            int count = 1000,
+            int offset = 0
+        )
         {
             var total = 0;
             var workCount = count;
@@ -105,11 +109,12 @@ namespace metrics.Controllers
             var groups = new List<VkGroup>();
             do
             {
-                var response = _vkClient.GetGroups(workCount, workOffset);
+                var response = await _vkClient.GetGroups(workCount, workOffset);
                 groups.AddRange(response?.Response?.Items ?? new List<VkGroup>());
                 total = response?.Response?.Count ?? 0;
                 workOffset += workCount;
             } while (total <= workOffset + workCount);
+
             if (!string.IsNullOrEmpty(exclude))
             {
                 groups = groups.Where(c => !c.Name.ToLower().Contains(exclude.ToLower())).ToList();
@@ -120,10 +125,12 @@ namespace metrics.Controllers
                 var ids = identity.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
                 groups = groups.Where(d => ids.Contains(d.Id)).ToList();
             }
+
             foreach (var group in groups)
             {
-                _vkClient.LeaveGroup(group.Id);
+                await _vkClient.LeaveGroup(group.Id);
             }
+
             return Ok();
         }
     }
