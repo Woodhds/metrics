@@ -6,6 +6,7 @@ using metrics.Options;
 using System.Text;
 using Base.Abstractions;
 using Base.Contracts.Options;
+using metrics.Broker;
 using metrics.logging;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
@@ -112,6 +113,10 @@ namespace metrics
             });
 
             services.AddLogging(c => c.AddMetricsLogging(Configuration));
+
+            services.AddMessageBroker(Configuration, g =>
+            {
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

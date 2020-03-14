@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using metrics.Broker.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,19 +9,24 @@ namespace metrics.Broker
     public class MessageHandlerProvider : IMessageHandlerProvider
     {
         private readonly IServiceCollection _serviceCollection;
+        private readonly Dictionary<Type, Type> _types = new Dictionary<Type, Type>();
         public MessageHandlerProvider(IServiceCollection serviceCollection)
         {
             _serviceCollection = serviceCollection;
         }
 
-        public void Register<T>() where T : class, IMessageHandler<T>
+        public void Register<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class
         {
-            _serviceCollection.AddSingleton<T>();
+            _serviceCollection.AddSingleton<IMessageHandler<TEvent>, THandler>();
+            if (!_types.ContainsKey(typeof(TEvent)))
+            {
+                _types.Add(typeof(TEvent), typeof(THandler));
+            }
         }
 
-        public IEnumerable<IMessageHandler> GetAll()
+        public IEnumerable<(Type, Type)> GetTypes()
         {
-            return _serviceCollection.Where(f => typeof(IMessageHandler<>).IsAssignableFrom(f.ImplementationType)).Cast<IMessageHandler>();
+            return _types.Select(f => (f.Key, f.Value));
         }
     }
 }
