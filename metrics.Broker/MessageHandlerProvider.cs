@@ -17,7 +17,7 @@ namespace metrics.Broker
 
         public void Register<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class
         {
-            _serviceCollection.AddSingleton<IMessageHandler<TEvent>, THandler>();
+            _serviceCollection.AddScoped<IMessageHandler<TEvent>, THandler>();
             if (!_types.ContainsKey(typeof(TEvent)))
             {
                 _types.Add(typeof(TEvent), typeof(THandler));
