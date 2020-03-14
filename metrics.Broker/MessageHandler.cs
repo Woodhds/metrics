@@ -15,7 +15,7 @@ namespace metrics.Broker
 
         public Task Consume(ConsumeContext<T> context)
         {
-            return _handler.HandleAsync(context.Message);
+            return _handler.HandleAsync(context.Message, context.CancellationToken);
         }
     }
 }

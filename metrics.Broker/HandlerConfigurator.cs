@@ -16,11 +16,10 @@ namespace metrics.Broker
             _serviceProvider = serviceProvider;
         }
 
-        public void Configure<TEvent, THandler>() where TEvent : class where THandler : IMessageHandler<TEvent>
+        public void Configure<TEvent>() where TEvent : class
         {
-            var consumer = new MessageHandler<TEvent>(_serviceProvider.GetService<THandler>());
-            
-            _configurator.Consumer(consumer.GetType(), _ => consumer);
+            _configurator.Consumer(typeof(MessageHandler<TEvent>),
+                _ => new MessageHandler<TEvent>(_serviceProvider.GetService<IMessageHandler<TEvent>>()));
         }
     }
 }

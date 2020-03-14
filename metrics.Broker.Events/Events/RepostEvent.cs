@@ -2,6 +2,6 @@
 {
     public class RepostEvent
     {
-        
+        public int Id { get; set; }
     }
 }

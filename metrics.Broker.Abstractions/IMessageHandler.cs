@@ -3,11 +3,7 @@ using System.Threading.Tasks;
 
 namespace metrics.Broker.Abstractions
 {
-    public interface IMessageHandler
-    {
-    }
-    
-    public interface IMessageHandler<in T> : IMessageHandler where T : class
+    public interface IMessageHandler<in T> where T : class
     {
         Task HandleAsync(T obj, CancellationToken token = default);
     }

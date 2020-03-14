@@ -38,10 +38,10 @@ namespace metrics.Broker
             {
                 var handlerConfigurator = new HandlerConfigurator(configurator, serviceProvider);
                 
-                foreach (var (tEvent, tHandler) in hp.GetTypes())
+                foreach (var (tEvent, _) in hp.GetTypes())
                 {
                     var method = typeof(HandlerConfigurator).GetMethod(nameof(HandlerConfigurator.Configure))
-                        ?.MakeGenericMethod(tEvent, tHandler);
+                        ?.MakeGenericMethod(tEvent);
                     method?.Invoke(handlerConfigurator, null);
                 }
             });

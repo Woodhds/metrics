@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Cache", "metrics.Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Events", "metrics.Broker.Events\metrics.Broker.Events.csproj", "{FA2490B0-91F8-49D6-8802-432656D78C94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Console", "metrics.Broker.Console\metrics.Broker.Console.csproj", "{C70246F0-9B3D-4C54-A071-0091824CCE0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{FA2490B0-91F8-49D6-8802-432656D78C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA2490B0-91F8-49D6-8802-432656D78C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA2490B0-91F8-49D6-8802-432656D78C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70246F0-9B3D-4C54-A071-0091824CCE0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70246F0-9B3D-4C54-A071-0091824CCE0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70246F0-9B3D-4C54-A071-0091824CCE0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70246F0-9B3D-4C54-A071-0091824CCE0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

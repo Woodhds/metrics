@@ -14,7 +14,7 @@ namespace metrics.Broker
             _bus = bus;
         }
 
-        public Task PublishAsync<T>(T obj, CancellationToken token = default) where T : class, IMessageHandler<T>
+        public Task PublishAsync<T>(T obj, CancellationToken token = default) where T : class
         {
             return _bus.Publish(obj, token);
         }

@@ -2,8 +2,6 @@
 {
     public interface IHandlerConfigurator
     {
-        void Configure<TEvent, THandler>() 
-            where TEvent : class 
-            where THandler : IMessageHandler<TEvent>;
+        void Configure<TEvent>() where TEvent : class;
     }
 }
