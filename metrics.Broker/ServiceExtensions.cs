@@ -32,7 +32,7 @@ namespace metrics.Broker
             var hp = new MessageHandlerProvider(serviceCollection);
 
             handlerProvider?.Invoke(hp);
-            var serviceProvider = serviceCollection.BuildServiceProvider(true);
+            var serviceProvider = serviceCollection.BuildServiceProvider();
 
             bus.ConnectReceiveEndpoint(options.Queue, configurator =>
             {

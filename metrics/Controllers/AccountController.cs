@@ -5,8 +5,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
+using metrics.Broker.Abstractions;
+using metrics.Broker.Events.Events;
 using metrics.Models;
 using metrics.Options;
 using metrics.Services.Abstractions;
@@ -28,12 +31,18 @@ namespace metrics.Controllers
         private readonly HttpClient _httpClient;
         private readonly IVkClient _vkClient;
         private readonly JwtOptions _jwtOptions;
+        private readonly IMessageBroker _messageBroker;
 
-        public AccountController(IHttpClientFactory httpClientFactory, IVkClient vkClient,
-            IOptions<JwtOptions> jwtOptions)
+        public AccountController(
+            IHttpClientFactory httpClientFactory,
+            IVkClient vkClient,
+            IOptions<JwtOptions> jwtOptions,
+            IMessageBroker messageBroker
+        )
         {
             _httpClient = httpClientFactory.CreateClient();
             _vkClient = vkClient;
+            _messageBroker = messageBroker;
             _jwtOptions = jwtOptions.Value;
         }
 
@@ -46,7 +55,8 @@ namespace metrics.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult> Login([FromBody] LoginModel model)
+        public async Task<ActionResult> Login([FromBody] LoginModel model,
+            CancellationToken cancellationToken = default)
         {
             var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString(
                 VkontakteOptions.UserInformationEndpoint, new Dictionary<string, string>
@@ -54,7 +64,7 @@ namespace metrics.Controllers
                     ["v"] = Constants.ApiVersion,
                     ["access_token"] = model.Token,
                     ["fields"] = string.Join(",", new List<string> {"first_name", "last_name", "photo_50"})
-                }));
+                }), cancellationToken);
 
             if (!response.IsSuccessStatusCode)
                 return Ok();
@@ -62,10 +72,16 @@ namespace metrics.Controllers
             var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
             if (payload.TryGetValue("error", out var error))
             {
-                ModelState.AddModelError("", error.Value<string>());
+                return BadRequest(error);
             }
 
             var id = payload["response"].First["id"]?.ToString();
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("id not valid");
+            }
+
             var name = $"{payload["response"].First["first_name"]} {payload["response"].First["last_name"]}";
             var avatar = payload["response"].First["photo_50"].ToString();
 
@@ -86,6 +102,14 @@ namespace metrics.Controllers
                 DateTime.Now.AddDays(14),
                 signInCredentials
             );
+
+            await _messageBroker.PublishAsync(new LoginEvent
+                {
+                    Token = model.Token, 
+                    UserId = int.Parse(id)
+                },
+                cancellationToken);
+            
             return Ok(new
             {
                 Id = id,

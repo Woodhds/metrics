@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using MassTransit;
 using metrics.Broker.Abstractions;
 
@@ -8,7 +9,7 @@ namespace metrics.Broker
     {
         private readonly IMessageHandler<T> _handler;
 
-        public MessageHandler(IMessageHandler<T> handler)
+        public MessageHandler([NotNull]IMessageHandler<T> handler)
         {
             _handler = handler;
         }

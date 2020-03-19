@@ -19,15 +19,18 @@ namespace metrics.Services.Concrete
         private readonly IVkTokenAccessor _vkTokenAccessor;
         private readonly VkApiUrls _urls;
 
-        public VkClient(IHttpClientFactory httpClientFactory,
-            IVkTokenAccessor vkTokenAccessor, IOptions<VkApiUrls> options,
-            ILogger<BaseHttpClient> logger) : base(httpClientFactory, logger)
+        public VkClient(
+            IHttpClientFactory httpClientFactory,
+            IVkTokenAccessor vkTokenAccessor,
+            IOptions<VkApiUrls> options,
+            ILogger<BaseHttpClient> logger
+        ) : base(httpClientFactory, logger)
         {
             _vkTokenAccessor = vkTokenAccessor;
             _urls = options.Value;
         }
 
-        private NameValueCollection AddVkParams(NameValueCollection @params)
+        private async Task<NameValueCollection> AddVkParams(NameValueCollection @params, int? userId = null)
         {
             if (@params == null)
             {
@@ -35,23 +38,23 @@ namespace metrics.Services.Concrete
             }
 
             @params.Add("v", Constants.ApiVersion);
-            @params.Add("access_token", _vkTokenAccessor.GetToken());
+            @params.Add("access_token", await _vkTokenAccessor.GetTokenAsync(userId));
 
             return @params;
         }
 
-        private Task<T> GetVkAsync<T>(string method, NameValueCollection @params = null)
+        private async Task<T> GetVkAsync<T>(string method, NameValueCollection @params = null, int? userId = null)
         {
-            @params = AddVkParams(@params);
+            @params = await AddVkParams(@params);
             var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
-            return base.GetAsync<T>(url, @params);
+            return await base.GetAsync<T>(url, @params);
         }
 
-        private Task<T> PostVkAsync<T>(string method, object content, NameValueCollection @params = null)
+        private async Task PostVkAsync<T>(string method, object content, NameValueCollection @params = null, int? userId = null)
         {
-            @params = AddVkParams(@params);
+            @params = await AddVkParams(@params, userId);
             var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
-            return base.PostAsync<T>(url, content, @params);
+            await base.PostAsync<T>(url, content, @params);
         }
 
         public async Task<VkResponse<List<VkMessage>>> GetReposts(string id, int page, int take, string search = null)
@@ -84,26 +87,26 @@ namespace metrics.Services.Concrete
                 .Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.Owner_Id}
                 )
             );
-            
+
             if (result.Response == null)
                 result.Response = new VkResponse<List<VkMessage>>.VkResponseItems();
-            
+
             result.Response.Count = count;
             return result;
         }
 
-        public async Task JoinGroup(int groupId, int timeout = 0)
+        public async Task JoinGroup(int groupId, int timeout, int? userId = null)
         {
             var @params = new NameValueCollection
             {
                 {"group_id", groupId.ToString()}
             };
 
-            await GetVkAsync<SimpleVkResponse<bool>>(_urls.GroupJoin, @params);
+            await GetVkAsync<SimpleVkResponse<bool>>(_urls.GroupJoin, @params, userId);
             await Task.Delay(timeout * 1000);
         }
 
-        public async Task Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0)
+        public async Task Repost(List<VkRepostViewModel> vkRepostViewModels, int timeout = 0, int? userId = null)
         {
             if (vkRepostViewModels == null)
                 throw new ArgumentNullException(nameof(vkRepostViewModels));
@@ -115,7 +118,7 @@ namespace metrics.Services.Concrete
             {
                 try
                 {
-                    await JoinGroup(group.Id, timeout);
+                    await JoinGroup(group.Id, timeout, userId);
                 }
                 catch (Exception e)
                 {
@@ -123,15 +126,15 @@ namespace metrics.Services.Concrete
                 }
             }
 
-            for (var i = 0; i < reposts.Length; i++)
+            foreach (var t in reposts)
             {
                 try
                 {
                     var @params = new NameValueCollection
                     {
-                        {"object", $"wall{reposts[i].Owner_Id}_{reposts[i].Id}"}
+                        {"object", $"wall{t.Owner_Id}_{t.Id}"}
                     };
-                    await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params);
+                    await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params, userId);
                     await Task.Delay(timeout * 1000);
                 }
                 catch (Exception e)

@@ -6,6 +6,7 @@ namespace metrics.Data.Common.Infrastructure.Entities
     {
         public int PostId { get; set; }
         public int OwnerId { get; set; }
-        public int Token { get; set; }
+        public int UserTokenId { get; set; }
+        public UserToken UserToken { get; set; }
     }
 }

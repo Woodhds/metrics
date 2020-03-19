@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Base.Contracts.Options;
 using metrics.Services.Abstractions;
 using Microsoft.Extensions.Options;
@@ -11,9 +12,9 @@ namespace metrics.Services.Utils
         {
             _options = options;
         }
-        public string GetToken()
+        public Task<string> GetTokenAsync(int? userId = null)
         {
-            return _options?.Value?.Value ?? "";
+            return Task.FromResult(_options?.Value?.Value ?? "");
         }
     }
 }

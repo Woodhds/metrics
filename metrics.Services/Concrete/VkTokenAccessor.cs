@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using metrics.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 
@@ -14,14 +15,11 @@ namespace metrics.Services.Concrete
             _httpContextAccessor = httpContextAccessor;
         }
         
-        public string GetToken()
+        public Task<string> GetTokenAsync(int? userId = null)
         {
             var ci = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
-            if (ci == null)
-            {
-                return string.Empty;
-            }
-            return ci.Claims.FirstOrDefault(c => c.Type == Constants.VK_TOKEN_CLAIM)?.Value;
+            
+            return Task.FromResult(ci == null ? string.Empty : ci.Claims.FirstOrDefault(c => c.Type == Constants.VK_TOKEN_CLAIM)?.Value);
         }
     }
 }

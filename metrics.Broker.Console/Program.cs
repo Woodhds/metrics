@@ -1,34 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
+using metrics.Data.Abstractions;
+using metrics.Data.Common.Infrastructure.Confguraton;
+using metrics.Data.Sql;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace metrics.Broker.Console
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            var serviceCollection = new ServiceCollection();
+            CreateHostBuilder(args).Build().Run();
+        }
 
-            var configBuilder = new ConfigurationBuilder();
-            configBuilder.AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../appsettings.json"));
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder()
+                .ConfigureServices((context, serviceCollection) =>
+                {
+                    
 
-            serviceCollection.AddMessageBroker(configBuilder.Build(),
-                provider => { provider.Register<RepostEvent, RepostEventHandler>(); });
+                    serviceCollection.AddSingleton<IEntityConfigurationProvider, EntityConfigurationProvider>();
+                    serviceCollection.AddSingleton<ITransactionScopeFactory, TransactionScopeFactory>();
+                    serviceCollection.AddSingleton<IDataContextFactory, DataContextFactory>();
+                    serviceCollection.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
+                    serviceCollection.AddScoped<DbContext, DataContext>();
+                    serviceCollection.AddDbContextPool<DataContext>(x =>
+                    {
+                        x.EnableSensitiveDataLogging();
+                        x.UseNpgsql(context.Configuration.GetConnectionString("DataContext"));
+                        x.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                    });
+                    
+                    serviceCollection.AddMessageBroker(context.Configuration,
+                        provider =>
+                        {
+                            provider.Register<RepostEvent, RepostEventHandler>();
+                            provider.Register<LoginEvent, LoginEventHandler>();
+                            provider.Register<GroupJoinEvent, GroupJoinEventHandler>();
+                        });
+                });
 
-            var serviceProvider = serviceCollection.BuildServiceProvider(true);
-            var messageBroker = serviceProvider.GetService<IMessageBroker>();
+        static async Task GroupJoin(int id, int userId)
+        {
+        }
 
-            foreach (var i in Enumerable.Range(1, 100))
-            {
-                await messageBroker.PublishAsync(new RepostEvent {Id = i});
-            }
+        static async Task RepostMessage(int ownerId, int id, int userId)
+        {
         }
     }
 }

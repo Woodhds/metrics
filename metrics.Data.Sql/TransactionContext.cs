@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Data.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace metrics.Data.Sql
@@ -9,11 +10,21 @@ namespace metrics.Data.Sql
     public sealed class TransactionContext : ITransactionContext
     {
         private readonly IDbContextTransaction _dbContextTransaction;
+        private readonly DbContext _dbContext;
         private bool _disposed;
 
-        public TransactionContext(IDbContextTransaction dbContextTransaction)
+        public TransactionContext(
+            IDbContextTransaction dbContextTransaction,
+            DbContext dbContext
+        )
         {
             _dbContextTransaction = dbContextTransaction;
+            _dbContext = dbContext;
+        }
+
+        public IRepository<T> GetRepository<T>() where T : class, new()
+        {
+            return new EFRepository<T>(_dbContext);
         }
 
         public Task CommitAsync(CancellationToken cancellationToken = default)
@@ -38,6 +49,7 @@ namespace metrics.Data.Sql
 
             if (disposing)
             {
+                _dbContext?.Dispose();
                 _dbContextTransaction?.Dispose();
             }
 

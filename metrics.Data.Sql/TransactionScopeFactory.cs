@@ -15,13 +15,20 @@ namespace metrics.Data.Sql
             _dataContextFactory = dataContextFactory;
         }
 
+        public ITransactionContext Create(IsolationLevel level = IsolationLevel.ReadCommitted)
+        {
+            var context = _dataContextFactory.Create();
+            var transaction = context.Database.BeginTransaction(level);
+            return new TransactionContext(transaction, context);
+        }
+
         public async Task<ITransactionContext> CreateAsync(IsolationLevel level = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default)
         {
-            var transaction =
-                await _dataContextFactory.Create().Database.BeginTransactionAsync(level, cancellationToken);
-            
-            return new TransactionContext(transaction);
+            var context = _dataContextFactory.Create();
+            var transaction = await context.Database.BeginTransactionAsync(level, cancellationToken);
+
+            return new TransactionContext(transaction, context);
         }
     }
 }

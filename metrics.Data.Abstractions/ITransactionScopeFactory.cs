@@ -6,6 +6,7 @@ namespace metrics.Data.Abstractions
 {
     public interface ITransactionScopeFactory
     {
+        ITransactionContext Create(IsolationLevel level = IsolationLevel.ReadCommitted);
         Task<ITransactionContext> CreateAsync(
             IsolationLevel level = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default

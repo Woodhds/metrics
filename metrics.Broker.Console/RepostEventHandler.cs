@@ -9,7 +9,6 @@ namespace metrics.Broker.Console
     {
         public Task HandleAsync(RepostEvent obj, CancellationToken token = default)
         {
-            System.Console.WriteLine($"Handler triggered {obj.Id}");
             return Task.CompletedTask;
         }
     }

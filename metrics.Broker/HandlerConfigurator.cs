@@ -18,8 +18,9 @@ namespace metrics.Broker
 
         public void Configure<TEvent>() where TEvent : class
         {
+            var createFactory = new MessageHandler<TEvent>(_serviceProvider.GetService<IMessageHandler<TEvent>>());
             _configurator.Consumer(typeof(MessageHandler<TEvent>),
-                _ => new MessageHandler<TEvent>(_serviceProvider.GetService<IMessageHandler<TEvent>>()));
+                _ => createFactory);
         }
     }
 }
