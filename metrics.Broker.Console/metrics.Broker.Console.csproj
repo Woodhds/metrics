@@ -20,6 +20,7 @@
       <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Data.Common\metrics.Data.Common.csproj" />
       <ProjectReference Include="..\metrics.Services.Abstractions\metrics.Services.Abstractions.csproj" />
+      <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
     </ItemGroup>
 
 </Project>

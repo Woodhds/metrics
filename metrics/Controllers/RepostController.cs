@@ -1,11 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
+using metrics.Broker.Abstractions;
+using metrics.Broker.Events.Events;
+using metrics.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using metrics.Services.Abstractions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace metrics.Controllers
 {
@@ -16,11 +23,22 @@ namespace metrics.Controllers
         private readonly IVkClient _vkClient;
         private readonly IVkMessageService _vkMessageService;
         private readonly ILogger<RepostController> _logger;
-        public RepostController(IVkClient vkClient, ILogger<RepostController> logger, IVkMessageService vkMessageService)
+        private readonly IMessageBroker _messageBroker;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public RepostController(
+            IVkClient vkClient,
+            ILogger<RepostController> logger,
+            IVkMessageService vkMessageService,
+            IMessageBroker messageBroker,
+            IHttpContextAccessor httpContextAccessor
+        )
         {
             _vkClient = vkClient;
             _logger = logger;
             _vkMessageService = vkMessageService;
+            _messageBroker = messageBroker;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize(Policy = "VkPolicy")]
@@ -41,11 +59,16 @@ namespace metrics.Controllers
 
         [Authorize(Policy = "VkPolicy")]
         [HttpPost("repost")]
-        public IActionResult Repost([FromBody]List<VkRepostViewModel> reposts, int timeout = 0)
+        public async Task<IActionResult> Repost(CancellationToken ct, [FromBody] List<VkRepostViewModel> reposts)
         {
             try
             {
-                _vkClient.Repost(reposts, timeout);
+                await _messageBroker.PublishAsync(new RepostGroupCreatedEvent
+                {
+                    Reposts = reposts,
+                    UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId()
+                }, ct);
+
                 return Ok(true);
             }
             catch (Exception e)

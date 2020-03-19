@@ -5,7 +5,7 @@ using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using metrics.Services.Abstractions;
 
-namespace metrics.Hangfire
+namespace metrics.Broker.Console
 {
     public class CacheTokenAccessor : IVkTokenAccessor
     {
