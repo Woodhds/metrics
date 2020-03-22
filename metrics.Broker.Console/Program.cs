@@ -29,7 +29,7 @@ namespace metrics.Broker.Console
                     serviceCollection.AddSingleton<IVkClient, VkClient>();
                     serviceCollection.Configure<VkApiUrls>(context.Configuration.GetSection(nameof(VkApiUrls)));
                     serviceCollection.AddHttpClient();
-                    serviceCollection.AddCaching();
+                    serviceCollection.AddCaching(context.Configuration);
                     serviceCollection.AddSingleton<IBaseHttpClient, BaseHttpClient>();
                     serviceCollection.AddSingleton<IVkTokenAccessor, CacheTokenAccessor>();
                     serviceCollection.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
