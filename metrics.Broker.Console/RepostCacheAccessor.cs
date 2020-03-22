@@ -1,41 +1,62 @@
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Base.Contracts;
+using metrics.Cache.Abstractions;
 
 namespace metrics.Broker.Console
 {
     public interface IRepostCacheAccessor
     {
-        IEnumerable<(int userId, VkRepostViewModel repost)> Get();
-        void Set(int userId, IEnumerable<VkRepostViewModel> models);
+        Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync();
+        Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models);
     }
 
     public class RepostCacheAccessor : IRepostCacheAccessor
     {
-        private readonly ConcurrentDictionary<int, List<VkRepostViewModel>> _cache =
-            new ConcurrentDictionary<int, List<VkRepostViewModel>>();
+        private readonly ICachingService _cache;
 
-        public IEnumerable<(int userId, VkRepostViewModel repost)> Get()
+        public RepostCacheAccessor(ICachingService cachingService)
         {
-            var obj = _cache.Keys.Select(key =>
-            (
-                key,
-                _cache[key].FirstOrDefault()
-            )).ToList();
-
-            obj.ForEach(z => { _cache[z.key].Remove(z.Item2); });
-
-            return obj;
+            _cache = cachingService;
         }
 
-        public void Set(int userId, IEnumerable<VkRepostViewModel> models)
+        public async Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync()
         {
-            _cache.AddOrUpdate(
-                userId,
-                key => models.ToList(),
-                (i, tuple) => tuple.Concat(models).Distinct().ToList()
-            );
+            var keys = await _cache.GetAsync<List<int>>("queue");
+
+            var obj = new List<(int key, List<VkRepostViewModel>)>();
+            foreach (var key in keys)
+            {
+                obj.Add((key, await _cache.GetAsync<List<VkRepostViewModel>>(key.ToString())));
+            }
+            
+            var result = new List<(int userId, VkRepostViewModel)>();
+            
+            obj.ForEach(async z =>
+            {
+                var item = z.Item2.FirstOrDefault();
+                if (item != null)
+                    z.Item2.Remove(item);
+                
+                result.Add((z.key, item));
+                await _cache.SetAsync(z.key.ToString(), z.Item2);
+            });
+
+            return result;
+        }
+
+        public async Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models)
+        {
+            var list = await _cache.GetAsync<List<VkRepostViewModel>>(userId.ToString());
+            var users = await _cache.GetAsync<List<int>>("queue");
+            users?.Add(userId);
+            await _cache.SetAsync("queue", users != null ? users.Distinct() : new[] {userId});
+
+            await _cache.SetAsync(userId.ToString(),
+                list != null
+                    ? list.Concat(models).Distinct()
+                    : models);
         }
     }
 }

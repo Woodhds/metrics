@@ -22,7 +22,7 @@ namespace metrics.Broker.Console
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var reposts = _repostCacheAccessor.Get();
+                var reposts = await _repostCacheAccessor.GetAsync();
                 foreach (var repost in reposts)
                 {
                     if (repost.repost != null)

@@ -16,7 +16,7 @@ namespace metrics.Broker.Console
 
         public Task HandleAsync(RepostGroupCreatedEvent obj, CancellationToken token = default)
         {
-            _repostCacheAccessor.Set(obj.UserId, obj.Reposts);
+            _repostCacheAccessor.SetAsync(obj.UserId, obj.Reposts);
             return Task.CompletedTask;
         }
     }

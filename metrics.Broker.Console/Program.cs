@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using metrics.Broker.Events.Events;
+using metrics.Cache;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
@@ -26,6 +27,7 @@ namespace metrics.Broker.Console
                     serviceCollection.AddHostedService<RepostHostedService>();
                     serviceCollection.AddSingleton<IVkClient, VkClient>();
                     serviceCollection.AddHttpClient();
+                    serviceCollection.AddCaching();
                     serviceCollection.AddSingleton<IBaseHttpClient, BaseHttpClient>();
                     serviceCollection.AddSingleton<IVkTokenAccessor, CacheTokenAccessor>();
                     serviceCollection.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
