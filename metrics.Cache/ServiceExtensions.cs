@@ -1,5 +1,6 @@
 ﻿using metrics.Cache.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace metrics.Cache
 {
@@ -9,7 +10,7 @@ namespace metrics.Cache
         {
             serviceCollection.AddStackExchangeRedisCache(x =>
             {
-                x.Configuration = "localhost";
+                x.ConfigurationOptions = ConfigurationOptions.Parse("192.168.99.100:30379,password=password");
                 x.InstanceName = "RepostInstance";
             });
 

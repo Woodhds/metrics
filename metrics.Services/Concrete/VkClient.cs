@@ -45,7 +45,7 @@ namespace metrics.Services.Concrete
 
         private async Task<T> GetVkAsync<T>(string method, NameValueCollection @params = null, int? userId = null)
         {
-            @params = await AddVkParams(@params);
+            @params = await AddVkParams(@params, userId);
             var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
             return await base.GetAsync<T>(url, @params);
         }
@@ -112,7 +112,7 @@ namespace metrics.Services.Concrete
                 throw new ArgumentNullException(nameof(vkRepostViewModels));
             vkRepostViewModels = vkRepostViewModels.Distinct().ToList();
 
-            var posts = await GetById(vkRepostViewModels);
+            var posts = await GetById(vkRepostViewModels, userId);
             var reposts = posts.Response.Items.Where(c => c.Reposts != null).ToArray();
             foreach (var group in posts.Response.Groups.Where(c => !c.Is_member))
             {
@@ -155,7 +155,7 @@ namespace metrics.Services.Concrete
             return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(_urls.UserInfo, @params);
         }
 
-        public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels)
+        public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels, int? userId = null)
         {
             if (vkRepostViewModels == null)
             {
@@ -168,7 +168,7 @@ namespace metrics.Services.Concrete
                 {"extended", 1.ToString()},
                 {"fields", "is_member"}
             };
-            return GetVkAsync<VkResponse<List<VkMessage>>>(_urls.WallGetById, @params);
+            return GetVkAsync<VkResponse<List<VkMessage>>>(_urls.WallGetById, @params, userId);
         }
 
         public Task<VkResponse<List<VkGroup>>> GetGroups(int count, int offset)

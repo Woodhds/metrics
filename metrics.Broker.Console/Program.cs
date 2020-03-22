@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Base.Contracts.Options;
+using Microsoft.Extensions.DependencyInjection;
 using metrics.Broker.Events.Events;
 using metrics.Cache;
 using metrics.Data.Abstractions;
@@ -26,6 +27,7 @@ namespace metrics.Broker.Console
                 {
                     serviceCollection.AddHostedService<RepostHostedService>();
                     serviceCollection.AddSingleton<IVkClient, VkClient>();
+                    serviceCollection.Configure<VkApiUrls>(context.Configuration.GetSection(nameof(VkApiUrls)));
                     serviceCollection.AddHttpClient();
                     serviceCollection.AddCaching();
                     serviceCollection.AddSingleton<IBaseHttpClient, BaseHttpClient>();
