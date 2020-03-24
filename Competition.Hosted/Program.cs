@@ -1,15 +1,12 @@
 ﻿using System;
 using Base.Contracts.Options;
+using metrics.Broker;
 using metrics.logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
 using NLog.Web;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Competition.Hosted
 {
@@ -52,6 +49,7 @@ namespace Competition.Hosted
                     services.Configure<CompetitionOptions>(
                         context.Configuration.GetSection(nameof(CompetitionOptions)));
                     services.AddHostedService<CompetitionService>();
+                    services.AddMessageBroker(context.Configuration);
                 })
                 .UseNLog();
     }

@@ -19,6 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Base.Contracts\Base.Contracts.csproj" />
     <ProjectReference Include="..\Elastic\Elastic.csproj" />
+    <ProjectReference Include="..\metrics.Broker.Abstractions\metrics.Broker.Abstractions.csproj" />
+    <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
     <ProjectReference Include="..\metrics.Services.Abstractions\metrics.Services.Abstractions.csproj" />
     <ProjectReference Include="..\metrics.Services.Utils\metrics.Services.Utils.csproj" />
   </ItemGroup>

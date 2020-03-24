@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Base.Contracts;
 using Base.Contracts.Options;
+using metrics.Broker.Abstractions;
+using metrics.Broker.Events.Events;
 using metrics.Services.Abstractions;
 using metrics.Services.Utils;
 
@@ -18,15 +20,18 @@ namespace metrics.Services.Concrete
     {
         private readonly IVkTokenAccessor _vkTokenAccessor;
         private readonly VkApiUrls _urls;
+        private readonly IMessageBroker _messageBroker;
 
         public VkClient(
             IHttpClientFactory httpClientFactory,
             IVkTokenAccessor vkTokenAccessor,
             IOptions<VkApiUrls> options,
-            ILogger<BaseHttpClient> logger
-        ) : base(httpClientFactory, logger)
+            ILogger<BaseHttpClient> logger, 
+            IMessageBroker messageBroker
+            ) : base(httpClientFactory, logger)
         {
             _vkTokenAccessor = vkTokenAccessor;
+            _messageBroker = messageBroker;
             _urls = options.Value;
         }
 
@@ -135,6 +140,12 @@ namespace metrics.Services.Concrete
                         {"object", $"wall{t.Owner_Id}_{t.Id}"}
                     };
                     await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params, userId);
+                    await _messageBroker.PublishAsync(new RepostedEvent
+                    {
+                        Id = t.Id,
+                        OwnerId = t.Owner_Id,
+                        UserId = userId ?? default
+                    });
                     await Task.Delay(timeout * 1000);
                 }
                 catch (Exception e)

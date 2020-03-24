@@ -49,16 +49,8 @@ namespace metrics.Broker.Console
                 }
 
                 var item = z.Item2.FirstOrDefault();
-                if (item != null)
-                    z.Item2.Remove(item);
 
                 result.Add((z.key, item));
-                if (z.Item2.Count > 0)
-                    await _cache.SetAsync(z.key.ToString(), z.Item2);
-                else
-                {
-                    await RemoveKey(z.key);
-                }
             });
 
             return result;

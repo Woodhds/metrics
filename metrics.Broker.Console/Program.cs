@@ -50,7 +50,7 @@ namespace metrics.Broker.Console
                         {
                             provider.Register<RepostGroupCreatedEvent, RepostEventGroupCreatedHandler>();
                             provider.Register<LoginEvent, LoginEventHandler>();
-                            provider.Register<GroupJoinEvent, GroupJoinEventHandler>();
+                            provider.Register<RepostedEvent, RepostedEventHandler>();
                         });
                 });
     }
