@@ -85,7 +85,7 @@ namespace metrics
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<IVkTokenAccessor, VkTokenAccessor>();
-            services.Configure<VkontakteOptions>(Configuration.GetSection("Vkontakte"));
+            services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.Configure<VkApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.Configure<ElasticOptions>(Configuration.GetSection("ElasticOptions"));
             services.AddSingleton<IVkClient, VkClient>();
@@ -108,7 +108,10 @@ namespace metrics
             {
                 options.AddPolicy(CorsPolicy, z =>
                 {
-                    z.WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                    z.WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
 

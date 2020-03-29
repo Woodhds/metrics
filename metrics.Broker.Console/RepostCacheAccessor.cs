@@ -23,7 +23,7 @@ namespace metrics.Broker.Console
 
         public async Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync()
         {
-            var keys = await _cache.GetAsync<List<int>>("queue");
+            var keys = await _cache.GetAsync<HashSet<int>>("queue");
 
             var obj = new List<(int key, List<VkRepostViewModel>)>();
             foreach (var key in keys)
@@ -59,7 +59,7 @@ namespace metrics.Broker.Console
         public async Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models)
         {
             var list = await _cache.GetAsync<List<VkRepostViewModel>>(userId.ToString());
-            var users = await _cache.GetAsync<List<int>>("queue");
+            var users = await _cache.GetAsync<HashSet<int>>("queue");
             users?.Add(userId);
             await _cache.SetAsync("queue", users != null ? users.Distinct() : new[] {userId});
 

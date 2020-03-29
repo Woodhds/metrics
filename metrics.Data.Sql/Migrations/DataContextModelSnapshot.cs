@@ -18,59 +18,6 @@ namespace metrics.Data.Sql.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("metrics.Data.Common.Infrastructure.Entities.JoinGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("UserTokenId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserTokenId");
-
-                    b.ToTable("JoinGroup");
-                });
-
-            modelBuilder.Entity("metrics.Data.Common.Infrastructure.Entities.Repost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("UserTokenId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserTokenId");
-
-                    b.ToTable("Repost");
-                });
-
             modelBuilder.Entity("metrics.Data.Common.Infrastructure.Entities.UserToken", b =>
                 {
                     b.Property<int>("UserId")
@@ -82,24 +29,6 @@ namespace metrics.Data.Sql.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("UserToken");
-                });
-
-            modelBuilder.Entity("metrics.Data.Common.Infrastructure.Entities.JoinGroup", b =>
-                {
-                    b.HasOne("metrics.Data.Common.Infrastructure.Entities.UserToken", "UserToken")
-                        .WithMany()
-                        .HasForeignKey("UserTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("metrics.Data.Common.Infrastructure.Entities.Repost", b =>
-                {
-                    b.HasOne("metrics.Data.Common.Infrastructure.Entities.UserToken", "UserToken")
-                        .WithMany()
-                        .HasForeignKey("UserTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

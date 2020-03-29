@@ -8,8 +8,6 @@ namespace metrics.Data.Common.Infrastructure.Confguraton
     {
         public void Configure(ModelBuilder builder)
         {
-            builder.Entity<JoinGroup>().HasOne(z => z.UserToken);
-            builder.Entity<Repost>().HasOne(z => z.UserToken);
             builder.Entity<UserToken>().HasKey(g => g.UserId);
         }
     }
