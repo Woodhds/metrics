@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
+using metrics.Services.Concrete;
 
 namespace metrics.Broker.Console
 {

@@ -13,10 +13,12 @@ namespace metrics.Broker.Console
     public class RepostedEventHandler : IMessageHandler<RepostedEvent>
     {
         private readonly ICachingService _cachingService;
+        private readonly IMessageBroker _messageBroker;
 
-        public RepostedEventHandler(ICachingService cachingService)
+        public RepostedEventHandler(ICachingService cachingService, IMessageBroker messageBroker)
         {
             _cachingService = cachingService;
+            _messageBroker = messageBroker;
         }
 
         public async Task HandleAsync([NotNull] RepostedEvent obj, CancellationToken token = default)
@@ -46,6 +48,8 @@ namespace metrics.Broker.Console
             {
                 await _cachingService.SetAsync(obj.UserId.ToString(), list, token);
             }
+
+            await _messageBroker.PublishAsync(new RepostEndEvent {UserId = obj.UserId}, token);
         }
     }
 }

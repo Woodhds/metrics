@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Services.Abstractions;
+using metrics.Services.Concrete;
 using Microsoft.Extensions.Hosting;
 
 namespace metrics.Broker.Console

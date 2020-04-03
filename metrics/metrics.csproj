@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
     <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
+    <ProjectReference Include="..\metrics.Cache\metrics.Cache.csproj" />
     <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />
     <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
   </ItemGroup>

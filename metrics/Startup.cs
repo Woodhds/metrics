@@ -7,6 +7,9 @@ using System.Text;
 using Base.Abstractions;
 using Base.Contracts.Options;
 using metrics.Broker;
+using metrics.Broker.Events.Events;
+using metrics.Cache;
+using metrics.Handlers;
 using metrics.logging;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
@@ -92,6 +95,8 @@ namespace metrics
             services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
             services.AddSingleton<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
+            services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
+            services.AddCaching(Configuration);
 
             services.Configure<IISServerOptions>(options =>
             {
@@ -119,6 +124,7 @@ namespace metrics
 
             services.AddMessageBroker(Configuration, g =>
             {
+                g.Register<RepostEndEvent, RepostEndEventHandler>();
             });
         }
 

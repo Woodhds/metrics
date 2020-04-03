@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Cache.Abstractions;
 
-namespace metrics.Broker.Console
+namespace metrics.Services.Concrete
 {
     public interface IRepostCacheAccessor
     {
         Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync();
         Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models);
+
+        ValueTask<int> GetCountAsync(int userId);
     }
 
     public class RepostCacheAccessor : IRepostCacheAccessor
@@ -67,6 +69,11 @@ namespace metrics.Broker.Console
                 list != null
                     ? list.Concat(models).Distinct()
                     : models);
+        }
+
+        public async ValueTask<int> GetCountAsync(int userId)
+        {
+            return (await _cache.GetAsync<List<VkRepostViewModel>>(userId.ToString()))?.Count ?? 0;
         }
     }
 }

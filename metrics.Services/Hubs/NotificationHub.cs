@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using metrics.Services.Abstractions;
+using metrics.Services.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -8,24 +8,24 @@ namespace metrics.Services.Hubs
     [Authorize(Policy = "VkPolicy")]
     public class NotificationHub : Hub
     {
-        private IEventStorage _eventStorage;
+        private readonly IRepostCacheAccessor _repostCacheAccessor;
 
-        public NotificationHub(IEventStorage eventStorage)
+        public NotificationHub(IRepostCacheAccessor repostCacheAccessor)
         {
-            _eventStorage = eventStorage;
+            _repostCacheAccessor = repostCacheAccessor;
         }
 
         [HubMethodName("currentCount")]
-        public void CurrentCount()
+        public async Task CurrentCount()
         {
-            Clients.User(Context.UserIdentifier)
-                .SendAsync("Count", _eventStorage.GetCurrentCount(Context.UserIdentifier));
+            await Clients.User(Context.UserIdentifier)
+                .SendAsync("Count", await _repostCacheAccessor.GetCountAsync(int.Parse(Context.UserIdentifier)));
         }
 
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
-            CurrentCount();
-            return base.OnConnectedAsync();
+            await base.OnConnectedAsync();
+            await CurrentCount();
         }
     }
 }
