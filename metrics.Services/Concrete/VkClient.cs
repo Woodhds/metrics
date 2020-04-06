@@ -130,7 +130,7 @@ namespace metrics.Services.Concrete
                     Logger.LogError(e, e.Message);
                 }
             }
-
+            
             foreach (var t in reposts)
             {
                 try
@@ -152,6 +152,17 @@ namespace metrics.Services.Concrete
                 {
                     Logger.LogError(e, e.Message);
                 }
+            }
+
+            foreach (var x in vkRepostViewModels.Select(f => $"{f.Id}+{f.Owner_Id}")
+                .Except(reposts.Select(f => $"{f.Id}+{f.Owner_Id}")))
+            {
+                await _messageBroker.PublishAsync(new RepostedEvent
+                {
+                    Id = Convert.ToInt32(x.Split('+')[0]),
+                    OwnerId = Convert.ToInt32(x.Split('+')[1]),
+                    UserId = userId ?? default
+                });
             }
         }
 

@@ -18,7 +18,7 @@ namespace metrics.Services.Hubs
         [HubMethodName("currentCount")]
         public async Task CurrentCount()
         {
-            await Clients.User(Context.UserIdentifier)
+            await Clients.Client(Context.UserIdentifier)
                 .SendAsync("Count", await _repostCacheAccessor.GetCountAsync(int.Parse(Context.UserIdentifier)));
         }
 

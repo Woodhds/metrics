@@ -19,10 +19,10 @@ namespace metrics.Handlers
             _repostCacheAccessor = repostCacheAccessor;
         }
 
-        public Task HandleAsync(RepostEndEvent obj, CancellationToken token = default)
+        public async Task HandleAsync(RepostEndEvent obj, CancellationToken token = default)
         {
-            return _hubContext.Clients.User(obj.UserId.ToString())
-                .SendAsync("Count", _repostCacheAccessor.GetCountAsync(obj.UserId), token);
+            await _hubContext.Clients.User(obj.UserId.ToString())
+                .SendAsync("count", await _repostCacheAccessor.GetCountAsync(obj.UserId), token);
         }
     }
 }

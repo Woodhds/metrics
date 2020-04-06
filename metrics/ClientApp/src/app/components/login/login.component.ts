@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { User } from "src/app/models/User";
 import { IAuthService } from "src/app/services/abstract/IAuth";
 import * as signalR from "@microsoft/signalr";
@@ -8,8 +8,9 @@ import * as signalR from "@microsoft/signalr";
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   count: Number = 0;
+  hub: signalR.HubConnection = null;
 
   constructor(private authService: IAuthService) {}
 
@@ -18,11 +19,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.authService.currentUserObs.subscribe(d => {
       this.user = d;
-    });
 
-    if (this.isAuthenticated) {
       const self = this;
-      const hub = new signalR.HubConnectionBuilder()
+      this.hub = new signalR.HubConnectionBuilder()
         .withUrl("/notifications", {
           accessTokenFactory(): string | Promise<string> {
             return self.user.Token;
@@ -30,15 +29,15 @@ export class LoginComponent implements OnInit {
         })
         .build();
 
-      hub.on("Сount", (args: Number) => {
-        console.log(args);
+      this.hub.on("Count", (args: Number) => {
+        console.log("Receive", args);
         self.count = args;
       });
 
-      hub.start().catch(reason => {
-        console.log(reason);
+      this.hub.start().catch(reason => {
+        console.log("Error", reason);
       });
-    }
+    });
   }
 
   public get isAuthenticated(): Boolean {
@@ -47,5 +46,13 @@ export class LoginComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  ngOnDestroy(): void {
+    if (this.hub) {
+      this.hub.stop().catch(f => {
+        console.log(f);
+      });
+    }
   }
 }

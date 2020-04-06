@@ -36,10 +36,11 @@ namespace metrics.Services.Concrete
         public async Task<List<VkMessage>> Fetch(int page = 1)
         {
             var client = _httpClientFactory.CreateClient();
-            try
+
+            var data = new List<VkRepostViewModel>();
+            for (var i = (page - 1) * Take; i < (page - 1) * Take + Take; i++)
             {
-                var data = new List<VkRepostViewModel>();
-                for (var i = (page - 1) * Take; i < (page - 1) * Take + Take; i++)
+                try
                 {
                     var formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
                     {
@@ -63,15 +64,13 @@ namespace metrics.Services.Concrete
 
                     data.AddRange(models);
                 }
-
-                return (await _vkClient.GetById(data))?.Response.Items;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("ERROR Parsing", e.Message);
+                catch (Exception e)
+                {
+                    _logger.LogError("ERROR Parsing", e.Message);
+                }
             }
 
-            return default;
+            return (await _vkClient.GetById(data))?.Response.Items;
         }
     }
 }
