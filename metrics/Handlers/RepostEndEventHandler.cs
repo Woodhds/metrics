@@ -21,8 +21,8 @@ namespace metrics.Handlers
 
         public async Task HandleAsync(RepostEndEvent obj, CancellationToken token = default)
         {
-            await _hubContext.Clients.User(obj.UserId.ToString())
-                .SendAsync("count", await _repostCacheAccessor.GetCountAsync(obj.UserId), token);
+            await _hubContext.Clients.Group(obj.UserId.ToString())
+                .SendAsync("Count", await _repostCacheAccessor.GetCountAsync(obj.UserId), token);
         }
     }
 }

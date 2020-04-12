@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         .build();
 
       this.hub.on("Count", (args: Number) => {
-        console.log("Receive", args);
         self.count = args;
       });
 

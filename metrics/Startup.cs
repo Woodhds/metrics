@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
 using System.Text;
+using System.Threading.Tasks;
 using Base.Abstractions;
 using Base.Contracts.Options;
 using metrics.Broker;
@@ -75,6 +76,18 @@ namespace metrics
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
                         ValidIssuer = jwtOptions.Issuer,
                         ValidAudience = jwtOptions.Audience
+                    };
+                    opts.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            if (context.Request.Query.ContainsKey("access_token"))
+                            {
+                                context.Token = context.Request.Query["access_token"];
+                            }
+                            
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
