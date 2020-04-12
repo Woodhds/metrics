@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using metrics.Services.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Broker.Console
 {
@@ -17,23 +18,23 @@ namespace metrics.Broker.Console
             _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task<string> GetTokenAsync(int? userId = null)
+        public Task<string> GetTokenAsync(int? userId = null)
         {
             if (!userId.HasValue)
             {
-                return string.Empty;
+                return Task.FromResult(string.Empty);
             }
 
-            return _tokens.GetOrAdd(userId.Value, _ =>
+            return Task.FromResult(_tokens.GetOrAdd(userId.Value, _ =>
             {
                 using var scope = _transactionScopeFactory.Create();
-                
+
                 return scope.GetRepository<UserToken>()
                     .Read()
                     .Where(f => f.UserId == userId.Value)
                     .Select(f => f.Token)
                     .FirstOrDefault();
-            });
+            }));
         }
     }
 }

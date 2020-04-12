@@ -19,9 +19,9 @@ namespace metrics.Cache
             return await JsonSerializer.DeserializeAsync<T>(ms, cancellationToken: cancellationToken);
         }
 
-        public async Task<byte[]> SerializeAsync<T>(T value, CancellationToken cancellationToken = default)
+        public Task<byte[]> SerializeAsync<T>(T value, CancellationToken cancellationToken = default)
         {
-            return JsonSerializer.SerializeToUtf8Bytes(value);
+            return Task.FromResult(JsonSerializer.SerializeToUtf8Bytes(value));
         }
     }
 }

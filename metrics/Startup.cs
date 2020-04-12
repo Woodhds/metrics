@@ -12,9 +12,9 @@ using metrics.Broker.Events.Events;
 using metrics.Cache;
 using metrics.Handlers;
 using metrics.logging;
+using metrics.Notification.SignalR.Extensions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
-using metrics.Services.Hubs;
 using metrics.Services.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -95,7 +95,7 @@ namespace metrics
             {
                 z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
             });
-            services.AddSignalR();
+            services.AddMetricsSignalR("192.168.99.100:30379,password=password");
 
             services.AddHttpClient();
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
@@ -165,7 +165,7 @@ namespace metrics
             {
                 endpoints.MapControllers();
 
-                endpoints.MapHub<NotificationHub>("/notifications").RequireAuthorization("VkPolicy");
+                endpoints.AddMetricsSignalR();
             });
 
             app.UseCors(CorsPolicy);

@@ -1,10 +1,9 @@
-using System;
 using System.Threading.Tasks;
 using metrics.Services.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace metrics.Services.Hubs
+namespace metrics.Notification.SignalR.Hubs
 {
     [Authorize(Policy = "VkPolicy")]
     public class NotificationHub : Hub
@@ -25,15 +24,8 @@ namespace metrics.Services.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
             await base.OnConnectedAsync();
             await CurrentCount();
-        }
-
-        public override async Task OnDisconnectedAsync(Exception exception)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.UserIdentifier);
-            await base.OnDisconnectedAsync(exception);
         }
     }
 }
