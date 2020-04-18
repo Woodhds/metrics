@@ -1,45 +1,45 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics", "metrics\metrics.csproj", "{5B466D45-EEA8-4F2A-A5FA-0693C8466B4F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Services", "metrics.Services\metrics.Services.csproj", "{6625EB64-77B5-4FD7-8C78-4BCBB69FB394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Competition.Hosted", "Competition.Hosted\Competition.Hosted.csproj", "{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competition.Hosted", "Competition.Hosted\Competition.Hosted.csproj", "{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elastic", "Elastic\Elastic.csproj", "{B842060E-EB09-475F-B410-C205C9BA63E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elastic", "Elastic\Elastic.csproj", "{B842060E-EB09-475F-B410-C205C9BA63E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts", "Base.Contracts\Base.Contracts.csproj", "{1BAD446C-794D-4A4E-BF70-465C09CFE5B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Base.Contracts", "Base.Contracts\Base.Contracts.csproj", "{1BAD446C-794D-4A4E-BF70-465C09CFE5B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elastic.Tests", "Elastic.Tests\Elastic.Tests.csproj", "{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elastic.Tests", "Elastic.Tests\Elastic.Tests.csproj", "{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Competition.ML", "Competition.ML\Competition.ML.csproj", "{49608AE8-B3A8-431D-922F-8C28369741DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competition.ML", "Competition.ML\Competition.ML.csproj", "{49608AE8-B3A8-431D-922F-8C28369741DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Services.Abstractions", "metrics.Services.Abstractions\metrics.Services.Abstractions.csproj", "{D4DEF438-6331-4B59-AD24-D19989FD164B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Services.Abstractions", "metrics.Services.Abstractions\metrics.Services.Abstractions.csproj", "{D4DEF438-6331-4B59-AD24-D19989FD164B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Services.Utils", "metrics.Services.Utils\metrics.Services.Utils.csproj", "{4686CCD8-D5C5-40CE-8D86-2A276F1DE7A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Services.Utils", "metrics.Services.Utils\metrics.Services.Utils.csproj", "{4686CCD8-D5C5-40CE-8D86-2A276F1DE7A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.logging", "metrics.logging\metrics.logging.csproj", "{ED161055-86F3-496F-A3A4-F7945144C5AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.logging", "metrics.logging\metrics.logging.csproj", "{ED161055-86F3-496F-A3A4-F7945144C5AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker", "metrics.Broker\metrics.Broker.csproj", "{E16F5D5E-4C27-41FD-ACDB-7CF3900FB980}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Broker", "metrics.Broker\metrics.Broker.csproj", "{E16F5D5E-4C27-41FD-ACDB-7CF3900FB980}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Data.Abstractions", "metrics.Data.Abstractions\metrics.Data.Abstractions.csproj", "{BC451379-6C7C-4449-B717-FC8195727B40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Data.Abstractions", "metrics.Data.Abstractions\metrics.Data.Abstractions.csproj", "{BC451379-6C7C-4449-B717-FC8195727B40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Data.Sql", "metrics.Data.Sql\metrics.Data.Sql.csproj", "{9945736E-3F00-48F7-8645-7582E35FDF27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Data.Sql", "metrics.Data.Sql\metrics.Data.Sql.csproj", "{9945736E-3F00-48F7-8645-7582E35FDF27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Data.Common", "metrics.Data.Common\metrics.Data.Common.csproj", "{EB8EC417-E7E9-4C00-A675-4D4F6F4EF23C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Data.Common", "metrics.Data.Common\metrics.Data.Common.csproj", "{EB8EC417-E7E9-4C00-A675-4D4F6F4EF23C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Abstractions", "metrics.Broker.Abstractions\metrics.Broker.Abstractions.csproj", "{364D7D75-1AA6-47DC-9781-9485FF0889CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Broker.Abstractions", "metrics.Broker.Abstractions\metrics.Broker.Abstractions.csproj", "{364D7D75-1AA6-47DC-9781-9485FF0889CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Cache.Abstractions", "metrics.Cache.Abstractions\metrics.Cache.Abstractions.csproj", "{E5B34812-E498-48DC-9D7E-259C1AAC6FEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Cache.Abstractions", "metrics.Cache.Abstractions\metrics.Cache.Abstractions.csproj", "{E5B34812-E498-48DC-9D7E-259C1AAC6FEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Cache", "metrics.Cache\metrics.Cache.csproj", "{5C9AC51C-668E-4EFE-97D0-F20F6AE72AF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Cache", "metrics.Cache\metrics.Cache.csproj", "{5C9AC51C-668E-4EFE-97D0-F20F6AE72AF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Events", "metrics.Broker.Events\metrics.Broker.Events.csproj", "{FA2490B0-91F8-49D6-8802-432656D78C94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Broker.Events", "metrics.Broker.Events\metrics.Broker.Events.csproj", "{FA2490B0-91F8-49D6-8802-432656D78C94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Console", "metrics.Broker.Console\metrics.Broker.Console.csproj", "{C70246F0-9B3D-4C54-A071-0091824CCE0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Broker.Console", "metrics.Broker.Console\metrics.Broker.Console.csproj", "{C70246F0-9B3D-4C54-A071-0091824CCE0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cache", "Cache", "{7D56D237-4F93-4B69-865F-F006DB319044}"
 EndProject
@@ -51,7 +51,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Competition", "Competition"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{F0090F2D-79B1-4853-A078-01EB73CCA642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Notification.SignalR", "metrics.Notification.SignalR\metrics.Notification.SignalR.csproj", "{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Notification.SignalR", "metrics.Notification.SignalR\metrics.Notification.SignalR.csproj", "{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,26 +141,30 @@ Global
 		{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1B9B1AA4-B7E9-4A7C-B1D5-7F683FA9B1D0}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7} = {F38705D3-C1A8-4D91-AAA6-251618BBBB83}
-		{49608AE8-B3A8-431D-922F-8C28369741DD} = {F38705D3-C1A8-4D91-AAA6-251618BBBB83}
 		{B842060E-EB09-475F-B410-C205C9BA63E1} = {DF9F6B9B-F666-456D-A89E-CB2BB8014F44}
 		{18F0AFB2-ECF8-479C-A1A7-3B415C67D27D} = {DF9F6B9B-F666-456D-A89E-CB2BB8014F44}
+		{49608AE8-B3A8-431D-922F-8C28369741DD} = {F38705D3-C1A8-4D91-AAA6-251618BBBB83}
 		{E16F5D5E-4C27-41FD-ACDB-7CF3900FB980} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
-		{364D7D75-1AA6-47DC-9781-9485FF0889CF} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
-		{C70246F0-9B3D-4C54-A071-0091824CCE0F} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
-		{FA2490B0-91F8-49D6-8802-432656D78C94} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
 		{BC451379-6C7C-4449-B717-FC8195727B40} = {F0090F2D-79B1-4853-A078-01EB73CCA642}
-		{5C9AC51C-668E-4EFE-97D0-F20F6AE72AF0} = {7D56D237-4F93-4B69-865F-F006DB319044}
-		{E5B34812-E498-48DC-9D7E-259C1AAC6FEC} = {7D56D237-4F93-4B69-865F-F006DB319044}
-		{EB8EC417-E7E9-4C00-A675-4D4F6F4EF23C} = {F0090F2D-79B1-4853-A078-01EB73CCA642}
 		{9945736E-3F00-48F7-8645-7582E35FDF27} = {F0090F2D-79B1-4853-A078-01EB73CCA642}
+		{EB8EC417-E7E9-4C00-A675-4D4F6F4EF23C} = {F0090F2D-79B1-4853-A078-01EB73CCA642}
+		{364D7D75-1AA6-47DC-9781-9485FF0889CF} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
+		{E5B34812-E498-48DC-9D7E-259C1AAC6FEC} = {7D56D237-4F93-4B69-865F-F006DB319044}
+		{5C9AC51C-668E-4EFE-97D0-F20F6AE72AF0} = {7D56D237-4F93-4B69-865F-F006DB319044}
+		{FA2490B0-91F8-49D6-8802-432656D78C94} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
+		{C70246F0-9B3D-4C54-A071-0091824CCE0F} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B9B1AA4-B7E9-4A7C-B1D5-7F683FA9B1D0}
 	EndGlobalSection
 EndGlobal
