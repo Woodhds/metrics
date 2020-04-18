@@ -28,14 +28,9 @@ namespace Competition.Hosted
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(builder =>
-                {
-                    builder.AddJsonFile("appsettings.json", true, true);
-                })
                 .ConfigureWebHostDefaults(builder =>
                 {
                     builder.UseStartup<Startup>();
-                    builder.UseUrls("http://localhost:5274", "https://localhost:5275");
                 })
                 .ConfigureLogging((context, builder) =>
                 {

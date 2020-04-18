@@ -95,7 +95,11 @@ namespace metrics
             {
                 z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
             });
-            services.AddMetricsSignalR("192.168.99.100:30379,password=password");
+
+            var signalROptions = new SignalROptions();
+            Configuration.GetSection(nameof(SignalROptions)).Bind(signalROptions);
+
+            services.AddMetricsSignalR(signalROptions.Host);
 
             services.AddHttpClient();
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
@@ -117,16 +121,11 @@ namespace metrics
             });
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
 
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
-
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicy, z =>
                 {
-                    z.WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001")
+                    z.WithOrigins("http://localhost:4200")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();
@@ -151,7 +150,6 @@ namespace metrics
             {
                 app.UseHsts();
                 app.UseHttpsRedirection();
-                app.UseSpaStaticFiles();
             }
 
             app.UseAuthentication();
@@ -169,15 +167,6 @@ namespace metrics
             });
 
             app.UseCors(CorsPolicy);
-            
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-                if (env.IsDevelopment())
-                {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                }
-            });
         }
     }
 }

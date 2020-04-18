@@ -53,7 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{F0090F2D-79B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Notification.SignalR", "metrics.Notification.SignalR\metrics.Notification.SignalR.csproj", "{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{691773A8-BCC8-4FF5-AEED-A12D32684672}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,10 +141,6 @@ Global
 		{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDD3FDF3-7BB1-4857-B8C6-CF064F8AC579}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C45A95BE-BFF6-4F59-BA6C-66C0827C8558}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
