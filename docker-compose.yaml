@@ -40,49 +40,53 @@ services:
         ports:
             - "6379:6379"
     
-    broker-console:
-        container_name: broker-console
-        build:
-            context: .
-            dockerfile: metrics.Broker.Console/Dockerfile
-        environment: 
-            ASPNETCORE_ENVIRONMENT: Development
-        depends_on: 
-            - postgres
-            - redis
-            - rabbitmq
-        networks: 
-            - metrics
+    # broker-console:
+    #     container_name: broker-console
+    #     build:
+    #         context: .
+    #         dockerfile: metrics.Broker.Console/Dockerfile
+    #     env_file: 
+    #         - docker-compose.env
+    #     environment: 
+    #         DOTNET_ENVIRONMENT: Development
+    #     depends_on: 
+    #         - postgres
+    #         - redis
+    #         - rabbitmq
+    #     networks: 
+    #         - metrics
 
-    competition-hosted:
-        container_name: competition-hosted
-        build:
-            context: .
-            dockerfile: Competition.Hosted/Dockerfile
-        environment: 
-            ASPNETCORE_ENVIRONMENT: Development
-        networks: 
-            - metrics
-        depends_on: 
-            - elasticsearch
-            - rabbitmq
+    # competition-hosted:
+    #     container_name: competition-hosted
+    #     build:
+    #         context: .
+    #         dockerfile: Competition.Hosted/Dockerfile
+    #     environment: 
+    #         DOTNET_ENVIRONMENT: Development
+    #     env_file: 
+    #         - docker-compose.env
+    #     networks: 
+    #         - metrics
+    #     depends_on: 
+    #         - elasticsearch
+    #         - rabbitmq
 
-    metrics-web:
-        container_name: metrics-webapi
-        build: 
-            context: .
-            dockerfile: metrics/Dockerfile
-        env_file: 
-             - docker-compose.env
-        networks: 
-            - metrics
-        ports: 
-            - "1745:1745"
-            - "1746:1746"
-        depends_on: 
-            - broker-console
-        volumes: 
-            - certs:/https/
+    # metrics-web:
+    #     container_name: metrics-webapi
+    #     build: 
+    #         context: .
+    #         dockerfile: metrics/Dockerfile
+    #     env_file: 
+    #          - docker-compose.env
+    #     networks: 
+    #         - metrics
+    #     ports: 
+    #         - "1745:1745"
+    #         - "1746:1746"
+    #     depends_on: 
+    #         - broker-console
+    #     volumes: 
+    #         - certs:/https/
 
 networks: 
     metrics:

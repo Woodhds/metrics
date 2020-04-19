@@ -21,6 +21,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { IAppConfigService } from "./services/abstract/IAppConfigService";
 import { AppConfigService } from "./services/concrete/AppConfig/AppConfigService";
 import { AuthenticatedGuard } from "./helpers/authenticated.guard";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { CorsInterceptor } from "./http-interceptors/cors-interceptor";
 
 @NgModule({
   declarations: [
@@ -47,7 +49,8 @@ import { AuthenticatedGuard } from "./helpers/authenticated.guard";
   providers: [
     { provide: IAuthService, useClass: AuthService },
     { provide: IAppConfigService, useClass: AppConfigService },
-    AuthenticatedGuard
+    AuthenticatedGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

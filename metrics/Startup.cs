@@ -159,14 +159,13 @@ namespace metrics
 
             app.UseAuthorization();
 
+            app.UseCors(CorsPolicy);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
 
                 endpoints.AddMetricsSignalR();
             });
-
-            app.UseCors(CorsPolicy);
         }
     }
 }

@@ -14,7 +14,7 @@ RUN dotnet publish ./metrics.Broker.Console/metrics.Broker.Console.csproj --no-r
 
 # Create docker image from published project
 # ------------------------------------------
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 
 WORKDIR /app
 

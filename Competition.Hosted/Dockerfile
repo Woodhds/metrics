@@ -14,7 +14,7 @@ RUN dotnet publish ./Competition.Hosted/Competition.Hosted.csproj --no-restore -
 
 # Create docker image from published project
 # ------------------------------------------
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 
 WORKDIR /app
 

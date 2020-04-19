@@ -14,7 +14,6 @@ namespace metrics
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://localhost:1745", "https://localhost:1746");
                     webBuilder.UseStartup<Startup>();
                 });
     }
