@@ -1,18 +1,20 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { User } from "src/app/models/User";
-import { IAuthService } from "src/app/services/abstract/IAuth";
-import * as signalR from "@microsoft/signalr";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {User} from 'src/app/models/User';
+import {IAuthService} from 'src/app/services/abstract/IAuth';
+import * as signalR from '@microsoft/signalr';
+import {environment} from '../../../environments/environment';
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
   count: Number = 0;
   hub: signalR.HubConnection = null;
 
-  constructor(private authService: IAuthService) {}
+  constructor(private authService: IAuthService) {
+  }
 
   public user: User = null;
 
@@ -22,19 +24,19 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       const self = this;
       this.hub = new signalR.HubConnectionBuilder()
-        .withUrl("/notifications", {
+        .withUrl(`${environment.baseUrl}/notifications`, {
           accessTokenFactory(): string | Promise<string> {
             return self.user.Token;
           }
         })
         .build();
 
-      this.hub.on("Count", (args: Number) => {
+      this.hub.on('Count', (args: Number) => {
         self.count = args;
       });
 
       this.hub.start().catch(reason => {
-        console.log("Error", reason);
+        console.log('Error', reason);
       });
     });
   }
