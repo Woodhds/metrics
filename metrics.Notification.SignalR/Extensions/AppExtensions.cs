@@ -6,9 +6,9 @@ namespace metrics.Notification.SignalR.Extensions
 {
     public static class AppExtensions
     {
-        public static IEndpointRouteBuilder AddMetricsSignalR(this IEndpointRouteBuilder builder)
+        public static IEndpointRouteBuilder AddMetricsSignalR(this IEndpointRouteBuilder builder, string corsPolicy)
         {
-            builder.MapHub<NotificationHub>("/notifications");
+            builder.MapHub<NotificationHub>("/notifications").RequireCors(corsPolicy);
             return builder;
         }
     }

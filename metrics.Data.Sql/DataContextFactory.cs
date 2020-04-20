@@ -12,7 +12,7 @@ namespace metrics.Data.Sql
             _options = options;
         }
 
-        public DbContext Create()
+        public DataContext Create()
         {
             return new DataContext(_options);
         }

@@ -164,7 +164,7 @@ namespace metrics
             {
                 endpoints.MapControllers();
 
-                endpoints.AddMetricsSignalR();
+                endpoints.AddMetricsSignalR(CorsPolicy);
             });
         }
     }
