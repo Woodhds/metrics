@@ -9,7 +9,10 @@ using Base.Abstractions;
 using Base.Contracts.Options;
 using metrics.Broker;
 using metrics.Broker.Events.Events;
-using metrics.Cache;
+using metrics.Data.Abstractions;
+using metrics.Data.Common.Infrastructure.Confguraton;
+using metrics.Data.Sql;
+using metrics.Data.Sql.Extensions;
 using metrics.Handlers;
 using metrics.logging;
 using metrics.Notification.SignalR.Extensions;
@@ -19,6 +22,7 @@ using metrics.Services.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
@@ -38,16 +42,37 @@ namespace metrics
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvcCore()
+                .AddCors(options =>
+                {
+                    options.AddPolicy(CorsPolicy, z =>
+                    {
+                        z.WithOrigins("http://localhost:4200")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+                })
+                .AddAuthorization(z =>
+                {
+                    z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
+                })
+                .AddNewtonsoftJson(opts =>
+                {
+                    opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                });
+            services.AddControllers();
+            services.AddHttpContextAccessor();
+            services.AddHttpClient();
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            services.AddHttpContextAccessor();
-            services.AddControllers().AddNewtonsoftJson(opts =>
-            {
-                opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
             var jwtOptions = new JwtOptions();
@@ -91,17 +116,11 @@ namespace metrics
                     };
                 });
 
-            services.AddAuthorization(z =>
-            {
-                z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
-            });
-
             var signalROptions = new SignalROptions();
             Configuration.GetSection(nameof(SignalROptions)).Bind(signalROptions);
 
             services.AddMetricsSignalR(signalROptions.Host);
-
-            services.AddHttpClient();
+            
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<IVkTokenAccessor, VkTokenAccessor>();
@@ -113,24 +132,10 @@ namespace metrics
             services.AddSingleton<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
-            services.AddCaching(Configuration);
+            services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
+            services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
 
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy(CorsPolicy, z =>
-                {
-                    z.WithOrigins("http://localhost:4200")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
-                });
-            });
 
             services.AddLogging(c => c.AddMetricsLogging(Configuration));
 
@@ -156,10 +161,9 @@ namespace metrics
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseCors(CorsPolicy);
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -1,24 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Base.Contracts;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
-using metrics.Cache.Abstractions;
+using metrics.Data.Abstractions;
+using metrics.Data.Common.Infrastructure.Entities;
 
 namespace metrics.Broker.Console
 {
     public class RepostedEventHandler : IMessageHandler<RepostedEvent>
     {
-        private readonly ICachingService _cachingService;
         private readonly IMessageBroker _messageBroker;
+        private readonly ITransactionScopeFactory _transactionScopeFactory;
 
-        public RepostedEventHandler(ICachingService cachingService, IMessageBroker messageBroker)
+        public RepostedEventHandler(IMessageBroker messageBroker, ITransactionScopeFactory transactionScopeFactory)
         {
-            _cachingService = cachingService;
             _messageBroker = messageBroker;
+            _transactionScopeFactory = transactionScopeFactory;
         }
 
         public async Task HandleAsync([NotNull] RepostedEvent obj, CancellationToken token = default)
@@ -26,30 +25,25 @@ namespace metrics.Broker.Console
             if (obj.UserId == default)
                 return;
 
-            var list = await _cachingService.GetAsync<List<VkRepostViewModel>>(obj.UserId.ToString(), token);
-            if (list == null || list.Count == 0)
+            using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: token);
+            
+            var message = scope.GetRepository<VkRepost>()
+                .Read()
+                .FirstOrDefault(q =>
+                    q.UserId == obj.UserId && obj.OwnerId == q.OwnerId && q.Status == VkRepostStatus.Pending &&
+                    q.MessageId == obj.Id);
+
+            if (message == null)
             {
                 return;
             }
 
-            var message = list.FirstOrDefault(z => z.Owner_Id == obj.OwnerId && z.Id == obj.Id);
-            if (message != null)
-            {
-                list.Remove(message);
-            }
+            message.Status = VkRepostStatus.Complete;
 
-            if (list.Count == 0)
-            {
-                await _cachingService.RemoveAsync(obj.UserId.ToString(), token);
-                var queue = await _cachingService.GetAsync<List<int>>("queue", token);
-                await _cachingService.SetAsync("queue", queue.Where(f => f != obj.UserId), token);
-            }
-            else
-            {
-                await _cachingService.SetAsync(obj.UserId.ToString(), list, token);
-            }
+            await scope.GetRepository<VkRepost>().UpdateAsync(message);
 
             await _messageBroker.PublishAsync(new RepostEndEvent {UserId = obj.UserId}, token);
+            await scope.CommitAsync(token);
         }
     }
 }

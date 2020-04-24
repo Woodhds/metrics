@@ -17,7 +17,6 @@
     <ItemGroup>
       <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
       <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
-      <ProjectReference Include="..\metrics.Cache\metrics.Cache.csproj" />
       <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Data.Common\metrics.Data.Common.csproj" />
       <ProjectReference Include="..\metrics.Services.Abstractions\metrics.Services.Abstractions.csproj" />

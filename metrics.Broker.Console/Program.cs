@@ -1,7 +1,6 @@
 ﻿using Base.Contracts.Options;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Broker.Events.Events;
-using metrics.Cache;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
@@ -29,7 +28,6 @@ namespace metrics.Broker.Console
                     serviceCollection.AddSingleton<IVkClient, VkClient>();
                     serviceCollection.Configure<VkApiUrls>(context.Configuration.GetSection(nameof(VkApiUrls)));
                     serviceCollection.AddHttpClient();
-                    serviceCollection.AddCaching(context.Configuration);
                     serviceCollection.AddSingleton<IBaseHttpClient, BaseHttpClient>();
                     serviceCollection.AddSingleton<IVkTokenAccessor, CacheTokenAccessor>();
                     serviceCollection.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();

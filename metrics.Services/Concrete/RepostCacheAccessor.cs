@@ -1,14 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
-using metrics.Cache.Abstractions;
+using metrics.Data.Abstractions;
+using metrics.Data.Common.Infrastructure.Entities;
 
 namespace metrics.Services.Concrete
 {
     public interface IRepostCacheAccessor
     {
-        Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync();
+        Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync(
+            CancellationToken cancellationToken = default);
+
         Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models);
 
         ValueTask<int> GetCountAsync(int userId);
@@ -16,64 +20,87 @@ namespace metrics.Services.Concrete
 
     public class RepostCacheAccessor : IRepostCacheAccessor
     {
-        private readonly ICachingService _cache;
+        private readonly ITransactionScopeFactory _transactionScopeFactory;
 
-        public RepostCacheAccessor(ICachingService cachingService)
+        public RepostCacheAccessor(ITransactionScopeFactory transactionScopeFactory)
         {
-            _cache = cachingService;
+            _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync()
+        public async Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync(
+            CancellationToken cancellationToken = default)
         {
-            var keys = await _cache.GetAsync<HashSet<int>>("queue");
+            using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: cancellationToken);
 
-            var obj = new List<(int key, List<VkRepostViewModel>)>();
-            foreach (var key in keys)
-            {
-                obj.Add((key, await _cache.GetAsync<List<VkRepostViewModel>>(key.ToString())));
-            }
-            
-            var result = new List<(int userId, VkRepostViewModel)>();
-
-            async Task RemoveKey(int key)
-            {
-                await _cache.RemoveAsync(key.ToString());
-                keys.Remove(key);
-                await _cache.SetAsync("queue", keys);
-            }
-            
-            obj.ForEach(async z =>
-            {
-                if (z.Item2 == null)
+            var list = scope.GetRepository<VkRepost>().Read().Where(f => f.Status == VkRepostStatus.New)
+                .AsEnumerable()
+                .GroupBy(q => new {q.Id, q.UserId})
+                .Select(q => new
                 {
-                    await RemoveKey(z.key);
-                    return;
-                }
+                    q.Key.UserId,
+                    Repost = q.FirstOrDefault(),
+                    q.Key.Id
+                })
+                .Where(f => f.Repost != null)
+                .ToList();
 
-                var item = z.Item2.FirstOrDefault();
+            foreach (var entity in list)
+            {
+                entity.Repost.Status = VkRepostStatus.Pending;
+                await scope.GetRepository<VkRepost>().UpdateAsync(entity.Repost);
+            }
 
-                result.Add((z.key, item));
-            });
+            await scope.CommitAsync(cancellationToken);
 
-            return result;
+            return list.Select(q => (q.UserId,
+                q.Repost != null
+                    ? new VkRepostViewModel {Id = q.Repost.MessageId, Owner_Id = q.Repost.OwnerId}
+                    : null));
         }
 
         public async Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models)
         {
-            var list = await _cache.GetAsync<List<VkRepostViewModel>>(userId.ToString());
-            var users = await _cache.GetAsync<HashSet<int>>("queue");
-            users?.Add(userId);
-            await _cache.SetAsync("queue", users != null ? users.Distinct() : new[] {userId});
+            using var scope = await _transactionScopeFactory.CreateAsync();
 
-            await _cache.SetAsync(userId.ToString(),
-                list != null
-                    ? list.Concat(models).Distinct()
-                    : models);
+            var obj = models.Select(f => new
+            {
+                f.Id,
+                f.Owner_Id,
+                Key = f.Id + "_" + f.Owner_Id
+            });
+            var keys = obj.Select(f => f.Key);
+
+            var alreadyCreate = scope.GetRepository<VkRepost>().Read()
+                .Where(f => f.UserId == userId &&
+                            (f.Status == VkRepostStatus.New || f.Status == VkRepostStatus.Pending))
+                .Select(f => new
+                {
+                    f.MessageId,
+                    f.OwnerId,
+                    key = f.MessageId.ToString() + "_" + f.OwnerId.ToString()
+                })
+                .Where(f => keys.Contains(f.key))
+                .ToList();
+
+            var toCreate = obj.Select(f => f.Key).Except(alreadyCreate.Select(f => f.key));
+            foreach (var create in obj.Where(f => toCreate.Contains(f.Key)))
+            {
+                await scope.GetRepository<VkRepost>().CreateAsync(new VkRepost
+                {
+                    Status = VkRepostStatus.New,
+                    MessageId = create.Id,
+                    OwnerId = create.Owner_Id,
+                    UserId = userId
+                });
+            }
+
+            await scope.CommitAsync();
         }
 
         public async ValueTask<int> GetCountAsync(int userId)
         {
-            return (await _cache.GetAsync<List<VkRepostViewModel>>(userId.ToString()))?.Count ?? 0;
+            return (await _transactionScopeFactory.CreateAsync()).GetRepository<VkRepost>().Read()
+                .Count(f => f.UserId == userId && (f.Status == VkRepostStatus.New || f.Status == VkRepostStatus.Pending));
         }
     }
 }

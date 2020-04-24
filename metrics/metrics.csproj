@@ -18,10 +18,17 @@
   <ItemGroup>
     <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
     <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
-    <ProjectReference Include="..\metrics.Cache\metrics.Cache.csproj" />
     <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />
     <ProjectReference Include="..\metrics.Notification.SignalR\metrics.Notification.SignalR.csproj" />
     <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Production.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

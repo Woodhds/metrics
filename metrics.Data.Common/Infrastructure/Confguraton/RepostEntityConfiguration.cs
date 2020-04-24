@@ -9,6 +9,8 @@ namespace metrics.Data.Common.Infrastructure.Confguraton
         public void Configure(ModelBuilder builder)
         {
             builder.Entity<UserToken>().HasKey(g => g.UserId);
+
+            builder.Entity<VkRepost>().HasKey(q => q.Id);
         }
     }
 }

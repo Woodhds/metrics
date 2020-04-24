@@ -24,11 +24,15 @@ namespace metrics.Broker.Console
             while (!stoppingToken.IsCancellationRequested)
             {
                 var reposts = await _repostCacheAccessor.GetAsync();
-                foreach (var repost in reposts)
+                if (reposts != null)
                 {
-                    if (repost.repost != null)
+
+                    foreach (var repost in reposts)
                     {
-                        await _vkClient.Repost(new List<VkRepostViewModel> {repost.repost}, 1, repost.userId);
+                        if (repost.repost != null)
+                        {
+                            await _vkClient.Repost(new List<VkRepostViewModel> {repost.repost}, 1, repost.userId);
+                        }
                     }
                 }
 
