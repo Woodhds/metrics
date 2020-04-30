@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -32,14 +33,13 @@ namespace metrics.Services.Concrete
         {
             using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: cancellationToken);
 
-            var list = scope.GetRepository<VkRepost>().Read().Where(f => f.Status == VkRepostStatus.New)
+            var list = scope.GetRepository<VkRepost>().Read().Where(f => f.Status == VkRepostStatus.Pending || f.Status == VkRepostStatus.New)
                 .AsEnumerable()
-                .GroupBy(q => new {q.Id, q.UserId})
+                .GroupBy(q => new {q.UserId, q.MessageId, q.OwnerId})
                 .Select(q => new
                 {
                     q.Key.UserId,
                     Repost = q.FirstOrDefault(),
-                    q.Key.Id
                 })
                 .Where(f => f.Repost != null)
                 .ToList();
@@ -47,6 +47,7 @@ namespace metrics.Services.Concrete
             foreach (var entity in list)
             {
                 entity.Repost.Status = VkRepostStatus.Pending;
+                entity.Repost.DateStatus = DateTime.Now;
                 await scope.GetRepository<VkRepost>().UpdateAsync(entity.Repost);
             }
 
@@ -89,6 +90,7 @@ namespace metrics.Services.Concrete
                 {
                     Status = VkRepostStatus.New,
                     MessageId = create.Id,
+                    DateStatus = DateTime.Now,
                     OwnerId = create.Owner_Id,
                     UserId = userId
                 });

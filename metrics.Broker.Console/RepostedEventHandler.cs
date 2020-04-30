@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,12 +27,15 @@ namespace metrics.Broker.Console
                 return;
 
             using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: token);
-            
+
             var message = scope.GetRepository<VkRepost>()
                 .Read()
                 .FirstOrDefault(q =>
-                    q.UserId == obj.UserId && obj.OwnerId == q.OwnerId && q.Status == VkRepostStatus.Pending &&
-                    q.MessageId == obj.Id);
+                    q.UserId == obj.UserId && 
+                    obj.OwnerId == q.OwnerId && 
+                    q.Status == VkRepostStatus.Pending &&
+                    q.MessageId == obj.Id
+                );
 
             if (message == null)
             {
@@ -39,6 +43,7 @@ namespace metrics.Broker.Console
             }
 
             message.Status = VkRepostStatus.Complete;
+            message.DateStatus = DateTime.Now;
 
             await scope.GetRepository<VkRepost>().UpdateAsync(message);
 

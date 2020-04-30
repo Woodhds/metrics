@@ -11,6 +11,12 @@ namespace metrics.Data.Common.Infrastructure.Confguraton
             builder.Entity<UserToken>().HasKey(g => g.UserId);
 
             builder.Entity<VkRepost>().HasKey(q => q.Id);
+
+            builder.Entity<MessageCategory>().HasKey(q => q.Id);
+
+            var messageBuilder = builder.Entity<MessageVk>();
+            messageBuilder.HasOne(z => z.MessageCategory);
+            messageBuilder.HasKey(q => new {q.MessageId, q.OwnerId});
         }
     }
 }

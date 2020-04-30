@@ -119,11 +119,6 @@ export class VkRepostModel {
   }
 }
 
-export class DataSourceResponse<T>{
-  Total: number;
-  Data: Array<T>;
-}
-
 export class VkLike {
   public Count: number;
   public User_Likes: boolean;

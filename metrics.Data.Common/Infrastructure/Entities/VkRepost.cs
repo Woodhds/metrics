@@ -1,17 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 
 namespace metrics.Data.Common.Infrastructure.Entities
 {
-    public class VkRepost
+    public class VkRepost : BaseEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        
         public int UserId { get; set; }
-        
         public int OwnerId { get; set; }
         public int MessageId { get; set; }
-        
         public VkRepostStatus Status { get; set; }
+        public DateTime DateStatus { get; set; }
     }
 }

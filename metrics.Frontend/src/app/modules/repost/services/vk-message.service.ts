@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {DataSourceResponse, VkMessage, VkRepostModel} from "../models/VkMessageModel";
-import {environment} from "../../../../environments/environment";
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {VkMessage, VkRepostModel} from '../models/VkMessageModel';
+import {environment} from '../../../../environments/environment';
+import {DataSourceResponse} from '../models/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root'
