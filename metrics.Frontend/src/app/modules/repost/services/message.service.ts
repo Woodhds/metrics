@@ -14,6 +14,14 @@ export class MessageService {
   }
 
   getTypes(page: number, pageSize: number): Observable<DataSourceResponse<Message>> {
-    return this.httpClient.get<DataSourceResponse<Message>>(`${environment.apiUrl}/message/types/${page}/${pageSize}`);
+    return this.httpClient.get<DataSourceResponse<Message>>(`${environment.apiUrl}/message/${page}/${pageSize}`);
+  }
+
+  save(data: Message): Observable<any> {
+    return this.httpClient.post(`${environment.apiUrl}/message`, data);
+  }
+
+  delete(id: number) {
+    return this.httpClient.delete(`${environment.apiUrl}/message/${id}`)
   }
 }

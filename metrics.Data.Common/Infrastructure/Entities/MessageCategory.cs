@@ -6,5 +6,8 @@ namespace metrics.Data.Common.Infrastructure.Entities
     {
         [MaxLength(255)]
         public string Title { get; set; }
+        
+        [MaxLength(100)]
+        public string Color { get; set; }
     }
 }
