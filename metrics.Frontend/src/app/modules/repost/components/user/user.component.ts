@@ -1,25 +1,28 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { VkUserService } from "../../services/vk-user.service";
-import { finalize } from "rxjs/operators";
-import { VkMessage, VkRepostModel } from "../../models/VkMessageModel";
-import { VkMessageService } from "../../services/vk-message.service";
-import { PageEvent } from "@angular/material/paginator";
-import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import VkUserModel from "../../models/VkUserModel";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { VkUserService } from '../../services/vk-user.service';
+import { finalize } from 'rxjs/operators';
+import { VkMessage, VkRepostModel } from '../../models/VkMessageModel';
+import { VkMessageService } from '../../services/vk-message.service';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import VkUserModel from '../../models/VkUserModel';
+import {Message} from '../../models/Message';
+import {MessageService} from "../../services/message.service";
+import {DataSourceResponse} from "../../models/DataSourceResponse";
 
 @Component({
-  selector: "app-user",
-  templateUrl: "./user.component.html",
-  styleUrls: ["./user.component.scss"]
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
   form: FormGroup;
   messages: VkMessage[] = [];
-  loading: boolean = false;
-  page: number = 0;
-  pageSize: number = 80;
-  total: number = 0;
+  loading = false;
+  page = 0;
+  pageSize = 80;
+  total = 0;
   pageSizeOptions: Array<number> = [
     20,
     40,
@@ -32,35 +35,41 @@ export class UserComponent implements OnInit {
     800,
     1000
   ];
-  timeout: number = 30;
+  timeout = 30;
   public users: VkUserModel[];
+  public categories: Message[];
 
   constructor(
     private userService: VkUserService,
     private fb: FormBuilder,
-    private vkMessageService: VkMessageService
+    private vkMessageService: VkMessageService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
-      search: "",
-      user: ""
+      search: '',
+      user: ''
     });
 
     this.userService.getUsers().subscribe(r => {
       this.users = r;
     });
+
+    this.messageService.getTypes(0, 30).subscribe((data: DataSourceResponse<Message>) => {
+      this.categories = data.Data;
+    });
   }
 
   onSubmit() {
     this.loading = true;
-    const user = this.form.get("user").value;
+    const user = this.form.get('user').value;
     this.vkMessageService
       .get(
         this.page,
         this.pageSize,
-        this.form.get("search").value,
-        user ? (<VkUserModel>user).Id.toString() : ""
+        this.form.get('search').value,
+        user ? (user as VkUserModel).Id.toString() : ''
       )
       .pipe(finalize(() => (this.loading = false)))
       .subscribe(data => {
@@ -74,7 +83,7 @@ export class UserComponent implements OnInit {
   }
 
   like(owner_id: number, id: number) {
-    let message = this.messages.find(
+    const message = this.messages.find(
       a => a.Owner_Id === owner_id && a.Id === id
     );
     if (message && !message.Likes.User_Likes) {
@@ -85,7 +94,7 @@ export class UserComponent implements OnInit {
   }
 
   repost(owner_id: number, id: number) {
-    let message = this.messages.find(
+    const message = this.messages.find(
       a => a.Owner_Id === owner_id && a.Id === id
     );
     if (message && !message.Reposts.User_reposted) {
@@ -139,11 +148,17 @@ export class UserComponent implements OnInit {
   }
 
   displayFn(user: VkUserModel): string {
-    return user ? user.FullName : "";
+    return user ? user.FullName : '';
   }
 
   clearUser(e: MouseEvent) {
     e.preventDefault();
-    this.form.controls["user"].setValue("");
+    this.form.controls.user.setValue('');
+  }
+
+  setType(id: number, ownerId: number, categoryId: number) {
+    this.messageService.setType(id, ownerId, categoryId).subscribe(() => {
+
+    })
   }
 }

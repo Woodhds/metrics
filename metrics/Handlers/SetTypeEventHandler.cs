@@ -23,11 +23,22 @@ namespace metrics.Handlers
             var message = scope.GetRepository<MessageVk>().Read()
                 .FirstOrDefault(a => a.MessageId == obj.MessageId && a.OwnerId == obj.OwnerId);
             if (message == null)
-                return;
-            
-            message.MessageCategoryId = obj.MessageCategory;
+            {
+                await scope.GetRepository<MessageVk>().CreateAsync(new MessageVk()
+                {
+                    MessageId = obj.MessageId,
+                    OwnerId = obj.OwnerId,
+                    MessageCategoryId = obj.MessageCategory
+                });
+            }
+            else
+            {
+                message.MessageCategoryId = obj.MessageCategory;
 
-            await scope.GetRepository<MessageVk>().UpdateAsync(message);
+                await scope.GetRepository<MessageVk>().UpdateAsync(message);
+            }
+
+           
             await scope.CommitAsync(token);
         }
     }

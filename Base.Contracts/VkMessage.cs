@@ -21,6 +21,7 @@ namespace Base.Contracts
         public int Identifier => (From_Id ^ Id).GetHashCode();
         [JsonIgnore]
         public int RepostedFrom { get; set; }
+        public int? MessageCategoryId { get; set; }
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>

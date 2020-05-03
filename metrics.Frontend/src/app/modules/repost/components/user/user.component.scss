@@ -2,9 +2,26 @@
   @apply flex flex-col;
 }
 
-.mat-card-title {
-  display: flex !important;
-}
+
 .mat-paginator-container {
   justify-content: center !important;
+}
+
+.mat-card {
+  .mat-slide-toggle {
+    @apply absolute;
+    right: 2rem;
+  }
+
+  .mat-card-title {
+    display: flex !important;
+  }
+
+  .mat-card-actions {
+    .message-category {
+      @apply absolute;
+      right: 2rem;
+      bottom: 0;
+    }
+  }
 }

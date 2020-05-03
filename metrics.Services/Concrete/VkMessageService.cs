@@ -1,18 +1,23 @@
 using System.Threading.Tasks;
 using Base.Abstractions;
 using Base.Contracts;
+using metrics.Data.Abstractions;
 using metrics.Services.Abstractions;
-using Nest;
 
 namespace metrics.Services.Concrete
 {
     public class VkMessageService : IVkMessageService
     {
         private readonly IElasticClientFactory _elasticClientFactory;
+        private readonly ITransactionScopeFactory _transactionScopeFactory;
 
-        public VkMessageService(IElasticClientFactory elasticClientFactory)
+        public VkMessageService(
+            IElasticClientFactory elasticClientFactory,
+            ITransactionScopeFactory transactionScopeFactory
+        )
         {
             _elasticClientFactory = elasticClientFactory;
+            _transactionScopeFactory = transactionScopeFactory;
         }
 
         public async Task<DataSourceResponseModel> GetMessages(int page = 0, int take = 50, string search = null,

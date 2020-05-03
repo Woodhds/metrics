@@ -13,6 +13,7 @@ using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
 using metrics.Data.Sql.Extensions;
+using metrics.Events;
 using metrics.Handlers;
 using metrics.logging;
 using metrics.Notification.SignalR.Extensions;
@@ -142,6 +143,7 @@ namespace metrics
             services.AddMessageBroker(Configuration, g =>
             {
                 g.Register<RepostEndEvent, RepostEndEventHandler>();
+                g.Register<SetMessageTypeEvent, SetTypeEventHandler>();
             });
         }
 

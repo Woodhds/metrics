@@ -1,5 +1,5 @@
 export class Message {
-  id: number;
+  Id: number;
   Title: string;
   Color: string;
 }

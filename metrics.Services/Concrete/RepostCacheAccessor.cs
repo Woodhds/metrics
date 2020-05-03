@@ -35,7 +35,7 @@ namespace metrics.Services.Concrete
 
             var list = scope.GetRepository<VkRepost>().Read().Where(f => f.Status == VkRepostStatus.Pending || f.Status == VkRepostStatus.New)
                 .AsEnumerable()
-                .GroupBy(q => new {q.UserId, q.MessageId, q.OwnerId})
+                .GroupBy(q => new {q.UserId})
                 .Select(q => new
                 {
                     q.Key.UserId,

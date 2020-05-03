@@ -24,4 +24,12 @@ export class MessageService {
   delete(id: number) {
     return this.httpClient.delete(`${environment.apiUrl}/message/${id}`)
   }
+
+  setType(id: number, ownerId: number, categoryId: number) {
+    return this.httpClient.post(`${environment.apiUrl}/message/type`, {
+      MessageId: id,
+      OwnerId: ownerId,
+      MessageCategory: categoryId
+    })
+  }
 }

@@ -113,6 +113,11 @@
           >
           {{ message.Reposts.Count }}
         </button>
+        <mat-form-field class="message-category">
+          <mat-select>
+            <mat-option (onSelectionChange)="setType(message.Id, message.Owner_Id, el.Id)" *ngFor="let el of categories" [value]="el.Id">{{el.Title}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </mat-card-actions>
     </mat-card>
   </ng-template>
