@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { VkUserService } from '../../services/vk-user.service';
-import { finalize } from 'rxjs/operators';
+import {finalize} from 'rxjs/operators';
 import { VkMessage, VkRepostModel } from '../../models/VkMessageModel';
 import { VkMessageService } from '../../services/vk-message.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent} from '@angular/material/paginator';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import VkUserModel from '../../models/VkUserModel';
 import {Message} from '../../models/Message';
@@ -158,7 +158,10 @@ export class UserComponent implements OnInit {
 
   setType(id: number, ownerId: number, categoryId: number) {
     this.messageService.setType(id, ownerId, categoryId).subscribe(() => {
-
     })
+  }
+
+  onCustomPageChange() {
+    this.onSubmit();
   }
 }
