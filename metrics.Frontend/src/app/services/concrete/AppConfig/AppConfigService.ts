@@ -1,10 +1,10 @@
-import {IAppConfigService} from "../../abstract/IAppConfigService";
-import {Injectable} from "@angular/core";
-import {AppConfig} from "../../../models/AppConfig";
-import {BehaviorSubject, Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import { environment } from "../../../../environments/environment";
-import {map} from "rxjs/operators";
+import {IAppConfigService} from '../../abstract/IAppConfigService';
+import {Injectable} from '@angular/core';
+import {AppConfig} from '../../../models/AppConfig';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

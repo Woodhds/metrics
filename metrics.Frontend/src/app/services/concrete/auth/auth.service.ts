@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { IAuthService } from "../../abstract/IAuth";
-import { User } from "src/app/models/User";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { BehaviorSubject, Observable } from "rxjs";
-import { environment } from "../../../../environments/environment";
-import { map } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { IAuthService } from '../../abstract/IAuth';
+import { User } from 'src/app/models/User';
+import {HttpClient} from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class AuthService implements IAuthService {
   private currentUserSubject: BehaviorSubject<User>;
@@ -18,7 +18,7 @@ export class AuthService implements IAuthService {
 
   constructor(private httpClient: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(
-      JSON.parse(localStorage.getItem("vkUser"))
+      JSON.parse(localStorage.getItem('vkUser'))
     );
 
     this.currentUserObs = this.currentUserSubject.asObservable();
@@ -29,7 +29,7 @@ export class AuthService implements IAuthService {
       .post<User>(`${environment.apiUrl}/account/login`, form)
       .pipe(
         map(user => {
-          localStorage.setItem("vkUser", JSON.stringify(user));
+          localStorage.setItem('vkUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
           return user;
         })
@@ -37,7 +37,7 @@ export class AuthService implements IAuthService {
   }
 
   refresh(): void {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   logout(): void {

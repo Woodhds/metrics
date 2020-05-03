@@ -25,3 +25,7 @@
     }
   }
 }
+
+::ng-deep .mat-select-full-height {
+  max-height: 80vh !important;
+}

@@ -1,5 +1,5 @@
-import { User } from "src/app/models/User";
-import {Observable} from "rxjs";
+import { User } from 'src/app/models/User';
+import {Observable} from 'rxjs';
 
 export abstract class IAuthService {
   abstract currentUser: User;

@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import {VkUserService} from "../../services/vk-user.service";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import {VkUserService} from '../../services/vk-user.service';
 
 @Component({
-  selector: "app-user",
-  templateUrl: "./add-user.component.html",
-  styleUrls: ["./add-user.component.scss"]
+  selector: 'app-user',
+  templateUrl: './add-user.component.html',
+  styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
   form: FormGroup;
@@ -13,7 +13,7 @@ export class AddUserComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      userId: ""
+      userId: ''
     });
   }
 

@@ -8,8 +8,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import VkUserModel from '../../models/VkUserModel';
 import {Message} from '../../models/Message';
-import {MessageService} from "../../services/message.service";
-import {DataSourceResponse} from "../../models/DataSourceResponse";
+import {MessageService} from '../../services/message.service';
+import {DataSourceResponse} from '../../models/DataSourceResponse';
 
 @Component({
   selector: 'app-user',

@@ -10,7 +10,7 @@ import {DataSourceResponse} from '../models/DataSourceResponse';
 })
 export class VkMessageService {
 
-  private routePrefix: string = `${environment.apiUrl}/repost`;
+  private routePrefix = `${environment.apiUrl}/repost`;
 
   constructor(private httpClient: HttpClient) {
   }

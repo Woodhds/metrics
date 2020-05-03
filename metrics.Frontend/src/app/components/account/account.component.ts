@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {AppConfig} from "../../models/AppConfig";
-import {AppConfigService} from "../../services/concrete/AppConfig/AppConfigService";
-import {IAuthService} from "../../services/abstract/IAuth";
-import {ActivatedRoute, Router} from "@angular/router";
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {AppConfig} from '../../models/AppConfig';
+import {AppConfigService} from '../../services/concrete/AppConfig/AppConfigService';
+import {IAuthService} from '../../services/abstract/IAuth';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -39,7 +39,7 @@ export class AccountComponent implements OnInit {
 
   onSubmit(): void {
     this.authService.login(this.form.value).subscribe(() => {
-      const returnUrl = this.activatedRoute.snapshot.params['returnUrl'];
+      const returnUrl = this.activatedRoute.snapshot.params.returnUrl;
       if (returnUrl) {
         this.router.navigate([returnUrl])
       }
