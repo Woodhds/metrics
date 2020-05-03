@@ -25,6 +25,7 @@ export class VkMessage {
   public Reposts: MessageReposts;
   public Likes: VkLike;
   public IsSelected: boolean;
+  public MessageCategoryId: number | null;
 }
 
 export class MessageReposts {
