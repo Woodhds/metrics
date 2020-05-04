@@ -55,11 +55,16 @@ namespace metrics.Services.Concrete
             var keys = response.Documents.Select(f => f.Owner_Id + "_" + f.Id);
             var items = scope.GetRepository<MessageVk>().Read().Select(r =>
                     new {Key = r.OwnerId.ToString() + "_" + r.MessageId.ToString(), item = r})
-                .Where(e => keys.Contains(e.Key)).Select(f => f.item).ToList();
+                .Where(e => keys.Contains(e.Key))
+                .Select(f => new {message = f.item, category = f.item.MessageCategory.Title}).ToList();
 
             foreach (var document in response.Documents)
             {
-                document.MessageCategoryId = items.FirstOrDefault(f => f.MessageId == document.Id && f.OwnerId == document.Owner_Id)?.MessageCategoryId;
+                var messageCategory =
+                    items.FirstOrDefault(f =>
+                        f.message.MessageId == document.Id && f.message.OwnerId == document.Owner_Id);
+                document.MessageCategoryId = messageCategory?.message?.MessageCategoryId;
+                document.MessageCategory = messageCategory?.category;
             }
 
             return new DataSourceResponseModel(response.Documents, response.Total);

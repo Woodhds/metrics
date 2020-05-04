@@ -127,9 +127,7 @@ namespace metrics
             services.AddSingleton<IVkTokenAccessor, VkTokenAccessor>();
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.Configure<VkApiUrls>(Configuration.GetSection("VKApiUrls"));
-            services.Configure<ElasticOptions>(Configuration.GetSection("ElasticOptions"));
             services.AddSingleton<IVkClient, VkClient>();
-            services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
             services.AddSingleton<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
@@ -138,6 +136,7 @@ namespace metrics
 
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
 
+            services.AddElastic(Configuration);
             services.AddLogging(c => c.AddMetricsLogging(Configuration));
 
             services.AddMessageBroker(Configuration, g =>

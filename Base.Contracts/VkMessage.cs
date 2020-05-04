@@ -22,6 +22,8 @@ namespace Base.Contracts
         [JsonIgnore]
         public int RepostedFrom { get; set; }
         public int? MessageCategoryId { get; set; }
+        [JsonIgnore]
+        public string MessageCategory { get; set; }
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>

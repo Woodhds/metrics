@@ -4,10 +4,10 @@ using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
+using metrics.Data.Sql.Extensions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Utils;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
@@ -31,18 +31,9 @@ namespace metrics.Broker.Console
                     serviceCollection.AddSingleton<IBaseHttpClient, BaseHttpClient>();
                     serviceCollection.AddSingleton<IVkTokenAccessor, CacheTokenAccessor>();
                     serviceCollection.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
-                    serviceCollection.AddSingleton<IEntityConfigurationProvider, EntityConfigurationProvider>();
-                    serviceCollection.AddSingleton<ITransactionScopeFactory, TransactionScopeFactory>();
-                    serviceCollection.AddSingleton<IDataContextFactory, DataContextFactory>();
                     serviceCollection.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
-                    serviceCollection.AddScoped<DbContext, DataContext>();
-                    serviceCollection.AddDbContextPool<DataContext>(x =>
-                    {
-                        x.EnableSensitiveDataLogging();
-                        x.UseNpgsql(context.Configuration.GetConnectionString("DataContext"));
-                        x.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                    });
-                    
+                    serviceCollection.AddDataContext<DataContext>(
+                        context.Configuration.GetConnectionString("DataContext"));
                     serviceCollection.AddMessageBroker(context.Configuration,
                         provider =>
                         {
