@@ -37,7 +37,8 @@ namespace metrics.ML.Services
                 var mlContext = new MLContext();
                 var trainingDataView = mlContext.Data.LoadFromEnumerable(messages);
                 var pipeline = mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(VkMessageML.Category))
-                    .Append(mlContext.Transforms.Text.FeaturizeText("Features", nameof(VkMessageML.Text)))
+                    .Append(mlContext.Transforms.Text.NormalizeText("NormalizedText", nameof(VkMessageML.Text)))
+                    .Append(mlContext.Transforms.Text.FeaturizeText("Features", "NormalizedText"))
                     .Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy())
                     .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
 

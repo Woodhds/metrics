@@ -19,7 +19,7 @@ namespace metrics.Services.Concrete
         {
             var ci = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
             
-            return Task.FromResult(ci == null ? string.Empty : ci.Claims.FirstOrDefault(c => c.Type == Constants.VK_TOKEN_CLAIM)?.Value);
+            return Task.FromResult(ci == null ? string.Empty : ci.Claims.FirstOrDefault(c => c.Type == Constants.VkTokenClaim)?.Value);
         }
     }
 }

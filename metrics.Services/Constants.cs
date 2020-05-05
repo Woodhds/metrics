@@ -1,8 +1,8 @@
-﻿namespace metrics
+﻿namespace metrics.Services
 {
     public static class Constants
     {
-        public const string VK_TOKEN_CLAIM = "VkToken";
-        public const string ApiVersion = "5.85";
+        public const string VkTokenClaim = "VkToken";
+        public const string ApiVersion = "5.103";
     }
 }

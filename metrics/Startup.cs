@@ -17,6 +17,7 @@ using metrics.Events;
 using metrics.Handlers;
 using metrics.logging;
 using metrics.Notification.SignalR.Extensions;
+using metrics.Services;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Utils;
@@ -56,7 +57,7 @@ namespace metrics
                 })
                 .AddAuthorization(z =>
                 {
-                    z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VK_TOKEN_CLAIM); });
+                    z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VkTokenClaim); });
                 })
                 .AddNewtonsoftJson(opts =>
                 {

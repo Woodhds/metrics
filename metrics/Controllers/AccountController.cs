@@ -12,6 +12,7 @@ using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Models;
 using metrics.Options;
+using metrics.Services;
 using metrics.Services.Abstractions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -88,7 +89,7 @@ namespace metrics.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, id),
-                new Claim(Constants.VK_TOKEN_CLAIM, model.Token),
+                new Claim(Constants.VkTokenClaim, model.Token),
                 new Claim(JwtRegisteredClaimNames.GivenName, name),
                 new Claim("photo", avatar)
             };
