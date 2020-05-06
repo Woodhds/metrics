@@ -9,16 +9,18 @@ namespace metrics.Broker.Console
     public class RepostEventGroupCreatedHandler : IMessageHandler<RepostGroupCreatedEvent>
     {
         private readonly IRepostCacheAccessor _repostCacheAccessor;
+        private readonly IMessageBroker _messageBroker;
 
-        public RepostEventGroupCreatedHandler(IRepostCacheAccessor repostCacheAccessor)
+        public RepostEventGroupCreatedHandler(IRepostCacheAccessor repostCacheAccessor, IMessageBroker messageBroker)
         {
             _repostCacheAccessor = repostCacheAccessor;
+            _messageBroker = messageBroker;
         }
 
-        public Task HandleAsync(RepostGroupCreatedEvent obj, CancellationToken token = default)
+        public async Task HandleAsync(RepostGroupCreatedEvent obj, CancellationToken token = default)
         {
-            _repostCacheAccessor.SetAsync(obj.UserId, obj.Reposts);
-            return Task.CompletedTask;
+            await _repostCacheAccessor.SetAsync(obj.UserId, obj.Reposts);
+            await _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token);
         }
     }
 }

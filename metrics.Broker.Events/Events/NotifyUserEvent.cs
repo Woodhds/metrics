@@ -1,6 +1,6 @@
 ﻿namespace metrics.Broker.Events.Events
 {
-    public class RepostEndEvent
+    public class NotifyUserEvent
     {
         public int UserId { get; set; }
     }

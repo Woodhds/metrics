@@ -1,6 +1,6 @@
 ﻿using Microsoft.ML.Data;
 
-namespace metrics.ML.Data
+namespace metrics.ML.Contracts.Data
 {
     public class VkMessagePredict
     {

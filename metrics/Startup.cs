@@ -16,6 +16,7 @@ using metrics.Data.Sql.Extensions;
 using metrics.Events;
 using metrics.Handlers;
 using metrics.logging;
+using metrics.ML.Services.Extensions;
 using metrics.Notification.SignalR.Extensions;
 using metrics.Services;
 using metrics.Services.Abstractions;
@@ -134,6 +135,7 @@ namespace metrics
             services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
             services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
+            services.AddPredictClient("https://localhost:5006");
 
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
 
@@ -142,7 +144,7 @@ namespace metrics
 
             services.AddMessageBroker(Configuration, g =>
             {
-                g.Register<RepostEndEvent, RepostEndEventHandler>();
+                g.Register<NotifyUserEvent, NotifyUserEventHandler>();
                 g.Register<SetMessageTypeEvent, SetTypeEventHandler>();
             });
         }

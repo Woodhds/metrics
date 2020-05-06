@@ -1,4 +1,4 @@
-﻿namespace metrics.ML.Data
+﻿namespace metrics.ML.Contracts.Data
 {
     public class VkMessageML
     {

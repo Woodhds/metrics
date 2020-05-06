@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package metrics.ml.services;
+
+service MessagePredicting {
+	rpc Predict(MessagePredictRequest) returns (MessagePredictResponse);
+}
+
+
+message MessagePredictRequest {
+	message MessagePredict {
+		int32 owner_id = 1;
+		int32 id = 2;
+		string text = 3;
+	}
+
+	repeated MessagePredict messages = 1;
+}
+
+message MessagePredictResponse {
+	message MessagePredicted {
+		int32 owner_id = 1;
+		int32 id = 2;
+		string category = 3;
+	}
+
+	repeated MessagePredicted messages = 1;
+}

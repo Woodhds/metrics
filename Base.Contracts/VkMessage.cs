@@ -24,6 +24,7 @@ namespace Base.Contracts
         public int? MessageCategoryId { get; set; }
         [JsonIgnore]
         public string MessageCategory { get; set; }
+        public string MessageCategoryPredict { get; set; }
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>

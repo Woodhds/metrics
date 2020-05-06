@@ -1,14 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Base.Abstractions;
-using metrics.Data.Abstractions;
-using metrics.Data.Common.Infrastructure.Confguraton;
-using metrics.Data.Sql;
-using metrics.Data.Sql.Extensions;
-using metrics.ML.Services;
-using metrics.Services.Abstractions;
-using metrics.Services.Concrete;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace metrics.ML
@@ -22,13 +13,9 @@ namespace metrics.ML
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
+                .ConfigureWebHostDefaults(builder =>
                 {
-                    services.AddHostedService<VkMessageMLService>();
-                    services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
-                    services.AddDataContext<DataContext>(context.Configuration.GetConnectionString("DataContext"));
-                    services.AddSingleton<IVkMessageService, VkMessageService>();
-                    services.AddElastic(context.Configuration);
+                    builder.UseStartup<Startup>();
                 });
     }
 }

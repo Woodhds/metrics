@@ -47,7 +47,7 @@ namespace metrics.Broker.Console
 
             await scope.GetRepository<VkRepost>().UpdateAsync(message);
 
-            await _messageBroker.PublishAsync(new RepostEndEvent {UserId = obj.UserId}, token);
+            await _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token);
             await scope.CommitAsync(token);
         }
     }
