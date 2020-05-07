@@ -24,4 +24,8 @@
       <Content Include="Model.zip" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Options" />
+    </ItemGroup>
+
 </Project>

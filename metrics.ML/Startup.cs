@@ -29,10 +29,9 @@ namespace metrics.ML
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
-            //services.AddHostedService<VkMessageMLService>();
+            services.AddHostedService<VkMessageMLService>();
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddDataContext<DataContext>(_configuration.GetConnectionString("DataContext"));
-            services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddElastic(_configuration);
             services.AddPredictClient("http://localhost:5005");
         }

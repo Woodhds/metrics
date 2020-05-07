@@ -3,32 +3,32 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using metrics.ML.Contracts.Data;
 using Metrics.Ml.Services;
-using metrics.ML.Services.Abstractions;
+using Microsoft.Extensions.ML;
 
 namespace metrics.ML.Services.Services
 {
     public class MessagePredictService : MessagePredicting.MessagePredictingBase
     {
-        private readonly IMessagePredictModelService _messagePredictModelService;
+        private readonly PredictionEnginePool<VkMessageML, VkMessagePredict>
+            _predictionEnginePool;
 
-        public MessagePredictService(IMessagePredictModelService messagePredictModelService)
+        public MessagePredictService(
+            PredictionEnginePool<VkMessageML, VkMessagePredict> predictionEnginePool)
         {
-            _messagePredictModelService = messagePredictModelService;
+            _predictionEnginePool = predictionEnginePool;
         }
 
         public override Task<MessagePredictResponse> Predict(MessagePredictRequest request, ServerCallContext context)
         {
-            var predictionEngine = _messagePredictModelService.Load();
-
             var result = request.Messages.Select(message => new MessagePredictResponse.Types.MessagePredicted
             {
-                Category = predictionEngine.Predict(new VkMessageML
+                Category = _predictionEnginePool.Predict(new VkMessageML
                 {
-                    Id = message.Id, 
-                    Text = message.Text, 
+                    Id = message.Id,
+                    Text = message.Text,
                     OwnerId = message.OwnerId
                 })?.Category,
-                Id = message.Id, 
+                Id = message.Id,
                 OwnerId = message.OwnerId
             }).ToList();
 

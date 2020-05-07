@@ -6,11 +6,11 @@ namespace metrics.ML.Services.Services
 {
     public class MessagePredictModelService : IMessagePredictModelService
     {
-        public PredictionEngine<VkMessageML, VkMessagePredict> Load()
+        public MLContext Load()
         {
             var context = new MLContext();
-            var trainedModel = context.Model.Load("Model.zip", out var _);
-            return context.Model.CreatePredictionEngine<VkMessageML, VkMessagePredict>(trainedModel);
+            context.Model.Load("Model.zip", out var _);
+            return context;
         }
 
         public void Save(MLContext context, ITransformer transformer, IDataView dataView)

@@ -12,7 +12,7 @@ namespace metrics.Data.Sql.Extensions
             services.AddSingleton<IEntityConfigurationProvider, EntityConfigurationProvider>();
             services.AddSingleton<ITransactionScopeFactory, TransactionScopeFactory>();
             services.AddSingleton<IDataContextFactory, DataContextFactory>();
-            services.AddScoped<DbContext, T>();
+            services.AddTransient<DbContext, T>();
             services.AddDbContextPool<T>(x =>
             {
                 x.EnableSensitiveDataLogging();

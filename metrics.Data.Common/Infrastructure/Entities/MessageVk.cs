@@ -9,8 +9,10 @@ namespace metrics.Data.Common.Infrastructure.Entities
         
         public int MessageCategoryId { get; set; }
         public MessageCategory MessageCategory { get; set; }
+        
+        public MessageVkStatus Status { get; set; }
 
         [NotMapped]
-        public string Identifier => $"{OwnerId}_{MessageId}";
+        public int Identifier => (OwnerId ^ MessageId).GetHashCode();
     }
 }
