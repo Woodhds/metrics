@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Model.zip" />
+      <Content Include="Model.zip" />
     </ItemGroup>
 
 </Project>

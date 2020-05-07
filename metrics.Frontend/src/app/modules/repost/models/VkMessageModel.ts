@@ -26,6 +26,7 @@ export class VkMessage {
   public Likes: VkLike;
   public IsSelected: boolean;
   public MessageCategoryId: number | null;
+  public MessageCategoryPredict: string | null;
 }
 
 export class MessageReposts {

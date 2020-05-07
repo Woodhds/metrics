@@ -125,6 +125,7 @@
           {{ message.Reposts.Count }}
         </button>
         <mat-form-field class="message-category">
+          <mat-label>{{message.MessageCategoryPredict}}</mat-label>
           <mat-select [value]="message.MessageCategoryId" panelClass="mat-select-full-height">
             <mat-option (onSelectionChange)="setType(message.Id, message.Owner_Id, el.Id)" *ngFor="let el of categories"
                         [value]="el.Id">
