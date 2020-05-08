@@ -6,5 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'metrics';
+
+  get backToTopVisible() : boolean {
+    return window.scrollY > 250;
+  }
+
+  backToTop() {
+    window.scroll({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 }

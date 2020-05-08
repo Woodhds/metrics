@@ -1,0 +1,10 @@
+.back-to-top {
+  @apply fixed opacity-0;
+  bottom: 3rem;
+  right: 3rem;
+  transition: opacity .3s ease-in;
+
+  &.visible {
+    @apply opacity-100;
+  }
+}
