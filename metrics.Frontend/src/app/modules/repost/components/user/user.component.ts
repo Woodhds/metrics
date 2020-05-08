@@ -82,24 +82,24 @@ export class UserComponent implements OnInit {
     return new Date(value * 1000).toLocaleString();
   }
 
-  like(owner_id: number, id: number) {
+  like(ownerId: number, id: number) {
     const message = this.messages.find(
-      a => a.Owner_Id === owner_id && a.Id === id
+      a => a.Owner_Id === ownerId && a.Id === id
     );
     if (message && !message.Likes.User_Likes) {
-      this.vkMessageService.like(owner_id, id).subscribe(() => {
+      this.vkMessageService.like(ownerId, id).subscribe(() => {
         message.Likes.User_Likes = true;
       });
     }
   }
 
-  repost(owner_id: number, id: number) {
+  repost(ownerId: number, id: number) {
     const message = this.messages.find(
-      a => a.Owner_Id === owner_id && a.Id === id
+      a => a.Owner_Id === ownerId && a.Id === id
     );
     if (message && !message.Reposts.User_reposted) {
       this.vkMessageService
-        .repost([new VkRepostModel(owner_id, id)])
+        .repost([new VkRepostModel(ownerId, id)])
         .subscribe(() => {
           message.Reposts.User_reposted = true;
         });

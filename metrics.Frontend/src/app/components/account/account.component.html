@@ -2,7 +2,7 @@
   <p>
     <a [href]="href" target="_blank">Получить</a>
   </p>
-  <mat-form-field class="md:w-1/4 w-full" [floatLabel]="form.value.token.floatLabel">
+  <mat-form-field class="md:w-1/4 w-full">
     <input matInput placeholder="Токен" formControlName="token" required/>
     <mat-error *ngIf="form.get('token')?.invalid && form.dirty">Введите токен</mat-error>
   </mat-form-field>

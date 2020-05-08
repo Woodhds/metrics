@@ -10,7 +10,7 @@ import {environment} from '../../../environments/environment';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  count: Number = 0;
+  count = 0;
   hub: signalR.HubConnection = null;
 
   constructor(private authService: IAuthService) {
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         })
         .build();
 
-      this.hub.on('Count', (args: Number) => {
+      this.hub.on('Count', (args: number) => {
         self.count = args;
       });
 
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  public get isAuthenticated(): Boolean {
+  public get isAuthenticated(): boolean {
     return this.user != null;
   }
 

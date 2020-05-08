@@ -8,7 +8,6 @@ using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using metrics.ML.Contracts.Data;
 using metrics.ML.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.ML;
 
@@ -37,7 +36,6 @@ namespace metrics.ML.Services
             {
                 using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: stoppingToken);
                 var messageVks = scope.GetRepository<MessageVk>().Read()
-                    .Where(f => f.Status == MessageVkStatus.None)
                     .Select(e => new
                     {
                         e.OwnerId,
@@ -63,7 +61,6 @@ namespace metrics.ML.Services
 
                 if (messages.Any())
                 {
-
                     var mlContext = _messagePredictModelService.Load();
                     var trainingDataView = mlContext.Data.LoadFromEnumerable(messages);
                     var pipeline = mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(VkMessageML.Category))
@@ -78,6 +75,7 @@ namespace metrics.ML.Services
 
                     _messagePredictModelService.Save(mlContext, trainedModel, trainingDataView);
 
+                    /*
                     try
                     {
                         foreach (var message in messageVks)
@@ -96,10 +94,10 @@ namespace metrics.ML.Services
                     catch (Exception e)
                     {
                         await scope.RollbackAsync(stoppingToken);
-                    }
+                    }*/
                 }
 
-                await Task.Delay(1000 * 60 * 5, stoppingToken);
+                await Task.Delay(1000 * 60 * 60, stoppingToken);
             }
         }
     }

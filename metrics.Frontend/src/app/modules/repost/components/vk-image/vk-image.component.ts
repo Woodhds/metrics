@@ -1,16 +1,16 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: "app-vk-image",
-  templateUrl: "./vk-image.component.html",
-  styleUrls: ["./vk-image.component.scss"]
+  selector: 'app-vk-image',
+  templateUrl: './vk-image.component.html',
+  styleUrls: ['./vk-image.component.scss']
 })
 export class VkImageComponent implements OnInit {
   @Input() src: string[];
   currentImageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  currentImage: number = 0;
-  @ViewChild("img") img: ElementRef;
+  currentImage = 0;
+  @ViewChild('img') img: ElementRef;
 
   constructor() {}
 
@@ -43,7 +43,7 @@ export class VkImageComponent implements OnInit {
 
   private assignSrc(): void {
     if (!this.img) return;
-    let el = this.img.nativeElement as HTMLImageElement;
+    const el = this.img.nativeElement as HTMLImageElement;
 
     if (!el) return;
     el.src = this.srcImg;
@@ -56,6 +56,6 @@ export class VkImageComponent implements OnInit {
   get srcImg(): string {
     return this.src.length > 0
       ? this.src[this.currentImage]
-      : "assets/images/nophoto.png";
+      : 'assets/images/nophoto.png';
   }
 }

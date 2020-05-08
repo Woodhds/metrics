@@ -1,10 +1,10 @@
-<mat-toolbar color="primary" class="mb-4">
+<mat-toolbar color="primary" class="fixed z-10">
   <mat-toolbar-row class="px-8 items-center">
     <a mat-button routerLink="/">
       <mat-icon>home</mat-icon>
     </a>
     <a *ngIf="isAuthenticated" mat-button routerLink="/add">Добавить</a>
-    <a *ngIf="isAuthenticated" mat-button routerLink="/user">Юзер</a>
+    <a *ngIf="isAuthenticated" mat-button routerLink="/user">Репостим</a>
     <a *ngIf="isAuthenticated" mat-button routerLink="/message">Типы сообщений</a>
     <app-login></app-login>
   </mat-toolbar-row>

@@ -28,8 +28,8 @@ namespace metrics.ML
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGrpc();
-            services.AddHostedService<VkMessageMLService>();
+            services.AddGrpc(); 
+            //services.AddHostedService<VkMessageMLService>();
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddDataContext<DataContext>(_configuration.GetConnectionString("DataContext"));
             services.AddElastic(_configuration);
