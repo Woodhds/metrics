@@ -1,5 +1,5 @@
 .back-to-top {
-  @apply fixed opacity-0;
+  @apply fixed opacity-0 z-40;
   bottom: 3rem;
   right: 3rem;
   transition: opacity .3s ease-in;

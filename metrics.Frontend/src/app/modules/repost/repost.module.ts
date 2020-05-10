@@ -24,7 +24,8 @@ import {MatTableModule} from '@angular/material/table';
 import {DialogComponent} from './components/dialog/dialog.component'
 import {MatDialogModule} from '@angular/material/dialog';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatSelectModule} from "@angular/material/select";
+import {MatSelectModule} from '@angular/material/select';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 const routes: Routes = [
   {path: '', canActivate: [AuthGuard], component: RepostComponent},
@@ -61,7 +62,8 @@ const routes: Routes = [
     MatDialogModule,
     FormsModule,
     MatSnackBarModule,
-    MatSelectModule
+    MatSelectModule,
+    MatExpansionModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor},
