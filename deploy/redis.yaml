@@ -1,0 +1,28 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: metrics-app
+  name: metrics-redis
+  labels:
+    app: metrics-redis
+spec:
+  selector:
+    matchLabels:
+      app: metrics-redis
+  template:
+    metadata:
+      labels:
+        app: metrics-redis
+    spec:
+      containers:
+        - name: metrics-redis
+          image: redis
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis_password
+                  name: metrics-secret

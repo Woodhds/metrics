@@ -1,0 +1,14 @@
+﻿apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: metrics-app
+  labels:
+    type: metrics-postgres-persistence
+  name: metrics-volume
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain

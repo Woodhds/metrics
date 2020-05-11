@@ -1,4 +1,5 @@
-﻿using Base.Abstractions;
+﻿using System;
+using Base.Abstractions;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
@@ -28,7 +29,7 @@ namespace metrics.ML
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGrpc(); 
+            services.AddGrpc();
             //services.AddHostedService<VkMessageMLService>();
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddDataContext<DataContext>(_configuration.GetConnectionString("DataContext"));
