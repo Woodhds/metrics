@@ -1,0 +1,14 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  namespace: metrics-app
+  name: metrics-redis-service
+  labels:
+    app: metrics-redis-service
+spec:
+  selector:
+    app: metrics-redis
+  ports:
+    - port: 6379
+      protocol: TCP
+      targetPort: 6379

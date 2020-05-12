@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.ML.Services", "metr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.ML.Contracts", "metrics.ML.Contracts\metrics.ML.Contracts.csproj", "{37A6F3CF-4C8E-4A51-AE47-D1C88BAD41C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{7794ED87-05F4-4E59-BB5C-CB8F5D14CC9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
