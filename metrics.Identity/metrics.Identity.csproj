@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Base.Contracts\Base.Contracts.csproj" />
+      <ProjectReference Include="..\metrics.Authentication\metrics.Authentication.csproj" />
+      <ProjectReference Include="..\metrics.Broker.Abstractions\metrics.Broker.Abstractions.csproj" />
+      <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
+      <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
+      <ProjectReference Include="..\metrics.Identity.Data\metrics.Identity.Data.csproj" />
+      <ProjectReference Include="..\metrics.Identity.Extensions\metrics.Identity.Extensions.csproj" />
+      <ProjectReference Include="..\metrics.Web\metrics.Web.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+    </ItemGroup>
+
+</Project>

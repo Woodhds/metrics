@@ -3,31 +3,29 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
-using System.Text;
-using System.Threading.Tasks;
 using Base.Abstractions;
 using Base.Contracts.Options;
+using metrics.Authentication;
 using metrics.Broker;
 using metrics.Broker.Events.Events;
+using metrics.Cache;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
 using metrics.Data.Sql.Extensions;
 using metrics.Events;
 using metrics.Handlers;
+using metrics.Identity.Client;
 using metrics.logging;
 using metrics.ML.Services.Extensions;
 using metrics.Notification.SignalR.Extensions;
-using metrics.Services;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Utils;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using metrics.Web.Conventions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 
 namespace metrics
@@ -56,15 +54,16 @@ namespace metrics
                             .AllowCredentials();
                     });
                 })
-                .AddAuthorization(z =>
-                {
-                    z.AddPolicy("VKPolicy", e => { e.RequireClaim(Constants.VkTokenClaim); });
-                })
+                .AddAuthorization()
                 .AddNewtonsoftJson(opts =>
                 {
                     opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 });
-            services.AddControllers();
+            services.AddControllers(q =>
+            {
+                q.UseGeneralRoutePrefix("api");
+            });
+            
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.Configure<IISServerOptions>(options =>
@@ -78,46 +77,7 @@ namespace metrics
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var jwtOptions = new JwtOptions();
-            Configuration.GetSection("Jwt").Bind(jwtOptions);
-            services.Configure<JwtOptions>(z =>
-            {
-                z.Audience = jwtOptions.Audience;
-                z.Issuer = jwtOptions.Issuer;
-                z.Key = jwtOptions.Key;
-            });
-            services.AddAuthentication(opts =>
-                {
-                    opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opts.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opts.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(opts =>
-                {
-                    opts.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                        ValidIssuer = jwtOptions.Issuer,
-                        ValidAudience = jwtOptions.Audience
-                    };
-                    opts.Events = new JwtBearerEvents
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            if (context.Request.Query.ContainsKey("access_token"))
-                            {
-                                context.Token = context.Request.Query["access_token"];
-                            }
-                            
-                            return Task.CompletedTask;
-                        }
-                    };
-                });
+            services.AddMetricsAuthentication(Configuration);
 
             var signalROptions = new SignalROptions();
             Configuration.GetSection(nameof(SignalROptions)).Bind(signalROptions);
@@ -126,21 +86,23 @@ namespace metrics
             
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddScoped<ICompetitionsService, CompetitionsService>();
-            services.AddSingleton<IVkTokenAccessor, VkTokenAccessor>();
+            services.AddScoped<IVkTokenAccessor, CacheTokenAccessor>();
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.Configure<VkApiUrls>(Configuration.GetSection("VKApiUrls"));
-            services.AddSingleton<IVkClient, VkClient>();
-            services.AddSingleton<IVkUserService, VkUserService>();
+            services.AddScoped<IVkClient, VkClient>();
+            services.AddScoped<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
             services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddPredictClient("https://localhost:5006");
+            services.AddCaching(Configuration);
 
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
 
             services.AddElastic(Configuration);
             services.AddLogging(c => c.AddMetricsLogging(Configuration));
+            services.AddIdentityClient(Configuration);
 
             services.AddMessageBroker(Configuration, g =>
             {

@@ -19,7 +19,7 @@ namespace metrics.Cache
             });
 
             serviceCollection.AddSingleton<ICachingSerializer, CachingSerializer>();
-            serviceCollection.AddSingleton<ICachingService, CachingService>();
+            serviceCollection.AddScoped<ICachingService, CachingService>();
             
             return serviceCollection;
         }

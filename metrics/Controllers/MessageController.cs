@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Broker.Abstractions;
@@ -11,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace metrics.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class MessageController : ControllerBase
     {
         private readonly IMessageBroker _messageBroker;

@@ -1,23 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Extensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using metrics.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace metrics.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class RepostController : ControllerBase
     {
         private readonly IVkClient _vkClient;
@@ -41,7 +38,6 @@ namespace metrics.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [Authorize(Policy = "VkPolicy")]
         [HttpGet("user")]
         public async Task<ActionResult<DataSourceResponseModel>> GetData(int page, int pageSize,
             string search = null, string user = null)
@@ -57,7 +53,6 @@ namespace metrics.Controllers
             }
         }
 
-        [Authorize(Policy = "VkPolicy")]
         [HttpPost("repost")]
         public async Task<IActionResult> Repost(CancellationToken ct, [FromBody] List<VkRepostViewModel> reposts)
         {
@@ -78,7 +73,6 @@ namespace metrics.Controllers
             }
         }
 
-        [Authorize(Policy = "VkPolicy")]
         [HttpGet("like")]
         public IActionResult Like([FromQuery] VkRepostViewModel model)
         {

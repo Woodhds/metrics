@@ -2,13 +2,11 @@ using System;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Services.Abstractions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace metrics.Controllers
 {
-    [Authorize(Policy = "VkPolicy")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class SiteController : ControllerBase
     {
 

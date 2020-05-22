@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from 'src/app/models/User';
-import {IAuthService} from 'src/app/services/abstract/IAuth';
 import * as signalR from '@microsoft/signalr';
 import {environment} from '../../../environments/environment';
+import {AuthService} from '../../services/concrete/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   count = 0;
   hub: signalR.HubConnection = null;
 
-  constructor(private authService: IAuthService) {
+  constructor(private authService: AuthService) {
   }
 
   public user: User = null;

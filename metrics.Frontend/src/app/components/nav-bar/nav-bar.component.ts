@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from '../../models/User';
-import {IAuthService} from '../../services/abstract/IAuth';
+import {AuthService} from '../../services/concrete/auth/auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,7 +10,7 @@ import {IAuthService} from '../../services/abstract/IAuth';
 export class NavBarComponent implements OnInit {
 
   private user: User = null;
-  constructor(private userService: IAuthService) {
+  constructor(private userService: AuthService) {
    }
 
    public get isAuthenticated() {

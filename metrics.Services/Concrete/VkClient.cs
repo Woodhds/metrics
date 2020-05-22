@@ -21,17 +21,20 @@ namespace metrics.Services.Concrete
         private readonly IVkTokenAccessor _vkTokenAccessor;
         private readonly VkApiUrls _urls;
         private readonly IMessageBroker _messageBroker;
+        private readonly IOptionsMonitor<VkontakteOptions> _vkontakteOptions;
 
         public VkClient(
             IHttpClientFactory httpClientFactory,
             IVkTokenAccessor vkTokenAccessor,
             IOptions<VkApiUrls> options,
-            ILogger<BaseHttpClient> logger, 
-            IMessageBroker messageBroker
-            ) : base(httpClientFactory, logger)
+            ILogger<BaseHttpClient> logger,
+            IMessageBroker messageBroker,
+            IOptionsMonitor<VkontakteOptions> vkontakteOptions
+        ) : base(httpClientFactory, logger)
         {
             _vkTokenAccessor = vkTokenAccessor;
             _messageBroker = messageBroker;
+            _vkontakteOptions = vkontakteOptions;
             _urls = options.Value;
         }
 
@@ -42,7 +45,7 @@ namespace metrics.Services.Concrete
                 @params = new NameValueCollection();
             }
 
-            @params.Add("v", Constants.ApiVersion);
+            @params.Add("v", _vkontakteOptions.CurrentValue.ApiVersion);
             @params.Add("access_token", await _vkTokenAccessor.GetTokenAsync(userId));
 
             return @params;
@@ -55,7 +58,8 @@ namespace metrics.Services.Concrete
             return await base.GetAsync<T>(url, @params);
         }
 
-        private async Task PostVkAsync<T>(string method, object content, NameValueCollection @params = null, int? userId = null)
+        private async Task PostVkAsync<T>(string method, object content, NameValueCollection @params = null,
+            int? userId = null)
         {
             @params = await AddVkParams(@params, userId);
             var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
@@ -130,7 +134,7 @@ namespace metrics.Services.Concrete
                     Logger.LogError(e, e.Message);
                 }
             }
-            
+
             foreach (var t in reposts)
             {
                 try
@@ -177,7 +181,8 @@ namespace metrics.Services.Concrete
             return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(_urls.UserInfo, @params);
         }
 
-        public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels, int? userId = null)
+        public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels,
+            int? userId = null)
         {
             if (vkRepostViewModels == null)
             {

@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {AppConfig} from '../../models/AppConfig';
-import {AppConfigService} from '../../services/concrete/AppConfig/AppConfigService';
-import {IAuthService} from '../../services/abstract/IAuth';
+import {AuthService} from '../../services/concrete/auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-account',
@@ -12,37 +10,27 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class AccountComponent implements OnInit {
 
-  form: FormGroup;
-  public config: AppConfig;
-
-  constructor(
-    private fb: FormBuilder,
-    private appConfigService: AppConfigService,
-    private authService: IAuthService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.form = fb.group({
-      token: new FormControl('')
-    });
+  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit() {
-    this.appConfigService.getConfig().subscribe(f => {
-      this.config = f;
-    });
-  }
 
-  get href() {
-    return this.config ? 'https://oauth.vk.com/authorize?client_id=' + this.config.ClientId + `&display=page&redirect_uri=http://vk.com/blank.php&scope=111111111&response_type=token&v=5.85` : '';
-  }
-
-  onSubmit(): void {
-    this.authService.login(this.form.value).subscribe(() => {
-      const returnUrl = this.activatedRoute.snapshot.params.returnUrl;
-      if (returnUrl) {
-        this.router.navigate([returnUrl])
+    this.authService.currentUserObs.subscribe(user => {
+      if (user) {
+        this.router.navigate(['/'])
       }
     })
+
+    this.activatedRoute.queryParamMap.subscribe(params => {
+
+      const token = params.get('access_token');
+      if (token) {
+        this.authService.getUserInfo(token).subscribe();
+      }
+    })
+  }
+
+  authorize(loginProvider) {
+    this.authService.login(loginProvider);
   }
 }

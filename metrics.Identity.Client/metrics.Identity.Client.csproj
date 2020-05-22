@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\metrics.Authentication\metrics.Authentication.csproj" />
+      <ProjectReference Include="..\metrics.Cache.Abstractions\metrics.Cache.Abstractions.csproj" />
+      <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
+      <ProjectReference Include="..\metrics.Identity.Client.Abstractions\metrics.Identity.Client.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>
