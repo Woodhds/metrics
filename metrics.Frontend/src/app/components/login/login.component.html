@@ -18,6 +18,9 @@
       [ngStyle]="{ 'background-image': 'url(' + user.Avatar + ')' }"
     ></button>
     <mat-menu #menu="matMenu">
+      <button class="focus:outline-none" routerLink="/profile" mat-menu-item>
+        Профиль
+      </button>
       <button class="focus:outline-none" (click)="logout()" mat-menu-item>
         Выйти
       </button>

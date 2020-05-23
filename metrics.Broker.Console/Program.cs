@@ -1,4 +1,5 @@
 ﻿using Base.Contracts.Options;
+using metrics.Authentication.Options;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Broker.Events.Events;
 using metrics.Cache;
@@ -38,6 +39,9 @@ namespace metrics.Broker.Console
                         context.Configuration.GetConnectionString("DataContext"));
                     serviceCollection.AddCaching(context.Configuration);
                     serviceCollection.AddIdentityClient(context.Configuration);
+                    serviceCollection.Configure<JwtOptions>(context.Configuration.GetSection(nameof(JwtOptions)));
+                    serviceCollection.Configure<VkontakteOptions>(
+                        context.Configuration.GetSection(nameof(VkontakteOptions)));
                     serviceCollection.AddMessageBroker(context.Configuration,
                         provider =>
                         {

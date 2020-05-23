@@ -21,7 +21,6 @@
       <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Data.Common\metrics.Data.Common.csproj" />
       <ProjectReference Include="..\metrics.Identity.Client\metrics.Identity.Client.csproj" />
-      <ProjectReference Include="..\metrics.Identity.Token\metrics.Identity.Token.csproj" />
       <ProjectReference Include="..\metrics.Services.Abstractions\metrics.Services.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
     </ItemGroup>

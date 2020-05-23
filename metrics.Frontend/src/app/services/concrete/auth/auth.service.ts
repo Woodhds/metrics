@@ -48,6 +48,10 @@ export class AuthService {
       );
   }
 
+  setToken(token: string) {
+    return this.httpClient.post(`${environment.apiUrl}/auth/user/token?token=` + token, null)
+  }
+
   logout(): void {
     localStorage.removeItem('vkUser');
     this.currentUserSubject.next(null);

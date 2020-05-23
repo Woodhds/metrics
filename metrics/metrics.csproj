@@ -19,7 +19,6 @@
     <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
     <ProjectReference Include="..\metrics.Cache\metrics.Cache.csproj" />
     <ProjectReference Include="..\metrics.Identity.Client\metrics.Identity.Client.csproj" />
-    <ProjectReference Include="..\metrics.Identity.Token\metrics.Identity.Token.csproj" />
     <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />
     <ProjectReference Include="..\metrics.Notification.SignalR\metrics.Notification.SignalR.csproj" />
     <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />

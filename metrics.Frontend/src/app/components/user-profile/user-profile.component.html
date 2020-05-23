@@ -1,0 +1,13 @@
+<a mat-raised-button
+   href="https://oauth.vk.com/authorize?client_id=5662498&scope=111111111&response_type=token&redirect_uri=https://oauth.vk.com/blank.html"
+   target="_blank">Получить</a>
+<form [formGroup]="form" (submit)="submit()">
+  <mat-form-field>
+    <mat-label>Токен</mat-label>
+    <input required matInput formControlName="token" />
+  </mat-form-field>
+  <p>
+    <button mat-raised-button [disabled]="form.invalid" color="primary" type="submit">Добавить</button>
+  </p>
+</form>
+

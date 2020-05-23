@@ -17,13 +17,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthenticatedGuard } from './helpers/authenticated.guard';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NavBarComponent,
-    AccountComponent
+    AccountComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

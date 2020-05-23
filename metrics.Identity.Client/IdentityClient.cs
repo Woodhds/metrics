@@ -23,7 +23,7 @@ namespace metrics.Identity.Client
         public async Task<string> GetToken(int userId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
-                _options.CurrentValue.UserToken + userId);
+                _options.CurrentValue.UserToken + "/" + userId);
             request.Headers.Add("Authorization", "Bearer " + _jsonWebTokenGenerationService.GetSystemToken());
 
             var response = await _httpClient.SendAsync(request);
