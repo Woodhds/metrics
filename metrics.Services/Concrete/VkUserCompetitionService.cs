@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Base.Contracts;
@@ -22,19 +23,30 @@ namespace metrics.Services.Concrete
             var users = await _vkUserService.SearchAsync(null);
             foreach (var user in users)
             {
-                for (var i = page; i < 4; i++)
+                try
                 {
-                    var response = await _vkClient.GetReposts(user.Id.ToString(), i, 80);
-                    if (response?.Response?.Items != null)
+                    for (var i = page; i < 4; i++)
                     {
-                        response.Response.Items.ForEach(e =>
+                        try
                         {
-                            e.RepostedFrom = user.Id;
-                        });
-                        data.AddRange(response.Response.Items);
-                    }
+                            var response = await _vkClient.GetReposts(user.Id.ToString(), i, 80);
+                            if (response?.Response?.Items != null)
+                            {
+                                response.Response.Items.ForEach(e => { e.RepostedFrom = user.Id; });
+                                data.AddRange(response.Response.Items);
+                            }
 
-                    await Task.Delay(9000);
+                            await Task.Delay(1000);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             }
 

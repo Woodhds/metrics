@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace metrics.Notification.SignalR.Hubs
 {
-    [Authorize(Policy = "VkPolicy")]
+    [Authorize]
     public class NotificationHub : Hub
     {
         private readonly IRepostCacheAccessor _repostCacheAccessor;

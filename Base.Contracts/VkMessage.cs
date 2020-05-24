@@ -64,7 +64,8 @@ namespace Base.Contracts
         market = 13,
         market_album = 14,
         sticker = 15,
-        pretty_cards = 16
+        pretty_cards = 16,
+        Event = 17
     }
 
     public class MessageAttachment

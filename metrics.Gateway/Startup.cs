@@ -34,6 +34,7 @@ namespace metrics.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseWebSockets();
             app.UseOcelot().Wait();
         }
     }

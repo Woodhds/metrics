@@ -40,6 +40,7 @@ namespace Competition.Hosted
                     services.Configure<ElasticOptions>(context.Configuration.GetSection(nameof(ElasticOptions)));
                     services.Configure<VkApiUrls>(context.Configuration.GetSection(nameof(VkApiUrls)));
                     services.Configure<TokenOptions>(context.Configuration.GetSection("Token"));
+                    services.Configure<VkontakteOptions>(context.Configuration.GetSection(nameof(VkontakteOptions)));
                     services.Configure<CompetitionOptions>(
                         context.Configuration.GetSection(nameof(CompetitionOptions)));
                     services.AddHostedService<CompetitionService>();
