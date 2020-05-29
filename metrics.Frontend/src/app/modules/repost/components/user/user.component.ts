@@ -10,6 +10,7 @@ import VkUserModel from '../../models/VkUserModel';
 import {Message} from '../../models/Message';
 import {MessageService} from '../../services/message.service';
 import {DataSourceResponse} from '../../models/DataSourceResponse';
+import {MatSelectChange} from '@angular/material/select';
 
 @Component({
   selector: 'app-user',
@@ -109,8 +110,8 @@ export class UserComponent implements OnInit {
   images(vkMessage: VkMessage) {
     if (vkMessage.Attachments) {
       return vkMessage.Attachments.filter(
-        img => img.Photo && img.Photo.Sizes[4]
-      ).map(item => item.Photo.Sizes[4].Url);
+        img => img.Photo && img.Photo.Sizes[3]
+      ).map(item => item.Photo.Sizes[3].Url);
     }
 
     return [];
@@ -156,8 +157,8 @@ export class UserComponent implements OnInit {
     this.form.controls.user.setValue('');
   }
 
-  setType(id: number, ownerId: number, categoryId: number) {
-    this.messageService.setType(id, ownerId, categoryId).subscribe(() => {
+  setType(id: number, ownerId: number, ev: MatSelectChange) {
+    this.messageService.setType(id, ownerId, ev.value).subscribe(() => {
     })
   }
 

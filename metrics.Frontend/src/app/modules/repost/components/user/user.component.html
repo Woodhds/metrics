@@ -35,14 +35,19 @@
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of users" [value]="option">
             <figure class="flex items-center">
-              <img class="h-10 mr-3" [src]="option.Avatar"/>
+              <img class="h-10 mr-3" [src]="option.Avatar" />
               <figcaption>{{ option.FullName }}</figcaption>
             </figure>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
       <p>
-        <button [disabled]="!form.valid" mat-raised-button color="primary" type="submit">
+        <button
+          [disabled]="!form.valid"
+          mat-raised-button
+          color="primary"
+          type="submit"
+        >
           Отправить
         </button>
       </p>
@@ -69,7 +74,7 @@
       ></mat-slider>
       <span class="w-1/5" *ngIf="selectedMessages.length">{{
         selectedMessages.length
-        }}</span>
+      }}</span>
     </div>
   </div>
   <div class="flex items-center flex-row-reverse">
@@ -84,7 +89,14 @@
     </mat-paginator>
     <mat-form-field class="pr-3">
       <div class="flex items-center">
-        <input placeholder="Страница" (keyup.enter)="onSubmit()" type="number" min="0" matInput [(ngModel)]="page"/>
+        <input
+          placeholder="Страница"
+          (keyup.enter)="onSubmit()"
+          type="number"
+          min="0"
+          matInput
+          [(ngModel)]="page"
+        />
         <button matSuffix (click)="onCustomPageChange()">
           <mat-icon>navigate_next</mat-icon>
         </button>
@@ -92,22 +104,24 @@
     </mat-form-field>
   </div>
 </mat-expansion-panel>
-<div class="h-full w-full flex flex-wrap justify-center mt-3 p-4 grid grid-cols-1 lg:grid-cols-2 gap-6"
-     [ngClass]="messages.length > 0 && !loading ? 'mat-elevation-z10' : ''">
-  <div class="loading-shade"
-       *ngIf="loading; else card">
+<div
+  class="h-full w-full flex flex-wrap justify-center mt-3 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+  [ngClass]="messages.length > 0 && !loading ? 'mat-elevation-z10' : ''"
+>
+  <div class="loading-shade" *ngIf="loading; else card">
     <mat-spinner *ngIf="loading"></mat-spinner>
   </div>
   <ng-template #card>
-    <mat-card *ngFor="let message of messages">
+    <mat-card class="text-sm" *ngFor="let message of messages">
       <mat-card-header>
         <mat-card-title class="flex items-center w-full">
           <a
             target="_blank"
             class="block flex-1"
             [href]="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id"
-          >Пост</a
           >
+            Пост
+          </a>
           <mat-slide-toggle
             *ngIf="!message.Reposts.User_reposted"
             [color]="'accent'"
@@ -118,35 +132,38 @@
         <mat-card-subtitle>{{ fromUnixTime(message.Date) }}</mat-card-subtitle>
       </mat-card-header>
       <app-vk-image [src]="images(message)"></app-vk-image>
-      <mat-card-content [innerHTML]="message.Text" class="h-64 overflow-auto">
+      <mat-card-content [innerHTML]="message.Text" class="h-32 overflow-auto text-xs">
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-button (click)="like(message.Owner_Id, message.Id)">
-          <mat-icon [color]="message.Likes.User_Likes ? 'warn' : 'primary'"
-          >thumb_up
-          </mat-icon
-          >
-          {{ message.Likes.Count }}
-        </button>
-        <button mat-button (click)="repost(message.Owner_Id, message.Id)">
-          <mat-icon [color]="message.Reposts.User_reposted ? 'warn' : 'primary'"
-          >share
-          </mat-icon
-          >
-          {{ message.Reposts.Count }}
-        </button>
+      <mat-card-footer class="text-center">
         <mat-form-field class="message-category">
-          <mat-label>{{message.MessageCategoryPredict}}</mat-label>
-          <mat-select [value]="message.MessageCategoryId" panelClass="mat-select-full-height">
-            <mat-option (onSelectionChange)="setType(message.Id, message.Owner_Id, el.Id)" *ngFor="let el of categories"
-                        [value]="el.Id">
+          <mat-label>{{ message.MessageCategoryPredict }}</mat-label>
+          <mat-select
+            (selectionChange)="setType(message.Id, message.Owner_Id, $event)"
+            [value]="message.MessageCategoryId"
+            panelClass="mat-select-full-height"
+          >
+            <mat-option *ngFor="let el of categories" [value]="el.Id">
               <div class="flex flex-wrap items-center">
-                <span class="flex-1">{{el.Title}}</span>
+                <span class="flex-1">{{ el.Title }}</span>
                 <div class="w-3 h-3" [style.background]="el.Color"></div>
               </div>
             </mat-option>
           </mat-select>
         </mat-form-field>
+      </mat-card-footer>
+      <mat-card-actions>
+        <button mat-button (click)="like(message.Owner_Id, message.Id)">
+          <mat-icon [color]="message.Likes.User_Likes ? 'warn' : 'primary'"
+            >thumb_up
+          </mat-icon>
+          {{ message.Likes.Count }}
+        </button>
+        <button mat-button (click)="repost(message.Owner_Id, message.Id)">
+          <mat-icon [color]="message.Reposts.User_reposted ? 'warn' : 'primary'"
+            >share
+          </mat-icon>
+          {{ message.Reposts.Count }}
+        </button>
       </mat-card-actions>
     </mat-card>
   </ng-template>

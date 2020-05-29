@@ -10,9 +10,9 @@
       <mat-icon>arrow_back</mat-icon>
     </a>
   </div>
-  <div class="flex flex-col mb-2">
-    <img #img class="h-64 w-64" matCardImage [appLazyImage]="srcImg" />
-    <ul class="flex flex-wrap items-center justify-center">
+  <div class="flex flex-col mb-2 items-center">
+    <img #img class="h-64 w-64" mat-card-image [appLazyImage]="srcImg" />
+    <ul class="flex flex-wrap items-center justify-center h-4">
       <li
         (click)="setCurrent(image)"
         *ngFor="let image of imagePoints"
