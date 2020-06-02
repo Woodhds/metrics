@@ -1,0 +1,45 @@
+﻿{
+  "FrontendUrl": "http://localhost:4200",
+  "AllowedHosts": "*",
+  "JwtOptions": {
+    "key": "62AF691B3FE1FCA6BE1FED6EE12D935A67ED66EE07D46483CBB79707B4CFA8B1",
+    "Issuer": "metrics",
+    "Audience": "metrics"
+  },
+  "CacheOptions": {
+    "Configuration": "192.168.99.100:6379,password=password",
+    "Instance": "UserTokens"
+  },
+  "NLog": {
+    "extensions": [
+      {
+        "assembly": "NLog.Targets.ElasticSearch"
+      }
+    ],
+    "targets": {
+      "main": {
+        "type": "BufferingWrapper",
+        "flushTimeout": 5000,
+        "target": {
+          "type": "ElasticSearch",
+          "uri": "${configsetting:name=ElasticOptions.Host}"
+        }
+      }
+    },
+    "rules": [
+      {
+        "logger": "*",
+        "minLevel": "Error",
+        "writeTo": "main"
+      }
+    ]
+  },
+  "ElasticOptions": {
+    "Host": "http://192.168.99.100:9200"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug"
+    }
+  }
+}

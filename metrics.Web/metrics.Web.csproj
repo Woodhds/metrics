@@ -5,7 +5,28 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\metrics.Authentication\metrics.Authentication.csproj" />
+      <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
+      <ProjectReference Include="..\metrics.Cache\metrics.Cache.csproj" />
+      <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="sharedsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

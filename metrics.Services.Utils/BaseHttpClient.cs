@@ -39,7 +39,7 @@ namespace metrics.Services.Utils
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                return default;
+                throw;
             }
         }
 
@@ -53,7 +53,7 @@ namespace metrics.Services.Utils
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                return default;
+                throw;
             }
         }
     }

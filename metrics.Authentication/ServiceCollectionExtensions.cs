@@ -17,8 +17,8 @@ namespace metrics.Authentication
         public static IServiceCollection AddMetricsAuthentication(this IServiceCollection services,
             IConfiguration configuration, Action<AuthenticationBuilder> action = null)
         {
-            var jwtOptions = new JwtOptions();
-            configuration.GetSection(nameof(JwtOptions)).Bind(jwtOptions);
+            var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+            
             services.Configure<JwtOptions>(z =>
             {
                 z.Audience = jwtOptions.Audience;
@@ -63,6 +63,7 @@ namespace metrics.Authentication
             action?.Invoke(authentication);
 
             services.AddSingleton<IJsonWebTokenGenerationService, JsonWebTokenGenerationService>();
+            services.AddAuthorization();
 
             return services;
         }
