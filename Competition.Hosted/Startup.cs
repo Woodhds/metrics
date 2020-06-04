@@ -1,15 +1,27 @@
 using Base.Abstractions;
+using Base.Contracts.Options;
+using metrics.Broker.Abstractions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Utils;
-using Microsoft.AspNetCore.Hosting;
+using metrics.Web;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Competition.Hosted
 {
-    public class Startup
+    public class Startup : BaseStartup
     {
-        public void ConfigureServices(IServiceCollection services)
+        
+        public Startup(IConfiguration configuration) : base(configuration)
+        {
+        }
+        protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
+        {
+            
+        }
+
+        protected override void ConfigureApplicationServices(IServiceCollection services)
         {
             services.AddSingleton<IVkClient, VkClient>();
             services.AddVkClientConsole();
@@ -17,11 +29,16 @@ namespace Competition.Hosted
             services.AddTransient<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<ICompetitionsService, VkUserCompetitionService>();
             services.AddSingleton<IVkUserService, VkUserService>();
+
+            services.Configure<VkApiUrls>(Configuration.GetSection(nameof(VkApiUrls)));
+            services.Configure<TokenOptions>(Configuration.GetSection("Token"));
+            services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
+            services.Configure<CompetitionOptions>(Configuration.GetSection(nameof(CompetitionOptions)));
+            services.AddHostedService<CompetitionService>();
         }
 
-        public void Configure(IWebHostEnvironment env)
+        protected override void ConfigureDataContext(IServiceCollection services)
         {
-            
         }
     }
 }

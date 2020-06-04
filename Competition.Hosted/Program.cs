@@ -1,9 +1,6 @@
 ﻿using System;
-using Base.Contracts.Options;
-using metrics.Broker;
-using metrics.logging;
+using metrics.Web.Extensions;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
 
@@ -29,22 +26,8 @@ namespace Competition.Hosted
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(builder =>
                 {
+                    builder.AddSharedConfiguration();
                     builder.UseStartup<Startup>();
-                })
-                .ConfigureLogging((context, builder) =>
-                {
-                    builder.AddMetricsLogging(context.Configuration);
-                })
-                .ConfigureServices((context, services) =>
-                {
-                    services.Configure<ElasticOptions>(context.Configuration.GetSection(nameof(ElasticOptions)));
-                    services.Configure<VkApiUrls>(context.Configuration.GetSection(nameof(VkApiUrls)));
-                    services.Configure<TokenOptions>(context.Configuration.GetSection("Token"));
-                    services.Configure<VkontakteOptions>(context.Configuration.GetSection(nameof(VkontakteOptions)));
-                    services.Configure<CompetitionOptions>(
-                        context.Configuration.GetSection(nameof(CompetitionOptions)));
-                    services.AddHostedService<CompetitionService>();
-                    services.AddMessageBroker(context.Configuration);
                 })
                 .UseNLog();
     }

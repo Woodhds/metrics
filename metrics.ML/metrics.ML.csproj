@@ -18,6 +18,7 @@
       <ProjectReference Include="..\metrics.ML.Contracts\metrics.ML.Contracts.csproj" />
       <ProjectReference Include="..\metrics.Services.Abstractions\metrics.Services.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />
+      <ProjectReference Include="..\metrics.Web\metrics.Web.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using metrics.Web.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 
 namespace metrics.Broker.Console
 {
@@ -17,6 +18,7 @@ namespace metrics.Broker.Console
                 {
                     builder.AddSharedConfiguration();
                     builder.UseStartup<Startup>();
-                });
+                })
+                .UseNLog();
     }
 }

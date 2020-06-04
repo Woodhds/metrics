@@ -1,15 +1,12 @@
-﻿using System;
-using Base.Abstractions;
+﻿using Base.Abstractions;
+using metrics.Broker.Abstractions;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
 using metrics.Data.Sql.Extensions;
-using metrics.ML.Services;
-using metrics.ML.Services.Abstractions;
 using metrics.ML.Services.Extensions;
 using metrics.ML.Services.Services;
-using metrics.Services.Abstractions;
-using metrics.Services.Concrete;
+using metrics.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,27 +15,15 @@ using Microsoft.Extensions.Hosting;
 
 namespace metrics.ML
 {
-    public class Startup
+    public class Startup : BaseStartup
     {
-        private readonly IConfiguration _configuration;
-
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration) : base(configuration)
         {
-            _configuration = configuration;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            services.AddGrpc();
-            //services.AddHostedService<VkMessageMLService>();
-            services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
-            services.AddDataContext<DataContext>(_configuration.GetConnectionString("DataContext"));
-            services.AddElastic(_configuration);
-            services.AddPredictClient("http://localhost:5005");
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+            base.Configure(app, env);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -50,6 +35,26 @@ namespace metrics.ML
             {
                 endpoints.MapGrpcService<MessagePredictService>();
             });
+        }
+
+        protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
+        {
+           
+        }
+
+        protected override void ConfigureApplicationServices(IServiceCollection services)
+        {
+            services.AddGrpc();
+            //services.AddHostedService<VkMessageMLService>();
+            services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
+            services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
+            services.AddElastic(Configuration);
+            services.AddPredictClient("http://localhost:5005");
+        }
+
+        protected override void ConfigureDataContext(IServiceCollection services)
+        {
+            
         }
     }
 }
