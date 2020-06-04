@@ -3,10 +3,12 @@ using metrics.Broker;
 using metrics.Broker.Abstractions;
 using metrics.Cache;
 using metrics.logging;
+using metrics.ServiceDiscovery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace metrics.Web
 {
@@ -32,7 +34,7 @@ namespace metrics.Web
             ConfigureMessageBroker(services);
         }
 
-        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
         {
             
         }
@@ -55,6 +57,7 @@ namespace metrics.Web
         protected virtual void ConfigureBase(IServiceCollection services)
         {
             services.AddHttpClient();
+            services.AddServiceDiscovery(Configuration);
         }
 
         protected virtual void ConfigureCaching(IServiceCollection services)

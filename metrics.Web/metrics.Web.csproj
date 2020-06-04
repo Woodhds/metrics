@@ -21,6 +21,7 @@
       <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
       <ProjectReference Include="..\metrics.Cache\metrics.Cache.csproj" />
       <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />
+      <ProjectReference Include="..\metrics.ServiceDiscovery\metrics.ServiceDiscovery.csproj" />
     </ItemGroup>
 
     <ItemGroup>

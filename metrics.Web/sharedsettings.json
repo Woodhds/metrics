@@ -10,6 +10,9 @@
     "Configuration": "192.168.99.100:6379,password=password",
     "Instance": "UserTokens"
   },
+  "ConsulConfig": {
+    "Address": "http://192.168.99.100:8500"
+  },
   "NLog": {
     "extensions": [
       {

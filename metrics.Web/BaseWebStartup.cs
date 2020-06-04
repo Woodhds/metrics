@@ -1,5 +1,6 @@
 ﻿using metrics.Authentication;
 using metrics.Broker.Abstractions;
+using metrics.ServiceDiscovery;
 using metrics.Web.Conventions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,9 +68,9 @@ namespace metrics.Web
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
         }
 
-        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
         {
-            base.Configure(app, env);
+            base.Configure(app, env, lifeTime);
             
             if (env.IsDevelopment())
             {
@@ -94,6 +95,8 @@ namespace metrics.Web
 
                 ConfigureEndpoints(endpoints);
             });
+
+            app.UseServiceDiscovery(lifeTime);
         }
 
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)

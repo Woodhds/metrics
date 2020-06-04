@@ -21,9 +21,9 @@ namespace metrics.ML
         {
         }
 
-        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
         {
-            base.Configure(app, env);
+            base.Configure(app, env, lifeTime);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
