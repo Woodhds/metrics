@@ -36,7 +36,7 @@ namespace metrics.Web
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
         {
-            
+            app.UseServiceDiscovery(lifeTime);
         }
 
         protected virtual void ConfigureMessageBroker(IServiceCollection services)

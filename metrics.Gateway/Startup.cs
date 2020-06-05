@@ -22,7 +22,7 @@ namespace metrics.Gateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMetricsAuthentication(_configuration);
-            
+
             services.AddOcelot();
         }
 

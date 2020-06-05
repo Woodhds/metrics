@@ -18,14 +18,13 @@ namespace metrics.ServiceDiscovery
         {
             var consulClient = app.ApplicationServices
                 .GetRequiredService<IConsulClient>();
-            var consulConfig = app.ApplicationServices
-                .GetRequiredService<IOptions<ConsulConfig>>();
-            
+
             var features = app.Properties["server.Features"] as FeatureCollection;
             var addresses = features.Get<IServerAddressesFeature>();
-            var address = addresses.Addresses.First();
+            var address = addresses.Addresses.FirstOrDefault();
+            if (string.IsNullOrEmpty(address))
+                return app;
             
-            // Register service with consul
             var uri = new Uri(address);
             var registration = new AgentServiceRegistration
             {

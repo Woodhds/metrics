@@ -95,8 +95,6 @@ namespace metrics.Web
 
                 ConfigureEndpoints(endpoints);
             });
-
-            app.UseServiceDiscovery(lifeTime);
         }
 
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
