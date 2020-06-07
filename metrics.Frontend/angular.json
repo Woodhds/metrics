@@ -133,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "metrics"
+  "defaultProject": "metrics",
+  "cli": {
+    "analytics": false
+  }
 }

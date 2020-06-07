@@ -3,10 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="Consul" Version="1.6.1" />
-        <PackageReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
 </Project>

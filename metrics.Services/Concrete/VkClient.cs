@@ -93,8 +93,7 @@ namespace metrics.Services.Concrete
             var count = data.Response.Count;
 
             var result = await GetById(reposts
-                .Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.Owner_Id}
-                )
+                .Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.Owner_Id})
             );
 
             if (result.Response == null)
@@ -170,7 +169,7 @@ namespace metrics.Services.Concrete
             }
         }
 
-        public Task<SimpleVkResponse<List<VkUserResponse>>> GetUserInfo(string id)
+        public Task<SimpleVkResponse<List<VkUserResponse>>> GetUserInfo(string id, int? currentUser = null)
         {
             var @params = new NameValueCollection
             {
@@ -178,7 +177,7 @@ namespace metrics.Services.Concrete
                 {"fields", "first_name,last_name,photo_50"}
             };
 
-            return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(_urls.UserInfo, @params);
+            return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(_urls.UserInfo, @params, currentUser);
         }
 
         public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels,

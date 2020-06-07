@@ -7,7 +7,7 @@ namespace metrics.Services.Abstractions
 {
     public interface IVkUserService
     {
-        Task<VkUserModel> CreateAsync(string userId, CancellationToken token = default);
+        Task<VkUserModel> CreateAsync(string userId, int? currentUser = null, CancellationToken token = default);
         Task<IEnumerable<VkUserModel>> SearchAsync(string searchStr);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -19,9 +20,13 @@ namespace metrics.Services.Concrete
             _vkClient = vkClient;
         }
 
-        public async Task<VkUserModel> CreateAsync(string userId, CancellationToken token = default)
+        public async Task<VkUserModel> CreateAsync(string userId, int? currentUser = null, CancellationToken token = default)
         {
-            var userInfo = await _vkClient.GetUserInfo(userId);
+            var userInfo = await _vkClient.GetUserInfo(userId, currentUser);
+
+            if (userInfo.Response == null)
+                throw new ArgumentNullException(nameof(userId));
+            
             var user = new VkUserModel
             {
                 Id = userInfo.Response.First().Id,

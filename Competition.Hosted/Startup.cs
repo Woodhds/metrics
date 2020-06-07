@@ -34,6 +34,7 @@ namespace Competition.Hosted
             services.Configure<TokenOptions>(Configuration.GetSection("Token"));
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.Configure<CompetitionOptions>(Configuration.GetSection(nameof(CompetitionOptions)));
+            services.Configure<ElasticOptions>(Configuration.GetSection(nameof(ElasticOptions)));
             services.AddHostedService<CompetitionService>();
         }
 

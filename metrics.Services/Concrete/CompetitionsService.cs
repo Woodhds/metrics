@@ -55,6 +55,8 @@ namespace metrics.Services.Concrete
 
                     var doc = new HtmlDocument();
                     doc.LoadHtml(content);
+                    if (doc.DocumentNode == null) continue;
+                    
                     var models = doc.DocumentNode
                         .SelectNodes(
                             "//div[@class='grid-item']/div[@class='post_container']/div[@class='post_footer']/a/@href")

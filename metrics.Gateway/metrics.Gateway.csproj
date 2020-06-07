@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ocelot" Version="16.0.1" />
-      <PackageReference Include="Ocelot.Provider.Consul" Version="16.0.1" />
+      <PackageReference Include="Ocelot" Version="15.0.7" />
+      <PackageReference Include="Ocelot.Provider.Consul" Version="15.0.7" />
     </ItemGroup>
 
     <ItemGroup>

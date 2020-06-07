@@ -36,6 +36,8 @@ namespace Competition.Hosted
                     try
                     {
                         var data = await service.Fetch();
+                        if (data?.Count == 0) continue;
+                        
                         await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: stoppingToken);
                         await Task.Delay(900 * 10, stoppingToken);
                     }
