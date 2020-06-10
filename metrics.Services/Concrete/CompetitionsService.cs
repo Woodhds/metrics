@@ -55,20 +55,26 @@ namespace metrics.Services.Concrete
 
                     var doc = new HtmlDocument();
                     doc.LoadHtml(content);
-                    if (doc.DocumentNode == null) continue;
+                    if (doc?.DocumentNode == null) continue;
                     
-                    var models = doc.DocumentNode
+                    var models = doc.DocumentNode?
                         .SelectNodes(
                             "//div[@class='grid-item']/div[@class='post_container']/div[@class='post_footer']/a/@href")
-                        .Where(d => d.Attributes.Any(h => h.Name == "href" && !string.IsNullOrEmpty(h.Value)))
-                        .Select(d => d.GetAttributeValue("href", "").Replace("https://vk.com/wall", "").Split('_'))
-                        .Select(d => new VkRepostViewModel {Owner_Id = int.Parse(d[0]), Id = int.Parse(d[1])});
+                        .Where(d => d.Attributes != null && d.Attributes.Any(h => h.Name == "href" && !string.IsNullOrEmpty(h.Value)))
+                        .Select(d => d.GetAttributeValue("href", "")?.Replace("https://vk.com/wall", "").Split('_'))
+                        .Where(h => h != null && h.Length > 1)
+                        .Select(d => new VkRepostViewModel {Owner_Id = int.Parse(d[0]), Id = int.Parse(d[1])})
+                        .ToList();
 
-                    data.AddRange(models);
+                    if (models.Any())
+                    {
+                        data.AddRange(models);
+                    }
+                    
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError("ERROR Parsing", e.Message);
+                    _logger.LogError("ERROR Parsing", e);
                 }
             }
 

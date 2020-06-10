@@ -14,8 +14,8 @@ namespace metrics.Broker
             Action<IMessageHandlerProvider> handlerProvider = null
         )
         {
-            var options = new AmpqOptions();
-            configuration.GetSection(nameof(AmpqOptions)).Bind(options);
+            var options = new AmqpOptions();
+            configuration.GetSection(nameof(AmqpOptions)).Bind(options);
 
             var bus = Bus.Factory.CreateUsingRabbitMq(x =>
             {
@@ -34,7 +34,7 @@ namespace metrics.Broker
             handlerProvider?.Invoke(hp);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            bus.ConnectReceiveEndpoint(options.Queue, configurator =>
+            bus.ConnectReceiveEndpoint(configuration["Queue"], configurator =>
             {
                 var handlerConfigurator = new HandlerConfigurator(configurator, serviceProvider);
                 

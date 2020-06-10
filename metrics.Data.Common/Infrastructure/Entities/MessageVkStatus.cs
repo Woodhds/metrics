@@ -3,6 +3,6 @@
     public enum MessageVkStatus
     {
         None = 0,
-        MLProcessed = 10
+        Processed = 10
     }
 }

@@ -47,9 +47,11 @@ namespace metrics.ML.Services
 
                 var messages = (await _elasticClientFactory.Create().SearchAsync<VkMessage>(descriptor =>
                         descriptor.Query(containerDescriptor => containerDescriptor.Ids(idsQueryDescriptor =>
-                                idsQueryDescriptor.Values(messageVks.Select(f => (f.OwnerId ^ f.MessageId).ToString())))).Skip(0)
+                                idsQueryDescriptor.Values(messageVks.Select(f =>
+                                    (f.OwnerId ^ f.MessageId).ToString())))).Skip(0)
                             .Take(9000),
-                    stoppingToken)).Documents.Join(messageVks, message => message.Identifier, vk => (vk.OwnerId ^ vk.MessageId),
+                    stoppingToken)).Documents.Join(messageVks, message => message.Identifier,
+                    vk => (vk.OwnerId ^ vk.MessageId),
                     (e, vk) =>
                         new VkMessageML
                         {
@@ -57,12 +59,14 @@ namespace metrics.ML.Services
                             Id = e.Id,
                             Text = e.Text,
                             OwnerId = e.Owner_Id
-                        });
+                        }).ToArray();
 
                 if (messages.Any())
                 {
-                    var mlContext = _messagePredictModelService.Load();
+                    var data = _messagePredictModelService.Load();
+                    var mlContext = new MLContext();
                     var trainingDataView = mlContext.Data.LoadFromEnumerable(messages);
+
                     var pipeline = mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(VkMessageML.Category))
                         .Append(mlContext.Transforms.Text.NormalizeText("NormalizedText", nameof(VkMessageML.Text)))
                         .Append(mlContext.Transforms.Text.FeaturizeText("Features", "NormalizedText"))
@@ -70,19 +74,19 @@ namespace metrics.ML.Services
                         .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"))
                         .AppendCacheCheckpoint(mlContext);
 
-                    //mlContext.MulticlassClassification.CrossValidate(trainingDataView, pipeline);
-                    var trainedModel = pipeline.Fit(trainingDataView);
+                    var transformedNewData = data.Transformer.Transform(trainingDataView);
+                    mlContext.MulticlassClassification.CrossValidate(transformedNewData, pipeline);
+                    var trainedModel = pipeline.Fit(transformedNewData);
 
-                    _messagePredictModelService.Save(mlContext, trainedModel, trainingDataView);
+                    _messagePredictModelService.Save(mlContext, trainedModel, transformedNewData);
 
-                    /*
                     try
                     {
                         foreach (var message in messageVks)
                         {
                             await scope.GetRepository<MessageVk>().UpdateAsync(new MessageVk
                             {
-                                Status = MessageVkStatus.MLProcessed,
+                                Status = MessageVkStatus.Processed,
                                 MessageCategoryId = message.MessageCategoryId,
                                 MessageId = message.MessageId,
                                 OwnerId = message.OwnerId
@@ -94,7 +98,7 @@ namespace metrics.ML.Services
                     catch (Exception e)
                     {
                         await scope.RollbackAsync(stoppingToken);
-                    }*/
+                    }
                 }
 
                 await Task.Delay(1000 * 60 * 60, stoppingToken);

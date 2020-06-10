@@ -4,6 +4,7 @@ using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Confguraton;
 using metrics.Data.Sql;
 using metrics.Data.Sql.Extensions;
+using metrics.ML.Services;
 using metrics.ML.Services.Extensions;
 using metrics.ML.Services.Services;
 using metrics.Web;
