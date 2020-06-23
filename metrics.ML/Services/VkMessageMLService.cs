@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,23 +7,25 @@ using Base.Contracts;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using metrics.ML.Contracts.Data;
+using metrics.ML.Services.Abstractions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.ML;
-using Microsoft.ML.Data;
-using Microsoft.ML.Trainers;
 
 namespace metrics.ML.Services
 {
     public class VkMessageMLService : BackgroundService
     {
+        private readonly IMessagePredictModelService _messagePredictModelService;
         private readonly IElasticClientFactory _elasticClientFactory;
         private readonly ITransactionScopeFactory _transactionScopeFactory;
 
         public VkMessageMLService(
+            IMessagePredictModelService messagePredictModelService,
             IElasticClientFactory elasticClientFactory,
             ITransactionScopeFactory transactionScopeFactory
         )
         {
+            _messagePredictModelService = messagePredictModelService;
             _elasticClientFactory = elasticClientFactory;
             _transactionScopeFactory = transactionScopeFactory;
         }
@@ -62,44 +63,22 @@ namespace metrics.ML.Services
 
                 if (messages.Any())
                 {
+                    var data = _messagePredictModelService.Load();
                     var mlContext = new MLContext();
-                    var data = mlContext.Data.LoadFromEnumerable(messages);
+                    var trainingDataView = mlContext.Data.LoadFromEnumerable(messages);
 
-                    ITransformer dataPrepPipeline;
-                    if (File.Exists("data_preparation.zip"))
-                    {
-                        dataPrepPipeline = mlContext.Model.Load("data_preparation.zip", out _);
-                    }
-                    else
-                    {
-                        var dataPrepEstimator = mlContext.Transforms.Conversion
-                            .MapValueToKey("Label", nameof(VkMessageML.Category))
-                            .Append(mlContext.Transforms.Text.NormalizeText("NormalizedText", nameof(VkMessageML.Text)))
-                            .Append(mlContext.Transforms.Text.FeaturizeText("Features", "NormalizedText"));
-                        dataPrepPipeline = dataPrepEstimator.Fit(data);
-                    }
+                    var pipeline = mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(VkMessageML.Category))
+                        .Append(mlContext.Transforms.Text.NormalizeText("NormalizedText", nameof(VkMessageML.Text)))
+                        .Append(mlContext.Transforms.Text.FeaturizeText("Features", "NormalizedText"))
+                        .Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy())
+                        .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"))
+                        .AppendCacheCheckpoint(mlContext);
 
-                    var dataEstimator =
-                        mlContext.Regression.Trainers.OnlineGradientDescent();
+                    var transformedNewData = data.Transformer.Transform(trainingDataView);
+                    mlContext.MulticlassClassification.CrossValidate(transformedNewData, pipeline);
+                    var trainedModel = pipeline.Fit(transformedNewData);
 
-                    var transformedData = dataPrepPipeline.Transform(data);
-
-                    RegressionPredictionTransformer<LinearRegressionModelParameters> trainedModel;
-
-                    if (File.Exists("Model.zip"))
-                    {
-                        var originalModel = mlContext.Model.Load("Model.zip", out _);
-                        var originalModelParameters =
-                            ((ISingleFeaturePredictionTransformer<object>) originalModel).Model as
-                            LinearRegressionModelParameters;
-                        trainedModel = dataEstimator.Fit(transformedData, originalModelParameters);
-                    }
-                    else
-                    {
-                        trainedModel = dataEstimator.Fit(transformedData);
-                    }
-
-                    mlContext.Model.Save(trainedModel, transformedData.Schema, "Model.zip");
+                    _messagePredictModelService.Save(mlContext, trainedModel, transformedNewData);
 
                     try
                     {
@@ -116,7 +95,7 @@ namespace metrics.ML.Services
 
                         await scope.CommitAsync(stoppingToken);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         await scope.RollbackAsync(stoppingToken);
                     }
