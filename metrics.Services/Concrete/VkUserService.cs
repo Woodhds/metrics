@@ -55,12 +55,9 @@ namespace metrics.Services.Concrete
             );
             
 
-            if (result.IsValid)
-            {
-                return result.Documents;
-            }
-
-            return Enumerable.Empty<VkUserModel>();
+            return result.IsValid 
+                ? result.Documents 
+                : Enumerable.Empty<VkUserModel>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using metrics.Web.Extensions;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using NLog.Web;
 
 namespace metrics
@@ -12,13 +12,10 @@ namespace metrics
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.AddSharedConfiguration();
-                    webBuilder.UseStartup<Startup>();
-                })
+        public static IWebHostBuilder CreateHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .AddSharedConfiguration()
+                .UseStartup<Startup>()
                 .UseNLog();
     }
 }
