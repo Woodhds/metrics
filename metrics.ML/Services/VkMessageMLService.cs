@@ -79,8 +79,8 @@ namespace metrics.ML.Services
                     var trainedModel = pipeline.Fit(transformedNewData);
 
                     _messagePredictModelService.Save(mlContext, trainedModel, transformedNewData);
-
-                    try
+                    
+                    /*try
                     {
                         foreach (var message in messageVks)
                         {
@@ -99,6 +99,7 @@ namespace metrics.ML.Services
                     {
                         await scope.RollbackAsync(stoppingToken);
                     }
+                    */
                 }
 
                 await Task.Delay(1000 * 60 * 60, stoppingToken);
