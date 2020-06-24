@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: metrics-webapi
+  labels:
+    app: metrics-webapi
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: metrics-weapi

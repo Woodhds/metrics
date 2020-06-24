@@ -88,6 +88,8 @@ namespace metrics.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Metrics API V1"); });
 
             app.UseEndpoints(endpoints =>
             {

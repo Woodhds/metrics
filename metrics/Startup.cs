@@ -61,7 +61,7 @@ namespace metrics
             services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
 
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
-            services.AddPredictClient("https://localhost:5006");
+            services.AddPredictClient(Configuration["ClientUrl"]);
             
             services.AddElastic(Configuration);
             

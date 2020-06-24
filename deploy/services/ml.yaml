@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metrics-ml
+  name: metrics-ml
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: metrics-ml
+  template:
+    spec:
+      containers:
+        - name: metrics-ml
+          image: metrics-ml
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+    metadata:
+      namespace: default
+      name: metrics-ml
+      labels:
+        app: metrics-ml
+    

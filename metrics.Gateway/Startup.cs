@@ -23,7 +23,7 @@ namespace metrics.Gateway
         {
             services.AddMetricsAuthentication(_configuration);
 
-            services.AddOcelot().AddConsul();
+            services.AddOcelot();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

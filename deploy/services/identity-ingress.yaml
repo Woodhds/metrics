@@ -1,0 +1,15 @@
+﻿apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: metrics-ingress
+  namespace: default
+  labels:
+    app: metrics-identity-ingress
+spec:
+  rules:
+    - host: metrics-identity
+      http:
+        paths:
+          - backend:
+              serviceName: metrics-identity
+              servicePort: 80

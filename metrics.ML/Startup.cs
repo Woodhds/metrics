@@ -50,7 +50,7 @@ namespace metrics.ML
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
             services.AddElastic(Configuration);
-            services.AddPredictClient("http://localhost:5005");
+            services.AddPredictClient(Configuration["ClientUrl"]);
         }
 
         protected override void ConfigureDataContext(IServiceCollection services)

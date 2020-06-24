@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metrics-webapi
+  name: metrics-webapi
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: metrics-webapi
+  template:
+    spec:
+      containers:
+        - name: metrics-webapi
+          image: metrics-webapi
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+    metadata:
+      namespace: default
+      name: metrics-webapi
+      labels:
+        app: metrics-webapi
+    

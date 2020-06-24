@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\metrics.Authentication\metrics.Authentication.csproj" />
+      <ProjectReference Include="..\metrics.Web\metrics.Web.csproj" />
     </ItemGroup>
 
 </Project>

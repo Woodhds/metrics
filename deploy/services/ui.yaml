@@ -1,0 +1,25 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-ui
+  labels:
+    app: metrics-ui
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: metrics-ui
+  template:
+    spec:
+      containers:
+        - name: metrics-ui
+          ports:
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent
+          image: metrics-ui
+    metadata:
+      namespace: default
+      labels:
+        app: metrics-ui
+      name: metrics-ui
+    

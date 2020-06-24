@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+﻿FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 ARG workdir="/src"
 
 # Copy source code
@@ -6,10 +6,10 @@ COPY . $workdir
 
 # Restore dependencies
 WORKDIR $workdir
-RUN dotnet restore ./metrics/metrics.csproj
+RUN dotnet restore ./metrics.Gateway/metrics.Gateway.csproj
 
 # Publish project
-RUN dotnet publish ./metrics/metrics.csproj --no-restore -c Release -o /app
+RUN dotnet publish ./metrics.Gateway/metrics.Gateway.csproj --no-restore -c Release -o /app
 
 
 # Create docker image from published project
@@ -20,17 +20,13 @@ WORKDIR /app
 
 # Disable telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
-
 ENV CacheOptions__Configuration="redis-master:6379,password=password"
 ENV ConsulConfig__Address="consul-consul-server:8500"
 ENV AmqpOptions__Host="rabbitmq"
 ENV ElasticOptions__Host="http://elasticsearch-master:9200"
-ENV ConnectionStrings__DataContext="Host=postgres-postgresql;Port=5432;Database=repost_ctx;UserId=postgres;Password=password;"
-ENV SignalROptions__Host="redis-master:6379,password=password"
-ENV IdentityOptions__ServerUrl="http://metrics-identity"
-ENV ClientUrl="http://metrics-ml"
+ENV ServiceDiscoveryProvider__Host="consul-consul-server"
+EXPOSE 80
 
 # Don't forget to expose a port for the application
-EXPOSE 80
 COPY --from=0 /app .
-ENTRYPOINT ["dotnet", "metrics.dll"]
+ENTRYPOINT ["dotnet", "metrics.Gateway.dll"]

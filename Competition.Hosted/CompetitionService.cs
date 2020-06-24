@@ -35,15 +35,20 @@ namespace Competition.Hosted
                 {
                     try
                     {
+                        Console.WriteLine($"Start fetching from \"{service.GetType().Name}\" {DateTimeOffset.Now}");
                         var data = await service.Fetch();
                         if (data?.Count == 0) continue;
-                        
+
                         await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: stoppingToken);
                         await Task.Delay(900 * 10, stoppingToken);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, "Error fetch posts");
+                    }
+                    finally
+                    {
+                        Console.WriteLine($"Stop fetching from \"{service.GetType().Name}\" {DateTimeOffset.Now}");
                     }
                 }
 

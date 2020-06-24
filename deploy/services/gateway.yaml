@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metrics-gateway
+  name: metrics-gateway
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: metrics-gateway
+  template:
+    spec:
+      containers:
+        - name: metrics-gateway
+          image: metrics-gateway
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /app/secrets
+              name: config-volume
+      volumes:
+        - name: config-volume
+          configMap:
+            name: metrics-gateway-config
+    metadata:
+      namespace: default
+      name: metrics-gateway
+      labels:
+        app: metrics-gateway
+    

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metrics-identity
+  name: metrics-identity
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: metrics-identity
+  template:
+    spec:
+      containers:
+        - name: metrics-identity
+          image: metrics-identity
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+    metadata:
+      namespace: default
+      name: metrics-identity
+      labels:
+        app: metrics-identity
+    

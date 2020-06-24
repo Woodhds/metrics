@@ -1,0 +1,15 @@
+﻿apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: metrics-ui-ingress
+  namespace: default
+  labels:
+    app: metrics-ui-ingress
+spec:
+  rules:
+    - host: metrics-ui
+      http:
+        paths:
+          - backend:
+              serviceName: metrics-ui
+              servicePort: 80

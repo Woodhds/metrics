@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metrics-competition
+  name: metrics-competition
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: metrics-competition
+  template:
+    spec:
+      containers:
+        - name: metrics-competition
+          image: metrics-competition
+          imagePullPolicy: IfNotPresent
+    metadata:
+      namespace: default
+      name: metrics-competition
+      labels:
+        app: metrics-competition
+    

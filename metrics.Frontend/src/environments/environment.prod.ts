@@ -1,4 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: "https://localhost:5000/api"
+  baseUrl: "",
+  get apiUrl() : string {
+    return this.baseUrl + '/api'
+  }
 };

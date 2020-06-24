@@ -1,0 +1,13 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: metrics-ui
+  labels:
+    app: metrics-ui
+  namespace: default
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: metrics-ui

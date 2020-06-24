@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metrics-broker
+  name: metrics-broker
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: metrics-broker
+  template:
+    spec:
+      containers:
+        - name: metrics-broker
+          image: metrics-broker
+          imagePullPolicy: IfNotPresent
+    metadata:
+      namespace: default
+      name: metrics-broker
+      labels:
+        app: metrics-broker
+    

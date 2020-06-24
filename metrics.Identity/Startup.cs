@@ -36,22 +36,12 @@ namespace metrics.Identity
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
             });
-            
+
             services
                 .AddMvcCore()
                 .AddNewtonsoftJson(opts =>
                 {
                     opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                })
-                .AddCors(opts =>
-                {
-                    opts.AddPolicy("CorsPolicy", builder =>
-                        builder
-                            .WithOrigins("http://localhost:4200")
-                            .AllowAnyHeader()
-                            .AllowCredentials()
-                            .AllowAnyMethod()
-                    );
                 });
 
             services.AddHttpContextAccessor();
@@ -118,7 +108,6 @@ namespace metrics.Identity
             
             app.UseAuthorization();
 
-            app.UseCors("CorsPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API V1"); });
 
