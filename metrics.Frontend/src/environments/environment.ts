@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:5010',
+  identityUrl: 'http://localhost:5003',
   get apiUrl() : string {
     return this.baseUrl + '/api'
   }

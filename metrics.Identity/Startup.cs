@@ -45,6 +45,16 @@ namespace metrics.Identity
                 .AddNewtonsoftJson(opts =>
                 {
                     opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                })
+                .AddCors(opts =>
+                {
+                    opts.AddPolicy("CorsPolicy", builder =>
+                        builder
+                            .WithOrigins(_configuration["FrontendUrl"])
+                            .AllowAnyHeader()
+                            .AllowCredentials()
+                            .AllowAnyMethod()
+                    );
                 });
 
             services.AddHttpContextAccessor();
@@ -115,6 +125,7 @@ namespace metrics.Identity
             
             app.UseAuthorization();
 
+            app.UseCors("CorsPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API V1"); });
 

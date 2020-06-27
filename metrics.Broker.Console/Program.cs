@@ -13,7 +13,7 @@ namespace metrics.Broker.Console
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder()
+            Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(builder =>
                 {
                     builder.AddSharedConfiguration();

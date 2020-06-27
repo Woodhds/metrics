@@ -13,7 +13,7 @@ namespace metrics.Identity.Client
             IConfiguration configuration)
         {
             serviceCollection.AddHttpClient();
-            serviceCollection.AddScoped<IIdentityClient, IdentityClient>();
+            serviceCollection.AddSingleton<IIdentityClient, IdentityClient>();
             serviceCollection.Configure<IdentityOptions>(configuration.GetSection(nameof(IdentityOptions)));
             serviceCollection.AddSingleton<ISystemTokenGenerationService, SystemTokenGenerationService>();
             serviceCollection.AddSingleton<IJsonWebTokenGenerationService, JsonWebTokenGenerationService>();
