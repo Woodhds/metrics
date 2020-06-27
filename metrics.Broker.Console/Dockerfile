@@ -20,12 +20,6 @@ WORKDIR /app
 
 # Disable telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
-ENV CacheOptions__Configuration="redis-master:6379,password=password"
-ENV ConsulConfig__Address="consul-consul-server:8500"
-ENV AmqpOptions__Host="rabbitmq"
-ENV ElasticOptions__Host="http://elasticsearch-master:9200"
-ENV ConnectionStrings__IdentityContext="Host=postgres-postgresql;Port=5432;Database=repost_ctx;UserId=postgres;Password=password"
-ENV IdentityOptions__ServerUrl="http://metrics-identity:80"
 
 # Don't forget to expose a port for the application
 COPY --from=0 /app .

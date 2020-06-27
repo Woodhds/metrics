@@ -1,5 +1,7 @@
+using metrics.Web.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using NLog.Web;
 
 namespace metrics.Identity
 {
@@ -12,6 +14,8 @@ namespace metrics.Identity
 
         public static IWebHostBuilder CreateHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .AddSharedConfiguration()
+                .UseNLog()
                 .UseStartup<Startup>();
     }
 }

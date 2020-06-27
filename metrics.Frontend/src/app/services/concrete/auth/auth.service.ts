@@ -28,7 +28,7 @@ export class AuthService {
       .set('loginProvider', loginProvider)
       .set('returnUrl', location.href)
 
-    window.location.href = `${environment.apiUrl}/auth/authorize/externallogin?` + httpParams.toString()
+    window.location.href = `${environment.identityUrl}/api/authorize/externallogin?` + httpParams.toString()
   }
 
   getUserInfo(token) {

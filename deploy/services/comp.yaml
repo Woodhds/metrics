@@ -15,6 +15,14 @@ spec:
         - name: metrics-competition
           image: metrics-competition
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /app/sharedsettings.json
+              name: shared-config
+              subPath: sharedsettings.json
+      volumes:
+        - name: shared-config
+          configMap:
+            name: metrics-shared-config
     metadata:
       namespace: default
       name: metrics-competition

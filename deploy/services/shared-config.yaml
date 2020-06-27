@@ -1,0 +1,10 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: metrics-shared-config
+  namespace: default
+  name: metrics-shared-config
+data:
+  sharedsettings.json:
+    "{\r\n  \"FrontendUrl\": \"http://metrics-ui\",\r\n  \"AllowedHosts\": \"*\",\r\n  \"JwtOptions\": {\r\n    \"key\": \"62AF691B3FE1FCA6BE1FED6EE12D935A67ED66EE07D46483CBB79707B4CFA8B1\",\r\n    \"Issuer\": \"metrics\",\r\n    \"Audience\": \"metrics\"\r\n  },\r\n  \"CacheOptions\": {\r\n    \"Configuration\": \"redis-master:6379,password=password\",\r\n    \"Instance\": \"UserTokens\"\r\n  },\r\n  \"ConsulConfig\": {\r\n    \"Address\": \"http://consul-consul-server:8500\"\r\n  },\r\n  \"AmqpOptions\": {\r\n    \"Host\": \"rabbitmq:5672\",\r\n    \"UserName\": \"user\",\r\n    \"Password\": \"password\"\r\n  },\r\n  \"NLog\": {\r\n    \"extensions\": [\r\n      {\r\n        \"assembly\": \"NLog.Targets.ElasticSearch\"\r\n      }\r\n    ],\r\n    \"targets\": {\r\n      \"main\": {\r\n        \"type\": \"BufferingWrapper\",\r\n        \"flushTimeout\": 5000,\r\n        \"target\": {\r\n          \"type\": \"ElasticSearch\",\r\n          \"uri\": \"${configsetting:name=ElasticOptions.Host}\"\r\n        }\r\n      }\r\n    },\r\n    \"rules\": [\r\n      {\r\n        \"logger\": \"*\",\r\n        \"minLevel\": \"Error\",\r\n        \"writeTo\": \"main\"\r\n      }\r\n    ]\r\n  },\r\n  \"ElasticOptions\": {\r\n    \"Host\": \"http://elasticsearch-master:9200\"\r\n  },\r\n  \"Logging\": {\r\n    \"LogLevel\": {\r\n      \"Default\": \"Information\",\r\n      \"Microsoft\": \"Warning\",\r\n      \"Microsoft.Hosting.Lifetime\": \"Information\"\r\n    }\r\n  }\r\n}"

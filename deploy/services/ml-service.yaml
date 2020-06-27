@@ -1,0 +1,17 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: metrics-ml
+  namespace: default
+  labels:
+    app: metrics-ml
+spec:
+  selector:
+    app: metrics-ml
+  ports:
+    - port: 80
+      name: http
+      protocol: TCP
+    - port: 443
+      name: https
+      protocol: TCP

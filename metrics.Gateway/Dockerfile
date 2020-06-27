@@ -20,13 +20,9 @@ WORKDIR /app
 
 # Disable telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
-ENV CacheOptions__Configuration="redis-master:6379,password=password"
-ENV ConsulConfig__Address="consul-consul-server:8500"
-ENV AmqpOptions__Host="rabbitmq"
-ENV ElasticOptions__Host="http://elasticsearch-master:9200"
-ENV ServiceDiscoveryProvider__Host="consul-consul-server"
+ENV ASPNETCORE_URLS=http://+:80;https://+:443
 EXPOSE 80
-
+EXPOSE 443
 # Don't forget to expose a port for the application
 COPY --from=0 /app .
 ENTRYPOINT ["dotnet", "metrics.Gateway.dll"]

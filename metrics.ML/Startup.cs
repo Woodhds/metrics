@@ -29,6 +29,11 @@ namespace metrics.ML
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+                app.UseHttpsRedirection();
+            }
 
             app.UseRouting();
 

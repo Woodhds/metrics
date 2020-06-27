@@ -17,6 +17,27 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+              name: http
+            - containerPort: 443
+              name: https
+          volumeMounts:
+            - mountPath: /app/sharedsettings.json
+              name: shared-config
+              subPath: sharedsettings.json
+            - mountPath: /certs/tls.crt
+              name: certs
+              subPath: tls.crt
+              readOnly: true
+          env:
+            - name: Kestrel__Certificates__Default__Path
+              value: /certs/tls.crt
+      volumes:
+        - name: shared-config
+          configMap:
+            name: metrics-shared-config
+        - name: certs
+          secret:
+            secretName: metrics-selfsigned-tls
     metadata:
       namespace: default
       name: metrics-ml

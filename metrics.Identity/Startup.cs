@@ -1,3 +1,5 @@
+using System;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Base.Contracts.Options;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -100,6 +103,10 @@ namespace metrics.Identity
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseForwardedHeaders();
             }
             
             app.UseAuthentication();
