@@ -23,9 +23,11 @@ namespace metrics.Broker.Console
 
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
         {
-            provider.Register<RepostGroupCreatedEvent, RepostEventGroupCreatedHandler>();
-            provider.Register<LoginEvent, LoginEventHandler>();
-            provider.Register<RepostedEvent, RepostedEventHandler>();
+            provider.RegisterConsumer<CreateRepostGroup, RepostEventGroupCreatedHandler>();
+            provider.RegisterConsumer<LoginEvent, LoginEventHandler>();
+            provider.RegisterConsumer<CreateRepost, RepostedEventHandler>();
+            
+            provider.RegisterCommand<CreateRepost>();
         }
 
         protected override void ConfigureApplicationServices(IServiceCollection services)

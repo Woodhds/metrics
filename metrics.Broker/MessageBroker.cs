@@ -18,5 +18,10 @@ namespace metrics.Broker
         {
             return _bus.Publish(obj, token);
         }
+
+        public Task SendAsync<T>(T obj, CancellationToken token = default) where T : class
+        {
+            return _bus.Send(obj, token);
+        }
     }
 }

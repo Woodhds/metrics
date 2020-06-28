@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Broker.Abstractions;
@@ -54,15 +53,15 @@ namespace metrics.Controllers
         }
 
         [HttpPost("repost")]
-        public async Task<IActionResult> Repost(CancellationToken ct, [FromBody] List<VkRepostViewModel> reposts)
+        public async Task<IActionResult> Repost([FromBody] List<VkRepostViewModel> reposts)
         {
             try
             {
-                await _messageBroker.PublishAsync(new RepostGroupCreatedEvent
+                await _messageBroker.SendAsync(new CreateRepostGroup
                 {
                     Reposts = reposts,
                     UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId()
-                }, ct);
+                });
 
                 return Ok(true);
             }

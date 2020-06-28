@@ -1,6 +1,6 @@
 ﻿namespace metrics.Broker.Events.Events
 {
-    public class RepostedEvent
+    public class CreateRepost
     {
         public int UserId { get; set; }
         public int OwnerId { get; set; }

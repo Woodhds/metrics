@@ -38,11 +38,18 @@ namespace metrics.Broker
             {
                 var handlerConfigurator = new HandlerConfigurator(configurator, serviceProvider);
                 
-                foreach (var (tEvent, _) in hp.GetTypes())
+                foreach (var (tEvent, _) in hp.GetConsumers())
                 {
-                    var method = typeof(HandlerConfigurator).GetMethod(nameof(HandlerConfigurator.Configure))
+                    var method = typeof(HandlerConfigurator).GetMethod(nameof(HandlerConfigurator.ConfigureConsumer))
                         ?.MakeGenericMethod(tEvent);
                     method?.Invoke(handlerConfigurator, null);
+                }
+
+                foreach (var command in hp.GetCommands())
+                {
+                    var method = typeof(HandlerConfigurator).GetMethod(nameof(HandlerConfigurator.ConfigureCommand))
+                        ?.MakeGenericMethod(command);
+                    method?.Invoke(handlerConfigurator, new object?[]{options.Host});
                 }
             });
 

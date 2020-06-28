@@ -25,7 +25,7 @@ namespace metrics.Controllers
         [HttpPost("type")]
         public async Task<IActionResult> SetType([FromBody] SetMessageTypeEvent @event)
         {
-            await _messageBroker.PublishAsync(@event);
+            await _messageBroker.SendAsync(@event);
             return Ok();
         }
 

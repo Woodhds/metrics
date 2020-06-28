@@ -143,7 +143,7 @@ namespace metrics.Services.Concrete
                         {"object", $"wall{t.Owner_Id}_{t.Id}"}
                     };
                     await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params, userId);
-                    await _messageBroker.PublishAsync(new RepostedEvent
+                    await _messageBroker.SendAsync(new CreateRepost
                     {
                         Id = t.Id,
                         OwnerId = t.Owner_Id,
@@ -160,7 +160,7 @@ namespace metrics.Services.Concrete
             foreach (var x in vkRepostViewModels.Select(f => $"{f.Id}+{f.Owner_Id}")
                 .Except(reposts.Select(f => $"{f.Id}+{f.Owner_Id}")))
             {
-                await _messageBroker.PublishAsync(new RepostedEvent
+                await _messageBroker.SendAsync(new CreateRepost
                 {
                     Id = Convert.ToInt32(x.Split('+')[0]),
                     OwnerId = Convert.ToInt32(x.Split('+')[1]),

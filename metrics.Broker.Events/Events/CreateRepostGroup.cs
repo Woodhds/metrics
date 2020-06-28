@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace metrics.Broker.Events.Events
 {
-    public class RepostGroupCreatedEvent
+    public class CreateRepostGroup
     {
         public int UserId { get; set; }
         public int Timeout { get; set; } = 30;
