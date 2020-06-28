@@ -7,20 +7,33 @@ namespace metrics.Broker
 {
     public class HandlerConfigurator
     {
-        private readonly IReceiveEndpointConfigurator _configurator;
+        private readonly IBusControl _busControl;
         private readonly IServiceProvider _serviceProvider;
 
-        public HandlerConfigurator(IReceiveEndpointConfigurator configurator, IServiceProvider serviceProvider)
+        public HandlerConfigurator(IServiceProvider serviceProvider, IBusControl busControl)
         {
-            _configurator = configurator;
             _serviceProvider = serviceProvider;
+            _busControl = busControl;
         }
 
         public void ConfigureConsumer<TEvent>() where TEvent : class
         {
-            var createFactory = new MessageHandler<TEvent>(_serviceProvider.GetService<IMessageHandler<TEvent>>());
-            _configurator.Consumer(typeof(MessageHandler<TEvent>),
-                _ => createFactory);
+            _busControl.ConnectReceiveEndpoint(typeof(TEvent).Name + "-queue", configurator =>
+            {
+                var createFactory = new MessageHandler<TEvent>(_serviceProvider.GetService<IMessageHandler<TEvent>>());
+                configurator.Consumer(typeof(MessageHandler<TEvent>),
+                    _ => createFactory);
+            });
+        }
+
+        public void ConfigureCommandConsumer<TEvent>() where TEvent : class
+        {
+            _busControl.ConnectReceiveEndpoint(typeof(TEvent).Name, configurator =>
+            {
+                var createFactory = new MessageHandler<TEvent>(_serviceProvider.GetService<IMessageHandler<TEvent>>());
+                configurator.Consumer(typeof(MessageHandler<TEvent>),
+                    _ => createFactory);
+            });
         }
 
         public void ConfigureCommand<TCommand>(string host) where TCommand: class

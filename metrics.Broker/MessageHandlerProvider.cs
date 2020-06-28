@@ -10,6 +10,7 @@ namespace metrics.Broker
     {
         private readonly IServiceCollection _serviceCollection;
         private readonly Dictionary<Type, Type> _consumers = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Type> _commandConsumers = new Dictionary<Type, Type>();
         private readonly List<Type> _commands = new List<Type>();
         public MessageHandlerProvider(IServiceCollection serviceCollection)
         {
@@ -25,6 +26,15 @@ namespace metrics.Broker
             }
         }
 
+        public void RegisterCommandConsumer<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class
+        {
+            _serviceCollection.AddScoped<IMessageHandler<TEvent>, THandler>();
+            if (!_commandConsumers.ContainsKey(typeof(TEvent)))
+            {
+                _commandConsumers.Add(typeof(TEvent), typeof(THandler));
+            }
+        }
+
         public IEnumerable<(Type, Type)> GetConsumers()
         {
             return _consumers.Select(f => (f.Key, f.Value));
@@ -33,6 +43,11 @@ namespace metrics.Broker
         public IEnumerable<Type> GetCommands()
         {
             return _commands;
+        }
+
+        public IEnumerable<(Type, Type)> GetCommandConsumers()
+        {
+            return _commandConsumers.Select(f => (f.Key, f.Value));
         }
 
         public void RegisterCommand<TCommand>() where TCommand : class

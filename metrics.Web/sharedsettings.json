@@ -14,7 +14,7 @@
     "Address": "http://localhost:8500"
   },
   "AmqpOptions": {
-    "Host": "localhost:5672",
+    "Host": "rabbitmq://localhost:5672",
     "UserName": "user",
     "Password": "password"
   },
