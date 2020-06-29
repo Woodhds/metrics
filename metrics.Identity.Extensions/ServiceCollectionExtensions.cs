@@ -15,7 +15,6 @@ namespace metrics.Identity.Extensions
             {
                 x.UseNpgsql(connectionString);
                 x.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                x.EnableSensitiveDataLogging();
             });
             
             serviceCollection.AddIdentity<User, Role>()

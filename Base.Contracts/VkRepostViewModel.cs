@@ -7,6 +7,12 @@ namespace Base.Contracts
         public int Owner_Id { get; set; }
         public int Id { get; set; }
 
+        public VkRepostViewModel(int ownerId, int id)
+        {
+            Owner_Id = ownerId;
+            Id = id;
+        }
+
         public override int GetHashCode() 
         {
             return HashCode.Combine(Owner_Id, Id);

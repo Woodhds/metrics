@@ -93,7 +93,7 @@ namespace metrics.Services.Concrete
             var count = data.Response.Count;
 
             var result = await GetById(reposts
-                .Select(c => new VkRepostViewModel {Id = c.Id, Owner_Id = c.Owner_Id})
+                .Select(c => new VkRepostViewModel(c.Owner_Id, c.Id))
             );
 
             if (result.Response == null)

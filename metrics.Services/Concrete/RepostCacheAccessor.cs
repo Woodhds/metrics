@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Services.Concrete
 {
     public interface IRepostCacheAccessor
     {
-        Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync(
+        Task<IEnumerable<(int userId, VkRepostViewModel repost, DateTime last)>> GetAsync(
             CancellationToken cancellationToken = default);
 
         Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models);
@@ -28,35 +29,42 @@ namespace metrics.Services.Concrete
             _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task<IEnumerable<(int userId, VkRepostViewModel repost)>> GetAsync(
+        public async Task<IEnumerable<(int userId, VkRepostViewModel repost, DateTime last)>> GetAsync(
             CancellationToken cancellationToken = default)
         {
             using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: cancellationToken);
 
-            var list = scope.GetRepository<VkRepost>().Read().Where(f => f.Status == VkRepostStatus.Pending || f.Status == VkRepostStatus.New)
-                .AsEnumerable()
-                .GroupBy(q => new {q.UserId})
-                .Select(q => new
+            var list = await (from r in scope.GetRepository<VkRepost>()
+                    .Read()
+                    .Where(f => f.Status == VkRepostStatus.New)
+                from t in scope.GetRepository<VkRepostUserOffset>().Read().Where(q => q.UserId == r.UserId)
+                    .DefaultIfEmpty()
+                select new
                 {
-                    q.Key.UserId,
-                    Repost = q.FirstOrDefault(),
-                })
-                .Where(f => f.Repost != null)
-                .ToList();
+                    r.UserId,
+                    r.MessageId,
+                    r.OwnerId,
+                    LastPost = t,
+                    r.Id
+                }).ToListAsync(cancellationToken);
 
             foreach (var entity in list)
             {
-                entity.Repost.Status = VkRepostStatus.Pending;
-                entity.Repost.DateStatus = DateTime.Now;
-                await scope.GetRepository<VkRepost>().UpdateAsync(entity.Repost);
+                await scope.GetRepository<VkRepost>().UpdateAsync(new VkRepost
+                {
+                    Id = entity.Id,
+                    Status = VkRepostStatus.Pending,
+                    DateStatus = DateTime.Now,
+                    MessageId = entity.MessageId,
+                    OwnerId = entity.OwnerId,
+                    UserId = entity.UserId
+                }, cancellationToken);
             }
 
             await scope.CommitAsync(cancellationToken);
 
-            return list.Select(q => (q.UserId,
-                q.Repost != null
-                    ? new VkRepostViewModel {Id = q.Repost.MessageId, Owner_Id = q.Repost.OwnerId}
-                    : null));
+            return list.Select(q =>
+                (q.UserId, new VkRepostViewModel(q.OwnerId, q.MessageId), q.LastPost?.LastPost ?? DateTime.Now));
         }
 
         public async Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models)
@@ -68,7 +76,8 @@ namespace metrics.Services.Concrete
                 f.Id,
                 f.Owner_Id,
                 Key = f.Id + "_" + f.Owner_Id
-            });
+            }).ToArray();
+
             var keys = obj.Select(f => f.Key);
 
             var alreadyCreate = scope.GetRepository<VkRepost>().Read()
@@ -102,7 +111,8 @@ namespace metrics.Services.Concrete
         public async ValueTask<int> GetCountAsync(int userId)
         {
             return (await _transactionScopeFactory.CreateAsync()).GetRepository<VkRepost>().Read()
-                .Count(f => f.UserId == userId && (f.Status == VkRepostStatus.New || f.Status == VkRepostStatus.Pending));
+                .Count(f => f.UserId == userId &&
+                            (f.Status == VkRepostStatus.New || f.Status == VkRepostStatus.Pending));
         }
     }
 }

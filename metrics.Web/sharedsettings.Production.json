@@ -1,0 +1,32 @@
+﻿{
+  "NLog": {
+    "extensions": [
+      {
+        "assembly": "NLog.Targets.ElasticSearch"
+      }
+    ],
+    "targets": {
+      "main": {
+        "type": "BufferingWrapper",
+        "flushTimeout": 5000,
+        "target": {
+          "type": "ElasticSearch",
+          "uri": "${configsetting:name=ElasticOptions.Host}"
+        },
+        "fields": [
+          {
+            "name": "StackTrace",
+            "layout": "${exception:format=ToString,StackTrace}${newline}"
+          }
+        ]
+      }
+    },
+    "rules": [
+      {
+        "logger": "*",
+        "minLevel": "Error",
+        "writeTo": "main"
+      }
+    ]
+  }
+}

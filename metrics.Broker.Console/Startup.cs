@@ -1,4 +1,5 @@
 ﻿using Base.Contracts.Options;
+using metrics.BackgroundJobs;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
@@ -43,6 +44,8 @@ namespace metrics.Broker.Console
             services.AddIdentityClient(Configuration);
             services.Configure<VkontakteOptions>(
                 Configuration.GetSection(nameof(VkontakteOptions)));
+
+            services.AddHangfire(Configuration["JobsHost"]);
         }
 
         protected override void ConfigureDataContext(IServiceCollection services)

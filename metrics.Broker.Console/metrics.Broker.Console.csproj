@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\metrics.BackgroundJobs\metrics.BackgroundJobs.csproj" />
       <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Data.Common\metrics.Data.Common.csproj" />
       <ProjectReference Include="..\metrics.Identity.Client\metrics.Identity.Client.csproj" />

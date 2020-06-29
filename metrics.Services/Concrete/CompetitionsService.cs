@@ -63,7 +63,7 @@ namespace metrics.Services.Concrete
                         .Where(d => d.Attributes != null && d.Attributes.Any(h => h.Name == "href" && !string.IsNullOrEmpty(h.Value)))
                         .Select(d => d.GetAttributeValue("href", "")?.Replace("https://vk.com/wall", "").Split('_'))
                         .Where(h => h != null && h.Length > 1)
-                        .Select(d => new VkRepostViewModel {Owner_Id = int.Parse(d[0]), Id = int.Parse(d[1])})
+                        .Select(d => new VkRepostViewModel(int.Parse(d[0]), int.Parse(d[1])))
                         .ToList();
 
                     if (models.Any())

@@ -1,0 +1,18 @@
+﻿{
+  "FrontendUrl": "http://localhost:4200",
+  "CacheOptions": {
+    "Configuration": "localhost:6379,password=password",
+    "Instance": "UserTokens"
+  },
+  "ConsulConfig": {
+    "Address": "http://localhost:8500"
+  },
+  "AmqpOptions": {
+    "Host": "rabbitmq://localhost:5672",
+    "UserName": "user",
+    "Password": "password"
+  },
+  "ElasticOptions": {
+    "Host": "http://localhost:9200"
+  }
+}
