@@ -1,20 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Services.Concrete
 {
     public interface IRepostCacheAccessor
     {
-        Task<IEnumerable<(int userId, VkRepostViewModel repost, DateTime last)>> GetAsync(
-            CancellationToken cancellationToken = default);
-
         Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models);
 
         ValueTask<int> GetCountAsync(int userId);
@@ -27,44 +22,6 @@ namespace metrics.Services.Concrete
         public RepostCacheAccessor(ITransactionScopeFactory transactionScopeFactory)
         {
             _transactionScopeFactory = transactionScopeFactory;
-        }
-
-        public async Task<IEnumerable<(int userId, VkRepostViewModel repost, DateTime last)>> GetAsync(
-            CancellationToken cancellationToken = default)
-        {
-            using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: cancellationToken);
-
-            var list = await (from r in scope.GetRepository<VkRepost>()
-                    .Read()
-                    .Where(f => f.Status == VkRepostStatus.New)
-                from t in scope.GetRepository<VkRepostUserOffset>().Read().Where(q => q.UserId == r.UserId)
-                    .DefaultIfEmpty()
-                select new
-                {
-                    r.UserId,
-                    r.MessageId,
-                    r.OwnerId,
-                    LastPost = t,
-                    r.Id
-                }).ToListAsync(cancellationToken);
-
-            foreach (var entity in list)
-            {
-                await scope.GetRepository<VkRepost>().UpdateAsync(new VkRepost
-                {
-                    Id = entity.Id,
-                    Status = VkRepostStatus.Pending,
-                    DateStatus = DateTime.Now,
-                    MessageId = entity.MessageId,
-                    OwnerId = entity.OwnerId,
-                    UserId = entity.UserId
-                }, cancellationToken);
-            }
-
-            await scope.CommitAsync(cancellationToken);
-
-            return list.Select(q =>
-                (q.UserId, new VkRepostViewModel(q.OwnerId, q.MessageId), q.LastPost?.LastPost ?? DateTime.Now));
         }
 
         public async Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models)

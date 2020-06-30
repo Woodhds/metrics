@@ -14,5 +14,20 @@
   },
   "ElasticOptions": {
     "Host": "http://localhost:9200"
+  },
+  "NLog": {
+    "throwConfigExceptions": true,
+    "targets": {
+      "logconsole": {
+        "type": "Console"
+      }
+    },
+    "rules": [
+      {
+        "logger": "*",
+        "minLevel": "Debug",
+        "writeTo": "logconsole"
+      }
+    ]
   }
 }

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.2.0" />
@@ -15,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\metrics.Authentication\metrics.Authentication.csproj" />
+    <ProjectReference Include="..\metrics.BackgroundJobs\metrics.BackgroundJobs.csproj" />
     <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
     <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
     <ProjectReference Include="..\metrics.Identity.Client\metrics.Identity.Client.csproj" />

@@ -21,6 +21,7 @@ namespace metrics.Broker.Console
         {
             await _repostCacheAccessor.SetAsync(obj.UserId, obj.Reposts);
             await _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token);
+            await _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token);
         }
     }
 }

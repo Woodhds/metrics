@@ -10,7 +10,7 @@ using metrics.Data.Common.Infrastructure.Entities;
 
 namespace metrics.Broker.Console
 {
-    public class RepostedEventHandler : IMessageHandler<CreateRepost>
+    public class RepostedEventHandler : IMessageHandler<RepostCreated>
     {
         private readonly IMessageBroker _messageBroker;
         private readonly ITransactionScopeFactory _transactionScopeFactory;
@@ -21,7 +21,7 @@ namespace metrics.Broker.Console
             _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task HandleAsync([NotNull] CreateRepost obj, CancellationToken token = default)
+        public async Task HandleAsync([NotNull] RepostCreated obj, CancellationToken token = default)
         {
             if (obj.UserId == default)
                 return;
@@ -48,6 +48,7 @@ namespace metrics.Broker.Console
             await scope.GetRepository<VkRepost>().UpdateAsync(message);
 
             await _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token);
+            await _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token);
             await scope.CommitAsync(token);
         }
     }

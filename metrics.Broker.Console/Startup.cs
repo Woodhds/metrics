@@ -26,14 +26,15 @@ namespace metrics.Broker.Console
         {
             provider.RegisterCommandConsumer<CreateRepostGroup, RepostEventGroupCreatedHandler>();
             provider.RegisterConsumer<LoginEvent, LoginEventHandler>();
-            provider.RegisterCommandConsumer<CreateRepost, RepostedEventHandler>();
+            provider.RegisterCommandConsumer<RepostCreated, RepostedEventHandler>();
+            provider.RegisterCommandConsumer<ExecuteNextRepost, RepostUserEventHandler>();
             
-            provider.RegisterCommand<CreateRepost>();
+            provider.RegisterCommand<ExecuteNextRepost>();
+            provider.RegisterCommand<RepostCreated>();
         }
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddHostedService<RepostHostedService>();
             services.AddSingleton<IVkClient, VkClient>();
             services.Configure<VkApiUrls>(Configuration.GetSection(nameof(VkApiUrls)));
 

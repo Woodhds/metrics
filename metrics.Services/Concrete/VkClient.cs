@@ -40,10 +40,7 @@ namespace metrics.Services.Concrete
 
         private async Task<NameValueCollection> AddVkParams(NameValueCollection @params, int? userId = null)
         {
-            if (@params == null)
-            {
-                @params = new NameValueCollection();
-            }
+            @params ??= new NameValueCollection();
 
             @params.Add("v", _vkontakteOptions.CurrentValue.ApiVersion);
             @params.Add("access_token", await _vkTokenAccessor.GetTokenAsync(userId));
@@ -143,11 +140,11 @@ namespace metrics.Services.Concrete
                         {"object", $"wall{t.Owner_Id}_{t.Id}"}
                     };
                     await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params, userId);
-                    await _messageBroker.SendAsync(new CreateRepost
+                    await _messageBroker.SendAsync(new RepostCreated
                     {
                         Id = t.Id,
                         OwnerId = t.Owner_Id,
-                        UserId = userId ?? default
+                        UserId = userId ?? default,
                     });
                     await Task.Delay(timeout * 1000);
                 }
@@ -160,7 +157,7 @@ namespace metrics.Services.Concrete
             foreach (var x in vkRepostViewModels.Select(f => $"{f.Id}+{f.Owner_Id}")
                 .Except(reposts.Select(f => $"{f.Id}+{f.Owner_Id}")))
             {
-                await _messageBroker.SendAsync(new CreateRepost
+                await _messageBroker.SendAsync(new RepostCreated
                 {
                     Id = Convert.ToInt32(x.Split('+')[0]),
                     OwnerId = Convert.ToInt32(x.Split('+')[1]),

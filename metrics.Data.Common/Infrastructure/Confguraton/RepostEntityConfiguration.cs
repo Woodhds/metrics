@@ -15,9 +15,6 @@ namespace metrics.Data.Common.Infrastructure.Confguraton
             var messageBuilder = builder.Entity<MessageVk>();
             messageBuilder.HasOne(z => z.MessageCategory);
             messageBuilder.HasKey(q => new {q.MessageId, q.OwnerId});
-
-            builder.Entity<VkRepostUserOffset>()
-                .HasKey(offset => offset.UserId);
         }
     }
 }
