@@ -4,20 +4,18 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace metrics.Data.Sql
 {
-    public class DataContext : DbContext
+    public class DataContext : BaseDataContext
     {
         public DataContext(DbContextOptions options) : base(options)
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void ConfigureEntities(ModelBuilder builder)
         {
             foreach (var config in this.GetService<IEntityConfigurationProvider>().GetConfigurations())
             {
-                config.Configure(modelBuilder);
+                config.Configure(builder);
             }
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

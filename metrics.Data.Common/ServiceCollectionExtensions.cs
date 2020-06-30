@@ -1,8 +1,9 @@
 ﻿using metrics.Data.Abstractions;
+using metrics.Data.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace metrics.Data.Sql.Extensions
+namespace metrics.Data.Common
 {
     public static class ServiceCollectionExtensions
     {

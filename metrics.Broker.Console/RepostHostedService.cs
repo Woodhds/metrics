@@ -46,7 +46,7 @@ namespace metrics.Broker.Console
 
                         for (var i = 0; i < userReposts.Length; i++)
                         {
-                            startDate = startDate.Add(TimeSpan.FromSeconds((i + 1) * 30));
+                            startDate = startDate.AddSeconds((i + 1) * 30);
                             System.Console.WriteLine("SCHEDULE AT: " + startDate);
                             _backgroundJobService.Schedule<IVkClient>(v => v.Repost(userReposts[i].repost.Owner_Id,
                                 userReposts[i].repost.Id, 1, t.Key.userId), startDate);
