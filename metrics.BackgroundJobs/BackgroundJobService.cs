@@ -19,7 +19,7 @@ namespace metrics.BackgroundJobs
             return _backgroundJobClient.Enqueue(action);
         }
 
-        public string Schedule<TService>(Expression<Action<TService>> task, DateTime date)
+        public string Schedule<TService>(Expression<Action<TService>> task, DateTimeOffset date)
         {
             return _backgroundJobClient.Schedule(task, date);
         }

@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using metrics.Data.Abstractions;
+using metrics.Data.Sql;
 
 namespace metrics.Data.Common.Infrastructure.Entities
 {

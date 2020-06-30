@@ -1,4 +1,5 @@
 ﻿using System;
+using metrics.Data.Abstractions;
 
 namespace metrics.Data.Common.Infrastructure.Entities
 {

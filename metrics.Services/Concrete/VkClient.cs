@@ -21,7 +21,7 @@ namespace metrics.Services.Concrete
         private readonly IVkTokenAccessor _vkTokenAccessor;
         private readonly VkApiUrls _urls;
         private readonly IMessageBroker _messageBroker;
-        private readonly IOptionsMonitor<VkontakteOptions> _vkontakteOptions;
+        private readonly IOptions<VkontakteOptions> _vkontakteOptions;
 
         public VkClient(
             IHttpClientFactory httpClientFactory,
@@ -29,7 +29,7 @@ namespace metrics.Services.Concrete
             IOptions<VkApiUrls> options,
             ILogger<BaseHttpClient> logger,
             IMessageBroker messageBroker,
-            IOptionsMonitor<VkontakteOptions> vkontakteOptions
+            IOptions<VkontakteOptions> vkontakteOptions
         ) : base(httpClientFactory, logger)
         {
             _vkTokenAccessor = vkTokenAccessor;
@@ -42,7 +42,7 @@ namespace metrics.Services.Concrete
         {
             @params ??= new NameValueCollection();
 
-            @params.Add("v", _vkontakteOptions.CurrentValue.ApiVersion);
+            @params.Add("v", _vkontakteOptions.Value.ApiVersion);
             @params.Add("access_token", await _vkTokenAccessor.GetTokenAsync(userId));
 
             return @params;

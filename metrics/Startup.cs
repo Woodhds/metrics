@@ -75,14 +75,6 @@ namespace metrics
             services.AddElastic(Configuration);
             
             services.AddIdentityClient(Configuration);
-
-            services.AddHangfire("localhost:6379,password=password");
-        }
-
-        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
-        {
-            base.Configure(app, env, lifeTime);
-            app.UseHangfireDashboard();
         }
     }
 }
