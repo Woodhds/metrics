@@ -45,11 +45,13 @@ namespace metrics.Broker.Console
                 message.Status = VkRepostStatus.Pending;
                 message.DateStatus = DateTime.Now;
 
-                await scope.GetRepository<VkRepost>().UpdateAsync(message);
+                await scope.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
+
+                await scope.CommitAsync(CancellationToken.None);
 
                 _jobService.Schedule<IVkClient>(
                     client => client.Repost(message.OwnerId, message.MessageId, 1, obj.UserId),
-                    TimeSpan.FromSeconds(5));
+                    TimeSpan.FromSeconds(10));
             }
             catch (Exception e)
             {

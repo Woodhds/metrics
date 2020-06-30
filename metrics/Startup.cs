@@ -44,6 +44,7 @@ namespace metrics
             provider.RegisterCommandConsumer<SetMessageTypeEvent, SetTypeEventHandler>();
             
             provider.RegisterCommand<CreateRepostGroup>();
+            provider.RegisterCommand<RepostCreated>();
             provider.RegisterCommand<SetMessageTypeEvent>();
         }
 
