@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
 using Base.Abstractions;
 using Base.Contracts.Options;
-using Hangfire;
-using metrics.BackgroundJobs;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
@@ -20,10 +18,7 @@ using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Utils;
 using metrics.Web;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Hosting;
 
 namespace metrics
 {
