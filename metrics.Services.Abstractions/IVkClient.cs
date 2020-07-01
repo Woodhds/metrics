@@ -20,5 +20,6 @@ namespace metrics.Services.Abstractions
         Task<VkResponse<List<VkGroup>>> GetGroups(int count, int offset);
         Task LeaveGroup(int groupId);
         Task<SimpleVkResponse<VkResponseLikeModel>> Like(VkRepostViewModel model);
+        Task<VkResponse<IEnumerable<VkUserResponse>>> SearchUserAsync(string search);
     }
 }

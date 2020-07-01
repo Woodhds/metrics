@@ -41,7 +41,7 @@ namespace metrics.Services.Concrete
             return user;
         }
 
-        public async Task<IEnumerable<VkUserModel>> SearchAsync(string searchStr)
+        public async Task<IEnumerable<VkUserModel>> Get(string searchStr)
         {
             var result = await _elasticClientProvider.Create().SearchAsync<VkUserModel>(z =>
                 z.Index<VkUserModel>()
@@ -58,6 +58,11 @@ namespace metrics.Services.Concrete
             return result.IsValid 
                 ? result.Documents 
                 : Enumerable.Empty<VkUserModel>();
+        }
+
+        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search)
+        {
+            return _vkClient.SearchUserAsync(search);
         }
     }
 }

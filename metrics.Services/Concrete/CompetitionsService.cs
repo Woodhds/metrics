@@ -33,7 +33,7 @@ namespace metrics.Services.Concrete
             _competitionOptions = optionsMonitor.CurrentValue;
         }
 
-        public async Task<List<VkMessage>> Fetch(int page = 1)
+        public async Task<IList<VkMessage>> Fetch(int page = 1)
         {
             var client = _httpClientFactory.CreateClient();
 

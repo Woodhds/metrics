@@ -58,7 +58,6 @@ namespace metrics
             services.AddScoped<ICompetitionsService, CompetitionsService>();
             services.AddScoped<IVkTokenAccessor, CacheTokenAccessor>();
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
-            services.Configure<VkApiUrls>(Configuration.GetSection("VKApiUrls"));
             services.AddScoped<IVkClient, VkClient>();
             services.AddScoped<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();

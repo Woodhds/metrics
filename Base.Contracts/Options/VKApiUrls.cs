@@ -1,17 +1,17 @@
 ﻿namespace Base.Contracts.Options
 {
-    public class VkApiUrls
+    public static class VkApiUrls
     {
-        public string Domain { get; set; }
-        public string MainDomain { get; set; }
-        public string Wall { get; set; }
-        public string WallSearch { get; set; }
-        public string Repost { get; set; }
-        public string WallGetById { get; set; }
-        public string GroupJoin { get; set; }
-        public string UserInfo { get; set; }
-        public string Groups { get; set; }
-        public string LeaveGroup { get; set; }
-        public string Like { get; set; }
+        public const string Domain = "https://api.vk.com/method/";
+        public const string Wall = Domain + "wall.get";
+        public const string WallSearch = Domain + "wall.search";
+        public const string Repost = Domain + "wall.repost";
+        public const string WallGetById = Domain + "wall.getById";
+        public const string GroupJoin = "groups.join";
+        public const string UserInfo = Domain + "users.get";
+        public const string Groups = Domain + "groups.get";
+        public const string LeaveGroup = Domain + "groups.leave";
+        public const string Like = Domain + "likes.add";
+        public const string UserSearch = Domain + "users.search";
     }
 }

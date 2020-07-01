@@ -25,7 +25,13 @@ namespace metrics.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VkUserModel>>> Users(string searchStr = "")
         {
-            return Ok(await _vkUserService.SearchAsync(searchStr));
+            return Ok(await _vkUserService.Get(searchStr));
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search(string search)
+        {
+            return Ok(await _vkUserService.SearchAsync(search));
         }
 
         [HttpPost]

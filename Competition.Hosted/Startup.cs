@@ -29,8 +29,6 @@ namespace Competition.Hosted
             services.AddTransient<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<ICompetitionsService, VkUserCompetitionService>();
             services.AddSingleton<IVkUserService, VkUserService>();
-
-            services.Configure<VkApiUrls>(Configuration.GetSection(nameof(VkApiUrls)));
             services.Configure<TokenOptions>(Configuration.GetSection("Token"));
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.Configure<CompetitionOptions>(Configuration.GetSection(nameof(CompetitionOptions)));

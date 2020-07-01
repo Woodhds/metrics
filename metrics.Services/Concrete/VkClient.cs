@@ -19,14 +19,12 @@ namespace metrics.Services.Concrete
     public class VkClient : BaseHttpClient, IVkClient
     {
         private readonly IVkTokenAccessor _vkTokenAccessor;
-        private readonly VkApiUrls _urls;
         private readonly IMessageBroker _messageBroker;
         private readonly IOptions<VkontakteOptions> _vkontakteOptions;
 
         public VkClient(
             IHttpClientFactory httpClientFactory,
             IVkTokenAccessor vkTokenAccessor,
-            IOptions<VkApiUrls> options,
             ILogger<BaseHttpClient> logger,
             IMessageBroker messageBroker,
             IOptions<VkontakteOptions> vkontakteOptions
@@ -35,7 +33,6 @@ namespace metrics.Services.Concrete
             _vkTokenAccessor = vkTokenAccessor;
             _messageBroker = messageBroker;
             _vkontakteOptions = vkontakteOptions;
-            _urls = options.Value;
         }
 
         private async Task<NameValueCollection> AddVkParams(NameValueCollection @params, int? userId = null)
@@ -51,7 +48,7 @@ namespace metrics.Services.Concrete
         private async Task<T> GetVkAsync<T>(string method, NameValueCollection @params = null, int? userId = null)
         {
             @params = await AddVkParams(@params, userId);
-            var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
+            var url = new Uri(method).AbsoluteUri;
             return await base.GetAsync<T>(url, @params);
         }
 
@@ -59,7 +56,7 @@ namespace metrics.Services.Concrete
             int? userId = null)
         {
             @params = await AddVkParams(@params, userId);
-            var url = new Uri(new Uri(_urls.Domain), method).AbsoluteUri;
+            var url = new Uri(method).AbsoluteUri;
             await base.PostAsync<T>(url, content, @params);
         }
 
@@ -72,10 +69,10 @@ namespace metrics.Services.Concrete
                 {"filter", "owner"},
                 {"owner_id", id}
             };
-            var method = _urls.Wall;
+            var method = VkApiUrls.Wall;
             if (!string.IsNullOrEmpty(search))
             {
-                method = _urls.WallSearch;
+                method = VkApiUrls.WallSearch;
                 @params.Add("query", search);
             }
 
@@ -107,7 +104,7 @@ namespace metrics.Services.Concrete
                 {"group_id", groupId.ToString()}
             };
 
-            await GetVkAsync<SimpleVkResponse<bool>>(_urls.GroupJoin, @params, userId);
+            await GetVkAsync<SimpleVkResponse<bool>>(VkApiUrls.GroupJoin, @params, userId);
             await Task.Delay(timeout * 1000);
         }
 
@@ -139,7 +136,7 @@ namespace metrics.Services.Concrete
                     {
                         {"object", $"wall{t.Owner_Id}_{t.Id}"}
                     };
-                    await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(_urls.Repost, null, @params, userId);
+                    await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(VkApiUrls.Repost, null, @params, userId);
                     await _messageBroker.SendAsync(new RepostCreated
                     {
                         Id = t.Id,
@@ -174,7 +171,7 @@ namespace metrics.Services.Concrete
                 {"fields", "first_name,last_name,photo_50"}
             };
 
-            return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(_urls.UserInfo, @params, currentUser);
+            return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(VkApiUrls.UserInfo, @params, currentUser);
         }
 
         public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels,
@@ -191,7 +188,7 @@ namespace metrics.Services.Concrete
                 {"extended", 1.ToString()},
                 {"fields", "is_member"}
             };
-            return GetVkAsync<VkResponse<List<VkMessage>>>(_urls.WallGetById, @params, userId);
+            return GetVkAsync<VkResponse<List<VkMessage>>>(VkApiUrls.WallGetById, @params, userId);
         }
 
         public Task<VkResponse<List<VkGroup>>> GetGroups(int count, int offset)
@@ -203,7 +200,7 @@ namespace metrics.Services.Concrete
                 {"extended", "1"},
                 {"offset", $"{offset}"}
             };
-            return GetVkAsync<VkResponse<List<VkGroup>>>(_urls.Groups, @params);
+            return GetVkAsync<VkResponse<List<VkGroup>>>(VkApiUrls.Groups, @params);
         }
 
         public Task LeaveGroup(int groupId)
@@ -212,7 +209,7 @@ namespace metrics.Services.Concrete
             {
                 {"group_id", $"{groupId}"}
             };
-            return GetVkAsync<SimpleVkResponse<string>>(_urls.LeaveGroup, @params);
+            return GetVkAsync<SimpleVkResponse<string>>(VkApiUrls.LeaveGroup, @params);
         }
 
         public Task<SimpleVkResponse<VkResponseLikeModel>> Like(VkRepostViewModel model)
@@ -223,7 +220,12 @@ namespace metrics.Services.Concrete
                 {"item_id", $"{model.Id}"},
                 {"type", "post"}
             };
-            return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(_urls.Like, @params);
+            return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(VkApiUrls.Like, @params);
+        }
+
+        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchUserAsync(string search)
+        {
+            throw new NotImplementedException();
         }
     }
 }

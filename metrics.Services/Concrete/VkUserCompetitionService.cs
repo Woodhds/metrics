@@ -21,10 +21,10 @@ namespace metrics.Services.Concrete
             _logger = logger;
         }
 
-        public async Task<List<VkMessage>> Fetch(int page = 1)
+        public async Task<IList<VkMessage>> Fetch(int page = 1)
         {
             var data = new List<VkMessage>();
-            var users = await _vkUserService.SearchAsync(null);
+            var users = await _vkUserService.Get(null);
             foreach (var user in users)
             {
                 try

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Linq;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace metrics.Services.Utils.Helpers
 {
@@ -10,16 +11,13 @@ namespace metrics.Services.Utils.Helpers
         {
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(nameof(url));
-
-            var builder = new UriBuilder(url);
-            if (@params != null)
+            
+            foreach (var c in Enumerable.Range(0, @params.Count))
             {
-                var query = string.Join("&", 
-                    Enumerable.Range(0, @params.Count).Select(c => $"{@params.GetKey(c)}={@params.Get(c)}"));
-                builder.Query = query;
-
+                url = QueryHelpers.AddQueryString(url, @params.GetKey(c), @params.Get(c));
             }
-            return builder.ToString();
+
+            return url;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Abstractions;
@@ -37,7 +38,7 @@ namespace Competition.Hosted
                     {
                         Console.WriteLine($"Start fetching from \"{service.GetType().Name}\" {DateTimeOffset.Now}");
                         var data = await service.Fetch();
-                        if (data?.Count == 0) continue;
+                        if (!data.Any()) continue;
 
                         await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: stoppingToken);
                         await Task.Delay(900 * 10, stoppingToken);

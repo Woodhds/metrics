@@ -36,7 +36,6 @@ namespace metrics.Broker.Console
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
             services.AddSingleton<IVkClient, VkClient>();
-            services.Configure<VkApiUrls>(Configuration.GetSection(nameof(VkApiUrls)));
 
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddSingleton<IVkTokenAccessor, CacheTokenAccessor>();
