@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
@@ -31,13 +32,21 @@ namespace metrics.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> Search(string search)
         {
-            return Ok(await _vkUserService.SearchAsync(search));
+            return Ok((await _vkUserService.SearchAsync(search,
+                _httpContextAccessor.HttpContext.User.Identity.GetUserId()))?.Response?.Items?.Select(q =>
+                new VkUserModel
+                {
+                    Avatar = q.Photo_50,
+                    Id = q.Id,
+                    FullName = q.First_name + " " + q.Last_Name
+                }));
         }
 
         [HttpPost]
-        public async Task<ActionResult<VkUserModel>> Add([Required]string userId, CancellationToken ct = default)
+        public async Task<ActionResult<VkUserModel>> Add([Required] string userId, CancellationToken ct = default)
         {
-            return Ok(await _vkUserService.CreateAsync(userId, _httpContextAccessor.HttpContext.User.Identity.GetUserId(), ct));
+            return Ok(await _vkUserService.CreateAsync(userId,
+                _httpContextAccessor.HttpContext.User.Identity.GetUserId()));
         }
     }
 }

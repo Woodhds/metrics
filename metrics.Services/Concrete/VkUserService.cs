@@ -20,7 +20,7 @@ namespace metrics.Services.Concrete
             _vkClient = vkClient;
         }
 
-        public async Task<VkUserModel> CreateAsync(string userId, int? currentUser = null, CancellationToken token = default)
+        public async Task<VkUserModel> CreateAsync(string userId, int? currentUser = null)
         {
             var userInfo = await _vkClient.GetUserInfo(userId, currentUser);
 
@@ -35,7 +35,7 @@ namespace metrics.Services.Concrete
             };
             if (user.Id > 0)
             {
-                await _elasticClientProvider.Create().IndexDocumentAsync(user, token);
+                await _elasticClientProvider.Create().IndexDocumentAsync(user);
             }
 
             return user;
@@ -60,9 +60,9 @@ namespace metrics.Services.Concrete
                 : Enumerable.Empty<VkUserModel>();
         }
 
-        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search)
+        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search, int? userId)
         {
-            return _vkClient.SearchUserAsync(search);
+            return _vkClient.SearchUserAsync(search, userId);
         }
     }
 }

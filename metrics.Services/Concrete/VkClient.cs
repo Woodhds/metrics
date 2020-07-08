@@ -62,7 +62,7 @@ namespace metrics.Services.Concrete
 
         public async Task<VkResponse<List<VkMessage>>> GetReposts(string id, int page, int take, string search = null)
         {
-            var @params = new NameValueCollection()
+            var @params = new NameValueCollection
             {
                 {"count", take.ToString()},
                 {"offset", ((page - 1) * take).ToString()},
@@ -223,9 +223,15 @@ namespace metrics.Services.Concrete
             return GetVkAsync<SimpleVkResponse<VkResponseLikeModel>>(VkApiUrls.Like, @params);
         }
 
-        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchUserAsync(string search)
+        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchUserAsync(string search, int? userId)
         {
-            throw new NotImplementedException();
+            var @params = new NameValueCollection
+            {
+                { "q", search },
+                { "fields", "photo_50" }
+            };
+
+            return GetVkAsync<VkResponse<IEnumerable<VkUserResponse>>>(VkApiUrls.UserSearch, @params, userId);
         }
     }
 }
