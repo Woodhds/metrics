@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 using metrics.Cache.Abstractions;
 using metrics.Identity.Client.Abstractions;
-using metrics.Services.Abstractions;
 
 namespace metrics.Identity.Client
 {
-    public class CacheTokenAccessor : IVkTokenAccessor
+    public class CacheTokenAccessor : ICacheTokenAccessor
     {
         private readonly ICachingService _cachingService;
         private readonly IIdentityClient _identityClient;

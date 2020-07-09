@@ -1,4 +1,5 @@
-﻿using Base.Contracts.Options;
+﻿using System;
+using Base.Contracts.Options;
 using metrics.BackgroundJobs;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
@@ -35,7 +36,10 @@ namespace metrics.Broker.Console
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddSingleton<IVkClient, VkClient>();
+            services.AddHttpClient<IVkClient, VkClient>((provider, client) =>
+            {
+                client.BaseAddress = new Uri(VkApiUrls.Domain);
+            });;
 
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddSingleton<IVkTokenAccessor, CacheTokenAccessor>();

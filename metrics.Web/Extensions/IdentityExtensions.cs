@@ -2,9 +2,8 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
-using Microsoft.IdentityModel.JsonWebTokens;
 
-namespace metrics.Extensions
+namespace metrics.Web.Extensions
 {
     public static class IdentityExtensions
     {

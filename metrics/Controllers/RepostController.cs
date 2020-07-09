@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
-using metrics.Extensions;
 using Microsoft.Extensions.Logging;
 using metrics.Services.Abstractions;
+using metrics.Web.Extensions;
 using Microsoft.AspNetCore.Http;
 
 namespace metrics.Controllers

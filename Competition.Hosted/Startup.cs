@@ -1,3 +1,4 @@
+using System;
 using Base.Abstractions;
 using Base.Contracts.Options;
 using metrics.Broker.Abstractions;
@@ -23,7 +24,10 @@ namespace Competition.Hosted
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddSingleton<IVkClient, VkClient>();
+            services.AddHttpClient<IVkClient, VkClient>((provider, client) =>
+            {
+                client.BaseAddress = new Uri(VkApiUrls.Domain);
+            });
             services.AddVkClientConsole();
             services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
             services.AddTransient<ICompetitionsService, CompetitionsService>();

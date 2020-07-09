@@ -9,6 +9,7 @@
       <ProjectReference Include="..\metrics.Cache.Abstractions\metrics.Cache.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Identity.Client.Abstractions\metrics.Identity.Client.Abstractions.csproj" />
+      <ProjectReference Include="..\metrics.Web\metrics.Web.csproj" />
     </ItemGroup>
 
 </Project>

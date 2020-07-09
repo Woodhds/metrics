@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
@@ -50,7 +51,7 @@ namespace metrics
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            var signalROptions = Configuration.GetSection((nameof(SignalROptions))).Get<SignalROptions>();
+            var signalROptions = Configuration.GetSection(nameof(SignalROptions)).Get<SignalROptions>();
             
             services.AddMetricsSignalR(signalROptions.Host);
             
@@ -58,7 +59,10 @@ namespace metrics
             services.AddScoped<ICompetitionsService, CompetitionsService>();
             services.AddScoped<IVkTokenAccessor, CacheTokenAccessor>();
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
-            services.AddScoped<IVkClient, VkClient>();
+            services.AddHttpClient<IVkClient, VkClient>((provider, client) =>
+            {
+                client.BaseAddress = new Uri(VkApiUrls.Domain);
+            });
             services.AddScoped<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
