@@ -1,5 +1,4 @@
-﻿using System;
-using metrics.Web.Extensions;
+﻿using metrics.Web.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
@@ -10,16 +9,7 @@ namespace Competition.Hosted
     {
         public static void Main(string[] args)
         {
-            try
-            {
-                
-                CreateHostBuilder(args).Build().Run();
-                Console.WriteLine($"Started at: {DateTime.Now}");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace);
-            }
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

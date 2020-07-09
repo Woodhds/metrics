@@ -1,5 +1,8 @@
-﻿using System;
-using Base.Contracts.Options;
+﻿using Base.Contracts.Options;
+using metrics.Authentication;
+using metrics.Authentication.Infrastructure;
+using metrics.Authentication.Services.Abstract;
+using metrics.Authentication.Services.Concrete;
 using metrics.BackgroundJobs;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
@@ -36,13 +39,14 @@ namespace metrics.Broker.Console
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddHttpClient<IVkClient, VkClient>((provider, client) =>
-            {
-                client.BaseAddress = new Uri(VkApiUrls.Domain);
-            });;
+            services.AddScoped<IVkClient, VkClient>();
 
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
-            services.AddSingleton<IVkTokenAccessor, CacheTokenAccessor>();
+            services.AddScoped<IVkTokenAccessor, CacheTokenAccessor>();
+            services.AddScoped<IUserStore, UserStore>();
+            services.AddScoped<IAuthenticatedUserProvider, AuthenticatedUserProvider>();
+            services.AddScoped<ISecurityUserManager, ApplicationUserManager>();
+            services.AddScoped<ISchedulerJobService, SchedulerJobService>();
             services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
 
             services.AddIdentityClient(Configuration);

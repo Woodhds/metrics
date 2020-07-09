@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Services.Abstractions;
-using metrics.Web.Extensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace metrics.Controllers
@@ -15,25 +12,22 @@ namespace metrics.Controllers
     public class UserController : ControllerBase
     {
         private readonly IVkUserService _vkUserService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(IVkUserService vkUserService, IHttpContextAccessor httpContextAccessor)
+        public UserController(IVkUserService vkUserService)
         {
             _vkUserService = vkUserService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VkUserModel>>> Users(string searchStr = "")
+        public Task<IEnumerable<VkUserModel>> Users(string searchStr = "")
         {
-            return Ok(await _vkUserService.Get(searchStr));
+            return _vkUserService.Get(searchStr);
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> Search(string search)
         {
-            return Ok((await _vkUserService.SearchAsync(search,
-                _httpContextAccessor.HttpContext.User.Identity.GetUserId()))?.Response?.Items?.Select(q =>
+            return Ok((await _vkUserService.SearchAsync(search))?.Response?.Items?.Select(q =>
                 new VkUserModel
                 {
                     Avatar = q.Photo_50,
@@ -43,10 +37,9 @@ namespace metrics.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<VkUserModel>> Add([Required] string userId, CancellationToken ct = default)
+        public Task<VkUserModel> Add([Required] string userId)
         {
-            return Ok(await _vkUserService.CreateAsync(userId,
-                _httpContextAccessor.HttpContext.User.Identity.GetUserId()));
+            return _vkUserService.CreateAsync(userId);
         }
     }
 }

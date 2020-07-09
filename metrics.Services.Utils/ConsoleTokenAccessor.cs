@@ -13,7 +13,7 @@ namespace metrics.Services.Utils
         {
             _options = options;
         }
-        public Task<string> GetTokenAsync(int? userId = null)
+        public Task<string> GetTokenAsync()
         {
             return Task.FromResult(_options?.Value?.Value ?? "");
         }

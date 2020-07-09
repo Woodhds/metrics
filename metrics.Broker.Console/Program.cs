@@ -1,4 +1,5 @@
 ﻿using metrics.Web.Extensions;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
@@ -12,13 +13,10 @@ namespace metrics.Broker.Console
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(builder =>
-                {
-                    builder.AddSharedConfiguration();
-                    builder.UseStartup<Startup>();
-                })
+        public static IWebHostBuilder CreateHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .AddSharedConfiguration()
                 .UseNLog();
     }
 }

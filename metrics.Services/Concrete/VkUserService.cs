@@ -20,9 +20,9 @@ namespace metrics.Services.Concrete
             _vkClient = vkClient;
         }
 
-        public async Task<VkUserModel> CreateAsync(string userId, int? currentUser = null)
+        public async Task<VkUserModel> CreateAsync(string userId)
         {
-            var userInfo = await _vkClient.GetUserInfo(userId, currentUser);
+            var userInfo = await _vkClient.GetUserInfo(userId);
 
             if (userInfo.Response == null)
                 throw new ArgumentNullException(nameof(userId));
@@ -60,9 +60,9 @@ namespace metrics.Services.Concrete
                 : Enumerable.Empty<VkUserModel>();
         }
 
-        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search, int? userId)
+        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search)
         {
-            return _vkClient.SearchUserAsync(search, userId);
+            return _vkClient.SearchUserAsync(search);
         }
     }
 }

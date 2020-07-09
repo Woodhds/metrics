@@ -1,3 +1,4 @@
+using metrics.Authentication.Infrastructure;
 using metrics.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace metrics.Services.Utils
             services.AddHttpClient();
             services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
             services.AddSingleton<IVkTokenAccessor, ConsoleTokenAccessor>();
+            services.AddSingleton<IAuthenticatedUserProvider, ConsoleUserProvider>();
             return services;
         }
     }

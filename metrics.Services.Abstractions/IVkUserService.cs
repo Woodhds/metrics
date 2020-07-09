@@ -6,8 +6,8 @@ namespace metrics.Services.Abstractions
 {
     public interface IVkUserService
     {
-        Task<VkUserModel> CreateAsync(string userId, int? currentUser = null);
+        Task<VkUserModel> CreateAsync(string userId);
         Task<IEnumerable<VkUserModel>> Get(string searchStr);
-        Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search, int? userId);
+        Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search);
     }
 }

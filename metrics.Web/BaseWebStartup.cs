@@ -89,6 +89,8 @@ namespace metrics.Web
             app.UseAuthentication();
             app.UseAuthorization();
             
+            ConfigureManualMiddleware(app);
+            
             app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Metrics API V1"); });
 
             app.UseEndpoints(endpoints =>
@@ -105,6 +107,11 @@ namespace metrics.Web
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
+        }
+
+        protected virtual void ConfigureManualMiddleware(IApplicationBuilder builder)
+        {
+            
         }
         
         protected abstract void ConfigureEndpoints(IEndpointRouteBuilder endpoints);

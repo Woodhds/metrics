@@ -49,8 +49,8 @@ namespace metrics.Broker.Console
 
                 await scope.CommitAsync(CancellationToken.None);
 
-                _jobService.Schedule<IVkClient>(
-                    client => client.Repost(message.OwnerId, message.MessageId, 1, obj.UserId),
+                _jobService.Schedule<ISchedulerJobService>(
+                    client => client.Repost(message.OwnerId, message.MessageId, obj.UserId),
                     TimeSpan.FromSeconds(10));
             }
             catch (Exception e)

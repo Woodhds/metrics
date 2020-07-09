@@ -8,6 +8,7 @@ using metrics.Services.Utils;
 using metrics.Web;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Competition.Hosted
 {
@@ -24,13 +25,10 @@ namespace Competition.Hosted
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddHttpClient<IVkClient, VkClient>((provider, client) =>
-            {
-                client.BaseAddress = new Uri(VkApiUrls.Domain);
-            });
+            services.AddSingleton<IVkClient, VkClient>();
             services.AddVkClientConsole();
             services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
-            services.AddTransient<ICompetitionsService, CompetitionsService>();
+            services.AddSingleton<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<ICompetitionsService, VkUserCompetitionService>();
             services.AddSingleton<IVkUserService, VkUserService>();
             services.Configure<TokenOptions>(Configuration.GetSection("Token"));
