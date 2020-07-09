@@ -22,11 +22,11 @@ namespace metrics.Broker.Console
             _userManager = userManager;
         }
 
-        public Task Repost(int ownerId, int messageId, int userId)
+        public async Task Repost(int ownerId, int messageId, int userId)
         {
             using (_userManager.SetUser(new SecurityUser {Id = userId}))
             {
-                return _vkClient.Repost(ownerId, messageId, 1);
+                await _vkClient.Repost(ownerId, messageId, 1);
             }
         }
     }

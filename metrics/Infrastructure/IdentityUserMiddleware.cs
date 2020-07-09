@@ -15,17 +15,17 @@ namespace metrics.Infrastructure
             _next = next;
         }
 
-        public Task Invoke(HttpContext context, ISecurityUserManager userManager)
+        public async Task Invoke(HttpContext context, ISecurityUserManager userManager)
         {
             if (!context.User.Identity.IsAuthenticated)
-                return _next(context);
+                await _next(context);
 
             using (userManager.SetUser(new SecurityUser
             {
                 Id = context.User.Identity.GetUserId()
             }))
             {
-                return _next(context);
+                await _next(context);
             }
         }
     }
