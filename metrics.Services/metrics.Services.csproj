@@ -23,6 +23,7 @@
     <ProjectReference Include="..\metrics.Broker.Abstractions\metrics.Broker.Abstractions.csproj" />
     <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
     <ProjectReference Include="..\metrics.Cache.Abstractions\metrics.Cache.Abstractions.csproj" />
+    <ProjectReference Include="..\metrics.Competitions.Abstractions\metrics.Competitions.Abstractions.csproj" />
     <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
     <ProjectReference Include="..\metrics.Data.Common\metrics.Data.Common.csproj" />
     <ProjectReference Include="..\metrics.ML.Services\metrics.ML.Services.csproj" />

@@ -1,16 +1,15 @@
 using metrics.Authentication.Infrastructure;
-using metrics.Services.Abstractions;
+using metrics.Competitions.Hosted.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace metrics.Services.Utils
+namespace metrics.Competitions.Hosted.Extensions
 {
     public static class ServiceExtensions
     {
         public static IServiceCollection AddVkClientConsole(this IServiceCollection services)
         {
             services.AddHttpClient();
-            services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
-            services.AddSingleton<IVkTokenAccessor, ConsoleTokenAccessor>();
+            services.AddSingleton<IUserTokenAccessor, ConsoleTokenAccessor>();
             services.AddSingleton<IAuthenticatedUserProvider, ConsoleUserProvider>();
             return services;
         }

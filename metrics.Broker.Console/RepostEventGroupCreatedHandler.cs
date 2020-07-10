@@ -8,10 +8,10 @@ namespace metrics.Broker.Console
 {
     public class RepostEventGroupCreatedHandler : IMessageHandler<CreateRepostGroup>
     {
-        private readonly IRepostCacheAccessor _repostCacheAccessor;
+        private readonly IUserRepostedService _repostCacheAccessor;
         private readonly IMessageBroker _messageBroker;
 
-        public RepostEventGroupCreatedHandler(IRepostCacheAccessor repostCacheAccessor, IMessageBroker messageBroker)
+        public RepostEventGroupCreatedHandler(IUserRepostedService repostCacheAccessor, IMessageBroker messageBroker)
         {
             _repostCacheAccessor = repostCacheAccessor;
             _messageBroker = messageBroker;

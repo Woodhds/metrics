@@ -8,9 +8,9 @@ namespace metrics.Notification.SignalR.Hubs
     [Authorize]
     public class NotificationHub : Hub
     {
-        private readonly IRepostCacheAccessor _repostCacheAccessor;
+        private readonly IUserRepostedService _repostCacheAccessor;
 
-        public NotificationHub(IRepostCacheAccessor repostCacheAccessor)
+        public NotificationHub(IUserRepostedService repostCacheAccessor)
         {
             _repostCacheAccessor = repostCacheAccessor;
         }

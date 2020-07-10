@@ -8,18 +8,18 @@ using metrics.Data.Common.Infrastructure.Entities;
 
 namespace metrics.Services.Concrete
 {
-    public interface IRepostCacheAccessor
+    public interface IUserRepostedService
     {
         Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models);
 
         ValueTask<int> GetCountAsync(int userId);
     }
 
-    public class RepostCacheAccessor : IRepostCacheAccessor
+    public class UserRepostedService : IUserRepostedService
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
 
-        public RepostCacheAccessor(ITransactionScopeFactory transactionScopeFactory)
+        public UserRepostedService(ITransactionScopeFactory transactionScopeFactory)
         {
             _transactionScopeFactory = transactionScopeFactory;
         }

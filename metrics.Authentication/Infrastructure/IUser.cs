@@ -1,4 +1,4 @@
-﻿namespace metrics.Authentication
+﻿namespace metrics.Authentication.Infrastructure
 {
     public interface IUser
     {

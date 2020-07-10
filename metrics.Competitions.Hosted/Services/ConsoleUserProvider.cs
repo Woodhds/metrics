@@ -1,7 +1,7 @@
 ﻿using metrics.Authentication;
 using metrics.Authentication.Infrastructure;
 
-namespace metrics.Services.Utils
+namespace metrics.Competitions.Hosted.Services
 {
     public class ConsoleUserProvider : IAuthenticatedUserProvider
     {

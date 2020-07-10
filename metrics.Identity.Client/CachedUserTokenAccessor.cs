@@ -6,13 +6,13 @@ using metrics.Identity.Client.Abstractions;
 
 namespace metrics.Identity.Client
 {
-    public class CacheTokenAccessor : ICacheTokenAccessor
+    public class CachedUserTokenAccessor : ICacheTokenAccessor
     {
         private readonly ICachingService _cachingService;
         private readonly IIdentityClient _identityClient;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
 
-        public CacheTokenAccessor(ICachingService cachingService, IIdentityClient identityClient,
+        public CachedUserTokenAccessor(ICachingService cachingService, IIdentityClient identityClient,
             IAuthenticatedUserProvider authenticatedUserProvider)
         {
             _cachingService = cachingService;

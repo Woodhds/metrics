@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Base.Contracts;
+using metrics.Competitions.Abstractions;
 using metrics.Services.Abstractions;
 using Microsoft.Extensions.Logging;
 
-namespace metrics.Services.Concrete
+namespace metrics.Competitions.Hosted.Services
 {
     public class VkUserCompetitionService : ICompetitionsService
     {

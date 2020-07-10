@@ -11,7 +11,6 @@
       <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
       <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
       <ProjectReference Include="..\metrics.Identity.Data\metrics.Identity.Data.csproj" />
-      <ProjectReference Include="..\metrics.Identity.Extensions\metrics.Identity.Extensions.csproj" />
       <ProjectReference Include="..\metrics.Web\metrics.Web.csproj" />
     </ItemGroup>
     

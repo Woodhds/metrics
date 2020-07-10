@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace metrics.Services.Utils
 {
-    public class BaseHttpClient : IBaseHttpClient
+    public class BaseHttpClient
     {
         private readonly HttpClient _httpClient;
         protected readonly ILogger<BaseHttpClient> Logger;

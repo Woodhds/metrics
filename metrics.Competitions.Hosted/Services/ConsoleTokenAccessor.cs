@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
 using Base.Contracts.Options;
-using metrics.Services.Abstractions;
+using metrics.Authentication;
+using metrics.Authentication.Infrastructure;
 using Microsoft.Extensions.Options;
 
-namespace metrics.Services.Utils
+namespace metrics.Competitions.Hosted.Services
 {
-    public class ConsoleTokenAccessor : IVkTokenAccessor
+    public class ConsoleTokenAccessor : IUserTokenAccessor
     {
         private readonly IOptions<TokenOptions> _options;
         

@@ -20,14 +20,14 @@ namespace metrics.Services.Concrete
 {
     public class VkClient : BaseHttpClient, IVkClient
     {
-        private readonly IVkTokenAccessor _vkTokenAccessor;
+        private readonly IUserTokenAccessor _vkTokenAccessor;
         private readonly IMessageBroker _messageBroker;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
         private readonly IOptions<VkontakteOptions> _vkontakteOptions;
 
         public VkClient(
             IHttpClientFactory httpClientFactory,
-            IVkTokenAccessor vkTokenAccessor,
+            IUserTokenAccessor vkTokenAccessor,
             ILogger<BaseHttpClient> logger,
             IMessageBroker messageBroker,
             IOptions<VkontakteOptions> vkontakteOptions,

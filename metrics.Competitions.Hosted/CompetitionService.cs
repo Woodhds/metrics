@@ -3,13 +3,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Abstractions;
-using metrics.Services.Abstractions;
+using metrics.Competitions.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nest;
 
-namespace Competition.Hosted
+namespace metrics.Competitions.Hosted
 {
     public class CompetitionService : BackgroundService
     {

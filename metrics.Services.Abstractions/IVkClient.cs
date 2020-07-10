@@ -4,7 +4,7 @@ using Base.Contracts;
 
 namespace metrics.Services.Abstractions
 {
-    public interface IVkClient : IBaseHttpClient
+    public interface IVkClient
     {
         Task<VkResponse<List<VkMessage>>> GetReposts(string id, int skip, int take, string search = null);
         Task Repost(List<VkRepostViewModel> reposts, int timeout = 0);

@@ -40,14 +40,9 @@ namespace metrics.Broker.Console
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
             services.AddScoped<IVkClient, VkClient>();
-
-            services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
-            services.AddScoped<IVkTokenAccessor, CacheTokenAccessor>();
-            services.AddScoped<IUserStore, UserStore>();
-            services.AddScoped<IAuthenticatedUserProvider, AuthenticatedUserProvider>();
-            services.AddScoped<ISecurityUserManager, ApplicationUserManager>();
+            
             services.AddScoped<ISchedulerJobService, SchedulerJobService>();
-            services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
+            services.AddSingleton<IUserRepostedService, UserRepostedService>();
 
             services.AddIdentityClient(Configuration);
             services.Configure<VkontakteOptions>(

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace metrics.Authentication
+namespace metrics.Authentication.Infrastructure
 {
     public interface IUserStore
     {

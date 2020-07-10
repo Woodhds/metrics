@@ -1,13 +1,8 @@
-using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
 using Base.Abstractions;
 using Base.Contracts.Options;
-using metrics.Authentication;
-using metrics.Authentication.Infrastructure;
-using metrics.Authentication.Services.Abstract;
-using metrics.Authentication.Services.Concrete;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
@@ -22,7 +17,6 @@ using metrics.ML.Services.Extensions;
 using metrics.Notification.SignalR.Extensions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
-using metrics.Services.Utils;
 using metrics.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
@@ -61,17 +55,11 @@ namespace metrics
             
             services.AddMetricsSignalR(signalROptions.Host);
             
-            services.AddSingleton<IBaseHttpClient, BaseHttpClient>();
-            services.AddScoped<ICompetitionsService, CompetitionsService>();
-            services.AddScoped<IVkTokenAccessor, CacheTokenAccessor>();
-            services.AddScoped<IUserStore, UserStore>();
-            services.AddScoped<IAuthenticatedUserProvider, AuthenticatedUserProvider>();
-            services.AddScoped<ISecurityUserManager, ApplicationUserManager>();
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.AddScoped<IVkClient, VkClient>();
             services.AddScoped<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
-            services.AddSingleton<IRepostCacheAccessor, RepostCacheAccessor>();
+            services.AddSingleton<IUserRepostedService, UserRepostedService>();
 
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddPredictClient(Configuration["ClientUrl"]);

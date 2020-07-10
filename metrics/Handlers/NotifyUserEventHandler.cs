@@ -11,11 +11,11 @@ namespace metrics.Handlers
     public class NotifyUserEventHandler : IMessageHandler<NotifyUserEvent>
     {
         private readonly IHubContext<NotificationHub> _hubContext;
-        private readonly IRepostCacheAccessor _repostCacheAccessor;
+        private readonly IUserRepostedService _repostCacheAccessor;
 
         public NotifyUserEventHandler(
             IHubContext<NotificationHub> hubContext,
-            IRepostCacheAccessor repostCacheAccessor
+            IUserRepostedService repostCacheAccessor
         )
         {
             _hubContext = hubContext;

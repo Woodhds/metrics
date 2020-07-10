@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using System.Linq;
 using Base.Contracts;
 using Base.Contracts.Options;
+using HtmlAgilityPack;
+using metrics.Competitions.Abstractions;
 using metrics.Services.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace metrics.Services.Concrete
+namespace metrics.Competitions.Hosted.Services
 {
     public class CompetitionsService : ICompetitionsService
     {

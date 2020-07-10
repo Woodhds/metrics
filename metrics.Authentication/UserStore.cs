@@ -1,4 +1,5 @@
 ﻿using System;
+using metrics.Authentication.Infrastructure;
 
 namespace metrics.Authentication
 {
@@ -23,7 +24,7 @@ namespace metrics.Authentication
 
         private class UserEntry : IDisposable
         {
-            public bool Disposed { get; set; }
+            public bool Disposed { get; private set; }
             public readonly IUser Prev;
             public readonly IUser Next;
 

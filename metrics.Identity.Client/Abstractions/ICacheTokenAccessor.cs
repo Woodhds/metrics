@@ -1,8 +1,8 @@
-﻿using metrics.Services.Abstractions;
+﻿using metrics.Authentication.Infrastructure;
 
 namespace metrics.Identity.Client.Abstractions
 {
-    public interface ICacheTokenAccessor : IVkTokenAccessor
+    public interface ICacheTokenAccessor : IUserTokenAccessor
     {
         
     }

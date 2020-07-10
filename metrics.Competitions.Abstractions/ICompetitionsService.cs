@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Base.Contracts;
 
-namespace metrics.Services.Abstractions
+namespace metrics.Competitions.Abstractions
 {
     public interface ICompetitionsService
     {

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace metrics.Identity.Client.Abstractions
+﻿namespace metrics.Identity.Client.Abstractions
 {
     public interface ISystemTokenGenerationService
     {

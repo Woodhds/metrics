@@ -1,4 +1,5 @@
 ﻿using System;
+using metrics.Authentication.Infrastructure;
 using metrics.Authentication.Services.Abstract;
 
 namespace metrics.Authentication.Services.Concrete
