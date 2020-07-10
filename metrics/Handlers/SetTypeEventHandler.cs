@@ -20,7 +20,7 @@ namespace metrics.Handlers
         public async Task HandleAsync(SetMessageTypeEvent obj, CancellationToken token = default)
         {
             var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: token);
-            var message = scope.GetRepository<MessageVk>().Read()
+            var message = scope.Query<MessageVk>()
                 .FirstOrDefault(a => a.MessageId == obj.MessageId && a.OwnerId == obj.OwnerId);
             if (message == null)
             {

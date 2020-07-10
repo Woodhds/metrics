@@ -34,8 +34,8 @@ namespace metrics.ML.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: stoppingToken);
-                var messageVks = scope.GetRepository<MessageVk>().Read()
+                using var scope = _transactionScopeFactory.CreateQuery(cancellationToken: stoppingToken);
+                var messageVks = scope.Query<MessageVk>()
                     .Select(e => new
                     {
                         e.OwnerId,

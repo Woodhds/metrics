@@ -8,18 +8,18 @@ namespace metrics.Notification.SignalR.Hubs
     [Authorize]
     public class NotificationHub : Hub
     {
-        private readonly IUserRepostedService _repostCacheAccessor;
+        private readonly IUserRepostedService _userRepostedService;
 
         public NotificationHub(IUserRepostedService repostCacheAccessor)
         {
-            _repostCacheAccessor = repostCacheAccessor;
+            _userRepostedService = repostCacheAccessor;
         }
 
         [HubMethodName("currentCount")]
         public async Task CurrentCount()
         {
             await Clients.User(Context.UserIdentifier)
-                .SendAsync("Count", await _repostCacheAccessor.GetCountAsync(int.Parse(Context.UserIdentifier)));
+                .SendAsync("Count", await _userRepostedService.GetCountAsync(int.Parse(Context.UserIdentifier)));
         }
 
         public override async Task OnConnectedAsync()

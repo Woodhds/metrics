@@ -54,9 +54,9 @@ namespace metrics.Services.Concrete
                                );
                 })
             );
-            using var scope = await _transactionScopeFactory.CreateAsync();
+            using var scope = _transactionScopeFactory.CreateQuery();
             var keys = response.Documents.Select(f => f.Owner_Id + "_" + f.Id);
-            var items = scope.GetRepository<MessageVk>().Read().Select(r =>
+            var items = scope.Query<MessageVk>().Select(r =>
                     new {Key = r.OwnerId.ToString() + "_" + r.MessageId.ToString(), item = r})
                 .Where(e => keys.Contains(e.Key))
                 .Select(f => new {message = f.item, category = f.item.MessageCategory.Title}).ToList();

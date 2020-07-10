@@ -30,11 +30,7 @@ export class UserComponent implements OnInit {
     60,
     80,
     100,
-    200,
-    400,
-    600,
-    800,
-    1000
+    200
   ];
   timeout = 30;
   public users: VkUserModel[];

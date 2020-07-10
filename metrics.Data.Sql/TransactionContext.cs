@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace metrics.Data.Sql
 {
-    public sealed class TransactionContext : ITransactionContext
+    public sealed class TransactionContext : QueryContext, ITransactionContext
     {
         private readonly IDbContextTransaction _dbContextTransaction;
         private readonly DbContext _dbContext;
@@ -16,7 +16,7 @@ namespace metrics.Data.Sql
         public TransactionContext(
             IDbContextTransaction dbContextTransaction,
             DbContext dbContext
-        )
+        ) : base(dbContext)
         {
             _dbContextTransaction = dbContextTransaction;
             _dbContext = dbContext;
@@ -56,8 +56,9 @@ namespace metrics.Data.Sql
             _disposed = true;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             Dispose(true);
             GC.SuppressFinalize(this);
         }

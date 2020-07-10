@@ -37,7 +37,7 @@ namespace metrics.Services.Concrete
 
             var keys = obj.Select(f => f.Key);
 
-            var alreadyCreate = scope.GetRepository<VkRepost>().Read()
+            var alreadyCreate = scope.Query<VkRepost>()
                 .Where(f => f.UserId == userId &&
                             (f.Status == VkRepostStatus.New || f.Status == VkRepostStatus.Pending))
                 .Select(f => new
@@ -67,7 +67,7 @@ namespace metrics.Services.Concrete
 
         public async ValueTask<int> GetCountAsync(int userId)
         {
-            return (await _transactionScopeFactory.CreateAsync()).GetRepository<VkRepost>().Read()
+            return (await _transactionScopeFactory.CreateAsync()).Query<VkRepost>()
                 .Count(f => f.UserId == userId &&
                             (f.Status == VkRepostStatus.New || f.Status == VkRepostStatus.Pending));
         }

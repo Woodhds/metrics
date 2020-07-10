@@ -48,10 +48,10 @@ namespace metrics.Controllers
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]
-        public async Task<ActionResult<DataSourceResponseModel>> GetTypes(int page, int pageSize)
+        public ActionResult<DataSourceResponseModel> GetTypes(int page, int pageSize)
         {
-            using var scope = await _transactionScopeFactory.CreateAsync();
-            var q = scope.GetRepository<MessageCategory>().Read().OrderBy(a => a.Id);
+            using var scope = _transactionScopeFactory.CreateQuery();
+            var q = scope.Query<MessageCategory>().OrderBy(a => a.Id);
             return new DataSourceResponseModel(q.Skip(page * pageSize).Take(pageSize).ToList(), q.Count());
         }
 

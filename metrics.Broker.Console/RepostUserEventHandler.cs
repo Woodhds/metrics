@@ -33,8 +33,7 @@ namespace metrics.Broker.Console
             {
                 var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: token);
                 var message = await scope
-                    .GetRepository<VkRepost>()
-                    .Read()
+                    .Query<VkRepost>()
                     .OrderBy(f => f.DateStatus)
                     .Where(f => f.Status == VkRepostStatus.New && f.UserId == obj.UserId)
                     .FirstOrDefaultAsync(token);

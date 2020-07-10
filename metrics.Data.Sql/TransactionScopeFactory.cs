@@ -15,13 +15,6 @@ namespace metrics.Data.Sql
             _dataContextFactory = dataContextFactory;
         }
 
-        public ITransactionContext Create(IsolationLevel level = IsolationLevel.ReadCommitted)
-        {
-            var context = _dataContextFactory.Create();
-            var transaction = context.Database.BeginTransaction(level);
-            return new TransactionContext(transaction, context);
-        }
-
         public async Task<ITransactionContext> CreateAsync(IsolationLevel level = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default)
         {
@@ -29,6 +22,13 @@ namespace metrics.Data.Sql
             var transaction = await context.Database.BeginTransactionAsync(level, cancellationToken);
 
             return new TransactionContext(transaction, context);
+        }
+
+        public IQueryContext CreateQuery(IsolationLevel level = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
+        {
+            var context = _dataContextFactory.Create();
+
+            return new QueryContext(context);
         }
     }
 }
