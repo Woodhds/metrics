@@ -10,7 +10,13 @@ namespace metrics.Data.Abstractions
             IsolationLevel level = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default
         );
+
         IQueryContext CreateQuery(
+            IsolationLevel level = IsolationLevel.ReadCommitted,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<ITransactionContext> CreateResilientAsync(
             IsolationLevel level = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default
         );

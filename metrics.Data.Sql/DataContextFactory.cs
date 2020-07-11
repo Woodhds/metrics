@@ -1,5 +1,4 @@
-﻿using metrics.Data.Abstractions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Data.Sql
 {

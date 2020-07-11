@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Data.Abstractions;
@@ -24,11 +23,6 @@ namespace metrics.Data.Sql
             await _dbContext.SaveChangesAsync(ct);
 
             return obj;
-        }
-
-        public IQueryable<T> Read()
-        {
-            return _set.AsQueryable();
         }
 
         public async Task<T> UpdateAsync(T obj, CancellationToken ct = default)
