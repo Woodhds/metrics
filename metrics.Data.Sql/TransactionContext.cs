@@ -58,9 +58,9 @@ namespace metrics.Data.Sql
 
         public override void Dispose()
         {
-            base.Dispose();
             Dispose(true);
             GC.SuppressFinalize(this);
+            base.Dispose();
         }
     }
 }

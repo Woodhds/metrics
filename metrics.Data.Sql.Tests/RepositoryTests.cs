@@ -1,5 +1,4 @@
-﻿using System;
-using metrics.Data.Common.Infrastructure.Entities;
+﻿using metrics.Data.Common.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 

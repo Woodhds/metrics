@@ -1,11 +1,9 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-//TODO: DRY
 namespace metrics.Data.Sql
 {
     public class TransactionScopeFactory : ITransactionScopeFactory
@@ -26,17 +24,22 @@ namespace metrics.Data.Sql
             return new TransactionContext(transaction, context);
         }
 
-        public IQueryContext CreateQuery(IsolationLevel level = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
+        public IQueryContext CreateQuery(IsolationLevel level = IsolationLevel.ReadCommitted,
+            CancellationToken cancellationToken = default)
         {
             var context = _dataContextFactory.Create();
 
             return new QueryContext(context);
         }
 
-        public Task<ITransactionContext> CreateResilientAsync(IsolationLevel level = IsolationLevel.ReadCommitted,
+        public async Task<IResilientTransactionContext> CreateResilientAsync(
+            IsolationLevel level = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default)
         {
-           throw new NotImplementedException();
+            return new ResilientTransactionContext(
+                await CreateAsync(level, cancellationToken),
+                _dataContextFactory.Create().Database.CreateExecutionStrategy()
+            );
         }
     }
 }

@@ -16,7 +16,7 @@ namespace metrics.Data.Abstractions
             CancellationToken cancellationToken = default
         );
 
-        Task<ITransactionContext> CreateResilientAsync(
+        Task<IResilientTransactionContext> CreateResilientAsync(
             IsolationLevel level = IsolationLevel.ReadCommitted,
             CancellationToken cancellationToken = default
         );
