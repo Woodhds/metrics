@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Data.Abstractions;
@@ -23,6 +24,11 @@ namespace metrics.Data.Sql
             await _dbContext.SaveChangesAsync(ct);
 
             return obj;
+        }
+
+        public Task CreateCollectionAsync(IEnumerable<T> collection, CancellationToken ct = default)
+        {
+            return _set.AddRangeAsync(collection, ct);
         }
 
         public async Task<T> UpdateAsync(T obj, CancellationToken ct = default)

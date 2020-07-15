@@ -1,4 +1,8 @@
-﻿using metrics.Data.Common.Infrastructure.Entities;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using metrics.Data.Common.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -31,6 +35,18 @@ namespace metrics.Data.Sql.Tests
                 await scope.GetRepository<VkRepost>().UpdateAsync(repost);
                 Assert.IsTrue(await scope.Query<VkRepost>().AnyAsync(e => e.Status == VkRepostStatus.Complete));
             });
+        }
+
+        [Test]
+        public async Task TestCreateBatch()
+        {
+            using var scope = await Initializer.TransactionScopeFactory.CreateAsync();
+
+            await scope.GetRepository<VkRepost>().CreateCollectionAsync(Enumerable.Range(0, 100).Select(_ => new VkRepost()));
+            
+            await scope.CommitAsync();
+
+            Assert.NotZero(await scope.Query<VkRepost>().CountAsync());
         }
     }
 }
