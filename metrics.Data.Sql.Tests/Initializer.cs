@@ -2,6 +2,7 @@
 using metrics.Data.Common.Infrastructure.Confguraton;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace metrics.Data.Sql.Tests
@@ -18,6 +19,13 @@ namespace metrics.Data.Sql.Tests
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             serviceCollection.AddSingleton<IEntityConfigurationProvider, EntityConfigurationProvider>();
+
+            serviceCollection.AddLogging(x =>
+            {
+                x.ClearProviders();
+                x.SetMinimumLevel(LogLevel.Information);
+                x.AddConsole();
+            });
             
             var builder = new DbContextOptionsBuilder()
                 .UseNpgsql("Host=localhost;Port=5432;Database=test_ctx;UserId=postgres;Password=password")
