@@ -26,7 +26,7 @@ namespace metrics.Broker.Console
             if (obj.UserId == default)
                 return;
 
-            using var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: token);
+            using var scope = await _transactionScopeFactory.CreateAsync(token);
 
             var message = scope.Query<VkRepost>()
                 .FirstOrDefault(q =>

@@ -1,4 +1,5 @@
-﻿using Base.Abstractions;
+﻿using Elastic;
+using Elastic.Client;
 using metrics.Broker.Abstractions;
 using metrics.Data.Abstractions;
 using metrics.Data.Common;

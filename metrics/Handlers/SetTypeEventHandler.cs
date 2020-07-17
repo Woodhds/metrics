@@ -19,27 +19,31 @@ namespace metrics.Handlers
 
         public async Task HandleAsync(SetMessageTypeEvent obj, CancellationToken token = default)
         {
-            var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: token);
-            var message = scope.Query<MessageVk>()
-                .FirstOrDefault(a => a.MessageId == obj.MessageId && a.OwnerId == obj.OwnerId);
-            if (message == null)
+            var scope = await _transactionScopeFactory.CreateResilientAsync(token);
+
+            await scope.ExecuteAsync(async transaction =>
             {
-                await scope.GetRepository<MessageVk>().CreateAsync(new MessageVk()
+                var message = transaction.Query<MessageVk>()
+                    .FirstOrDefault(a => a.MessageId == obj.MessageId && a.OwnerId == obj.OwnerId);
+                if (message == null)
                 {
-                    MessageId = obj.MessageId,
-                    OwnerId = obj.OwnerId,
-                    MessageCategoryId = obj.MessageCategory
-                });
-            }
-            else
-            {
-                message.MessageCategoryId = obj.MessageCategory;
+                    await transaction.GetRepository<MessageVk>().CreateAsync(new MessageVk
+                    {
+                        MessageId = obj.MessageId,
+                        OwnerId = obj.OwnerId,
+                        MessageCategoryId = obj.MessageCategory
+                    }, token);
+                }
+                else
+                {
+                    message.MessageCategoryId = obj.MessageCategory;
 
-                await scope.GetRepository<MessageVk>().UpdateAsync(message);
-            }
+                    await transaction.GetRepository<MessageVk>().UpdateAsync(message, token);
+                }
 
-           
-            await scope.CommitAsync(token);
+
+                await transaction.CommitAsync(token);
+            });
         }
     }
 }

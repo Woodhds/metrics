@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Base.Abstractions
+namespace Elastic.Client
 {
     public static class ServiceCollectionExtensions
     {

@@ -26,11 +26,6 @@ namespace metrics.Data.Sql
             return obj;
         }
 
-        public Task CreateCollectionAsync(IEnumerable<T> collection, CancellationToken ct = default)
-        {
-            return _set.AddRangeAsync(collection, ct);
-        }
-
         public async Task<T> UpdateAsync(T obj, CancellationToken ct = default)
         {
             _set.Attach(obj).State = EntityState.Modified;

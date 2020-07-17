@@ -1,5 +1,5 @@
-using Base.Abstractions;
 using Base.Contracts.Options;
+using Elastic.Client;
 using metrics.Broker.Abstractions;
 using metrics.Competitions.Abstractions;
 using metrics.Competitions.Hosted.Extensions;
@@ -33,6 +33,7 @@ namespace metrics.Competitions.Hosted
             services.Configure<TokenOptions>(Configuration.GetSection("Token"));
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.Configure<CompetitionOptions>(Configuration.GetSection(nameof(CompetitionOptions)));
+            services.Configure<ElasticOptions>(Configuration.GetSection(nameof(ElasticOptions)));
             services.AddHostedService<CompetitionService>();
         }
 

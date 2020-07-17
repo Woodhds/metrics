@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Services", "metrics
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "metrics.Competitions.Hosted", "metrics.Competitions.Hosted\metrics.Competitions.Hosted.csproj", "{95973F9C-2E3A-495F-8B0E-8FE4C4C8C1E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elastic", "Elastic\Elastic.csproj", "{B842060E-EB09-475F-B410-C205C9BA63E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elastic.Client", "Elastic.Client\Elastic.Client.csproj", "{B842060E-EB09-475F-B410-C205C9BA63E1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Base.Contracts", "Base.Contracts\Base.Contracts.csproj", "{1BAD446C-794D-4A4E-BF70-465C09CFE5B0}"
 EndProject
@@ -92,6 +92,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{ABF7D990-9694-4FD4-8A33-F738E6D81FE0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Data.Sql.Tests", "metrics.Data.Sql.Tests\metrics.Data.Sql.Tests.csproj", "{E07F7DB4-9364-43A3-89A0-75FFCE70DC72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elastic.Console", "Elastic\Elastic.Console\Elastic.Console.csproj", "{092803D8-41CC-4ECB-95DB-449443A9EDF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -235,6 +237,10 @@ Global
 		{E07F7DB4-9364-43A3-89A0-75FFCE70DC72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E07F7DB4-9364-43A3-89A0-75FFCE70DC72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E07F7DB4-9364-43A3-89A0-75FFCE70DC72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{092803D8-41CC-4ECB-95DB-449443A9EDF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{092803D8-41CC-4ECB-95DB-449443A9EDF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{092803D8-41CC-4ECB-95DB-449443A9EDF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{092803D8-41CC-4ECB-95DB-449443A9EDF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -269,6 +275,7 @@ Global
 		{D4DEF438-6331-4B59-AD24-D19989FD164B} = {ABF7D990-9694-4FD4-8A33-F738E6D81FE0}
 		{4686CCD8-D5C5-40CE-8D86-2A276F1DE7A2} = {ABF7D990-9694-4FD4-8A33-F738E6D81FE0}
 		{E07F7DB4-9364-43A3-89A0-75FFCE70DC72} = {F0090F2D-79B1-4853-A078-01EB73CCA642}
+		{092803D8-41CC-4ECB-95DB-449443A9EDF0} = {DF9F6B9B-F666-456D-A89E-CB2BB8014F44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B9B1AA4-B7E9-4A7C-B1D5-7F683FA9B1D0}

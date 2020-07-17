@@ -231,6 +231,7 @@ namespace metrics.Services.Concrete
             var @params = new NameValueCollection
             {
                 {"q", search},
+                {"count", "100"},
                 {"fields", "photo_50"}
             };
 

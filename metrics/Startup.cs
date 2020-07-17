@@ -1,8 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
-using Base.Abstractions;
 using Base.Contracts.Options;
+using Elastic;
+using Elastic.Client;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;

@@ -4,11 +4,12 @@ using Base.Contracts.Options;
 using Microsoft.Extensions.Options;
 using Nest;
 
-namespace Base.Abstractions
+namespace Elastic.Client
 {
     public class ElasticClientFactory : IElasticClientFactory
     {
         private readonly ElasticOptions _options;
+
         public ElasticClientFactory(IOptions<ElasticOptions> options)
         {
             _options = options.Value;
@@ -25,8 +26,12 @@ namespace Base.Abstractions
                 new ConnectionSettings(new Uri(_options.Host))
                     .DisableDirectStreaming()
                     .DefaultMappingFor<VkMessage>(descriptor =>
-                    descriptor.IdProperty(model => model.Identifier).IndexName("vk_message"))
-                    .DefaultMappingFor<VkUserModel>(z => z.IndexName("vk_user"));
+                        descriptor
+                            .IdProperty(model => model.Identifier)
+                            .IndexName("vk_message")
+                    )
+                    .DefaultMappingFor<VkUserModel>(descriptor => descriptor.IdProperty(model => model.Id)
+                        .IndexName("vk_user"));
             return new ElasticClient(connection);
         }
     }

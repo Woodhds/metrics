@@ -6,19 +6,22 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace metrics.Data.Sql
 {
-    public class ResilientTransactionContext : IResilientTransactionContext
+    public class ResilientTransactionContext: IResilientTransactionContext
     {
-        private readonly ITransactionContext _transactionContext;
+        private readonly ITransactionRepositoryContext _transactionContext;
         private readonly IExecutionStrategy _executionStrategy;
         private bool _disposed;
 
-        public ResilientTransactionContext(ITransactionContext transactionContext, IExecutionStrategy executionStrategy)
+        public ResilientTransactionContext(
+            ITransactionRepositoryContext transactionContext,
+            IExecutionStrategy executionStrategy
+        )
         {
             _transactionContext = transactionContext;
             _executionStrategy = executionStrategy;
         }
 
-        public Task ExecuteAsync(Func<ITransactionContext, Task> context)
+        public Task ExecuteAsync(Func<ITransactionRepositoryContext, Task> context)
         {
             return _executionStrategy.ExecuteAsync(_transactionContext, context.Invoke);
         }

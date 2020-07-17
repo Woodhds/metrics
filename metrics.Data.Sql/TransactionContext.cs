@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace metrics.Data.Sql
 {
-    public sealed class TransactionContext : QueryContext, ITransactionContext
+    public sealed class TransactionContext : QueryContext, ITransactionRepositoryContext
     {
         private readonly IDbContextTransaction _dbContextTransaction;
         private readonly DbContext _dbContext;

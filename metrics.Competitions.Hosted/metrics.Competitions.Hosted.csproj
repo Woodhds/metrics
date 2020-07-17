@@ -6,7 +6,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\Elastic\Elastic.csproj" />
+      <ProjectReference Include="..\Elastic.Client\Elastic.Client.csproj" />
       <ProjectReference Include="..\metrics.Competitions.Abstractions\metrics.Competitions.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />
       <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Base.Abstractions;
 using Base.Contracts;
+using Elastic.Client;
 using metrics.Services.Abstractions;
 
 namespace metrics.Services.Concrete

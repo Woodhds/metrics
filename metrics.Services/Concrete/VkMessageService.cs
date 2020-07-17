@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Base.Abstractions;
 using Base.Contracts;
+using Elastic.Client;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using Metrics.Ml.Services;
@@ -28,32 +28,32 @@ namespace metrics.Services.Concrete
         public async Task<DataSourceResponseModel> GetMessages(int page = 0, int take = 50, string search = null,
             string user = null)
         {
-            var client = _elasticClientFactory.Create();
-
-            var response = await client.SearchAsync<VkMessage>(z => z
-                .From(page * take)
-                .Take(take)
-                .Query(f =>
-                {
-                    var q = f
-                        .Bool(e => e
-                            .Filter(g => g
-                                .MatchPhrase(q => q
-                                    .Field(message => message.Text)
-                                    .Query(search)
+            var response = await _elasticClientFactory
+                .Create()
+                .SearchAsync<VkMessage>(z => z
+                    .From(page * take)
+                    .Take(take)
+                    .Query(f =>
+                    {
+                        var q = f
+                            .Bool(e => e
+                                .Filter(g => g
+                                    .MatchPhrase(q => q
+                                        .Field(message => message.Text)
+                                        .Query(search)
+                                    )
                                 )
-                            )
-                        );
-                    if (string.IsNullOrEmpty(user)) return q;
+                            );
+                        if (string.IsNullOrEmpty(user)) return q;
 
-                    return q &&
-                           f
-                               .Term(t => t
-                                   .Value(user)
-                                   .Field(l => l.RepostedFrom)
-                               );
-                })
-            );
+                        return q &&
+                               f
+                                   .Term(t => t
+                                       .Value(user)
+                                       .Field(l => l.RepostedFrom)
+                                   );
+                    })
+                );
             using var scope = _transactionScopeFactory.CreateQuery();
             var keys = response.Documents.Select(f => f.Owner_Id + "_" + f.Id);
             var items = scope.Query<MessageVk>().Select(r =>

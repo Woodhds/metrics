@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using metrics.Data.Common.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -38,10 +39,9 @@ namespace metrics.Data.Sql.Tests
         [Test]
         public async Task TestCreateBatch()
         {
-            using var scope = await Initializer.TransactionScopeFactory.CreateAsync();
+            using var scope = await Initializer.TransactionScopeFactory.CreateBatchAsync();
 
-            await scope.GetRepository<VkRepost>().CreateCollectionAsync(Enumerable.Range(0, 100).Select(_ => new VkRepost()));
-            
+            await scope.CreateCollectionAsync(Enumerable.Range(0, 100).Select(_ => new VkRepost()));
             await scope.CommitAsync();
 
             Assert.NotZero(await scope.Query<VkRepost>().CountAsync());

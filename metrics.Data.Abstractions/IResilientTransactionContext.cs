@@ -5,6 +5,6 @@ namespace metrics.Data.Abstractions
 {
     public interface IResilientTransactionContext : IDisposable
     {
-        Task ExecuteAsync(Func<ITransactionContext, Task> context);
+        Task ExecuteAsync(Func<ITransactionRepositoryContext, Task> context);
     }
 }

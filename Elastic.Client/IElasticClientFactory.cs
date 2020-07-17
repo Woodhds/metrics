@@ -1,6 +1,6 @@
 using Nest;
 
-namespace Base.Abstractions
+namespace Elastic.Client
 {
     public interface IElasticClientFactory
     {

@@ -6,7 +6,6 @@ using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
-using metrics.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using IBackgroundJobService = metrics.BackgroundJobs.Abstractions.IBackgroundJobService;
@@ -31,26 +30,30 @@ namespace metrics.Broker.Console
         {
             try
             {
-                var scope = await _transactionScopeFactory.CreateAsync(cancellationToken: token);
-                var message = await scope
-                    .Query<VkRepost>()
-                    .OrderBy(f => f.DateStatus)
-                    .Where(f => f.Status == VkRepostStatus.New && f.UserId == obj.UserId)
-                    .FirstOrDefaultAsync(token);
+                using var scope = await _transactionScopeFactory.CreateResilientAsync(token);
 
-                if (message == null)
-                    return;
+                await scope.ExecuteAsync(async transaction =>
+                {
+                    var message = await transaction
+                        .Query<VkRepost>()
+                        .OrderBy(f => f.DateStatus)
+                        .Where(f => f.Status == VkRepostStatus.New && f.UserId == obj.UserId)
+                        .FirstOrDefaultAsync(token);
 
-                message.Status = VkRepostStatus.Pending;
-                message.DateStatus = DateTime.Now;
+                    if (message == null)
+                        return;
 
-                await scope.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
+                    message.Status = VkRepostStatus.Pending;
+                    message.DateStatus = DateTime.Now;
 
-                await scope.CommitAsync(CancellationToken.None);
+                    await transaction.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
 
-                _jobService.Schedule<ISchedulerJobService>(
-                    client => client.Repost(message.OwnerId, message.MessageId, obj.UserId),
-                    TimeSpan.FromSeconds(10));
+                    await transaction.CommitAsync(CancellationToken.None);
+                    
+                    _jobService.Schedule<ISchedulerJobService>(
+                        client => client.Repost(message.OwnerId, message.MessageId, obj.UserId),
+                        TimeSpan.FromSeconds(10));
+                });
             }
             catch (Exception e)
             {
