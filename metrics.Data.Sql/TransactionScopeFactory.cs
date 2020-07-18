@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Data.Abstractions;
+using metrics.Data.Sql.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Data.Sql
@@ -30,16 +31,6 @@ namespace metrics.Data.Sql
             var context = _dataContextFactory.Create();
 
             return new QueryContext(context);
-        }
-
-        public async Task<IResilientTransactionContext> CreateResilientAsync(
-            IsolationLevel level = IsolationLevel.ReadCommitted,
-            CancellationToken cancellationToken = default)
-        {
-            return new ResilientTransactionContext(
-                await CreateAsync(level, cancellationToken),
-                _dataContextFactory.Create().Database.CreateExecutionStrategy()
-            );
         }
 
         public async Task<IBatchTransactionContext> CreateBatchAsync(IsolationLevel level, CancellationToken ct = default)

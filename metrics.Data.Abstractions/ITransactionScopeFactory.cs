@@ -16,12 +16,6 @@ namespace metrics.Data.Abstractions
         IQueryContext CreateQuery(CancellationToken cancellationToken = default) =>
             CreateQuery(IsolationLevel.ReadUncommitted, cancellationToken);
 
-        Task<IResilientTransactionContext> CreateResilientAsync(IsolationLevel level,
-            CancellationToken cancellationToken = default);
-
-        Task<IResilientTransactionContext> CreateResilientAsync(CancellationToken cancellationToken = default) =>
-            CreateResilientAsync(IsolationLevel.ReadCommitted, cancellationToken);
-
         Task<IBatchTransactionContext> CreateBatchAsync(IsolationLevel level, CancellationToken ct = default);
 
         Task<IBatchTransactionContext> CreateBatchAsync(CancellationToken ct = default) =>

@@ -5,7 +5,7 @@ using metrics.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace metrics.Data.Sql
+namespace metrics.Data.Sql.Contexts
 {
     public sealed class TransactionContext : QueryContext, ITransactionRepositoryContext
     {

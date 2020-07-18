@@ -3,7 +3,7 @@ using System.Linq;
 using metrics.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace metrics.Data.Sql
+namespace metrics.Data.Sql.Contexts
 {
     public class QueryContext : IQueryContext
     {

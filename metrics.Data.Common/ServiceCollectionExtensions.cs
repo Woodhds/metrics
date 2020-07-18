@@ -1,5 +1,4 @@
-﻿using System;
-using metrics.Data.Abstractions;
+﻿using metrics.Data.Abstractions;
 using metrics.Data.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,14 +16,7 @@ namespace metrics.Data.Common
             services.AddTransient<DbContext, T>();
             services.AddDbContextPool<T>(x =>
             {
-                x.UseNpgsql(connectionString, builder =>
-                {
-                    builder.EnableRetryOnFailure(
-                        5,
-                        TimeSpan.FromSeconds(30),
-                        null!
-                    );
-                });
+                x.UseNpgsql(connectionString);
                 x.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
