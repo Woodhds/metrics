@@ -8,7 +8,7 @@ using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common;
-using metrics.Data.Common.Infrastructure.Confguraton;
+using metrics.Data.Common.Infrastructure.Configuration;
 using metrics.Data.Sql;
 using metrics.Events;
 using metrics.Handlers;

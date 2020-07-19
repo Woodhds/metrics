@@ -2,7 +2,7 @@
 using metrics.Data.Common.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace metrics.Data.Common.Infrastructure.Confguraton
+namespace metrics.Data.Common.Infrastructure.Configuration
 {
     public class RepostEntityConfiguration : IEntityConfiguration
     {

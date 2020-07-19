@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using metrics.Data.Abstractions;
-using metrics.Data.Common.Infrastructure.Confguraton;
+using metrics.Data.Common.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

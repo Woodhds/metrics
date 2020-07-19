@@ -3,7 +3,7 @@ using Elastic.Client;
 using metrics.Broker.Abstractions;
 using metrics.Data.Abstractions;
 using metrics.Data.Common;
-using metrics.Data.Common.Infrastructure.Confguraton;
+using metrics.Data.Common.Infrastructure.Configuration;
 using metrics.Data.Sql;
 using metrics.ML.Services;
 using metrics.ML.Services.Extensions;
