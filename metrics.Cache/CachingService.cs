@@ -19,12 +19,12 @@ namespace metrics.Cache
         public async Task<T> GetAsync<T>(string key, CancellationToken cancellationToken = default)
         {
             var bytes = await _cache.GetAsync(key, cancellationToken);
-            return await _serializer.DeserializeAsync<T>(bytes, cancellationToken);
+            return _serializer.Deserialize<T>(bytes);
         }
 
         public async Task SetAsync<T>(string key, T obj, CancellationToken cancellationToken = default)
         {
-            await _cache.SetAsync(key, await _serializer.SerializeAsync(obj, cancellationToken), cancellationToken);
+            await _cache.SetAsync(key, _serializer.Serialize(obj), cancellationToken);
         }
 
         public Task RemoveAsync(string key, CancellationToken cancellationToken = default)

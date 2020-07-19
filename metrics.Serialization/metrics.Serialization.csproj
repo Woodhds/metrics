@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Elastic.Client\Elastic.Client.csproj" />
+      <ProjectReference Include="..\metrics.Serialization.Abstractions\metrics.Serialization.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

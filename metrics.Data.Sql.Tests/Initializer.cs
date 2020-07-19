@@ -29,15 +29,7 @@ namespace metrics.Data.Sql.Tests
             });
 
             var builder = new DbContextOptionsBuilder()
-                .UseNpgsql("Host=localhost;Port=5432;Database=test_ctx;UserId=postgres;Password=password",
-                    optionsBuilder =>
-                    {
-                        /*optionsBuilder.EnableRetryOnFailure(
-                            5,
-                            TimeSpan.FromSeconds(30),
-                            new List<string>()
-                        );*/
-                    })
+                .UseNpgsql("Host=localhost;Port=5432;Database=test_ctx;UserId=postgres;Password=password")
                 .UseApplicationServiceProvider(serviceCollection.BuildServiceProvider())
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .EnableSensitiveDataLogging();

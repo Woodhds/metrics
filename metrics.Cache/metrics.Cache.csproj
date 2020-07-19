@@ -6,6 +6,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\metrics.Cache.Abstractions\metrics.Cache.Abstractions.csproj" />
+        <ProjectReference Include="..\metrics.Serialization.Abstractions\metrics.Serialization.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

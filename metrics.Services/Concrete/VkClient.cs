@@ -13,6 +13,7 @@ using metrics.Authentication;
 using metrics.Authentication.Infrastructure;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
+using metrics.Serialization.Abstractions;
 using metrics.Services.Abstractions;
 using metrics.Services.Utils;
 
@@ -31,8 +32,8 @@ namespace metrics.Services.Concrete
             ILogger<BaseHttpClient> logger,
             IMessageBroker messageBroker,
             IOptions<VkontakteOptions> vkontakteOptions,
-            IAuthenticatedUserProvider authenticatedUserProvider
-        ) : base(httpClientFactory, logger)
+            IAuthenticatedUserProvider authenticatedUserProvider, IJsonSerializer jsonSerializer) : base(
+            httpClientFactory, logger, jsonSerializer)
         {
             _vkTokenAccessor = vkTokenAccessor;
             _messageBroker = messageBroker;

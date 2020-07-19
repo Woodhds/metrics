@@ -17,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
 
 namespace metrics.Identity
 {
@@ -39,10 +38,6 @@ namespace metrics.Identity
 
             services
                 .AddMvcCore()
-                .AddNewtonsoftJson(opts =>
-                {
-                    opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                })
                 .AddCors(opts =>
                 {
                     opts.AddPolicy("CorsPolicy", builder =>
