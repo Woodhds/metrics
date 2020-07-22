@@ -10,9 +10,7 @@ namespace metrics.BackgroundJobs
     {
         public static IServiceCollection AddHangfire(this IServiceCollection services, string host)
         {
-            services.AddHangfireServer(options =>
-            {
-            });
+            services.AddHangfireServer();
 
             services.AddHangfire(configuration =>
             {
@@ -23,7 +21,7 @@ namespace metrics.BackgroundJobs
             });
 
             services.AddSingleton<IBackgroundJobService, BackgroundJobService>();
-            
+
             return services;
         }
     }

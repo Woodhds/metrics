@@ -1,5 +1,4 @@
-﻿using metrics.Services.Models;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -95,8 +94,7 @@ namespace metrics.Services.Concrete
                 .Select(c => new VkRepostViewModel(c.Owner_Id, c.Id))
             );
 
-            if (result.Response == null)
-                result.Response = new VkResponse<List<VkMessage>>.VkResponseItems();
+            result.Response ??= new VkResponse<List<VkMessage>>.VkResponseItems();
 
             result.Response.Count = count;
             return result;
@@ -109,7 +107,7 @@ namespace metrics.Services.Concrete
                 {"group_id", groupId.ToString()}
             };
 
-            await GetVkAsync<SimpleVkResponse<bool>>(VkApiUrls.GroupJoin, @params);
+            await GetVkAsync<SimpleVkResponse<int>>(VkApiUrls.GroupJoin, @params);
             await Task.Delay(timeout * 1000);
         }
 

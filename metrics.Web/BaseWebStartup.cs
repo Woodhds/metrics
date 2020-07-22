@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
 using metrics.Authentication;
 using metrics.Broker.Abstractions;
 using metrics.Serialization.Abstractions;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using JsonSerializer = metrics.Serialization.JsonSerializer;
 
 namespace metrics.Web
@@ -29,6 +31,7 @@ namespace metrics.Web
 
         protected override void ConfigureMvc(IServiceCollection services)
         {
+            base.ConfigureMvc(services);
             services.AddMvcCore()
                 .AddCors(options =>
                 {
@@ -39,8 +42,11 @@ namespace metrics.Web
                             .AllowAnyHeader()
                             .AllowCredentials();
                     });
+                })
+                .AddJsonOptions(x =>
+                {
+                    _jsonSerializerOptionsProvider.Apply(x.JsonSerializerOptions);
                 });
-            services.AddSingleton<IJsonSerializer, JsonSerializer>();
             services.AddControllers(q => { q.UseGeneralRoutePrefix("api"); });
         }
 

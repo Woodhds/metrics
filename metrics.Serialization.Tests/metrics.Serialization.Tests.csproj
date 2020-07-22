@@ -13,7 +13,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Base.Contracts\Base.Contracts.csproj" />
       <ProjectReference Include="..\metrics.Serialization\metrics.Serialization.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="testobjectvk.txt" />
+      <Content Include="testobjectvk.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

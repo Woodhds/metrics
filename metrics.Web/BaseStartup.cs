@@ -1,24 +1,30 @@
-﻿using metrics.Authentication.Options;
+﻿using System.Text.Json;
+using metrics.Authentication.Options;
 using metrics.Broker;
 using metrics.Broker.Abstractions;
 using metrics.Cache;
 using metrics.logging;
+using metrics.Serialization;
+using metrics.Serialization.Abstractions;
 using metrics.ServiceDiscovery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using JsonSerializer = metrics.Serialization.JsonSerializer;
 
 namespace metrics.Web
 {
     public abstract class BaseStartup
     {
         protected readonly IConfiguration Configuration;
+        protected readonly IJsonSerializerOptionsProvider _jsonSerializerOptionsProvider;
 
         protected BaseStartup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _jsonSerializerOptionsProvider = new JsonSerializerOptionsProvider();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -51,7 +57,8 @@ namespace metrics.Web
 
         protected virtual void ConfigureMvc(IServiceCollection services)
         {
-           
+            services.AddSingleton(_jsonSerializerOptionsProvider);
+            services.AddSingleton<IJsonSerializer, JsonSerializer>();
         }
 
         protected virtual void ConfigureBase(IServiceCollection services)

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Base.Contracts;
 using metrics.Serialization.Abstractions;
 using metrics.Serialization.Tests.Models;
 using NUnit.Framework;
@@ -8,11 +11,11 @@ namespace metrics.Serialization.Tests
     [TestFixture]
     public class JsonSerializerTests
     {
-        private IJsonSerializer _jsonSerializer;
+        private readonly IJsonSerializer _jsonSerializer;
         
         public JsonSerializerTests()
         {
-            _jsonSerializer = new JsonSerializer();
+            _jsonSerializer = new JsonSerializer(new JsonSerializerOptionsProvider());
         }
         
         [Test]
@@ -37,6 +40,17 @@ namespace metrics.Serialization.Tests
             
             Assert.IsTrue(result.Contains("1591445700"));
             Assert.AreEqual(_jsonSerializer.Deserialize<TestSerializationObject>(result).Date, obj.Date);
+        }
+
+        [Test]
+        public void DeserializeMassiveObjectVk()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "testobjectvk.txt");
+            FileAssert.Exists(path);
+            var strings = File.ReadAllText(path);
+            var result = _jsonSerializer.Deserialize<VkResponse<IEnumerable<VkMessage>>>(strings);
+            Assert.NotNull(result?.Response);
+            Assert.IsNotEmpty(result.Response.Items);
         }
     }
 }

@@ -7,6 +7,11 @@ namespace Base.Contracts
         public int Owner_Id { get; set; }
         public int Id { get; set; }
 
+        public VkRepostViewModel()
+        {
+            //For deserialization
+        }
+
         public VkRepostViewModel(int ownerId, int id)
         {
             Owner_Id = ownerId;
