@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using metrics.Authentication.Options;
+﻿using metrics.Authentication.Options;
 using metrics.Broker;
 using metrics.Broker.Abstractions;
 using metrics.Cache;
@@ -19,12 +18,12 @@ namespace metrics.Web
     public abstract class BaseStartup
     {
         protected readonly IConfiguration Configuration;
-        protected readonly IJsonSerializerOptionsProvider _jsonSerializerOptionsProvider;
+        protected readonly IJsonSerializerOptionsProvider JsonSerializerOptionsProvider;
 
         protected BaseStartup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _jsonSerializerOptionsProvider = new JsonSerializerOptionsProvider();
+            JsonSerializerOptionsProvider = new JsonSerializerOptionsProvider();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -57,7 +56,7 @@ namespace metrics.Web
 
         protected virtual void ConfigureMvc(IServiceCollection services)
         {
-            services.AddSingleton(_jsonSerializerOptionsProvider);
+            services.AddSingleton(JsonSerializerOptionsProvider);
             services.AddSingleton<IJsonSerializer, JsonSerializer>();
         }
 

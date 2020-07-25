@@ -1,9 +1,5 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-using metrics.Authentication;
+﻿using metrics.Authentication;
 using metrics.Broker.Abstractions;
-using metrics.Serialization.Abstractions;
-using metrics.ServiceDiscovery;
 using metrics.Web.Conventions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,8 +9,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json.Serialization;
-using JsonSerializer = metrics.Serialization.JsonSerializer;
 
 namespace metrics.Web
 {
@@ -45,7 +39,7 @@ namespace metrics.Web
                 })
                 .AddJsonOptions(x =>
                 {
-                    _jsonSerializerOptionsProvider.Apply(x.JsonSerializerOptions);
+                    JsonSerializerOptionsProvider.Apply(x.JsonSerializerOptions);
                 });
             services.AddControllers(q => { q.UseGeneralRoutePrefix("api"); });
         }

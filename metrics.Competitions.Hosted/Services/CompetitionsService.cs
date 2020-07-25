@@ -34,11 +34,11 @@ namespace metrics.Competitions.Hosted.Services
             _competitionOptions = optionsMonitor.CurrentValue;
         }
 
-        public async Task<IList<VkMessage>> Fetch(int page = 1)
+        public async Task<IList<VkMessage>> Fetch(int page = 10)
         {
             var client = _httpClientFactory.CreateClient();
 
-            var data = new List<VkRepostViewModel>();
+            var data = new List<VkMessage>();
             for (var i = (page - 1) * Take; i < (page - 1) * Take + Take; i++)
             {
                 try
@@ -69,7 +69,7 @@ namespace metrics.Competitions.Hosted.Services
 
                     if (models.Any())
                     {
-                        data.AddRange(models);
+                        data.AddRange((await _vkClient.GetById(models))?.Response.Items!);
                     }
                     
                 }
@@ -79,7 +79,7 @@ namespace metrics.Competitions.Hosted.Services
                 }
             }
 
-            return (await _vkClient.GetById(data))?.Response.Items;
+            return data;
         }
     }
 }
