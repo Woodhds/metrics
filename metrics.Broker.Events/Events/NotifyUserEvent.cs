@@ -2,7 +2,7 @@
 {
     public interface INotifyUserEvent
     {
-        int UserId { get; set; }
+        int UserId { get; }
     }
     public class NotifyUserEvent : INotifyUserEvent
     {

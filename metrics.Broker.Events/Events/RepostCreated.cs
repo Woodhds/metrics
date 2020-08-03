@@ -6,7 +6,7 @@
         int OwnerId { get; set; }
         int Id { get; set; }
     }
-    public class RepostCreated
+    public class RepostCreated : IRepostCreated
     {
         public int UserId { get; set; }
         public int OwnerId { get; set; }

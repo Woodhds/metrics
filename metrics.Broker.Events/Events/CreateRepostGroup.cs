@@ -5,9 +5,9 @@ namespace metrics.Broker.Events.Events
 {
     public interface ICreateRepostGroup
     {
-        int UserId { get; set; }
+        int UserId { get; }
 
-        IEnumerable<VkRepostViewModel> Reposts { get; set; }
+        IEnumerable<VkRepostViewModel> Reposts { get; }
     }
     
     public class CreateRepostGroup : ICreateRepostGroup

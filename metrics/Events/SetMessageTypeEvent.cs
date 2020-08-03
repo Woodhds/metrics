@@ -2,12 +2,12 @@
 {
     public interface ISetMessageTypeEvent
     {
-        int MessageId { get; set; }
-        int OwnerId { get; set; }
-        int MessageCategory { get; set; }
+        int MessageId { get; }
+        int OwnerId { get; }
+        int MessageCategory { get; }
     }
     
-    public class SetMessageTypeEvent
+    public class SetMessageTypeEvent : ISetMessageTypeEvent
     {
         public int MessageId { get; set; }
         public int OwnerId { get; set; }

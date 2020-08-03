@@ -7,6 +7,7 @@ using metrics.Identity.Data;
 using metrics.Identity.Extensions;
 using metrics.Identity.Infrastructure.Identity;
 using metrics.Identity.Options;
+using metrics.Serialization;
 using metrics.Web.Conventions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -47,6 +48,10 @@ namespace metrics.Identity
                             .AllowCredentials()
                             .AllowAnyMethod()
                     );
+                })
+                .AddJsonOptions(options =>
+                {
+                    new JsonSerializerOptionsProvider().Apply(options.JsonSerializerOptions);
                 });
 
             services.AddHttpContextAccessor();
