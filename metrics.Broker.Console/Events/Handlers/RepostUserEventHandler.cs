@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Broker.Abstractions;
+using metrics.Broker.Console.Services;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
@@ -10,9 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using IBackgroundJobService = metrics.BackgroundJobs.Abstractions.IBackgroundJobService;
 
-namespace metrics.Broker.Console
+namespace metrics.Broker.Console.Events.Handlers
 {
-    public class RepostUserEventHandler : IMessageHandler<ExecuteNextRepost>
+    public class RepostUserEventHandler : IMessageHandler<IExecuteNextRepost>
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IBackgroundJobService _jobService;
@@ -26,7 +27,7 @@ namespace metrics.Broker.Console
             _logger = logger;
         }
 
-        public async Task HandleAsync(ExecuteNextRepost obj, CancellationToken token = default)
+        public async Task HandleAsync(IExecuteNextRepost obj, CancellationToken token = default)
         {
             try
             {

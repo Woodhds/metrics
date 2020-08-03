@@ -1,6 +1,10 @@
 ﻿namespace metrics.Broker.Events.Events
 {
-    public class ExecuteNextRepost
+    public interface IExecuteNextRepost
+    {
+        int UserId { get; }
+    }
+    public class ExecuteNextRepost : IExecuteNextRepost
     {
         public int UserId { get; set; }
     }

@@ -5,6 +5,8 @@ using metrics.Authentication.Services.Abstract;
 using metrics.Authentication.Services.Concrete;
 using metrics.BackgroundJobs;
 using metrics.Broker.Abstractions;
+using metrics.Broker.Console.Events.Handlers;
+using metrics.Broker.Console.Services;
 using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common;
@@ -28,13 +30,13 @@ namespace metrics.Broker.Console
 
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
         {
-            provider.RegisterCommandConsumer<CreateRepostGroup, RepostEventGroupCreatedHandler>();
-            provider.RegisterConsumer<LoginEvent, LoginEventHandler>();
-            provider.RegisterCommandConsumer<RepostCreated, RepostedEventHandler>();
-            provider.RegisterCommandConsumer<ExecuteNextRepost, RepostUserEventHandler>();
+            provider.RegisterConsumer<ILoginEvent, LoginEventHandler>();
+            provider.RegisterCommandConsumer<ICreateRepostGroup, RepostEventGroupCreatedHandler>();
+            provider.RegisterCommandConsumer<IRepostCreated, RepostedEventHandler>();
+            provider.RegisterCommandConsumer<IExecuteNextRepost, RepostUserEventHandler>();
             
-            provider.RegisterCommand<ExecuteNextRepost>();
-            provider.RegisterCommand<RepostCreated>();
+            provider.RegisterCommand<IExecuteNextRepost>();
+            provider.RegisterCommand<IRepostCreated>();
         }
 
         protected override void ConfigureApplicationServices(IServiceCollection services)

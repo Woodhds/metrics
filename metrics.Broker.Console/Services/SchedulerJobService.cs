@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using metrics.Authentication;
 using metrics.Authentication.Services.Abstract;
 using metrics.Services.Abstractions;
 
-namespace metrics.Broker.Console
+namespace metrics.Broker.Console.Services
 {
     public interface ISchedulerJobService
     {

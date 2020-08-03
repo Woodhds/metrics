@@ -8,7 +8,7 @@ using metrics.Events;
 
 namespace metrics.Handlers
 {
-    public class SetTypeEventHandler : IMessageHandler<SetMessageTypeEvent>
+    public class SetTypeEventHandler : IMessageHandler<ISetMessageTypeEvent>
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
 
@@ -17,7 +17,7 @@ namespace metrics.Handlers
             _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task HandleAsync(SetMessageTypeEvent obj, CancellationToken token = default)
+        public async Task HandleAsync(ISetMessageTypeEvent obj, CancellationToken token = default)
         {
             var transaction = await _transactionScopeFactory.CreateAsync(token);
 

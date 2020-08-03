@@ -1,5 +1,11 @@
 ﻿namespace metrics.Broker.Events.Events
 {
+    public interface IRepostCreated
+    {
+        int UserId { get; set; }
+        int OwnerId { get; set; }
+        int Id { get; set; }
+    }
     public class RepostCreated
     {
         public int UserId { get; set; }

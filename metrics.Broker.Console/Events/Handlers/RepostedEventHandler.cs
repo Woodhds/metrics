@@ -8,9 +8,9 @@ using metrics.Broker.Events.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 
-namespace metrics.Broker.Console
+namespace metrics.Broker.Console.Events.Handlers
 {
-    public class RepostedEventHandler : IMessageHandler<RepostCreated>
+    public class RepostedEventHandler : IMessageHandler<IRepostCreated>
     {
         private readonly IMessageBroker _messageBroker;
         private readonly ITransactionScopeFactory _transactionScopeFactory;
@@ -21,7 +21,7 @@ namespace metrics.Broker.Console
             _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task HandleAsync([NotNull] RepostCreated obj, CancellationToken token = default)
+        public async Task HandleAsync([NotNull] IRepostCreated obj, CancellationToken token = default)
         {
             if (obj.UserId == default)
                 return;
