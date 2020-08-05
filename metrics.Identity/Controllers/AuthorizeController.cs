@@ -1,14 +1,17 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Base.Contracts.Options;
 using metrics.Authentication.Services.Abstract;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Identity.Data.Models;
 using metrics.Identity.Data.Stores;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 
 namespace metrics.Identity.Controllers
 {
@@ -21,11 +24,18 @@ namespace metrics.Identity.Controllers
         private readonly UserStore _userStore;
         private readonly IJsonWebTokenGenerationService _jsonWebTokenGenerationService;
         private readonly IMessageBroker _messageBroker;
+        private readonly VkontakteOptions _vkontakteOptions;
 
         public AuthorizeController(
-            UserManager<User> userManager, SignInManager<User> signInManager, UserStore userStore,
-            IJsonWebTokenGenerationService jsonWebTokenGenerationService, IMessageBroker messageBroker)
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            UserStore userStore,
+            IJsonWebTokenGenerationService jsonWebTokenGenerationService,
+            IMessageBroker messageBroker,
+            IOptions<VkontakteOptions> options
+        )
         {
+            _vkontakteOptions = options.Value;
             _userManager = userManager;
             _signInManager = signInManager;
             _userStore = userStore;
@@ -58,7 +68,7 @@ namespace metrics.Identity.Controllers
             var user = await _userManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
 
             var accessToken = string.Empty;
-            
+
             if (user == null)
             {
                 user = new User
@@ -73,7 +83,7 @@ namespace metrics.Identity.Controllers
 
                 await _userManager.AddLoginAsync(user, loginInfo);
             }
-            
+
             var userToken = loginInfo.AuthenticationTokens.FirstOrDefault(d => d.Name == "access_token");
             if (userToken != null)
             {
@@ -97,6 +107,18 @@ namespace metrics.Identity.Controllers
         {
             await HttpContext.SignOutAsync();
             return Ok();
+        }
+
+
+        [HttpGet("externalToken")]
+        [AllowAnonymous]
+        public ActionResult GetExternalToken()
+        {
+            var url = QueryHelpers.AddQueryString(VkApiUrls.AuthorizeUrl, "client_id", _vkontakteOptions.AppId);
+            url = QueryHelpers.AddQueryString(url, "scope", _vkontakteOptions.AppScope);
+            url = QueryHelpers.AddQueryString(url, "response_type", "token");
+            url = QueryHelpers.AddQueryString(url, "redirect_uri", "https://oauth.vk.com/blank.html");
+            return Redirect(url);
         }
     }
 }

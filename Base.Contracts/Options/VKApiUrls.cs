@@ -2,6 +2,7 @@
 {
     public static class VkApiUrls
     {
+        public const string AuthorizeUrl = "https://oauth.vk.com/authorize";
         public const string Domain = "https://api.vk.com/method/";
         public const string Wall = Domain + "wall.get";
         public const string WallSearch = Domain + "wall.search";

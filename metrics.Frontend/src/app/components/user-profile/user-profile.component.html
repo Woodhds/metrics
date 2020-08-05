@@ -1,5 +1,5 @@
 <a mat-raised-button
-   href="https://oauth.vk.com/authorize?client_id=5662498&scope=111111111&response_type=token&redirect_uri=https://oauth.vk.com/blank.html"
+   [href]="externalUrl"
    target="_blank">Получить</a>
 <form [formGroup]="form" (submit)="submit()">
   <mat-form-field>
@@ -11,3 +11,27 @@
   </p>
 </form>
 
+<table class="w-full" mat-table [dataSource]="data">
+  <ng-container matColumnDef="Name">r
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Value">
+    <th mat-header-cell *matHeaderCellDef>Value</th>
+    <td mat-cell *matCellDef="let element"> {{element.Value}} </td>
+  </ng-container>
+  <ng-container matColumnDef="LoginProvider">
+    <th mat-header-cell *matHeaderCellDef>LoginProvider</th>
+    <td mat-cell *matCellDef="let element"> {{element.LoginProvider}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button (click)="removeToken(element.Name, element.LoginProvider)">
+        <mat-icon color="primary">remove_circle</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+</table>

@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { User } from 'src/app/models/User';
+import {Injectable} from '@angular/core';
+import {User} from 'src/app/models/User';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment';
 import {map} from 'rxjs/operators';
+import {UserToken} from "../../../models/UserToken";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import {map} from 'rxjs/operators';
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUserObs: Observable<User>;
+
   public get currentUser(): User {
     return this.currentUserSubject.value;
   }
@@ -55,5 +57,20 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('vkUser');
     this.currentUserSubject.next(null);
+  }
+
+  public getUserTokens(): Observable<UserToken[]> {
+    return this.httpClient.get<UserToken[]>(`${environment.apiUrl}/auth/user/token`);
+  }
+
+  public removeToken(name: string, loginProvider: string): Observable<any> {
+    return this.httpClient.delete(`${environment.apiUrl}/auth/user/token`, {
+      params: new HttpParams({
+        fromObject: {
+          name,
+          loginProvider
+        }
+      })
+    })
   }
 }
