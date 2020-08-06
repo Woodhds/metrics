@@ -57,7 +57,7 @@ namespace metrics.Broker
                 method?.Invoke(handlerConfigurator, null);
             }
 
-            bus.Start();
+            serviceCollection.AddHostedService<MessageBrokerHostedService>();
 
             return serviceCollection;
         }
