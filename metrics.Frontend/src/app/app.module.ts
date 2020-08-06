@@ -19,6 +19,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthenticatedGuard } from './helpers/authenticated.guard';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import {MatTableModule} from "@angular/material/table";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatTabsModule} from "@angular/material/tabs";
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import {MatTableModule} from "@angular/material/table";
     RepostModule,
     MatMenuModule,
     OverlayModule,
-    MatTableModule
+    MatTableModule,
+    MatTooltipModule,
+    MatTabsModule
   ],
   providers: [
     AuthenticatedGuard
