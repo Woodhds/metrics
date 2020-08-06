@@ -13,12 +13,17 @@ namespace metrics.Identity.Data.Stores
         {
         }
 
-        public override Task SetTokenAsync(User user, string loginProvider, string name, string value,
+        public override async Task SetTokenAsync(User user, string loginProvider, string name, string value,
             CancellationToken cancellationToken)
         {
-            base.SetTokenAsync(user, loginProvider, name, value, cancellationToken);
-            return SaveChanges(cancellationToken);
+            await base.SetTokenAsync(user, loginProvider, name, value, cancellationToken);
+            await SaveChanges(cancellationToken);
+        }
 
+        public override async Task RemoveTokenAsync(User user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+           await base.RemoveTokenAsync(user, loginProvider, name, cancellationToken);
+           await SaveChanges(cancellationToken);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
-using Base.Contracts.Options;
 using metrics.Broker.Abstractions;
 using metrics.Identity.Data.Models;
 using metrics.Identity.Data.Stores;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace metrics.Identity.Controllers
 {
@@ -72,7 +70,6 @@ namespace metrics.Identity.Controllers
         {
             var user = await GetUser();
             await _userStore.RemoveTokenAsync(user, loginProvider, name, CancellationToken.None);
-            await _userStore.Context.SaveChangesAsync();
             await _messageBroker.PublishAsync(new UserTokenRemoved
             {
                 UserId = user.Id,

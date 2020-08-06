@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from "../../services/concrete/auth/auth.service";
 import {UserToken} from "../../models/UserToken";
 import {environment} from "../../../environments/environment";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-user-profile',
@@ -15,7 +16,7 @@ export class UserProfileComponent implements OnInit {
   columns = ['Name', 'Value', 'LoginProvider', 'Actions']
   externalUrl = environment.apiUrl + '/auth/authorize/externalToken';
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -39,6 +40,7 @@ export class UserProfileComponent implements OnInit {
 
   removeToken(name: string, loginProvider: string) {
     this.authService.removeToken(name, loginProvider).subscribe(() => {
+      this.snackBar.open('Токен удален')
       this.getData()
     })
   }

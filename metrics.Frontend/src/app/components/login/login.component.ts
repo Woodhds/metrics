@@ -22,22 +22,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.currentUserObs.subscribe(d => {
       this.user = d;
 
-      const self = this;
-      this.hub = new signalR.HubConnectionBuilder()
-        .withUrl(`${environment.baseUrl}/notifications`, {
-          accessTokenFactory(): string | Promise<string> {
-            return self.user.Token;
-          }
-        })
-        .build();
+      if (this.user) {
 
-      this.hub.on('Count', (args: number) => {
-        self.count = args;
-      });
+        const self = this;
+        this.hub = new signalR.HubConnectionBuilder()
+          .withUrl(`${environment.baseUrl}/notifications`, {
+            accessTokenFactory(): string | Promise<string> {
+              return self.user.Token;
+            }
+          })
+          .build();
 
-      this.hub.start().catch(reason => {
-        console.log('Error', reason);
-      });
+        this.hub.on('Count', (args: number) => {
+          self.count = args;
+        });
+
+        this.hub.start().catch(reason => {
+          console.log('Error', reason);
+        });
+      }
     });
   }
 
