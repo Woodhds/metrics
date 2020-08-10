@@ -8,4 +8,16 @@
       <ProjectReference Include="..\metrics.Services.Abstractions\metrics.Services.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.12.4" />
+        <PackageReference Include="Grpc" Version="2.31.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.31.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <Protobuf Include="Protos\identityclient.proto">
+            <Generator>MSBuild;Compile</Generator>
+        </Protobuf>
+    </ItemGroup>
+
 </Project>

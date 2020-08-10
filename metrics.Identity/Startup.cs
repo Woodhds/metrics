@@ -7,6 +7,7 @@ using metrics.Identity.Data;
 using metrics.Identity.Extensions;
 using metrics.Identity.Infrastructure.Identity;
 using metrics.Identity.Options;
+using metrics.Identity.Services;
 using metrics.Serialization;
 using metrics.Web.Conventions;
 using Microsoft.AspNetCore.Authentication;
@@ -102,6 +103,7 @@ namespace metrics.Identity
             });
 
             services.AddMessageBroker(_configuration);
+            services.AddGrpc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,7 +128,11 @@ namespace metrics.Identity
             app.UseSwagger();
             app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API V1"); });
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<IdentityTokenService>();
+                endpoints.MapControllers();
+            });
         }
     }
 }

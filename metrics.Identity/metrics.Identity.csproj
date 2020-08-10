@@ -10,11 +10,13 @@
       <ProjectReference Include="..\metrics.Broker.Abstractions\metrics.Broker.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
       <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
+      <ProjectReference Include="..\metrics.Identity.Client.Abstractions\metrics.Identity.Client.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Identity.Data\metrics.Identity.Data.csproj" />
       <ProjectReference Include="..\metrics.Web\metrics.Web.csproj" />
     </ItemGroup>
     
     <ItemGroup>
+      <PackageReference Include="Grpc.AspNetCore.Server" Version="2.30.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.0" />
     </ItemGroup>

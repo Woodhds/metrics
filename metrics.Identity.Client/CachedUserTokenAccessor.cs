@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using metrics.Authentication;
 using metrics.Authentication.Infrastructure;
 using metrics.Cache.Abstractions;
 using metrics.Identity.Client.Abstractions;
@@ -9,10 +8,11 @@ namespace metrics.Identity.Client
     public class CachedUserTokenAccessor : ICacheTokenAccessor
     {
         private readonly ICachingService _cachingService;
-        private readonly IIdentityClient _identityClient;
+        private readonly IdentityTokenService.IdentityTokenServiceClient _identityClient;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
 
-        public CachedUserTokenAccessor(ICachingService cachingService, IIdentityClient identityClient,
+        public CachedUserTokenAccessor(ICachingService cachingService,
+            IdentityTokenService.IdentityTokenServiceClient identityClient,
             IAuthenticatedUserProvider authenticatedUserProvider)
         {
             _cachingService = cachingService;
@@ -23,7 +23,7 @@ namespace metrics.Identity.Client
         public async Task<string> GetTokenAsync()
         {
             var user = _authenticatedUserProvider.GetUser();
-            
+
             if (user == null)
                 return string.Empty;
 
@@ -31,7 +31,8 @@ namespace metrics.Identity.Client
 
             if (string.IsNullOrEmpty(token))
             {
-                token = await _identityClient.GetToken(user.Id);
+                token = (await _identityClient.GetTokenAsync(new IdentityTokenServiceRequest {UserId = user.Id})
+                    .ResponseAsync)?.Token;
 
                 if (!string.IsNullOrEmpty(token))
                     await _cachingService.SetAsync(user.Id.ToString(), token);

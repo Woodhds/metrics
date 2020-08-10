@@ -1,4 +1,5 @@
-﻿using Base.Contracts.Options;
+﻿using System;
+using Base.Contracts.Options;
 using metrics.Authentication;
 using metrics.Authentication.Infrastructure;
 using metrics.Authentication.Services.Abstract;
@@ -15,7 +16,12 @@ namespace metrics.Identity.Client
             IConfiguration configuration)
         {
             services.AddHttpClient();
-            services.AddSingleton<IIdentityClient, IdentityClient>();
+            services.AddGrpcClient<IdentityTokenService.IdentityTokenServiceClient>((serviceProvider, options) =>
+                {
+                    options.Address = new Uri(configuration["IdentityOptions:ServerUrl"]);
+                })
+                .AddInterceptor<IdentityClientAuthInterceptor>();
+            services.AddSingleton<IdentityClientAuthInterceptor>();
             services.Configure<IdentityOptions>(configuration.GetSection(nameof(IdentityOptions)));
             services.AddSingleton<ISystemTokenGenerationService, SystemTokenGenerationService>();
             services.AddSingleton<IJsonWebTokenGenerationService, JsonWebTokenGenerationService>();

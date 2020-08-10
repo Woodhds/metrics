@@ -1,0 +1,15 @@
+﻿syntax = 'proto3';
+
+option csharp_namespace = "metrics.Identity.Client.Abstractions";
+
+service IdentityTokenService {
+  rpc GetToken(IdentityTokenServiceRequest) returns (IdentityTokenServiceResponse);
+}
+
+message IdentityTokenServiceRequest {
+  int32 UserId = 1;
+}
+
+message IdentityTokenServiceResponse {
+  string Token = 1;
+}
