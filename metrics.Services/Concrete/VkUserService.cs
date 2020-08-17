@@ -40,7 +40,7 @@ namespace metrics.Services.Concrete
             return user;
         }
 
-        public async Task<IEnumerable<VkUserModel>> Get(string searchStr)
+        public async Task<IEnumerable<VkUserModel>> GetAsync(string searchStr)
         {
             var result = await _elasticClientProvider.Create().SearchAsync<VkUserModel>(z =>
                 z.Index<VkUserModel>()

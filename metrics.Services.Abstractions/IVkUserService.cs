@@ -7,7 +7,7 @@ namespace metrics.Services.Abstractions
     public interface IVkUserService
     {
         Task<VkUserModel> CreateAsync(string userId);
-        Task<IEnumerable<VkUserModel>> Get(string searchStr);
+        Task<IEnumerable<VkUserModel>> GetAsync(string searchStr);
         Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search);
     }
 }

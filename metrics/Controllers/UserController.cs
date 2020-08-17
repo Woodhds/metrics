@@ -21,7 +21,7 @@ namespace metrics.Controllers
         [HttpGet]
         public Task<IEnumerable<VkUserModel>> Users(string searchStr = "")
         {
-            return _vkUserService.Get(searchStr);
+            return _vkUserService.GetAsync(searchStr);
         }
 
         [HttpGet("search")]

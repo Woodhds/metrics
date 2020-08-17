@@ -25,7 +25,7 @@ namespace metrics.Competitions.Hosted.Services
         public async Task<IList<VkMessage>> Fetch(int page = 1)
         {
             var data = new List<VkMessage>();
-            var users = await _vkUserService.Get(null);
+            var users = await _vkUserService.GetAsync(null);
             foreach (var user in users)
             {
                 try
