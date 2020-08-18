@@ -10,14 +10,19 @@ namespace metrics.Identity.Client
         private readonly ICachingService _cachingService;
         private readonly IdentityTokenService.IdentityTokenServiceClient _identityClient;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
+        private readonly IUserTokenKeyProvider _userTokenKeyProvider;
 
-        public CachedUserTokenAccessor(ICachingService cachingService,
+        public CachedUserTokenAccessor(
+            ICachingService cachingService,
             IdentityTokenService.IdentityTokenServiceClient identityClient,
-            IAuthenticatedUserProvider authenticatedUserProvider)
+            IAuthenticatedUserProvider authenticatedUserProvider,
+            IUserTokenKeyProvider userTokenKeyProvider
+        )
         {
             _cachingService = cachingService;
             _identityClient = identityClient;
             _authenticatedUserProvider = authenticatedUserProvider;
+            _userTokenKeyProvider = userTokenKeyProvider;
         }
 
         public async Task<string> GetTokenAsync()
@@ -27,7 +32,7 @@ namespace metrics.Identity.Client
             if (user == null)
                 return string.Empty;
 
-            var token = await _cachingService.GetAsync<string>(user.Id.ToString());
+            var token = await _cachingService.GetAsync<string>(_userTokenKeyProvider.GetKey(user.Id));
 
             if (string.IsNullOrEmpty(token))
             {
@@ -35,7 +40,7 @@ namespace metrics.Identity.Client
                     .ResponseAsync)?.Token;
 
                 if (!string.IsNullOrEmpty(token))
-                    await _cachingService.SetAsync(user.Id.ToString(), token);
+                    await _cachingService.SetAsync(_userTokenKeyProvider.GetKey(user.Id), token);
             }
 
             return token;

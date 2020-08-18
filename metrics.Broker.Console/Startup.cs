@@ -1,8 +1,5 @@
-﻿using Base.Contracts.Options;
-using metrics.Authentication;
-using metrics.Authentication.Infrastructure;
-using metrics.Authentication.Services.Abstract;
-using metrics.Authentication.Services.Concrete;
+﻿using Base.Contracts;
+using Base.Contracts.Options;
 using metrics.BackgroundJobs;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Console.Events.Handlers;
@@ -13,9 +10,9 @@ using metrics.Data.Common;
 using metrics.Data.Common.Infrastructure.Configuration;
 using metrics.Data.Sql;
 using metrics.Identity.Client;
+using metrics.Identity.Client.Abstractions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
-using metrics.Services.Utils;
 using metrics.Web;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +28,7 @@ namespace metrics.Broker.Console
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
         {
             provider.RegisterConsumer<ILoginEvent, LoginEventHandler>();
+            provider.RegisterConsumer<IUserTokenRemoved, UserTokenRemovedHandler>();
             provider.RegisterCommandConsumer<ICreateRepostGroup, RepostEventGroupCreatedHandler>();
             provider.RegisterCommandConsumer<IRepostCreated, RepostedEventHandler>();
             provider.RegisterCommandConsumer<IExecuteNextRepost, RepostUserEventHandler>();
@@ -45,6 +43,7 @@ namespace metrics.Broker.Console
             
             services.AddScoped<ISchedulerJobService, SchedulerJobService>();
             services.AddSingleton<IUserRepostedService, UserRepostedService>();
+            services.AddSingleton<IUserTokenKeyProvider, UserTokenKeyProvider>();
 
             services.AddIdentityClient(Configuration);
             services.Configure<VkontakteOptions>(

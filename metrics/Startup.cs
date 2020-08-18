@@ -13,6 +13,7 @@ using metrics.Data.Sql;
 using metrics.Events;
 using metrics.Handlers;
 using metrics.Identity.Client;
+using metrics.Identity.Client.Abstractions;
 using metrics.Infrastructure;
 using metrics.ML.Services.Extensions;
 using metrics.Notification.SignalR.Extensions;
@@ -61,6 +62,7 @@ namespace metrics
             services.AddScoped<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddSingleton<IUserRepostedService, UserRepostedService>();
+            services.AddSingleton<IUserTokenKeyProvider, UserTokenKeyProvider>();
 
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddPredictClient(Configuration["ClientUrl"]);
