@@ -13,7 +13,7 @@ namespace metrics.Services.Utils
     {
         private readonly HttpClient _httpClient;
         protected readonly ILogger<BaseHttpClient> Logger;
-        private readonly IJsonSerializer _jsonSerializer; 
+        private readonly IJsonSerializer _jsonSerializer;
 
         public BaseHttpClient(
             IHttpClientFactory httpClientFactory,
@@ -29,8 +29,9 @@ namespace metrics.Services.Utils
             try
             {
                 var uri = @params.BuildUrl(url);
-                var stringContent = new StringContent(_jsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync(uri, stringContent);
+                var stringContent =
+                    new StringContent(_jsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(uri, stringContent).ConfigureAwait(false);
 
                 response.EnsureSuccessStatusCode();
 
@@ -48,7 +49,7 @@ namespace metrics.Services.Utils
             try
             {
                 var uri = @params.BuildUrl(url);
-                return _jsonSerializer.Deserialize<T>(await _httpClient.GetStringAsync(uri));
+                return _jsonSerializer.Deserialize<T>(await _httpClient.GetStringAsync(uri).ConfigureAwait(false));
             }
             catch (Exception e)
             {

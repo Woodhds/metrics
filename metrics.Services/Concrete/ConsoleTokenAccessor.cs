@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using Base.Contracts.Options;
-using metrics.Authentication;
 using metrics.Authentication.Infrastructure;
 using Microsoft.Extensions.Options;
 
-namespace metrics.Competitions.Hosted.Services
+namespace metrics.Services.Concrete
 {
     public class ConsoleTokenAccessor : IUserTokenAccessor
     {
