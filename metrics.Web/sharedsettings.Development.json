@@ -10,7 +10,8 @@
   "AmqpOptions": {
     "Host": "rabbitmq://localhost:5672",
     "UserName": "user",
-    "Password": "password"
+    "Password": "password",
+    "InMemory": true
   },
   "ElasticOptions": {
     "Host": "http://localhost:9200"

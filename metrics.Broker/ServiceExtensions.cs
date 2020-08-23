@@ -17,14 +17,7 @@ namespace metrics.Broker
             var options = new AmqpOptions();
             configuration.GetSection(nameof(AmqpOptions)).Bind(options);
 
-            var bus = Bus.Factory.CreateUsingRabbitMq(x =>
-            {
-                x.Host(new Uri($"{options.Host}"), configurator =>
-                {
-                    configurator.Username(options.UserName);
-                    configurator.Password(options.Password);
-                });
-            });
+            var bus = options.InMemory ? CreateUsingInMemory() : CreateUsingRabbitmq(options);
 
             serviceCollection.AddSingleton(bus);
             serviceCollection.AddSingleton<IMessageBroker, MessageBroker>(_ => new MessageBroker(bus));
@@ -60,6 +53,27 @@ namespace metrics.Broker
             serviceCollection.AddHostedService<MessageBrokerHostedService>();
 
             return serviceCollection;
+        }
+
+        private static IBusControl CreateUsingRabbitmq(AmqpOptions options)
+        {
+            return Bus.Factory.CreateUsingRabbitMq(x =>
+            {
+                x.Host(new Uri($"{options.Host}"), configurator =>
+                {
+                    configurator.Username(options.UserName);
+                    configurator.Password(options.Password);
+                });
+            });
+        }
+
+        private static IBusControl CreateUsingInMemory()
+        {
+            Console.WriteLine("Bus started with InMemory transport");
+            return Bus.Factory.CreateUsingInMemory(x =>
+            {
+                x.TransportConcurrencyLimit = 100;
+            });
         }
     }
 }
