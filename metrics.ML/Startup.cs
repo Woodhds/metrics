@@ -55,7 +55,7 @@ namespace metrics.ML
         {
             services.AddGrpc();
             //services.AddHostedService<VkMessageMLService>();
-            services.AddHostedService<TransformMessageService>();
+            //services.AddHostedService<TransformMessageService>();
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
             services.AddElastic(Configuration);

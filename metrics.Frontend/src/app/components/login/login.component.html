@@ -6,10 +6,12 @@
 <ng-template #authenticated>
   <div class="flex flex-wrap items-center">
     <div *ngIf="count" class="relative mr-3">
+      <a [routerLink]="['profile', 'running']">
       <span class="absolute text-sm pin-t pin-r px-2 bg-red-500 rounded">{{
         count
-      }}</span>
-      <mat-icon>hightlight</mat-icon>
+        }}</span>
+        <mat-icon>hightlight</mat-icon>
+      </a>
     </div>
     <div class="mr-4">{{ user.FullName }}</div>
     <button

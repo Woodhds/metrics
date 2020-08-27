@@ -8,7 +8,7 @@ import { PageEvent} from '@angular/material/paginator';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import VkUserModel from '../../models/VkUserModel';
 import {Message} from '../../models/Message';
-import {MessageService} from '../../services/message.service';
+import {MessageCategoryService} from '../../services/message-category.service';
 import {DataSourceResponse} from '../../models/DataSourceResponse';
 import {MatSelectChange} from '@angular/material/select';
 
@@ -40,7 +40,7 @@ export class UserComponent implements OnInit {
     private userService: VkUserService,
     private fb: FormBuilder,
     private vkMessageService: VkMessageService,
-    private messageService: MessageService
+    private messageService: MessageCategoryService
   ) {}
 
   ngOnInit() {
@@ -154,7 +154,7 @@ export class UserComponent implements OnInit {
   }
 
   setType(id: number, ownerId: number, ev: MatSelectChange) {
-    this.messageService.setType(id, ownerId, ev.value).subscribe(() => {
+    this.vkMessageService.setType(id, ownerId, ev.value).subscribe(() => {
     })
   }
 

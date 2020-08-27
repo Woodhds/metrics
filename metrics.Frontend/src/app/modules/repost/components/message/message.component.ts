@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
-import {MessageService} from '../../services/message.service';
+import {MessageCategoryService} from '../../services/message-category.service';
 import {of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {Message} from '../../models/Message';
@@ -20,7 +20,7 @@ export class MessageComponent implements AfterViewInit {
   data: Message[];
   isLoading = false;
 
-  constructor(private messageService: MessageService, private dialog: MatDialog, private _snackbar: MatSnackBar) {
+  constructor(private messageService: MessageCategoryService, private dialog: MatDialog, private _snackbar: MatSnackBar) {
   }
 
   ngAfterViewInit(): void {
@@ -29,7 +29,7 @@ export class MessageComponent implements AfterViewInit {
 
   openDialog(message) {
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: message ? { Title: message.Title, Color: message.Color, Id: message.Id } : new Message()
+      data: message ? {...message} : new Message()
     })
 
     dialogRef.afterClosed().subscribe((data: Message) => {

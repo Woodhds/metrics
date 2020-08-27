@@ -4,14 +4,11 @@
     "Configuration": "localhost:6379,password=password",
     "Instance": "UserTokens"
   },
-  "ConsulConfig": {
-    "Address": "http://localhost:8500"
-  },
   "AmqpOptions": {
     "Host": "rabbitmq://localhost:5672",
     "UserName": "user",
     "Password": "password",
-    "InMemory": true
+    "InMemory": false
   },
   "ElasticOptions": {
     "Host": "http://localhost:9200"
