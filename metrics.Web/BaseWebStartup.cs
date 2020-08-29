@@ -15,7 +15,7 @@ namespace metrics.Web
     public abstract class BaseWebStartup : BaseStartup
     {
         protected readonly string CorsPolicy = nameof(CorsPolicy);
-        public BaseWebStartup(IConfiguration configuration) : base(configuration)
+        protected BaseWebStartup(IConfiguration configuration) : base(configuration)
         {
         }
 

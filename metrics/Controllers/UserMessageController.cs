@@ -38,7 +38,7 @@ namespace metrics.Controllers
             var texts = (await _vkClient.GetById(
                     data.Select(f => new VkRepostViewModel(f.OwnerId, f.MessageId))))
                 .Response.Items
-                .Select(f => new {f.Text});
+                .Select(f => new {f.Text, f.Id});
 
             return new DataSourceResponseModel(texts, await query.CountAsync());
         }
