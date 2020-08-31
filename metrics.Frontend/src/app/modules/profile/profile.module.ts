@@ -12,6 +12,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { AuthGuard } from "../../helpers/auth.guard";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
 
 const routes: Routes = [
   {
@@ -35,6 +36,7 @@ const routes: Routes = [
     MatTooltipModule,
     MatButtonModule,
     MatPaginatorModule,
+    MatSortModule,
   ],
 })
 export class ProfileModule {}

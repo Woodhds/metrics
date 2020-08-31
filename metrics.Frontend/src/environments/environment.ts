@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:5010',
-  identityUrl: 'http://localhost:5003',
+  baseUrl: 'https://localhost:5011',
+  identityUrl: 'https://localhost:5004',
   get apiUrl() : string {
     return this.baseUrl + '/api'
   }

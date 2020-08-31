@@ -35,7 +35,8 @@ namespace metrics.Identity
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services
@@ -117,14 +118,14 @@ namespace metrics.Identity
             {
                 app.UseForwardedHeaders();
             }
-            
+
+            app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseRouting();
-            
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
 
-            app.UseCors("CorsPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API V1"); });
 

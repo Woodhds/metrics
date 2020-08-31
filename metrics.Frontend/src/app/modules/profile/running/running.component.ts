@@ -9,12 +9,12 @@ import { PageEvent } from "@angular/material/paginator";
   styleUrls: ["./running.component.scss"],
 })
 export class RunningComponent implements OnInit {
-  displayColumns: ["Id", "Text"];
-  pageSizes: [50, 100];
+  displayColumns = ["Id", 'DateStatus', "Text"];
+  pageSizes = [50, 100];
   total: number = 0;
   pageSize: number = 50;
   page: number = 0;
-  data: UserMessage[];
+  data: Array<UserMessage> = [];
 
   constructor(private userMessageService: UserMessageService) {}
 

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\metrics.core\metrics.core.csproj" />
+      <ProjectReference Include="..\metrics.EventSourcing.Abstractions\metrics.EventSourcing.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>
