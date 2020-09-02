@@ -17,6 +17,7 @@
     <ProjectReference Include="..\metrics.Authentication\metrics.Authentication.csproj" />
     <ProjectReference Include="..\metrics.Broker.Events\metrics.Broker.Events.csproj" />
     <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
+    <ProjectReference Include="..\metrics.EventSourcing\metrics.EventSourcing.csproj" />
     <ProjectReference Include="..\metrics.Identity.Client\metrics.Identity.Client.csproj" />
     <ProjectReference Include="..\metrics.Notification.SignalR\metrics.Notification.SignalR.csproj" />
     <ProjectReference Include="..\metrics.Services\metrics.Services.csproj" />

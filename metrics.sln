@@ -103,8 +103,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventSourcing", "EventSourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.EventSourcing.Abstractions", "metrics.EventSourcing.Abstractions\metrics.EventSourcing.Abstractions.csproj", "{0E0EAEE6-99EE-4572-AD60-6EA73B778FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.core", "metrics.core\metrics.core.csproj", "{E8301F7A-BF1F-43E4-80B4-26E31FBB5FC6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.EventSourcing", "metrics.EventSourcing\metrics.EventSourcing.csproj", "{9DE4F5B5-D680-49E4-B960-876666A7544F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.EventSourcing.Tests", "metrics.EventSourcing.Tests\metrics.EventSourcing.Tests.csproj", "{56D6BAE5-4EAB-45EE-882B-A8A0EF7A9545}"
@@ -267,10 +265,6 @@ Global
 		{0E0EAEE6-99EE-4572-AD60-6EA73B778FCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E0EAEE6-99EE-4572-AD60-6EA73B778FCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E0EAEE6-99EE-4572-AD60-6EA73B778FCB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8301F7A-BF1F-43E4-80B4-26E31FBB5FC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8301F7A-BF1F-43E4-80B4-26E31FBB5FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8301F7A-BF1F-43E4-80B4-26E31FBB5FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8301F7A-BF1F-43E4-80B4-26E31FBB5FC6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9DE4F5B5-D680-49E4-B960-876666A7544F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9DE4F5B5-D680-49E4-B960-876666A7544F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DE4F5B5-D680-49E4-B960-876666A7544F}.Release|Any CPU.ActiveCfg = Release|Any CPU

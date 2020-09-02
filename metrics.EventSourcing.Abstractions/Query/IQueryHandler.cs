@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace metrics.EventSourcing.Abstractions.Query
 {
-    public interface IQueryHandler<in TQuery> where TQuery : IQuery
+    public interface IQueryHandler<in TQuery, TResponse> where TQuery : IQuery<TResponse>
     {
-        Task<TResponse> ExecuteAsync<TResponse>(IQuery<TResponse> query, CancellationToken token);
+        Task<TResponse> ExecuteAsync(TQuery query, CancellationToken token = default);
     }
 }

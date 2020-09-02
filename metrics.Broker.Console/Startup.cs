@@ -39,9 +39,9 @@ namespace metrics.Broker.Console
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddScoped<IVkClient, VkClient>();
+            services.AddSingleton<IVkClient, VkClient>();
             
-            services.AddScoped<ISchedulerJobService, SchedulerJobService>();
+            services.AddSingleton<ISchedulerJobService, SchedulerJobService>();
             services.AddSingleton<IUserRepostedService, UserRepostedService>();
             services.AddSingleton<IUserTokenKeyProvider, UserTokenKeyProvider>();
 

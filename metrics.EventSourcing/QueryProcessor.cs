@@ -1,26 +1,31 @@
-﻿using System.Threading.Tasks;
-using metrics.core.Services;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using metrics.EventSourcing.Abstractions.Query;
+using metrics.EventSourcing.Exceptions;
 
 namespace metrics.EventSourcing
 {
     public class QueryProcessor : IQueryProcessor
     {
-        private readonly IServiceResolver _resolver;
+        private readonly IServiceProvider _resolver;
 
-        public QueryProcessor(IServiceResolver resolver)
+        public QueryProcessor(IServiceProvider resolver)
         {
             _resolver = resolver;
         }
 
-        public Task<TResponse> ProcessAsync<TResponse>(IQuery<TResponse> query)
+        public Task<TResponse> ProcessAsync<TResponse>(IQuery<TResponse> query, CancellationToken token = default)
         {
-            throw new System.NotImplementedException();
-        }
+            var queryHandlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TResponse));
+            var handler = _resolver.GetService(queryHandlerType);
+            if (handler == null)
+            {
+                throw new QueryHandlerNotFoundException(queryHandlerType);
+            }
 
-        public Task<TResponse> ProcessAsync<TResponse>(IQuery query)
-        {
-            throw new System.NotImplementedException();
+            var method = queryHandlerType.GetMethod("ExecuteAsync");
+            return (Task<TResponse>) method?.Invoke(handler, new object[] {query, token});
         }
     }
 }

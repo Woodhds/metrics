@@ -25,10 +25,10 @@ namespace metrics.Identity.Client
             services.Configure<IdentityOptions>(configuration.GetSection(nameof(IdentityOptions)));
             services.AddSingleton<ISystemTokenGenerationService, SystemTokenGenerationService>();
             services.AddSingleton<IJsonWebTokenGenerationService, JsonWebTokenGenerationService>();
-            services.AddScoped<IUserTokenAccessor, CachedUserTokenAccessor>();
-            services.AddScoped<IUserStore, UserStore>();
-            services.AddScoped<IAuthenticatedUserProvider, AuthenticatedUserProvider>();
-            services.AddScoped<ISecurityUserManager, ApplicationUserManager>();
+            services.AddSingleton<IUserTokenAccessor, CachedUserTokenAccessor>();
+            services.AddSingleton<IUserStore, UserStore>();
+            services.AddSingleton<IAuthenticatedUserProvider, AuthenticatedUserProvider>();
+            services.AddSingleton<ISecurityUserManager, ApplicationUserManager>();
             return services;
         }
     }
