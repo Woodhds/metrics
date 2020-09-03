@@ -2,30 +2,30 @@
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.EventSourcing.Abstractions.Query;
-using metrics.EventSourcing.Exceptions;
 
-namespace metrics.EventSourcing
+namespace metrics.EventSourcing.Tests
 {
-    public class QueryProcessor : IQueryProcessor
+    public class TestQueryProcessor : IQueryProcessor
     {
         private readonly IServiceProvider _resolver;
 
-        public QueryProcessor(IServiceProvider resolver)
+        public TestQueryProcessor(IServiceProvider resolver)
         {
             _resolver = resolver;
         }
 
-        public async Task<TResponse> ProcessAsync<TResponse>(IQuery<TResponse> query, CancellationToken token = default)
+        public Task<TResponse> ProcessAsync<TResponse>(IQuery<TResponse> query, CancellationToken token = default)
         {
             var queryHandlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TResponse));
             var handler = _resolver.GetService(queryHandlerType);
             if (handler == null)
             {
-                throw new QueryHandlerNotFoundException(queryHandlerType);
+                throw new ArgumentException();
             }
 
+            
             var method = queryHandlerType.GetMethod("ExecuteAsync");
-            return await ((Task<TResponse>) method?.Invoke(handler, new object[] {query, token})).ConfigureAwait(false);
+            return (Task<TResponse>) method?.Invoke(handler, new object[] {query, token});
         }
     }
 }

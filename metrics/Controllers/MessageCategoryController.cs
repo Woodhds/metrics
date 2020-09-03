@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
+using metrics.EventSourcing.Abstractions.Query;
+using metrics.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace metrics.Controllers
@@ -12,10 +14,13 @@ namespace metrics.Controllers
     public class MessageCategoryController : ControllerBase
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
+        private readonly IQueryProcessor _queryProcessor;
 
-        public MessageCategoryController(ITransactionScopeFactory transactionScopeFactory)
+        public MessageCategoryController(ITransactionScopeFactory transactionScopeFactory,
+            IQueryProcessor queryProcessor)
         {
             _transactionScopeFactory = transactionScopeFactory;
+            _queryProcessor = queryProcessor;
         }
 
         [HttpPost]
@@ -37,11 +42,9 @@ namespace metrics.Controllers
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]
-        public ActionResult<DataSourceResponseModel> GetTypes(int page, int pageSize)
+        public async Task<DataSourceResponseModel> GetTypes([FromQuery]MessageCategoryTypesQuery query)
         {
-            using var scope = _transactionScopeFactory.CreateQuery();
-            var q = scope.Query<MessageCategory>().OrderBy(a => a.Id);
-            return new DataSourceResponseModel(q.Skip(page * pageSize).Take(pageSize).ToList(), q.Count());
+            return await _queryProcessor.ProcessAsync(query);
         }
 
         [HttpDelete("{id:int}")]

@@ -25,5 +25,11 @@ namespace metrics.EventSourcing.Tests
                 Assert.NotNull(result);
             });
         }
+
+        [Test]
+        public void ProcessMethodInvoke()
+        {
+            
+        }
     }
 }
