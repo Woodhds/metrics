@@ -42,7 +42,7 @@ namespace metrics.Controllers
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]
-        public async Task<DataSourceResponseModel> GetTypes([FromQuery]MessageCategoryTypesQuery query)
+        public async Task<DataSourceResponseModel> GetTypes([FromRoute]MessageCategoryTypesQuery query)
         {
             return await _queryProcessor.ProcessAsync(query);
         }

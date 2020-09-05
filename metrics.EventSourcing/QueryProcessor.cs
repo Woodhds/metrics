@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.EventSourcing.Abstractions.Query;
-using metrics.EventSourcing.Exceptions;
 
 namespace metrics.EventSourcing
 {
     public class QueryProcessor : IQueryProcessor
     {
+        private class CacheItem
+        {
+            public IQueryHandlerImpl HandlerImpl { get; set; }
+            public IQueryHandler Handler { get; set; }
+        }
+        
         private readonly IServiceProvider _resolver;
+        private readonly ConcurrentDictionary<Type, CacheItem> _implementations = new ConcurrentDictionary<Type, CacheItem>();
 
         public QueryProcessor(IServiceProvider resolver)
         {
@@ -17,15 +24,23 @@ namespace metrics.EventSourcing
 
         public async Task<TResponse> ProcessAsync<TResponse>(IQuery<TResponse> query, CancellationToken token = default)
         {
-            var queryHandlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TResponse));
-            var handler = _resolver.GetService(queryHandlerType);
-            if (handler == null)
-            {
-                throw new QueryHandlerNotFoundException(queryHandlerType);
-            }
+            var handler = GetHandler<TResponse>(query.GetType()); 
 
-            var method = queryHandlerType.GetMethod("ExecuteAsync");
-            return await ((Task<TResponse>) method?.Invoke(handler, new object[] {query, token})).ConfigureAwait(false);
+            return await handler.HandlerImpl.ExecuteAsync<TResponse>(handler.Handler, query, token);
+        }
+
+        private CacheItem GetHandler<TResponse>(Type queryType)
+        {
+            return _implementations.GetOrAdd(queryType, x =>
+            {
+                var queryHandlerType = typeof(IQueryHandler<,>).MakeGenericType(queryType, typeof(TResponse));
+                return new CacheItem
+                {
+                    HandlerImpl =
+                        (IQueryHandlerImpl) Activator.CreateInstance(typeof(QueryHandlerImpl<>).MakeGenericType(x)),
+                    Handler = (IQueryHandler) _resolver.GetService(queryHandlerType)
+                };
+            });
         }
     }
 }

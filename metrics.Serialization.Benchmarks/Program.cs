@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json.Serialization;
 using Base.Contracts;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
@@ -9,8 +8,6 @@ using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 using metrics.Serialization.Abstractions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using JsonConverter = Newtonsoft.Json.JsonConverter;
 
 
 namespace metrics.Serialization.Benchmarks

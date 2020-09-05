@@ -6,6 +6,8 @@ using Base.Contracts;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
 using metrics.Events;
+using metrics.EventSourcing.Abstractions.Query;
+using metrics.Queries;
 using Microsoft.Extensions.Logging;
 using metrics.Services.Abstractions;
 using metrics.Web.Extensions;
@@ -18,39 +20,28 @@ namespace metrics.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IVkClient _vkClient;
-        private readonly IVkMessageService _vkMessageService;
         private readonly ILogger<MessageController> _logger;
         private readonly IMessageBroker _messageBroker;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IQueryProcessor _queryProcessor;
 
         public MessageController(
             IVkClient vkClient,
             ILogger<MessageController> logger,
-            IVkMessageService vkMessageService,
             IMessageBroker messageBroker,
-            IHttpContextAccessor httpContextAccessor
-        )
+            IHttpContextAccessor httpContextAccessor, IQueryProcessor queryProcessor)
         {
             _vkClient = vkClient;
             _logger = logger;
-            _vkMessageService = vkMessageService;
             _messageBroker = messageBroker;
             _httpContextAccessor = httpContextAccessor;
+            _queryProcessor = queryProcessor;
         }
 
         [HttpGet("user")]
-        public async Task<ActionResult<DataSourceResponseModel>> GetData(int page, int pageSize,
-            string search = null, string user = null)
+        public Task<DataSourceResponseModel> GetData([FromQuery]MessageSearchQuery query)
         {
-            try
-            {
-                return await _vkMessageService.GetMessages(page, pageSize, search, user);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, e);
-                return BadRequest();
-            }
+            return _queryProcessor.ProcessAsync(query);
         }
 
         [HttpPost("repost")]
@@ -86,7 +77,7 @@ namespace metrics.Controllers
                 return BadRequest();
             }
         }
-        
+
         [HttpPost("type")]
         public async Task<IActionResult> SetType([FromBody] SetMessageTypeEvent @event)
         {

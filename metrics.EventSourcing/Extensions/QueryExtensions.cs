@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using metrics.EventSourcing.Abstractions.Query;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +11,13 @@ namespace metrics.EventSourcing.Extensions
         {
             services.AddSingleton<IQueryProcessor, QueryProcessor>();
 
+            services.AddEvents(assembly);
+
+            return services;
+        }
+
+        private static void AddEvents(this IServiceCollection services, Assembly assembly)
+        {
             var queryDefinitions = assembly.GetTypes().SelectMany(f =>
                     f.GetInterfaces().Where(t =>
                         t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IQueryHandler<,>)))
@@ -26,8 +32,6 @@ namespace metrics.EventSourcing.Extensions
                     services.AddTransient(query, implType);
                 }
             }
-
-            return services;
         }
     }
 }

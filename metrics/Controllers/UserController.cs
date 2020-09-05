@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using Base.Contracts;
+using metrics.EventSourcing.Abstractions.Query;
+using metrics.Queries;
 using metrics.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +13,12 @@ namespace metrics.Controllers
     public class UserController : ControllerBase
     {
         private readonly IVkUserService _vkUserService;
+        private readonly IQueryProcessor _queryProcessor;
 
-        public UserController(IVkUserService vkUserService)
+        public UserController(IVkUserService vkUserService, IQueryProcessor queryProcessor)
         {
             _vkUserService = vkUserService;
+            _queryProcessor = queryProcessor;
         }
 
         [HttpGet]
@@ -25,15 +28,9 @@ namespace metrics.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> Search(string search)
+        public Task<IEnumerable<VkUserModel>> Search([FromQuery] SearchUserQuery query)
         {
-            return Ok((await _vkUserService.SearchAsync(search))?.Response?.Items?.Select(q =>
-                new VkUserModel
-                {
-                    Avatar = q.Photo_50,
-                    Id = q.Id,
-                    FullName = q.First_name + " " + q.Last_Name
-                }));
+            return _queryProcessor.ProcessAsync(query);
         }
 
         [HttpPost]
