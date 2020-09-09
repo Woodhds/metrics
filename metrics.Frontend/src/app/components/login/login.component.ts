@@ -37,10 +37,15 @@ export class LoginComponent implements OnInit, OnDestroy {
           self.count = args;
         });
 
-        this.hub.start().catch(reason => {
-          console.log('Error', reason);
-        });
+        this.startHub();
       }
+    });
+  }
+
+  startHub() {
+    this.hub.start().catch(reason => {
+      console.log('Error', reason);
+      setTimeout(this.startHub, 60000)
     });
   }
 

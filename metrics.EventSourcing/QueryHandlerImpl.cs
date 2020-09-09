@@ -4,11 +4,11 @@ using metrics.EventSourcing.Abstractions.Query;
 
 namespace metrics.EventSourcing
 {
-    public interface IQueryHandlerImpl
+    internal interface IQueryHandlerImpl
     {
         Task<TResponse> ExecuteAsync<TResponse>(IQueryHandler handler, IQuery query, CancellationToken token = default);
     }
-    public class QueryHandlerImpl<TQuery> : IQueryHandlerImpl where TQuery : IQuery
+    internal class QueryHandlerImpl<TQuery> : IQueryHandlerImpl where TQuery : IQuery
     {
         public async Task<TResponse> ExecuteAsync<TResponse>(IQueryHandler handler, IQuery query,
             CancellationToken token = default)

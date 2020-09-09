@@ -40,7 +40,7 @@ namespace metrics.Broker
             {
                 var method = typeof(HandlerConfigurator).GetMethod(nameof(HandlerConfigurator.ConfigureCommand))
                     ?.MakeGenericMethod(command);
-                method?.Invoke(handlerConfigurator, new object?[]{options.Host});
+                method?.Invoke(handlerConfigurator, new object[]{options.Host});
             }
             
             foreach (var (tEvent, _) in hp.GetCommandConsumers())
