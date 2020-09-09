@@ -45,9 +45,9 @@ namespace metrics.Broker.Console.Events.Handlers
                 message.Status = VkRepostStatus.Pending;
                 message.DateStatus = DateTime.Now;
 
-                await transaction.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
+                await transaction.GetRepository<VkRepost>().UpdateAsync(message, token);
 
-                await transaction.CommitAsync(CancellationToken.None);
+                await transaction.CommitAsync(token);
                     
                 _jobService.Schedule<ISchedulerJobService>(
                     client => client.Repost(message.OwnerId, message.MessageId, obj.UserId),
