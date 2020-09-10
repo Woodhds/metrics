@@ -15,6 +15,8 @@ namespace metrics.Data.Common.Infrastructure.Configuration
             var messageBuilder = builder.Entity<MessageVk>();
             messageBuilder.HasOne(z => z.MessageCategory);
             messageBuilder.HasKey(q => new {q.MessageId, q.OwnerId});
+
+            builder.Entity<FavouriteGroup>().HasKey(f => new {f.GroupId, f.UserId});
         }
     }
 }

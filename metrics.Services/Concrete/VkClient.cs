@@ -66,10 +66,33 @@ namespace metrics.Services.Concrete
 
         public async Task<VkResponse<List<VkMessage>>> GetReposts(string id, int page, int take, string search = null)
         {
+            var data = await WallSearch(id, page, take, search);
+            
+            var reposts = data.Response.Items
+                .OrderByDescending(c => c.Date)
+                .Where(c => c.Copy_History != null && c.Copy_History.Count > 0)
+                .Select(c => c.Copy_History.First())
+                .Distinct()
+                .ToList();
+
+            var count = data.Response.Count;
+
+            var result = reposts.Any() ? await GetById(reposts
+                .Select(c => new VkRepostViewModel(c.Owner_Id, c.Id))
+            ) : new VkResponse<List<VkMessage>>();
+
+            result.Response ??= new VkResponse<List<VkMessage>>.VkResponseItems();
+
+            result.Response.Count = count;
+            return result;
+        }
+
+        public Task<VkResponse<List<VkMessage>>> WallSearch(string id, int skip, int take, string search = null)
+        {
             var @params = new NameValueCollection
             {
                 {"count", take.ToString()},
-                {"offset", ((page - 1) * take).ToString()},
+                {"offset", ((skip - 1) * take).ToString()},
                 {"filter", "owner"},
                 {"owner_id", id}
             };
@@ -80,24 +103,7 @@ namespace metrics.Services.Concrete
                 @params.Add("query", search);
             }
 
-            var data = await GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
-            var reposts = data.Response.Items
-                .OrderByDescending(c => c.Date)
-                .Where(c => c.Copy_History != null && c.Copy_History.Count > 0)
-                .Select(c => c.Copy_History.First())
-                .Distinct()
-                .ToList();
-
-            var count = data.Response.Count;
-
-            var result = await GetById(reposts
-                .Select(c => new VkRepostViewModel(c.Owner_Id, c.Id))
-            );
-
-            result.Response ??= new VkResponse<List<VkMessage>>.VkResponseItems();
-
-            result.Response.Count = count;
-            return result;
+            return GetVkAsync<VkResponse<List<VkMessage>>>(method, @params);
         }
 
         public async Task JoinGroup(int groupId, int timeout)

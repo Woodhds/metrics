@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using metrics.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,16 @@ namespace metrics.Data.Sql.Contexts
         public IQueryable<T> Query<T>() where T : class
         {
             return _context.Set<T>();
+        }
+
+        public IQueryable<T> RawSql<T>(string sql, params object[] parameters) where T : class
+        {
+            return _context.Set<T>().FromSqlRaw(sql, parameters);
+        }
+
+        public IQueryable<T> RawSql<T>(FormattableString sql) where T : class
+        {
+            return _context.Set<T>().FromSqlInterpolated(sql);
         }
 
         ~QueryContext()

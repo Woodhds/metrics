@@ -40,6 +40,8 @@ namespace metrics.Broker.Console
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
             services.AddSingleton<IVkClient, VkClient>();
+            //services.AddHostedService<StartupService>();
+            services.AddSingleton<IRandomLikeService, RandomLikeService>();
             
             services.AddSingleton<ISchedulerJobService, SchedulerJobService>();
             services.AddSingleton<IUserRepostedService, UserRepostedService>();

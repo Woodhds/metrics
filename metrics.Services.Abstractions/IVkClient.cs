@@ -7,6 +7,7 @@ namespace metrics.Services.Abstractions
     public interface IVkClient
     {
         Task<VkResponse<List<VkMessage>>> GetReposts(string id, int skip, int take, string search = null);
+        Task<VkResponse<List<VkMessage>>> WallSearch(string id, int skip, int take, string search = null);
         Task Repost(List<VkRepostViewModel> reposts, int timeout = 0);
 
         Task Repost(int ownerId, int id, int timeout = 0) =>
