@@ -1,5 +1,6 @@
 ﻿using Base.Contracts;
 using Base.Contracts.Options;
+using Hangfire;
 using metrics.BackgroundJobs;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Console.Events.Handlers;
@@ -14,8 +15,11 @@ using metrics.Identity.Client.Abstractions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Web;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace metrics.Broker.Console
 {
@@ -58,6 +62,12 @@ namespace metrics.Broker.Console
         {
             services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
             services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
+        }
+
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
+        {
+            base.Configure(app, env, lifeTime);
+            app.UseHangfireDashboard();
         }
     }
 }

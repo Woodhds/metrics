@@ -112,7 +112,7 @@
     <mat-spinner *ngIf="loading"></mat-spinner>
   </div>
   <ng-template #card>
-    <mat-card class="text-sm" *ngFor="let message of messages">
+    <mat-card class="text-sm" *ngFor="let message of messages; trackBy: track">
       <mat-card-header>
         <mat-card-title class="flex items-center w-full">
           <a
