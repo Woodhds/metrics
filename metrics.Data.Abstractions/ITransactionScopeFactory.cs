@@ -21,5 +21,10 @@ namespace metrics.Data.Abstractions
 
         Task<IBatchTransactionContext> CreateBatchAsync(CancellationToken ct = default) =>
             CreateBatchAsync(IsolationLevel.ReadCommitted, ct);
+
+        Task<IRawSqlTransactionContext> CreateRawAsync(IsolationLevel level, CancellationToken ct = default);
+
+        Task<IRawSqlTransactionContext> CreateRawAsync(CancellationToken ct = default) =>
+            CreateRawAsync(IsolationLevel.ReadCommitted, ct);
     }
 }

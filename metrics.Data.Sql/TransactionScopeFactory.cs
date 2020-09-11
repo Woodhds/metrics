@@ -39,5 +39,12 @@ namespace metrics.Data.Sql
             
             return new BatchTransactionContext(await context.Database.BeginTransactionAsync(ct), context); 
         }
+
+        public async Task<IRawSqlTransactionContext> CreateRawAsync(IsolationLevel level, CancellationToken ct = default)
+        {
+            var context = _dataContextFactory.Create();
+            
+            return new RawSqlTransactionContext(context, await context.Database.BeginTransactionAsync(ct)); 
+        }
     }
 }
