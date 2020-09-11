@@ -33,6 +33,7 @@ namespace metrics.Broker.Console
         {
             provider.RegisterConsumer<ILoginEvent, LoginEventHandler>();
             provider.RegisterConsumer<IUserTokenRemoved, UserTokenRemovedHandler>();
+            provider.RegisterConsumer<IUserTokenChanged, UserTokenChangedHandler>();
             provider.RegisterCommandConsumer<ICreateRepostGroup, RepostEventGroupCreatedHandler>();
             provider.RegisterCommandConsumer<IRepostCreated, RepostedEventHandler>();
             provider.RegisterCommandConsumer<IExecuteNextRepost, RepostUserEventHandler>();

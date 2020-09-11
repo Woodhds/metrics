@@ -50,6 +50,11 @@ namespace metrics.Identity.Controllers
         {
             var user = await GetUser();
             await _userStore.SetTokenAsync(user, "Vkontakte", "access_token_implicit", token, default);
+            await _messageBroker.PublishAsync(new UserTokenChanged
+            {
+                Token = token,
+                UserId = user.Id
+            });
             return Ok();
         }
 
