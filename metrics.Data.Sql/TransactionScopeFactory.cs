@@ -22,7 +22,7 @@ namespace metrics.Data.Sql
             var context = _dataContextFactory.Create();
             var transaction = await context.Database.BeginTransactionAsync(level, cancellationToken);
 
-            return new TransactionContext(transaction, context);
+            return new TransactionRepositoryContext(context, new TransactionContext(transaction));
         }
 
         public IQueryContext CreateQuery(IsolationLevel level = IsolationLevel.ReadCommitted,

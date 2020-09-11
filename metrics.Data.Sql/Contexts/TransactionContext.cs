@@ -2,29 +2,18 @@
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Data.Abstractions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace metrics.Data.Sql.Contexts
 {
-    public sealed class TransactionContext : QueryContext, ITransactionRepositoryContext
+    public class TransactionContext : ITransactionContext
     {
         private readonly IDbContextTransaction _dbContextTransaction;
-        private readonly DbContext _dbContext;
         private bool _disposed;
 
-        public TransactionContext(
-            IDbContextTransaction dbContextTransaction,
-            DbContext dbContext
-        ) : base(dbContext)
+        public TransactionContext(IDbContextTransaction dbContextTransaction)
         {
             _dbContextTransaction = dbContextTransaction;
-            _dbContext = dbContext;
-        }
-
-        public IRepository<T> GetRepository<T>() where T : class, new()
-        {
-            return new EFRepository<T>(_dbContext);
         }
 
         public Task CommitAsync(CancellationToken cancellationToken = default)
@@ -49,18 +38,16 @@ namespace metrics.Data.Sql.Contexts
 
             if (disposing)
             {
-                _dbContext?.Dispose();
                 _dbContextTransaction?.Dispose();
             }
 
             _disposed = true;
         }
 
-        public override void Dispose()
+        public virtual void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-            base.Dispose();
         }
     }
 }
