@@ -38,8 +38,9 @@ namespace metrics.Queries.Handlers
                 .Where(f => f.UserId == _authenticatedUserProvider.GetUser().Id).OrderByDescending(f => f.Id);
 
             var data = await query.Skip(page * pageSize).Take(pageSize).ToListAsync(token);
-            var texts = (await _vkClient.GetById(
-                    data.Select(f => new VkRepostViewModel(f.OwnerId, f.MessageId))))
+            var posts = await _vkClient.GetById(
+                data.Select(f => new VkRepostViewModel(f.OwnerId, f.MessageId)));
+            var texts = posts
                 .Response.Items
                 .Select(f => new
                 {

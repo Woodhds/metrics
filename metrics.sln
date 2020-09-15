@@ -105,6 +105,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.EventSourcing", "me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.EventSourcing.Tests", "metrics.EventSourcing.Tests\metrics.EventSourcing.Tests.csproj", "{56D6BAE5-4EAB-45EE-882B-A8A0EF7A9545}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.core", "metrics.core\metrics.core.csproj", "{DA8FFF63-4480-448D-AE31-2B6704A4058E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -267,6 +269,10 @@ Global
 		{56D6BAE5-4EAB-45EE-882B-A8A0EF7A9545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56D6BAE5-4EAB-45EE-882B-A8A0EF7A9545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56D6BAE5-4EAB-45EE-882B-A8A0EF7A9545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA8FFF63-4480-448D-AE31-2B6704A4058E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA8FFF63-4480-448D-AE31-2B6704A4058E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA8FFF63-4480-448D-AE31-2B6704A4058E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA8FFF63-4480-448D-AE31-2B6704A4058E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -306,6 +312,7 @@ Global
 		{0E0EAEE6-99EE-4572-AD60-6EA73B778FCB} = {50531886-A9A8-4DE5-9194-4CE4456491CD}
 		{9DE4F5B5-D680-49E4-B960-876666A7544F} = {50531886-A9A8-4DE5-9194-4CE4456491CD}
 		{56D6BAE5-4EAB-45EE-882B-A8A0EF7A9545} = {50531886-A9A8-4DE5-9194-4CE4456491CD}
+		{DA8FFF63-4480-448D-AE31-2B6704A4058E} = {ABF7D990-9694-4FD4-8A33-F738E6D81FE0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B9B1AA4-B7E9-4A7C-B1D5-7F683FA9B1D0}

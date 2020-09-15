@@ -6,7 +6,7 @@ namespace metrics.Identity.Client
     {
         public string GetKey(int userId)
         {
-            return userId + "_access_token_implicit";
+            return userId.ToString();
         }
     }
 }
