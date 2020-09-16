@@ -3,6 +3,7 @@ using Elastic.Client;
 using metrics.Broker.Abstractions;
 using metrics.Competitions.Abstractions;
 using metrics.Competitions.Hosted.Services;
+using metrics.core.DistributedLock;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Extensions;
@@ -24,7 +25,7 @@ namespace metrics.Competitions.Hosted
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddSingleton<IVkClient, VkClient>();
+            services.AddVkClient(Configuration);
             services.AddVkClientConsole(Configuration);
             services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
             services.AddSingleton<ICompetitionsService, CompetitionsService>();

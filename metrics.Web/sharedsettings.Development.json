@@ -1,8 +1,9 @@
 ﻿{
   "FrontendUrl": "http://localhost:4200",
+  "RedisConnectionStringLock": "localhost:6379,password=password",
   "CacheOptions": {
     "Configuration": "localhost:6379,password=password",
-    "Instance": "UserTokens"
+    "Instance": "UserTokens:"
   },
   "AmqpOptions": {
     "Host": "rabbitmq://localhost:5672",

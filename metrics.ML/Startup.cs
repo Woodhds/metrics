@@ -60,7 +60,7 @@ namespace metrics.ML
             services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
             services.AddElastic(Configuration);
             services.AddPredictClient(Configuration["ClientUrl"]);
-            services.AddSingleton<IVkClient, VkClient>();
+            services.AddVkClient(Configuration);
             services.AddVkClientConsole(Configuration);
         }
 

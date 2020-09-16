@@ -8,10 +8,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Base.Contracts;
 using Base.Contracts.Options;
-using metrics.Authentication;
 using metrics.Authentication.Infrastructure;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events.Events;
+using metrics.core.DistributedLock;
 using metrics.Serialization.Abstractions;
 using metrics.Services.Abstractions;
 using metrics.Services.Utils;
@@ -24,6 +24,7 @@ namespace metrics.Services.Concrete
         private readonly IMessageBroker _messageBroker;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
         private readonly IOptions<VkontakteOptions> _vkontakteOptions;
+        private readonly IDistributedLock _distributedLock;
 
         public VkClient(
             IHttpClientFactory httpClientFactory,
@@ -31,13 +32,16 @@ namespace metrics.Services.Concrete
             ILogger<BaseHttpClient> logger,
             IMessageBroker messageBroker,
             IOptions<VkontakteOptions> vkontakteOptions,
-            IAuthenticatedUserProvider authenticatedUserProvider, IJsonSerializer jsonSerializer) : base(
+            IAuthenticatedUserProvider authenticatedUserProvider,
+            IJsonSerializer jsonSerializer,
+            IDistributedLock distributedLock) : base(
             httpClientFactory, logger, jsonSerializer)
         {
             _vkTokenAccessor = vkTokenAccessor;
             _messageBroker = messageBroker;
             _vkontakteOptions = vkontakteOptions;
             _authenticatedUserProvider = authenticatedUserProvider;
+            _distributedLock = distributedLock;
         }
 
         private async Task<NameValueCollection> AddVkParams(NameValueCollection @params)
@@ -54,20 +58,26 @@ namespace metrics.Services.Concrete
         {
             @params = await AddVkParams(@params);
             var url = new Uri(method).AbsoluteUri;
-            return await base.GetAsync<T>(url, @params);
+            await using (await _distributedLock.AcquireAsync(_authenticatedUserProvider.GetUser().Id.ToString()))
+            {
+                return await base.GetAsync<T>(url, @params);
+            }
         }
 
         private async Task PostVkAsync<T>(string method, object content, NameValueCollection @params = null)
         {
             @params = await AddVkParams(@params);
             var url = new Uri(method).AbsoluteUri;
-            await base.PostAsync<T>(url, content, @params);
+            await using (await _distributedLock.AcquireAsync(_authenticatedUserProvider.GetUser().Id.ToString()))
+            {
+                await base.PostAsync<T>(url, content, @params);
+            }
         }
 
         public async Task<VkResponse<List<VkMessage>>> GetReposts(string id, int page, int take, string search = null)
         {
             var data = await WallSearch(id, page, take, search);
-            
+
             var reposts = data.Response.Items
                 .OrderByDescending(c => c.Date)
                 .Where(c => c.Copy_History != null && c.Copy_History.Count > 0)
@@ -77,9 +87,11 @@ namespace metrics.Services.Concrete
 
             var count = data.Response.Count;
 
-            var result = reposts.Any() ? await GetById(reposts
-                .Select(c => new VkRepostViewModel(c.Owner_Id, c.Id))
-            ) : new VkResponse<List<VkMessage>>();
+            var result = reposts.Any()
+                ? await GetById(reposts
+                    .Select(c => new VkRepostViewModel(c.Owner_Id, c.Id))
+                )
+                : new VkResponse<List<VkMessage>>();
 
             result.Response ??= new VkResponse<List<VkMessage>>.VkResponseItems();
 

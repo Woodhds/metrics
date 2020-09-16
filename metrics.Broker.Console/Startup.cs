@@ -14,6 +14,7 @@ using metrics.Identity.Client;
 using metrics.Identity.Client.Abstractions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
+using metrics.Services.Extensions;
 using metrics.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,7 +45,7 @@ namespace metrics.Broker.Console
 
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
-            services.AddSingleton<IVkClient, VkClient>();
+            services.AddVkClient(Configuration);
             //services.AddHostedService<StartupService>();
             services.AddSingleton<IRandomLikeService, RandomLikeService>();
             

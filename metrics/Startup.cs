@@ -20,6 +20,7 @@ using metrics.ML.Services.Extensions;
 using metrics.Notification.SignalR.Extensions;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
+using metrics.Services.Extensions;
 using metrics.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
@@ -59,7 +60,7 @@ namespace metrics
             services.AddMetricsSignalR(signalROptions.Host);
 
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
-            services.AddSingleton<IVkClient, VkClient>();
+            services.AddVkClient(Configuration);
             services.AddSingleton<IVkUserService, VkUserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddSingleton<IUserRepostedService, UserRepostedService>();

@@ -9,7 +9,7 @@ namespace metrics.Services.Abstractions
         {
             return new SecurityUser
             {
-                Id = 0
+                Id = 68868143
             };
         }
     }
