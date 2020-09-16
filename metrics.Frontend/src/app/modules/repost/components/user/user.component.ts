@@ -70,42 +70,26 @@ export class UserComponent implements OnInit {
       });
   }
 
-  fromUnixTime(value: number): string {
-    return new Date(value * 1000).toLocaleString();
-  }
-
   like(ownerId: number, id: number) {
     const message = this.messages.find(
-      (a) => a.Owner_Id === ownerId && a.Id === id
+      (a) => a.OwnerId === ownerId && a.Id === id
     );
-    if (message && !message.Likes.User_Likes) {
+    if (message) {
       this.vkMessageService.like(ownerId, id).subscribe(() => {
-        message.Likes.User_Likes = true;
       });
     }
   }
 
   repost(ownerId: number, id: number) {
     const message = this.messages.find(
-      (a) => a.Owner_Id === ownerId && a.Id === id
+      (a) => a.OwnerId === ownerId && a.Id === id
     );
-    if (message && !message.Reposts.User_reposted) {
+    if (message) {
       this.vkMessageService
         .repost([new VkRepostModel(ownerId, id)])
         .subscribe(() => {
-          message.Reposts.User_reposted = true;
         });
     }
-  }
-
-  images(vkMessage: VkMessage) {
-    if (vkMessage.Attachments) {
-      return vkMessage.Attachments.filter(
-        (img) => img.Photo && img.Photo.Sizes[3]
-      ).map((item) => item.Photo.Sizes[3].Url);
-    }
-
-    return [];
   }
 
   get selectedMessages(): VkMessage[] {
@@ -121,7 +105,7 @@ export class UserComponent implements OnInit {
   repostAll() {
     this.vkMessageService
       .repost(
-        this.selectedMessages.map((x) => new VkRepostModel(x.Owner_Id, x.Id)),
+        this.selectedMessages.map((x) => new VkRepostModel(x.OwnerId, x.Id)),
         this.timeout
       )
       .subscribe(() => {});
@@ -131,8 +115,12 @@ export class UserComponent implements OnInit {
     message.IsSelected =
       ev.checked &&
       !this.selectedMessages.some(
-        (f) => f.Id === message.Id && f.Owner_Id === message.Owner_Id
+        (f) => f.Id === message.Id && f.OwnerId === message.OwnerId
       );
+  }
+
+  toDate(date: string) : string {
+    return new Date(date).toLocaleString();
   }
 
   sliderChange(value) {
@@ -157,6 +145,6 @@ export class UserComponent implements OnInit {
   }
 
   track(idx: number, item: VkMessage) {
-    return `${item.From_Id}_${item.Id}`;
+    return `${item.FromId}_${item.Id}`;
   }
 }

@@ -57,7 +57,7 @@ namespace metrics.Broker.Console.Services
                 if (post != default && !(post.Likes?.User_Likes ?? true))
                 {
                     await Task.Delay(300);
-                    await _vkClient.Like(new VkRepostViewModel {Id = post.Id, Owner_Id = post.Owner_Id});
+                    await _vkClient.Like(new VkRepostViewModel {Id = post.Id, OwnerId = post.OwnerId});
                 }
 
                 _backgroundJobService.Schedule<IRandomLikeService>(x => x.ExecuteRandomLike(userId),

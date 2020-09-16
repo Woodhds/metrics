@@ -4,7 +4,7 @@ namespace Base.Contracts
 {
     public class VkRepostViewModel : IEquatable<VkRepostViewModel>
     {
-        public int Owner_Id { get; set; }
+        public int OwnerId { get; set; }
         public int Id { get; set; }
 
         public VkRepostViewModel()
@@ -14,20 +14,20 @@ namespace Base.Contracts
 
         public VkRepostViewModel(int ownerId, int id)
         {
-            Owner_Id = ownerId;
+            OwnerId = ownerId;
             Id = id;
         }
 
         public override int GetHashCode() 
         {
-            return HashCode.Combine(Owner_Id, Id);
+            return HashCode.Combine(OwnerId, Id);
         }
 
         public bool Equals(VkRepostViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Owner_Id == other.Owner_Id && Id == other.Id;
+            return OwnerId == other.OwnerId && Id == other.Id;
         }
 
         public override bool Equals(object obj)

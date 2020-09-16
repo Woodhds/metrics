@@ -80,8 +80,8 @@ namespace metrics.Services.Concrete
 
             var reposts = data.Response.Items
                 .OrderByDescending(c => c.Date)
-                .Where(c => c.Copy_History != null && c.Copy_History.Count > 0)
-                .Select(c => c.Copy_History.First())
+                .Where(c => c.CopyHistory != null && c.CopyHistory.Count > 0)
+                .Select(c => c.CopyHistory.First())
                 .Distinct()
                 .ToList();
 
@@ -89,7 +89,7 @@ namespace metrics.Services.Concrete
 
             var result = reposts.Any()
                 ? await GetById(reposts
-                    .Select(c => new VkRepostViewModel(c.Owner_Id, c.Id))
+                    .Select(c => new VkRepostViewModel(c.OwnerId, c.Id))
                 )
                 : new VkResponse<List<VkMessage>>();
 
@@ -155,13 +155,13 @@ namespace metrics.Services.Concrete
                 {
                     var @params = new NameValueCollection
                     {
-                        {"object", $"wall{t.Owner_Id}_{t.Id}"}
+                        {"object", $"wall{t.OwnerId}_{t.Id}"}
                     };
                     await PostVkAsync<SimpleVkResponse<VkRepostMessage>>(VkApiUrls.Repost, null, @params);
                     await _messageBroker.SendAsync(new RepostCreated
                     {
                         Id = t.Id,
-                        OwnerId = t.Owner_Id,
+                        OwnerId = t.OwnerId,
                         UserId = _authenticatedUserProvider.GetUser().Id
                     });
                     await Task.Delay(timeout * 1000);
@@ -172,8 +172,8 @@ namespace metrics.Services.Concrete
                 }
             }
 
-            foreach (var x in vkRepostViewModels.Select(f => $"{f.Id}+{f.Owner_Id}")
-                .Except(reposts.Select(f => $"{f.Id}+{f.Owner_Id}")))
+            foreach (var x in vkRepostViewModels.Select(f => $"{f.Id}+{f.OwnerId}")
+                .Except(reposts.Select(f => $"{f.Id}+{f.OwnerId}")))
             {
                 await _messageBroker.SendAsync(new RepostCreated
                 {
@@ -195,7 +195,7 @@ namespace metrics.Services.Concrete
             return GetVkAsync<SimpleVkResponse<List<VkUserResponse>>>(VkApiUrls.UserInfo, @params);
         }
 
-        public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels)
+        public Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel>? vkRepostViewModels)
         {
             if (vkRepostViewModels == null)
             {
@@ -204,7 +204,7 @@ namespace metrics.Services.Concrete
 
             var @params = new NameValueCollection
             {
-                {"posts", string.Join(",", vkRepostViewModels.Select(c => $"{c.Owner_Id}_{c.Id}"))},
+                {"posts", string.Join(",", vkRepostViewModels.Select(c => $"{c.OwnerId}_{c.Id}"))},
                 {"extended", 1.ToString()},
                 {"fields", "is_member"}
             };
@@ -236,7 +236,7 @@ namespace metrics.Services.Concrete
         {
             var @params = new NameValueCollection
             {
-                {"owner_id", $"{model.Owner_Id}"},
+                {"owner_id", $"{model.OwnerId}"},
                 {"item_id", $"{model.Id}"},
                 {"type", "post"}
             };

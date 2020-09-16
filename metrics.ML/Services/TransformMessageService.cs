@@ -31,7 +31,7 @@ namespace metrics.ML.Services
             {
                 var posts = lines.Skip(skip).Take(take)
                     .Select(GetPost)
-                    .Select(x => new VkRepostViewModel {Id = x.id, Owner_Id = x.ownerId})
+                    .Select(x => new VkRepostViewModel {Id = x.id, OwnerId = x.ownerId})
                     .ToArray();
 
                 if (posts.Any())

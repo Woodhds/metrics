@@ -45,7 +45,7 @@ namespace metrics.Queries.Handlers
                 .Select(f => new
                 {
                     f.Text, f.Id,
-                    DateStatus = data.Where(a => a.OwnerId == f.Owner_Id && a.MessageId == f.Id)
+                    DateStatus = data.Where(a => a.OwnerId == f.OwnerId && a.MessageId == f.Id)
                         .Select(a => a.DateStatus)
                 });
 

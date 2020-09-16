@@ -1,7 +1,7 @@
 ﻿namespace Base.Contracts
 {
-    public class SimpleVkResponse<T> where T: class
+    public class SimpleVkResponse<T>
     {
-        public T? Response { get; set; }
+        public T Response { get; set; }
     }
 }

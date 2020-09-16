@@ -5,7 +5,7 @@ namespace Base.Contracts
 {
     public class VkLike
     {
-        public int Count { get; set; }
+        public uint Count { get; set; }
         [JsonConverter(typeof(JsonBooleanConverter))]
         public bool User_Likes { get; set; }
     }

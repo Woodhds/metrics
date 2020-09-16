@@ -31,8 +31,8 @@ namespace metrics.Services.Concrete
             var obj = models.Select(f => new
             {
                 f.Id,
-                f.Owner_Id,
-                Key = f.Id + "_" + f.Owner_Id
+                f.OwnerId,
+                Key = f.Id + "_" + f.OwnerId
             }).ToArray();
 
             var keys = obj.Select(f => f.Key);
@@ -57,7 +57,7 @@ namespace metrics.Services.Concrete
                     Status = VkRepostStatus.New,
                     MessageId = create.Id,
                     DateStatus = DateTime.Now,
-                    OwnerId = create.Owner_Id,
+                    OwnerId = create.OwnerId,
                     UserId = userId
                 });
             }

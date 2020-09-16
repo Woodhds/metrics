@@ -118,27 +118,26 @@
           <a
             target="_blank"
             class="block flex-1"
-            [href]="'https://vk.com/wall' + message.Owner_Id + '_' + message.Id"
+            [href]="'https://vk.com/wall' + message.OwnerId + '_' + message.Id"
           >
             Пост
           </a>
           <mat-slide-toggle
-            *ngIf="!message.Reposts.User_reposted"
             [color]="'accent'"
             (change)="onSelect($event, message)"
             [checked]="message.IsSelected"
           ></mat-slide-toggle>
         </mat-card-title>
-        <mat-card-subtitle>{{ fromUnixTime(message.Date) }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ toDate(message.Date) }}</mat-card-subtitle>
       </mat-card-header>
-      <app-vk-image [src]="images(message)"></app-vk-image>
+      <app-vk-image [src]="message.Images || []"></app-vk-image>
       <mat-card-content [innerHTML]="message.Text" class="h-32 overflow-auto text-xs">
       </mat-card-content>
       <mat-card-footer class="text-center">
         <mat-form-field class="message-category">
           <mat-label>{{ message.MessageCategoryPredict }}</mat-label>
           <mat-select
-            (selectionChange)="setType(message.Id, message.Owner_Id, $event)"
+            (selectionChange)="setType(message.Id, message.OwnerId, $event)"
             [value]="message.MessageCategoryId"
             panelClass="mat-select-full-height"
           >
@@ -152,17 +151,17 @@
         </mat-form-field>
       </mat-card-footer>
       <mat-card-actions>
-        <button mat-button (click)="like(message.Owner_Id, message.Id)">
-          <mat-icon [color]="message.Likes.User_Likes ? 'warn' : 'primary'"
+        <button mat-button (click)="like(message.OwnerId, message.Id)">
+          <mat-icon color="primary"
             >thumb_up
           </mat-icon>
-          {{ message.Likes.Count }}
+          {{ message.LikesCount }}
         </button>
-        <button mat-button (click)="repost(message.Owner_Id, message.Id)">
-          <mat-icon [color]="message.Reposts.User_reposted ? 'warn' : 'primary'"
+        <button mat-button (click)="repost(message.OwnerId, message.Id)">
+          <mat-icon color="primary"
             >share
           </mat-icon>
-          {{ message.Reposts.Count }}
+          {{ message.RepostsCount }}
         </button>
       </mat-card-actions>
     </mat-card>

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
+using Base.Contracts.Models;
 using Elastic.Client;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
@@ -33,7 +34,7 @@ namespace metrics.ML.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                using var scope = _transactionScopeFactory.CreateQuery(cancellationToken: stoppingToken);
+                using var scope = _transactionScopeFactory.CreateQuery(stoppingToken);
                 var messageVks = scope.Query<MessageVk>()
                     .Select(e => new
                     {
@@ -44,7 +45,7 @@ namespace metrics.ML.Services
                     })
                     .ToList();
 
-                var messages = (await _elasticClientFactory.Create().SearchAsync<VkMessage>(descriptor =>
+                var messages = (await _elasticClientFactory.Create().SearchAsync<VkMessageModel>(descriptor =>
                         descriptor.Query(containerDescriptor => containerDescriptor.Ids(idsQueryDescriptor =>
                                 idsQueryDescriptor.Values(messageVks.Select(f =>
                                     (f.OwnerId ^ f.MessageId).ToString())))).Skip(0)
@@ -57,7 +58,7 @@ namespace metrics.ML.Services
                             Category = vk.MessageCategory,
                             Id = e.Id,
                             Text = e.Text,
-                            OwnerId = e.Owner_Id
+                            OwnerId = e.OwnerId
                         }).ToArray();
 
                 if (messages.Any())

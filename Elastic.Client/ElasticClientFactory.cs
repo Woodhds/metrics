@@ -1,5 +1,6 @@
 using System;
 using Base.Contracts;
+using Base.Contracts.Models;
 using Base.Contracts.Options;
 using Microsoft.Extensions.Options;
 using Nest;
@@ -25,7 +26,7 @@ namespace Elastic.Client
             var connection =
                 new ConnectionSettings(new Uri(_options.Host))
                     .DisableDirectStreaming()
-                    .DefaultMappingFor<VkMessage>(descriptor =>
+                    .DefaultMappingFor<VkMessageModel>(descriptor =>
                         descriptor
                             .IdProperty(model => model.Identifier)
                             .IndexName("vk_message")

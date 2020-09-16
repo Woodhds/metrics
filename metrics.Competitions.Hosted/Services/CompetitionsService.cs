@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Base.Contracts;
+using Base.Contracts.Models;
 using Base.Contracts.Options;
 using HtmlAgilityPack;
 using metrics.Competitions.Abstractions;
@@ -34,11 +35,11 @@ namespace metrics.Competitions.Hosted.Services
             _competitionOptions = optionsMonitor.CurrentValue;
         }
 
-        public async Task<IList<VkMessage>> Fetch(int page = 10)
+        public async Task<IList<VkMessageModel>> Fetch(int page = 10)
         {
             var client = _httpClientFactory.CreateClient();
 
-            var data = new List<VkMessage>();
+            var data = new List<VkMessageModel>();
             for (var i = (page - 1) * Take; i < (page - 1) * Take + Take; i++)
             {
                 try
@@ -67,9 +68,9 @@ namespace metrics.Competitions.Hosted.Services
                         .Select(d => new VkRepostViewModel(int.Parse(d[0]), int.Parse(d[1])))
                         .ToList();
 
-                    if (models.Any())
+                    if (models != null && models.Any())
                     {
-                        data.AddRange((await _vkClient.GetById(models))?.Response.Items!);
+                        data.AddRange((await _vkClient.GetById(models)).Response.Items.Select(f => new VkMessageModel(f)));
                     }
                     
                 }

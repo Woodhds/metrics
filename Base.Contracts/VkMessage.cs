@@ -8,34 +8,30 @@ namespace Base.Contracts
     public class VkMessage
     {
         public int Id { get; set; }
-        public int Owner_Id { get; set; }
-        public int From_Id { get; set; }
+        [JsonPropertyName("owner_id")]
+        public int OwnerId { get; set; }
+        [JsonPropertyName("from_id")]
+        public int FromId { get; set; }
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime Date { get; set; }
         public string? Text { get; set; }
-        public List<VkMessage> Copy_History { get; set; } = new List<VkMessage>();
+        [JsonPropertyName("copy_history")]
+        public List<VkMessage> CopyHistory { get; set; } = new List<VkMessage>();
         public List<MessageAttachment> Attachments { get; set; } = new List<MessageAttachment>();
         public MessageReposts? Reposts { get; set; }
         public VkLike? Likes { get; set; }
-        public int Identifier => (From_Id ^ Id).GetHashCode();
-        [JsonIgnore]
-        public int RepostedFrom { get; set; }
-        public int? MessageCategoryId { get; set; }
-        [JsonIgnore]
-        public string? MessageCategory { get; set; }
-        public string? MessageCategoryPredict { get; set; }
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>
     {
         public bool Equals(VkMessage x, VkMessage y)
         {
-            return x.Owner_Id == y.Owner_Id && x.Id == y.Id;
+            return x.OwnerId == y.OwnerId && x.Id == y.Id;
         }
 
         public int GetHashCode(VkMessage obj)
         {
-            return (obj.From_Id + obj.Id).GetHashCode();
+            return (obj.FromId + obj.Id).GetHashCode();
         }
     }
 
@@ -70,7 +66,7 @@ namespace Base.Contracts
     public class MessageAttachment
     {
         public MessageAttachmentType Type { get; set; }
-        public AttachmentPhoto Photo { get; set; }
+        public AttachmentPhoto? Photo { get; set; }
     }
 
     public class AttachmentPhoto
@@ -104,12 +100,15 @@ namespace Base.Contracts
     public class Owner
     {
         public int Id { get; set; }
-        public string Screen_Name { get; set; }
+        [JsonPropertyName("screen_name")]
+        public string ScreenName { get; set; }
     }
 
     public class Profile : Owner
     {
-        public string First_Name { get; set; }
-        public string Last_Name { get; set; }
+        [JsonPropertyName("first_name")]
+        public string FirstName { get; set; }
+        [JsonPropertyName("last_name")]
+        public string LastName { get; set; }
     }
 }

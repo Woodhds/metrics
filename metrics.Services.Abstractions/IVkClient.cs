@@ -15,7 +15,7 @@ namespace metrics.Services.Abstractions
 
         Task<SimpleVkResponse<List<VkUserResponse>>> GetUserInfo(string id);
 
-        Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel> vkRepostViewModels);
+        Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel>? vkRepostViewModels);
 
         Task<VkResponse<List<VkGroup>>> GetGroups(int count, int offset);
         Task LeaveGroup(int groupId);

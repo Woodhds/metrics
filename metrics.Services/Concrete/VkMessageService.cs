@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Base.Contracts;
+using Base.Contracts.Models;
 using Elastic.Client;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
@@ -34,7 +35,7 @@ namespace metrics.Services.Concrete
         {
             var response = await _elasticClientFactory
                 .Create()
-                .SearchAsync<VkMessage>(z => z
+                .SearchAsync<VkMessageModel>(z => z
                     .From(page * take)
                     .Take(take)
                     .Query(f =>
@@ -59,7 +60,7 @@ namespace metrics.Services.Concrete
                     })
                 );
             using var scope = _transactionScopeFactory.CreateQuery();
-            var keys = response.Documents.Select(f => f.Owner_Id + "_" + f.Id);
+            var keys = response.Documents.Select(f => f.OwnerId + "_" + f.Id);
             var items = scope.Query<MessageVk>().Select(r =>
                     new {Key = r.OwnerId.ToString() + "_" + r.MessageId.ToString(), item = r})
                 .Where(e => keys.Contains(e.Key))
@@ -73,7 +74,7 @@ namespace metrics.Services.Concrete
                     Messages =
                     {
                         response.Documents.Select(e => new MessagePredictRequest.Types.MessagePredict
-                            {Id = e.Id, Text = e.Text, OwnerId = e.Owner_Id})
+                            {Id = e.Id, Text = e.Text, OwnerId = e.OwnerId})
                     }
                 });
             }
@@ -86,11 +87,11 @@ namespace metrics.Services.Concrete
             {
                 var messageCategory =
                     items.FirstOrDefault(f =>
-                        f.message.MessageId == document.Id && f.message.OwnerId == document.Owner_Id);
+                        f.message.MessageId == document.Id && f.message.OwnerId == document.OwnerId);
                 document.MessageCategoryId = messageCategory?.message?.MessageCategoryId;
                 document.MessageCategory = messageCategory?.category;
                 document.MessageCategoryPredict = predicted?.Messages
-                    .FirstOrDefault(e => e.Id == document.Id && e.OwnerId == document.Owner_Id)?.Category;
+                    .FirstOrDefault(e => e.Id == document.Id && e.OwnerId == document.OwnerId)?.Category;
             }
 
             return new DataSourceResponseModel(response.Documents, response.Total);

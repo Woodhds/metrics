@@ -15,108 +15,24 @@ export class VkGroup {
 
 export class VkMessage {
   public Id: number;
-  public Owner_Id: number;
-  public From_Id: number;
-  public Date: number;
+  public OwnerId: number;
+  public FromId: number;
+  public LikesCount: number;
+  public RepostsCount: number;
+  public Date: string;
   public Text: string;
-  public Post_Type: string;
-  public Copy_History: VkMessage[];
-  public Attachments: MessageAttachment[];
-  public Reposts: MessageReposts;
-  public Likes: VkLike;
+  public Images: string[] = [];
   public IsSelected: boolean;
   public MessageCategoryId: number | null;
   public MessageCategoryPredict: string | null;
 }
 
-export class MessageReposts {
-  public User_reposted: boolean;
-  public Count: number;
-}
-
-
-export enum PostType {
-  post = 0
-}
-export enum MessageAttachmentType {
-  photo = 0,
-
-  audio = 1,
-
-  video = 2,
-
-  link = 3,
-
-  poll = 4,
-
-  page = 5,
-
-  album = 6,
-
-  doc = 7,
-
-  posted_photo = 8,
-
-  graffiti = 9,
-
-  note = 10,
-
-  app = 11,
-
-  photos_list = 12,
-
-  market = 13,
-
-  market_album = 14,
-
-  sticker = 15,
-
-  pretty_cards = 16
-}
-
-
-export class MessageAttachment {
-  public Type: MessageAttachmentType;
-  public Photo: AttachmentPhoto;
-}
-export class AttachmentPhoto {
-  public Id: number;
-  public Sizes: PhotoSize[];
-}
-export class PhotoSize {
-  public Width: number;
-  public Height: number;
-  public Type: PhotoSizeType;
-  public Url: string;
-}
-export enum PhotoSizeType {
-  m = 0,
-
-  o = 1,
-
-  p = 2,
-
-  q = 3,
-
-  r = 4,
-
-  s = 5,
-
-  x = 6,
-
-  y = 7,
-
-  z = 8,
-
-  w = 9
-}
-
 export class VkRepostModel {
-  Owner_Id: number;
+  OwnerId: number;
   Id: number;
 
   constructor(owner_id: number, id: number) {
-    this.Owner_Id = owner_id;
+    this.OwnerId = owner_id;
     this.Id = id;
   }
 }
