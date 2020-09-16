@@ -29,8 +29,8 @@ namespace metrics.Services.Concrete
             _logger = logger;
         }
 
-        public async Task<DataSourceResponseModel> GetMessages(int page = 0, int take = 50, string search = null,
-            string user = null)
+        public async Task<DataSourceResponseModel> GetMessages(int page = 0, int take = 50, string? search = null,
+            string? user = null)
         {
             var response = await _elasticClientFactory
                 .Create()
@@ -65,7 +65,7 @@ namespace metrics.Services.Concrete
                 .Where(e => keys.Contains(e.Key))
                 .Select(f => new {message = f.item, category = f.item.MessageCategory.Title}).ToList();
 
-            MessagePredictResponse predicted = null;
+            MessagePredictResponse? predicted = null;
             try
             {
                 predicted = await _messagePredictingClient.PredictAsync(new MessagePredictRequest

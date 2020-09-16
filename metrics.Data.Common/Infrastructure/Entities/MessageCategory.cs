@@ -10,6 +10,6 @@ namespace metrics.Data.Common.Infrastructure.Entities
         public string Title { get; set; }
         
         [MaxLength(100)]
-        public string Color { get; set; }
+        public string? Color { get; set; }
     }
 }

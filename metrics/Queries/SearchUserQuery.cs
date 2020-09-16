@@ -6,6 +6,6 @@ namespace metrics.Queries
 {
     public class SearchUserQuery : IQuery<IEnumerable<VkUserModel>>
     {
-        public string Search { get; set; }
+        public string? Search { get; set; }
     }
 }

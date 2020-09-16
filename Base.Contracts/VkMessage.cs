@@ -12,19 +12,18 @@ namespace Base.Contracts
         public int From_Id { get; set; }
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime Date { get; set; }
-        public string Text { get; set; }
-        public List<VkMessage> Copy_History { get; set; }
-        public List<MessageAttachment> Attachments { get; set; }
-        public MessageReposts Reposts { get; set; }
-        public VkLike Likes { get; set; }
-        public Owner Owner { get; set; }
+        public string? Text { get; set; }
+        public List<VkMessage> Copy_History { get; set; } = new List<VkMessage>();
+        public List<MessageAttachment> Attachments { get; set; } = new List<MessageAttachment>();
+        public MessageReposts? Reposts { get; set; }
+        public VkLike? Likes { get; set; }
         public int Identifier => (From_Id ^ Id).GetHashCode();
         [JsonIgnore]
         public int RepostedFrom { get; set; }
         public int? MessageCategoryId { get; set; }
         [JsonIgnore]
-        public string MessageCategory { get; set; }
-        public string MessageCategoryPredict { get; set; }
+        public string? MessageCategory { get; set; }
+        public string? MessageCategoryPredict { get; set; }
     }
 
     public class EqualityVkMessage : IEqualityComparer<VkMessage>

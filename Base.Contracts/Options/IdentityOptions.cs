@@ -2,6 +2,6 @@
 {
     public class IdentityOptions
     {
-        public string ServerUrl { get; set; }
+        public string ServerUrl { get; set; } = "";
     }
 }

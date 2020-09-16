@@ -2,6 +2,6 @@
 {
     public class SignalROptions
     {
-        public string Host { get; set; }
+        public string? Host { get; set; }
     }
 }
