@@ -92,7 +92,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  get selectedMessages(): VkMessage[] {
+  get selectedMessages(): Array<VkMessage> {
     return this.messages.filter((x) => x.IsSelected);
   }
 

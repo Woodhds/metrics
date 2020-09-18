@@ -41,7 +41,8 @@ namespace metrics.Competitions.Hosted.Services
                             var response = await _vkClient.GetReposts(user.Id.ToString(), i, 80);
                             if (response?.Response?.Items != null)
                             {
-                                var models = response.Response.Items.Select(f => new VkMessageModel(f)).ToList();
+                                var models = response.Response.Items
+                                    .Select(f => new VkMessageModel(f, response.Response.Groups)).ToList();
                                 models.ForEach(e => { e.RepostedFrom = user.Id; });
                                 data.AddRange(models);
                             }

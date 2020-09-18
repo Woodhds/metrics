@@ -22,19 +22,6 @@ namespace Base.Contracts
         public VkLike? Likes { get; set; }
     }
 
-    public class EqualityVkMessage : IEqualityComparer<VkMessage>
-    {
-        public bool Equals(VkMessage x, VkMessage y)
-        {
-            return x.OwnerId == y.OwnerId && x.Id == y.Id;
-        }
-
-        public int GetHashCode(VkMessage obj)
-        {
-            return (obj.FromId + obj.Id).GetHashCode();
-        }
-    }
-
     public enum PostType
     {
         Post = 0,

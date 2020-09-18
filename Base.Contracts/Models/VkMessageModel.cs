@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,7 @@ namespace Base.Contracts.Models
         public string? Text { get; set; }
         public uint LikesCount { get; set; }
         public uint RepostsCount { get; set; }
+        public string Owner { get; set; }
         public string[] Images { get; set; }
         public int Identifier => (FromId ^ Id).GetHashCode();
         [JsonIgnore] public int RepostedFrom { get; set; }
@@ -20,7 +22,7 @@ namespace Base.Contracts.Models
         [JsonIgnore] public string? MessageCategory { get; set; }
         public string? MessageCategoryPredict { get; set; }
 
-        public VkMessageModel(VkMessage message)
+        public VkMessageModel(VkMessage message, IEnumerable<VkGroup> groups)
         {
             Id = message.Id;
             OwnerId = message.OwnerId;
@@ -36,6 +38,19 @@ namespace Base.Contracts.Models
                 .ToArray();
             LikesCount = message.Likes?.Count ?? 0;
             RepostsCount = message.Reposts?.Count ?? 0;
+            Owner = groups.Where(a => a.Id == -message.OwnerId).Select(f => f.Name).FirstOrDefault() ?? "";
+        }
+
+        public override bool Equals(object? x)
+        {
+            if (!(x is VkMessageModel obj)) return false;
+
+            return obj.OwnerId == OwnerId && Id == obj.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return (FromId + Id).GetHashCode();
         }
     }
 }

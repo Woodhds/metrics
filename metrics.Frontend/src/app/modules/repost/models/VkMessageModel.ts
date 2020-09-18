@@ -19,7 +19,8 @@ export class VkMessage {
   public FromId: number;
   public LikesCount: number;
   public RepostsCount: number;
-  public Date: string;
+  public Date: string
+  public Owner: string;
   public Text: string;
   public Images: string[] = [];
   public IsSelected: boolean;

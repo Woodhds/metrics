@@ -70,7 +70,9 @@ namespace metrics.Competitions.Hosted.Services
 
                     if (models != null && models.Any())
                     {
-                        data.AddRange((await _vkClient.GetById(models)).Response.Items.Select(f => new VkMessageModel(f)));
+                        var response = await _vkClient.GetById(models);
+                        
+                        data.AddRange(response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)));
                     }
                     
                 }

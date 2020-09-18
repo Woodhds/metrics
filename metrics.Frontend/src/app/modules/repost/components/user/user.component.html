@@ -120,7 +120,7 @@
             class="block flex-1"
             [href]="'https://vk.com/wall' + message.OwnerId + '_' + message.Id"
           >
-            Пост
+            {{ message.Owner ? message.Owner : 'Пост' }}
           </a>
           <mat-slide-toggle
             [color]="'accent'"
