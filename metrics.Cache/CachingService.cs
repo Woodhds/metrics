@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Cache.Abstractions;
@@ -22,9 +23,15 @@ namespace metrics.Cache
             return _serializer.Deserialize<T>(bytes);
         }
 
-        public async Task SetAsync<T>(string key, T obj, CancellationToken cancellationToken = default)
+        public async Task SetAsync<T>(string key, T obj, TimeSpan duration,
+            CancellationToken cancellationToken = default)
         {
-            await _cache.SetAsync(key, _serializer.Serialize(obj), cancellationToken);
+            await _cache.SetAsync(key, _serializer.Serialize(obj),
+                new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.Add(duration)
+                },
+                cancellationToken);
         }
 
         public Task RemoveAsync(string key, CancellationToken cancellationToken = default)

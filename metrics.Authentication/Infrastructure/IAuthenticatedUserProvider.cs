@@ -2,6 +2,6 @@
 {
     public interface IAuthenticatedUserProvider
     {
-        IUser GetUser();
+        IUser? GetUser();
     }
 }

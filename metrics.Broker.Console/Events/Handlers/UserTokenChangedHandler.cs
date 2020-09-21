@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Broker.Abstractions;
@@ -20,7 +21,12 @@ namespace metrics.Broker.Console.Events.Handlers
 
         public Task HandleAsync(IUserTokenChanged obj, CancellationToken token = default)
         {
-            return _cachingService.SetAsync(_userTokenKeyProvider.GetKey(obj.UserId), obj.Token, token);
+            return _cachingService.SetAsync(
+                _userTokenKeyProvider.GetKey(obj.UserId),
+                obj.Token,
+                TimeSpan.FromHours(3),
+                token
+            );
         }
     }
 }
