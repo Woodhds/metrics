@@ -11,8 +11,14 @@ namespace metrics.EventSourcing
     {
         private class CacheItem
         {
-            public IQueryHandlerImpl HandlerImpl { get; set; }
-            public IQueryHandler Handler { get; set; }
+            public readonly IQueryHandlerImpl HandlerImpl;
+            public readonly IQueryHandler Handler;
+
+            public CacheItem(IQueryHandlerImpl handlerImpl, IQueryHandler handler)
+            {
+                HandlerImpl = handlerImpl;
+                Handler = handler;
+            }
         }
 
         private readonly IServiceProvider _resolver;
@@ -37,13 +43,10 @@ namespace metrics.EventSourcing
             return _implementations.GetOrAdd(queryType, x =>
             {
                 var queryHandlerType = typeof(IQueryHandler<,>).MakeGenericType(queryType, typeof(TResponse));
-                return new CacheItem
-                {
-                    HandlerImpl =
-                        (IQueryHandlerImpl) Activator.CreateInstance(typeof(QueryHandlerImpl<>).MakeGenericType(x)),
-                    Handler = (IQueryHandler) (_resolver.GetService(queryHandlerType) ??
-                              throw new QueryHandlerNotFoundException(queryHandlerType))
-                };
+                return new CacheItem(
+                    (IQueryHandlerImpl) Activator.CreateInstance(typeof(QueryHandlerImpl<>).MakeGenericType(x)),
+                    (IQueryHandler) (_resolver.GetService(queryHandlerType) ??
+                                     throw new QueryHandlerNotFoundException(queryHandlerType)));
             });
         }
     }

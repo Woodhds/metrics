@@ -8,6 +8,7 @@ using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using Metrics.Ml.Services;
 using metrics.Services.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace metrics.Services.Concrete
@@ -61,10 +62,19 @@ namespace metrics.Services.Concrete
                 );
             using var scope = _transactionScopeFactory.CreateQuery();
             var keys = response.Documents.Select(f => f.OwnerId + "_" + f.Id);
-            var items = scope.Query<MessageVk>().Select(r =>
+            var items = await scope.Query<MessageVk>()
+                .Select(r =>
                     new {Key = r.OwnerId.ToString() + "_" + r.MessageId.ToString(), item = r})
                 .Where(e => keys.Contains(e.Key))
-                .Select(f => new {message = f.item, category = f.item.MessageCategory.Title}).ToList();
+                .Select(f => new {message = f.item, category = f.item.MessageCategory.Title})
+                .ToListAsync();
+
+            var reposts = await scope.Query<VkRepost>()
+                .Where(f => f.Status == VkRepostStatus.Complete)
+                .Select(r =>
+                    new {Key = r.OwnerId.ToString() + "_" + r.MessageId.ToString(), r.OwnerId, r.MessageId})
+                .Where(f => keys.Contains(f.Key))
+                .ToListAsync();
 
             MessagePredictResponse? predicted = null;
             try
@@ -90,6 +100,7 @@ namespace metrics.Services.Concrete
                         f.message.MessageId == document.Id && f.message.OwnerId == document.OwnerId);
                 document.MessageCategoryId = messageCategory?.message?.MessageCategoryId;
                 document.MessageCategory = messageCategory?.category;
+                document.UserReposted = reposts.Any(f => f.MessageId == document.Id && f.OwnerId == document.OwnerId);
                 document.MessageCategoryPredict = predicted?.Messages
                     .FirstOrDefault(e => e.Id == document.Id && e.OwnerId == document.OwnerId)?.Category;
             }

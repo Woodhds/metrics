@@ -26,6 +26,7 @@ export class VkMessage {
   public IsSelected: boolean;
   public MessageCategoryId: number | null;
   public MessageCategoryPredict: string | null;
+  public UserReposted: boolean;
 }
 
 export class VkRepostModel {

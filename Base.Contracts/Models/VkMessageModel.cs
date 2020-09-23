@@ -20,6 +20,7 @@ namespace Base.Contracts.Models
         [JsonIgnore] public int RepostedFrom { get; set; }
         public int? MessageCategoryId { get; set; }
         [JsonIgnore] public string? MessageCategory { get; set; }
+        public bool UserReposted { get; set; }
         public string? MessageCategoryPredict { get; set; }
 
         public VkMessageModel(VkMessage message, IEnumerable<VkGroup> groups)

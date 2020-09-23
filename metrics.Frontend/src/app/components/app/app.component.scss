@@ -1,10 +1,14 @@
 .back-to-top {
-  @apply fixed opacity-0 z-40;
-  bottom: 3rem;
-  right: 3rem;
+  @apply fixed opacity-0 z-40 h-12 w-12;
+  bottom: 1rem;
+  right: 1rem;
   transition: opacity .3s ease-in;
 
   &.visible {
     @apply opacity-100;
   }
+}
+
+::ng-deep .mat-button-wrapper {
+  padding: 0 !important;
 }

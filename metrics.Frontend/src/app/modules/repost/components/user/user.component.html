@@ -35,7 +35,7 @@
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of users" [value]="option">
             <figure class="flex items-center">
-              <img class="h-10 mr-3" [src]="option.Avatar" />
+              <img class="h-10 mr-3" [src]="option.Avatar"/>
               <figcaption>{{ option.FullName }}</figcaption>
             </figure>
           </mat-option>
@@ -74,7 +74,7 @@
       ></mat-slider>
       <span class="w-1/5" *ngIf="selectedMessages.length">{{
         selectedMessages.length
-      }}</span>
+        }}</span>
     </div>
   </div>
   <div class="flex items-center flex-row-reverse">
@@ -122,10 +122,10 @@
           >
             {{ message.Owner ? message.Owner : 'Пост' }}
           </a>
-          <mat-slide-toggle
-            [color]="'accent'"
-            (change)="onSelect($event, message)"
-            [checked]="message.IsSelected"
+          <mat-slide-toggle *ngIf="!message.UserReposted"
+                            [color]="'accent'"
+                            (change)="onSelect($event, message)"
+                            [checked]="message.IsSelected"
           ></mat-slide-toggle>
         </mat-card-title>
         <mat-card-subtitle>{{ toDate(message.Date) }}</mat-card-subtitle>
@@ -153,13 +153,13 @@
       <mat-card-actions>
         <button mat-button (click)="like(message.OwnerId, message.Id)">
           <mat-icon color="primary"
-            >thumb_up
+          >thumb_up
           </mat-icon>
           {{ message.LikesCount }}
         </button>
         <button mat-button (click)="repost(message.OwnerId, message.Id)">
-          <mat-icon color="primary"
-            >share
+          <mat-icon [color]="message.UserReposted ? 'warn' : 'primary'"
+          >share
           </mat-icon>
           {{ message.RepostsCount }}
         </button>
