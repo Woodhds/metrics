@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+﻿FROM mcr.microsoft.com/dotnet/core/sdk:5.0
 ARG workdir="/src"
 
 # Copy source code
@@ -14,7 +14,7 @@ RUN dotnet publish ./metrics.ML/metrics.ML.csproj --no-restore -c Release -o /ap
 
 # Create docker image from published project
 # ------------------------------------------
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:5.0
 
 WORKDIR /app
 
