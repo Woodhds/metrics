@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
+using metrics.Data.Common.Infrastructure.Entities;
 using metrics.EventSourcing.Abstractions.Query;
 using metrics.Services.Abstractions;
 

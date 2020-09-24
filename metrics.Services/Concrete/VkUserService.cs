@@ -1,31 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
-using Elastic.Client;
+using metrics.Data.Abstractions;
 using metrics.Services.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Services.Concrete
 {
     public class VkUserService : IVkUserService
     {
-        private readonly IElasticClientFactory _elasticClientProvider;
+        private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IVkClient _vkClient;
 
-        public VkUserService(IElasticClientFactory elasticClientProvider, IVkClient vkClient)
+        public VkUserService(IVkClient vkClient, ITransactionScopeFactory transactionScopeFactory)
         {
-            _elasticClientProvider = elasticClientProvider;
             _vkClient = vkClient;
+            _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task<VkUserModel> CreateAsync(string userId)
+        public async Task<VkUserModel> CreateAsync(string userId, CancellationToken token = default)
         {
             var userInfo = await _vkClient.GetUserInfo(userId);
 
             if (userInfo.Response == null)
                 throw new ArgumentNullException(nameof(userId));
-            
+
             var user = new VkUserModel
             {
                 Id = userInfo.Response.First().Id,
@@ -34,32 +36,28 @@ namespace metrics.Services.Concrete
             };
             if (user.Id > 0)
             {
-                await _elasticClientProvider.Create().IndexDocumentAsync(user);
+                using var scope = await _transactionScopeFactory.CreateAsync(token);
+                await scope.GetRepository<VkUserModel>().CreateAsync(user, token);
+                await scope.CommitAsync(token);
             }
 
             return user;
         }
 
-        public async Task<IEnumerable<VkUserModel>> GetAsync(string searchStr)
+        public async Task<IEnumerable<VkUserModel>> GetAsync(string? searchStr, CancellationToken ct = default)
         {
-            var result = await _elasticClientProvider.Create().SearchAsync<VkUserModel>(z =>
-                z.Index<VkUserModel>()
-                    .Query(t =>
-                        t.QueryString(a =>
-                            a.Query(searchStr)
-                                .Fields(e => e.Field(g => g.FullName))
-                                .Analyzer("russian")
-                        )
-                    )
-            );
-            
+            using var scope = await _transactionScopeFactory.CreateAsync(ct);
+            var query = scope.Query<VkUserModel>();
 
-            return result.IsValid 
-                ? result.Documents 
-                : Enumerable.Empty<VkUserModel>();
+            if (!string.IsNullOrEmpty(searchStr))
+            {
+                query = query.Where(f => EF.Functions.ToTsVector("russian", f.FullName).Matches(searchStr));
+            }
+
+            return await query.ToListAsync(ct);
         }
 
-        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search)
+        public Task<VkResponse<IEnumerable<VkUserResponse>>> SearchAsync(string search, CancellationToken ct = default)
         {
             return _vkClient.SearchUserAsync(search);
         }

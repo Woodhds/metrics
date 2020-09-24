@@ -4,6 +4,10 @@ using metrics.Broker.Abstractions;
 using metrics.Competitions.Abstractions;
 using metrics.Competitions.Hosted.Services;
 using metrics.core.DistributedLock;
+using metrics.Data.Abstractions;
+using metrics.Data.Common;
+using metrics.Data.Common.Infrastructure.Configuration;
+using metrics.Data.Sql;
 using metrics.Services.Abstractions;
 using metrics.Services.Concrete;
 using metrics.Services.Extensions;
@@ -38,6 +42,8 @@ namespace metrics.Competitions.Hosted
 
         protected override void ConfigureDataContext(IServiceCollection services)
         {
+            services.AddDataContext<DataContext>(Configuration.GetConnectionString("DataContext"));
+            services.AddSingleton<IEntityConfiguration, RepostEntityConfiguration>();
         }
     }
 }

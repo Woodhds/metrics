@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Base.Contracts\Base.Contracts.csproj" />
       <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
       <ProjectReference Include="..\metrics.Data.Sql\metrics.Data.Sql.csproj" />
     </ItemGroup>

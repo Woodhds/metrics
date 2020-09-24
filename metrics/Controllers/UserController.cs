@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Base.Contracts;
+using metrics.Data.Common.Infrastructure.Entities;
 using metrics.EventSourcing.Abstractions.Query;
 using metrics.Queries;
 using metrics.Services.Abstractions;
