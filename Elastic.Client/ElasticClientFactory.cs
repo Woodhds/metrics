@@ -25,14 +25,11 @@ namespace Elastic.Client
         {
             var connection =
                 new ConnectionSettings(new Uri(_options.Host))
-                    .DisableDirectStreaming()
                     .DefaultMappingFor<VkMessageModel>(descriptor =>
                         descriptor
                             .IdProperty(model => model.Identifier)
                             .IndexName("vk_message")
-                    )
-                    .DefaultMappingFor<VkUserModel>(descriptor => descriptor.IdProperty(model => model.Id)
-                        .IndexName("vk_user"));
+                    );
             return new ElasticClient(connection);
         }
     }
