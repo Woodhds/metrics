@@ -35,7 +35,7 @@ namespace metrics.Competitions.Hosted.Services
             _competitionOptions = optionsMonitor.CurrentValue;
         }
 
-        public async Task<IList<VkMessageModel>> Fetch(int page = 10)
+        public async Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 10)
         {
             var client = _httpClientFactory.CreateClient();
 
@@ -68,13 +68,11 @@ namespace metrics.Competitions.Hosted.Services
                         .Select(d => new VkRepostViewModel(int.Parse(d[0]), int.Parse(d[1])))
                         .ToList();
 
-                    if (models != null && models.Any())
-                    {
-                        var response = await _vkClient.GetById(models);
+                    if (models == null || !models.Any()) continue;
+                    var response = await _vkClient.GetById(models);
                         
-                        data.AddRange(response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)));
-                    }
-                    
+                    data.AddRange(response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)));
+
                 }
                 catch (Exception e)
                 {

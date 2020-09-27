@@ -18,7 +18,7 @@ using metrics.Services.Utils;
 
 namespace metrics.Services.Concrete
 {
-    public class VkClient : BaseHttpClient, IVkClient
+    public class VkClient : BaseHttpClient<VkClient>, IVkClient
     {
         private readonly IUserTokenAccessor _vkTokenAccessor;
         private readonly IMessageBroker _messageBroker;
@@ -29,13 +29,13 @@ namespace metrics.Services.Concrete
         public VkClient(
             IHttpClientFactory httpClientFactory,
             IUserTokenAccessor vkTokenAccessor,
-            ILogger<BaseHttpClient> logger,
+            ILogger<VkClient> logger,
             IMessageBroker messageBroker,
             IOptions<VkontakteOptions> vkontakteOptions,
             IAuthenticatedUserProvider authenticatedUserProvider,
             IJsonSerializer jsonSerializer,
             IDistributedLock distributedLock) : base(
-            httpClientFactory, logger, jsonSerializer)
+            httpClientFactory, jsonSerializer, logger)
         {
             _vkTokenAccessor = vkTokenAccessor;
             _messageBroker = messageBroker;
@@ -44,7 +44,7 @@ namespace metrics.Services.Concrete
             _distributedLock = distributedLock;
         }
 
-        private async Task<NameValueCollection> AddVkParams(NameValueCollection @params)
+        private async Task<NameValueCollection> AddVkParams(NameValueCollection? @params)
         {
             @params ??= new NameValueCollection();
 
@@ -64,11 +64,11 @@ namespace metrics.Services.Concrete
             }
         }
 
-        private async Task PostVkAsync<T>(string method, object content, NameValueCollection @params = null)
+        private async Task PostVkAsync<T>(string method, object? content, NameValueCollection? @params = null)
         {
             @params = await AddVkParams(@params);
             var url = new Uri(method).AbsoluteUri;
-            await using (await _distributedLock.AcquireAsync(_authenticatedUserProvider.GetUser().Id.ToString()))
+            await using (await _distributedLock.AcquireAsync(_authenticatedUserProvider.GetUser()?.Id.ToString()))
             {
                 await base.PostAsync<T>(url, content, @params);
             }
@@ -99,7 +99,7 @@ namespace metrics.Services.Concrete
             return result;
         }
 
-        public Task<VkResponse<List<VkMessage>>> WallSearch(string id, int skip, int take, string search = null)
+        public Task<VkResponse<List<VkMessage>>> WallSearch(string id, int skip, int take, string? search = null)
         {
             var @params = new NameValueCollection
             {

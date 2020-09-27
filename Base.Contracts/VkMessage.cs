@@ -16,7 +16,7 @@ namespace Base.Contracts
         public DateTime Date { get; set; }
         public string? Text { get; set; }
         [JsonPropertyName("copy_history")]
-        public List<VkMessage> CopyHistory { get; set; } = new List<VkMessage>();
+        public List<VkMessage>? CopyHistory { get; set; } = new List<VkMessage>();
         public List<MessageAttachment> Attachments { get; set; } = new List<MessageAttachment>();
         public MessageReposts? Reposts { get; set; }
         public VkLike? Likes { get; set; }

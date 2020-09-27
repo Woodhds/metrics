@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using metrics.Serialization.Abstractions;
@@ -9,28 +10,34 @@ using Microsoft.Extensions.Logging;
 
 namespace metrics.Services.Utils
 {
-    public class BaseHttpClient
+    public class BaseHttpClient<TClient>
     {
         private readonly HttpClient _httpClient;
-        protected readonly ILogger<BaseHttpClient> Logger;
+        protected readonly ILogger<TClient> Logger;
         private readonly IJsonSerializer _jsonSerializer;
 
         public BaseHttpClient(
             IHttpClientFactory httpClientFactory,
-            ILogger<BaseHttpClient> logger, IJsonSerializer jsonSerializer)
+            IJsonSerializer jsonSerializer,
+            ILogger<TClient> logger
+        )
         {
-            Logger = logger;
             _jsonSerializer = jsonSerializer;
-            _httpClient = httpClientFactory.CreateClient();
+            Logger = logger;
+            _httpClient = httpClientFactory.CreateClient(typeof(TClient).Name);
         }
 
-        protected virtual async Task<T> PostAsync<T>(string url, object content, NameValueCollection @params = null)
+        protected virtual async Task<T> PostAsync<T>(string url, object? content, NameValueCollection? @params = null)
         {
             try
             {
                 var uri = @params.BuildUrl(url);
                 var stringContent =
-                    new StringContent(_jsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
+                    new StringContent(
+                        _jsonSerializer.Serialize(content),
+                        Encoding.UTF8,
+                        MediaTypeNames.Application.Json
+                    );
                 var response = await _httpClient.PostAsync(uri, stringContent).ConfigureAwait(false);
 
                 response.EnsureSuccessStatusCode();
@@ -44,7 +51,7 @@ namespace metrics.Services.Utils
             }
         }
 
-        protected virtual async Task<T> GetAsync<T>(string url, NameValueCollection @params = null)
+        protected virtual async Task<T> GetAsync<T>(string url, NameValueCollection? @params = null)
         {
             try
             {

@@ -26,7 +26,7 @@ namespace metrics.Competitions.Hosted.Services
             _logger = logger;
         }
 
-        public async Task<IList<VkMessageModel>> Fetch(int page = 1)
+        public async Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 1)
         {
             var data = new List<VkMessageModel>();
             var users = await _vkUserService.GetAsync(null);

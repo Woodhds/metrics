@@ -6,6 +6,6 @@ namespace metrics.Competitions.Abstractions
 {
     public interface ICompetitionsService
     {
-        Task<IList<VkMessageModel>> Fetch(int page = 1);
+        Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 1);
     }
 }

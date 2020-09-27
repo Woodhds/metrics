@@ -5,6 +5,6 @@ namespace metrics.core.DistributedLock
 {
     public interface IDistributedLock
     {
-        Task<IAsyncDisposable> AcquireAsync(string key);
+        Task<IAsyncDisposable> AcquireAsync(string? key);
     }
 }

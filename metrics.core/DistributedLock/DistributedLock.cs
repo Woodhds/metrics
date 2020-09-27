@@ -32,7 +32,7 @@ namespace metrics.core.DistributedLock
             _database = database;
         }
 
-        public async Task<IAsyncDisposable> AcquireAsync(string key)
+        public async Task<IAsyncDisposable> AcquireAsync(string? key)
         {
             while (!_database.LockTake(key, key, TimeSpan.FromSeconds(30)))
             {
