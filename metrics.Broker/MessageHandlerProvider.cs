@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace metrics.Broker
 {
-    public class MessageHandlerProvider : IMessageHandlerProvider
+    internal class MessageHandlerProvider : IMessageHandlerProvider
     {
         private readonly IServiceCollection _serviceCollection;
         private readonly Dictionary<Type, Type> _consumers = new Dictionary<Type, Type>();

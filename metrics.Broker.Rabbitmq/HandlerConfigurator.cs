@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace metrics.Broker.Rabbitmq
 {
-    public class HandlerConfigurator : IHandlerConfigurator
+    internal class HandlerConfigurator : IHandlerConfigurator
     {
         private readonly IBusControl _busControl;
         private readonly IServiceProvider _serviceProvider;

@@ -5,7 +5,7 @@ using metrics.Broker.Abstractions;
 
 namespace metrics.Broker.Rabbitmq
 {
-    public class MessageBroker : IMessageBroker
+    internal class MessageBroker : IMessageBroker
     {
         private readonly IBusControl _bus;
 

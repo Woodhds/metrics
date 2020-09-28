@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace metrics.Broker.Rabbitmq
 {
-    public class MessageBrokerHostedService : IHostedService
+    internal class MessageBrokerHostedService : IHostedService
     {
         private readonly IBusControl _busControl;
 
