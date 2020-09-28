@@ -107,6 +107,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.EventSourcing.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.core", "metrics.core\metrics.core.csproj", "{DA8FFF63-4480-448D-AE31-2B6704A4058E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Rabbitmq", "metrics.Broker.Rabbitmq\metrics.Broker.Rabbitmq.csproj", "{65B21ED1-81A1-4479-B324-44AF6E04A92C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -273,6 +275,10 @@ Global
 		{DA8FFF63-4480-448D-AE31-2B6704A4058E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA8FFF63-4480-448D-AE31-2B6704A4058E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA8FFF63-4480-448D-AE31-2B6704A4058E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B21ED1-81A1-4479-B324-44AF6E04A92C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B21ED1-81A1-4479-B324-44AF6E04A92C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B21ED1-81A1-4479-B324-44AF6E04A92C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B21ED1-81A1-4479-B324-44AF6E04A92C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +319,7 @@ Global
 		{9DE4F5B5-D680-49E4-B960-876666A7544F} = {50531886-A9A8-4DE5-9194-4CE4456491CD}
 		{56D6BAE5-4EAB-45EE-882B-A8A0EF7A9545} = {50531886-A9A8-4DE5-9194-4CE4456491CD}
 		{DA8FFF63-4480-448D-AE31-2B6704A4058E} = {ABF7D990-9694-4FD4-8A33-F738E6D81FE0}
+		{65B21ED1-81A1-4479-B324-44AF6E04A92C} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B9B1AA4-B7E9-4A7C-B1D5-7F683FA9B1D0}

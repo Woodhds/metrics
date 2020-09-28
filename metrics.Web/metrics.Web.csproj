@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\metrics.Authentication\metrics.Authentication.csproj" />
+      <ProjectReference Include="..\metrics.Broker.Rabbitmq\metrics.Broker.Rabbitmq.csproj" />
       <ProjectReference Include="..\metrics.Broker\metrics.Broker.csproj" />
       <ProjectReference Include="..\metrics.Cache\metrics.Cache.csproj" />
       <ProjectReference Include="..\metrics.logging\metrics.logging.csproj" />

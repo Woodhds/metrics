@@ -19,8 +19,11 @@ namespace metrics.Broker.Console.Events.Handlers
         private readonly IBackgroundJobService _jobService;
         private readonly ILogger<RepostUserEventHandler> _logger;
 
-        public RepostUserEventHandler(ITransactionScopeFactory transactionScopeFactory,
-            IBackgroundJobService jobService, ILogger<RepostUserEventHandler> logger)
+        public RepostUserEventHandler(
+            ITransactionScopeFactory transactionScopeFactory,
+            IBackgroundJobService jobService,
+            ILogger<RepostUserEventHandler> logger
+        )
         {
             _transactionScopeFactory = transactionScopeFactory;
             _jobService = jobService;
@@ -48,7 +51,7 @@ namespace metrics.Broker.Console.Events.Handlers
                 await transaction.GetRepository<VkRepost>().UpdateAsync(message, token);
 
                 await transaction.CommitAsync(token);
-                    
+
                 _jobService.Schedule<ISchedulerJobService>(
                     client => client.Repost(message.OwnerId, message.MessageId, obj.UserId),
                     TimeSpan.FromSeconds(10));

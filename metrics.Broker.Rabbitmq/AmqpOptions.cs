@@ -1,4 +1,4 @@
-﻿namespace metrics.Broker
+﻿namespace metrics.Broker.Rabbitmq
 {
     public class AmqpOptions
     {

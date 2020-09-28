@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Base.Contracts.Options;
 using metrics.Authentication;
 using metrics.Broker;
+using metrics.Broker.Rabbitmq;
 using metrics.Identity.Data;
 using metrics.Identity.Extensions;
 using metrics.Identity.Infrastructure.Identity;
@@ -103,7 +104,7 @@ namespace metrics.Identity
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Identity API", Version = "v1"});
             });
 
-            services.AddMessageBroker(_configuration);
+            services.AddMessageBroker(_configuration, (collection, configuration) => new RabbitMqBrokerConfigurationBuilder(_configuration, services));
             services.AddGrpc();
         }
 

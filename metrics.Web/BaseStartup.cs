@@ -1,6 +1,7 @@
 ﻿using metrics.Authentication.Options;
 using metrics.Broker;
 using metrics.Broker.Abstractions;
+using metrics.Broker.Rabbitmq;
 using metrics.Cache;
 using metrics.logging;
 using metrics.Serialization;
@@ -38,13 +39,16 @@ namespace metrics.Web
             ConfigureMessageBroker(services);
         }
 
-        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IHostApplicationLifetime lifeTime)
         {
         }
 
         protected virtual void ConfigureMessageBroker(IServiceCollection services)
         {
-            services.AddMessageBroker(Configuration, AddBrokerHandlers);
+            services.AddMessageBroker(Configuration,
+                (collection, configuration) => new RabbitMqBrokerConfigurationBuilder(configuration, collection),
+                AddBrokerHandlers);
         }
 
         protected virtual void ConfigureAuthentication(IServiceCollection services)

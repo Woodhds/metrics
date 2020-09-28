@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using metrics.Broker.Abstractions;
 
-namespace metrics.Broker
+namespace metrics.Broker.Rabbitmq
 {
     public class MessageHandler<T> : IConsumer<T> where T : class
     {

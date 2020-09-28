@@ -3,9 +3,9 @@ using MassTransit;
 using metrics.Broker.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace metrics.Broker
+namespace metrics.Broker.Rabbitmq
 {
-    public class HandlerConfigurator
+    public class HandlerConfigurator : IHandlerConfigurator
     {
         private readonly IBusControl _busControl;
         private readonly IServiceProvider _serviceProvider;
