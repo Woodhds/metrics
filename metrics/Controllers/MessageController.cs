@@ -19,14 +19,14 @@ namespace metrics.Controllers
     [Route("[controller]")]
     public class MessageController : ControllerBase
     {
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
         private readonly ILogger<MessageController> _logger;
         private readonly IMessageBroker _messageBroker;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IQueryProcessor _queryProcessor;
 
         public MessageController(
-            IVkClient vkClient,
+            IVkService vkClient,
             ILogger<MessageController> logger,
             IMessageBroker messageBroker,
             IHttpContextAccessor httpContextAccessor, IQueryProcessor queryProcessor)

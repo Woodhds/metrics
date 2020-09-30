@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using metrics.Serialization.Abstractions;
+using metrics.Services.Abstractions;
 using metrics.Services.Utils.Helpers;
 using Microsoft.Extensions.Logging;
 
@@ -12,19 +13,19 @@ namespace metrics.Services.Utils
 {
     public class BaseHttpClient<TClient>
     {
-        private readonly HttpClient _httpClient;
+        private readonly IVkClient _httpClient;
         protected readonly ILogger<TClient> Logger;
         private readonly IJsonSerializer _jsonSerializer;
 
         public BaseHttpClient(
-            IHttpClientFactory httpClientFactory,
+            IVkClient client,
             IJsonSerializer jsonSerializer,
             ILogger<TClient> logger
         )
         {
             _jsonSerializer = jsonSerializer;
             Logger = logger;
-            _httpClient = httpClientFactory.CreateClient(typeof(TClient).Name);
+            _httpClient = client;
         }
 
         protected virtual async Task<T> PostAsync<T>(string url, object? content, NameValueCollection? @params = null)

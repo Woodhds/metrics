@@ -13,9 +13,9 @@ namespace metrics.ML.Services
 {
     public class TransformMessageService : BackgroundService
     {
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
 
-        public TransformMessageService(IVkClient vkClient)
+        public TransformMessageService(IVkService vkClient)
         {
             _vkClient = vkClient;
         }

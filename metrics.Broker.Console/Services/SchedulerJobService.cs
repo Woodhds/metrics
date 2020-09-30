@@ -12,10 +12,10 @@ namespace metrics.Broker.Console.Services
 
     public class SchedulerJobService : ISchedulerJobService
     {
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
         private readonly ISecurityUserManager _userManager;
 
-        public SchedulerJobService(IVkClient vkClient, ISecurityUserManager userManager)
+        public SchedulerJobService(IVkService vkClient, ISecurityUserManager userManager)
         {
             _vkClient = vkClient;
             _userManager = userManager;

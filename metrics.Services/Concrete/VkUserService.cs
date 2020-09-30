@@ -13,9 +13,9 @@ namespace metrics.Services.Concrete
     public class VkUserService : IVkUserService
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
 
-        public VkUserService(IVkClient vkClient, ITransactionScopeFactory transactionScopeFactory)
+        public VkUserService(IVkService vkClient, ITransactionScopeFactory transactionScopeFactory)
         {
             _vkClient = vkClient;
             _transactionScopeFactory = transactionScopeFactory;

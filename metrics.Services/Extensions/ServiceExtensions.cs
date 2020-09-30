@@ -27,8 +27,11 @@ namespace metrics.Services.Extensions
 
         public static IServiceCollection AddVkClient(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IVkClient, VkClient>();
-           // services.AddHttpClient<IVkClient, VkClient>();
+            services.AddSingleton<IVkService, VkService>();
+            services.AddHttpClient<IVkClient, VkClient>()
+                .AddHttpMessageHandler<VkClientHttpHandler>();
+            services.AddSingleton<VkClientHttpHandler>();
+            
             services.AddSingleton<IDistributedLock, DistributedLock>(x =>
                 new DistributedLock(ConnectionMultiplexer.Connect(configuration[RedisConnectionStringLock]).GetDatabase()));
             return services;

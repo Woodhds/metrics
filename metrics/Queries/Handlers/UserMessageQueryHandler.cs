@@ -15,12 +15,12 @@ namespace metrics.Queries.Handlers
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
 
         public UserMessageQueryHandler(
             ITransactionScopeFactory transactionScopeFactory,
             IAuthenticatedUserProvider authenticatedUserProvider,
-            IVkClient vkClient
+            IVkService vkClient
         )
         {
             _transactionScopeFactory = transactionScopeFactory;

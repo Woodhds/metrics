@@ -19,13 +19,13 @@ namespace metrics.Broker.Console.Services
 
     public class RandomLikeService : IRandomLikeService
     {
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
         private readonly ISecurityUserManager _securityUserManager;
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IBackgroundJobService _backgroundJobService;
 
         public RandomLikeService(
-            IVkClient vkClient,
+            IVkService vkClient,
             ISecurityUserManager securityUserManager,
             ITransactionScopeFactory transactionScopeFactory,
             IBackgroundJobService schedulerJobService

@@ -4,7 +4,7 @@ namespace Base.Contracts
 {
     public class VkResponse<T>
     {
-        public VkResponseItems Response { get; set; }
+        public VkResponseItems? Response { get; set; }
 
         public class VkResponseItems
         {

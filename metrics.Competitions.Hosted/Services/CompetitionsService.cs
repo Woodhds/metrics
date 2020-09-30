@@ -16,14 +16,14 @@ namespace metrics.Competitions.Hosted.Services
 {
     public class CompetitionsService : ICompetitionsService
     {
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly CompetitionOptions _competitionOptions;
         private const int Take = 10;
         private readonly ILogger<CompetitionsService> _logger;
 
         public CompetitionsService(
-            IVkClient vkClient,
+            IVkService vkClient,
             IHttpClientFactory httpClientFactory,
             IOptionsMonitor<CompetitionOptions> optionsMonitor,
             ILogger<CompetitionsService> logger

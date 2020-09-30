@@ -11,12 +11,12 @@ namespace metrics.Competitions.Hosted.Services
 {
     public class VkUserCompetitionService : ICompetitionsService
     {
-        private readonly IVkClient _vkClient;
+        private readonly IVkService _vkClient;
         private readonly IVkUserService _vkUserService;
         private readonly ILogger<VkUserCompetitionService> _logger;
 
         public VkUserCompetitionService(
-            IVkClient vkClient,
+            IVkService vkClient,
             IVkUserService vkUserService,
             ILogger<VkUserCompetitionService> logger
         )
