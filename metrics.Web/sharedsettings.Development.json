@@ -5,6 +5,9 @@
     "Configuration": "localhost:6379,password=password",
     "Instance": "UserTokens:"
   },
+  "KafkaConfiguration": {
+    "Servers": "localhost:9092"
+  },
   "AmqpOptions": {
     "Host": "rabbitmq://localhost:5672",
     "UserName": "user",

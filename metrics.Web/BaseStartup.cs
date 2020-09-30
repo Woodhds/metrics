@@ -1,6 +1,7 @@
 ﻿using metrics.Authentication.Options;
 using metrics.Broker;
 using metrics.Broker.Abstractions;
+using metrics.Broker.Kafka;
 using metrics.Broker.Rabbitmq;
 using metrics.Cache;
 using metrics.logging;
@@ -47,7 +48,7 @@ namespace metrics.Web
         protected virtual void ConfigureMessageBroker(IServiceCollection services)
         {
             services.AddMessageBroker(Configuration,
-                (collection, configuration) => new RabbitMqBrokerConfigurationBuilder(configuration, collection),
+                (collection, configuration) => new KafkaBrokerConfigurationBuilder(configuration, services),
                 AddBrokerHandlers);
         }
 

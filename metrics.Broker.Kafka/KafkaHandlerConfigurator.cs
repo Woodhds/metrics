@@ -27,7 +27,7 @@ namespace metrics.Broker.Kafka
             var handler = new KafkaMessageHandler<TEvent>(
                 (IMessageHandler<TEvent>)
                 _serviceProvider.GetService(typeof(IMessageHandler<TEvent>)),
-                _kafkaConfigurationProvider
+                consumer
             );
 
             Task.Run(() => handler.Start());

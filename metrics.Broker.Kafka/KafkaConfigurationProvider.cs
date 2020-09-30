@@ -1,5 +1,7 @@
 ﻿using Confluent.Kafka;
+using Confluent.SchemaRegistry.Serdes;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace metrics.Broker.Kafka
 {
@@ -17,7 +19,8 @@ namespace metrics.Broker.Kafka
             return new ConsumerBuilder<Null, T>(
                     new ConsumerConfig
                     {
-                        BootstrapServers = _options.Value.Servers
+                        BootstrapServers = _options.Value.Servers,
+                        GroupId = nameof(T) + "-group"
                     })
                 .Build();
         }
