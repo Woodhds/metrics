@@ -10,9 +10,9 @@ namespace metrics.Broker.Rabbitmq
         private readonly IBusControl _busControl;
         private readonly IServiceProvider _serviceProvider;
 
-        public HandlerConfigurator(IServiceProvider serviceProvider, IBusControl busControl)
+        public HandlerConfigurator(IServiceCollection serviceProvider, IBusControl busControl)
         {
-            _serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider.BuildServiceProvider();
             _busControl = busControl;
         }
 

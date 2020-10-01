@@ -105,7 +105,7 @@ namespace metrics.Identity
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Identity API", Version = "v1"});
             });
 
-            services.AddMessageBroker(_configuration, (collection, configuration) => new KafkaBrokerConfigurationBuilder(_configuration, services));
+            services.AddMessageBroker(_configuration, (collection, configuration) => new RabbitMqBrokerConfigurationBuilder(_configuration, services));
             services.AddGrpc();
         }
 

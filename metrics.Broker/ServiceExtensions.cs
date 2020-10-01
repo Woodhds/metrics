@@ -18,11 +18,7 @@ namespace metrics.Broker
 
             handlerProvider?.Invoke(hp);
             
-            var builder = configurator(serviceCollection, configuration);
-            
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            
-            var messageBrokerConfig = builder.Build(serviceProvider);
+            var messageBrokerConfig = configurator(serviceCollection, configuration).Build(serviceCollection);
 
             var handlerConfigurator = messageBrokerConfig.HandlerConfigurator;
             

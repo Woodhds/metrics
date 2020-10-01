@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Confluent.Kafka;
 using metrics.Broker.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace metrics.Broker.Kafka
 {
     public class KafkaHandlerConfigurator : IHandlerConfigurator
     {
         private readonly IKafkaConfigurationProvider _kafkaConfigurationProvider;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceCollection _serviceProvider;
 
         public KafkaHandlerConfigurator(
             IKafkaConfigurationProvider kafkaConfigurationProvider,
-            IServiceProvider serviceProvider
+            IServiceCollection serviceProvider
         )
         {
             _kafkaConfigurationProvider = kafkaConfigurationProvider;
@@ -23,6 +23,7 @@ namespace metrics.Broker.Kafka
         {
             var consumer = _kafkaConfigurationProvider.GetConsumerConfig<TEvent>();
             
+            /*
             consumer.Subscribe(nameof(TEvent));
             var handler = new KafkaMessageHandler<TEvent>(
                 (IMessageHandler<TEvent>)
@@ -30,7 +31,7 @@ namespace metrics.Broker.Kafka
                 consumer
             );
 
-            Task.Run(() => handler.Start());
+            Task.Run(() => handler.Start());*/
         }
 
         public void ConfigureCommandConsumer<TEvent>() where TEvent : class

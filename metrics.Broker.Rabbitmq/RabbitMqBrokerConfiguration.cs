@@ -19,12 +19,12 @@ namespace metrics.Broker.Rabbitmq
             _busControl = _options.InMemory ? CreateUsingInMemory() : CreateUsingRabbitmq(_options);
             _messageBroker = new MessageBroker(_busControl);
             serviceCollection.AddSingleton(typeof(IMessageBroker), _ => _messageBroker);
-
+            
             serviceCollection.AddHostedService<MessageBrokerHostedService>();
             serviceCollection.AddSingleton(_busControl);
         }
 
-        public BrokerConfiguration Build(IServiceProvider serviceProvider)
+        public BrokerConfiguration Build(IServiceCollection serviceProvider)
         {
             return new BrokerConfiguration(_messageBroker, new HandlerConfigurator(serviceProvider, _busControl),
                 _options.Host);

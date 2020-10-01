@@ -15,11 +15,12 @@ namespace metrics.Broker.Kafka
             serviceCollection.AddSingleton<IHandlerConfigurator, KafkaHandlerConfigurator>();
         }
 
-        public BrokerConfiguration Build(IServiceProvider serviceProvider)
+        public BrokerConfiguration Build(IServiceCollection serviceProvider)
         {
+            var provider = serviceProvider.BuildServiceProvider();
             return new BrokerConfiguration(
-                serviceProvider.GetRequiredService<IMessageBroker>(),
-                serviceProvider.GetRequiredService<IHandlerConfigurator>(),
+                provider.GetRequiredService<IMessageBroker>(),
+                provider.GetRequiredService<IHandlerConfigurator>(),
                 ""
             );
         }
