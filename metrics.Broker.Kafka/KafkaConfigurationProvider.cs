@@ -1,7 +1,5 @@
 ﻿using Confluent.Kafka;
-using Confluent.SchemaRegistry.Serdes;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace metrics.Broker.Kafka
 {
@@ -22,6 +20,7 @@ namespace metrics.Broker.Kafka
                         BootstrapServers = _options.Value.Servers,
                         GroupId = nameof(T) + "-group"
                     })
+                .SetValueDeserializer(new KafkaSerializer<T>())
                 .Build();
         }
 
@@ -31,6 +30,7 @@ namespace metrics.Broker.Kafka
                 {
                     BootstrapServers = _options.Value.Servers
                 })
+                .SetValueSerializer(new KafkaSerializer<T>())
                 .Build();
         }
     }
