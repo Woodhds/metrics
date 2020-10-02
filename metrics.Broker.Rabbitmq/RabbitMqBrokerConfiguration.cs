@@ -11,9 +11,11 @@ namespace metrics.Broker.Rabbitmq
         private readonly AmqpOptions _options;
         private readonly IBusControl _busControl;
         private readonly IMessageBroker _messageBroker;
+        private readonly IServiceCollection _serviceCollection;
 
         public RabbitMqBrokerConfigurationBuilder(IConfiguration configuration, IServiceCollection serviceCollection)
         {
+            _serviceCollection = serviceCollection;
             _options = new AmqpOptions();
             configuration.GetSection(nameof(AmqpOptions)).Bind(_options);
             _busControl = _options.InMemory ? CreateUsingInMemory() : CreateUsingRabbitmq(_options);
@@ -24,9 +26,9 @@ namespace metrics.Broker.Rabbitmq
             serviceCollection.AddSingleton(_busControl);
         }
 
-        public BrokerConfiguration Build(IServiceCollection serviceProvider)
+        public BrokerConfiguration Build()
         {
-            return new BrokerConfiguration(_messageBroker, new HandlerConfigurator(serviceProvider, _busControl),
+            return new BrokerConfiguration(_messageBroker, new HandlerConfigurator(_serviceCollection, _busControl),
                 _options.Host);
         }
 

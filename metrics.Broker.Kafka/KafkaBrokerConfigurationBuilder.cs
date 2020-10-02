@@ -7,20 +7,23 @@ namespace metrics.Broker.Kafka
 {
     public class KafkaBrokerConfigurationBuilder : IBrokerConfigurationBuilder
     {
+        private readonly IServiceCollection _serviceCollection;
+
         public KafkaBrokerConfigurationBuilder(IConfiguration configuration, IServiceCollection serviceCollection)
         {
+            _serviceCollection = serviceCollection;
             serviceCollection.Configure<KafkaConfiguration>(configuration.GetSection(nameof(KafkaConfiguration)));
             serviceCollection.AddSingleton<IKafkaConfigurationProvider, KafkaConfigurationProvider>();
             serviceCollection.AddSingleton<IMessageBroker, KafkaMessageBroker>();
-            serviceCollection.AddSingleton<IHandlerConfigurator, KafkaHandlerConfigurator>();
+            
         }
 
-        public BrokerConfiguration Build(IServiceCollection serviceProvider)
+        public BrokerConfiguration Build()
         {
-            var provider = serviceProvider.BuildServiceProvider();
+            var provider = _serviceCollection.BuildServiceProvider();
             return new BrokerConfiguration(
                 provider.GetRequiredService<IMessageBroker>(),
-                provider.GetRequiredService<IHandlerConfigurator>(),
+                new KafkaHandlerConfigurator(provider.GetRequiredService<IKafkaConfigurationProvider>(), _serviceCollection), 
                 ""
             );
         }

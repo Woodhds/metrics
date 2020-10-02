@@ -48,7 +48,7 @@ namespace metrics.Web
         protected virtual void ConfigureMessageBroker(IServiceCollection services)
         {
             services.AddMessageBroker(Configuration,
-                (collection, configuration) => new RabbitMqBrokerConfigurationBuilder(configuration, services),
+                (collection, configuration) => new KafkaBrokerConfigurationBuilder(configuration, services),
                 AddBrokerHandlers);
         }
 

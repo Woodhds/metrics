@@ -19,7 +19,7 @@ namespace metrics.Broker
 
         public void RegisterConsumer<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class
         {
-            _serviceCollection.AddScoped<IMessageHandler<TEvent>, THandler>();
+            _serviceCollection.AddSingleton<IMessageHandler<TEvent>, THandler>();
             if (!_consumers.ContainsKey(typeof(TEvent)))
             {
                 _consumers.Add(typeof(TEvent), typeof(THandler));
@@ -28,7 +28,7 @@ namespace metrics.Broker
 
         public void RegisterCommandConsumer<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class
         {
-            _serviceCollection.AddScoped<IMessageHandler<TEvent>, THandler>();
+            _serviceCollection.AddSingleton<IMessageHandler<TEvent>, THandler>();
             if (!_commandConsumers.ContainsKey(typeof(TEvent)))
             {
                 _commandConsumers.Add(typeof(TEvent), typeof(THandler));
