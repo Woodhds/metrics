@@ -23,7 +23,7 @@ namespace metrics.Broker.Kafka
             var provider = _serviceCollection.BuildServiceProvider();
             return new BrokerConfiguration(
                 provider.GetRequiredService<IMessageBroker>(),
-                new KafkaHandlerConfigurator(provider.GetRequiredService<IKafkaConfigurationProvider>(), _serviceCollection), 
+                new KafkaHandlerConfigurator(_serviceCollection), 
                 ""
             );
         }

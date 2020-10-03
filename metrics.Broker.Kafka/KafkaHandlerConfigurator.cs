@@ -5,23 +5,15 @@ namespace metrics.Broker.Kafka
 {
     public class KafkaHandlerConfigurator : IHandlerConfigurator
     {
-        private readonly IKafkaConfigurationProvider _kafkaConfigurationProvider;
         private readonly IServiceCollection _serviceCollection;
 
-        public KafkaHandlerConfigurator(
-            IKafkaConfigurationProvider kafkaConfigurationProvider,
-            IServiceCollection serviceCollection
-        )
+        public KafkaHandlerConfigurator(IServiceCollection serviceCollection)
         {
-            _kafkaConfigurationProvider = kafkaConfigurationProvider;
             _serviceCollection = serviceCollection;
         }
 
         public void ConfigureConsumer<TEvent>() where TEvent : class
         {
-            var consumer = _kafkaConfigurationProvider.GetConsumerConfig<TEvent>();
-            consumer.Subscribe(nameof(TEvent));
-
             _serviceCollection.AddHostedService<KafkaHostedHandler<TEvent>>();
         }
 
