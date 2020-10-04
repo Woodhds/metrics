@@ -1,0 +1,7 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "metrics.Broker.Events";
+
+message ExecuteNextRepost {
+  int32 UserId = 1;
+}

@@ -8,7 +8,7 @@ using Base.Contracts;
 using Base.Contracts.Options;
 using metrics.Authentication.Infrastructure;
 using metrics.Broker.Abstractions;
-using metrics.Broker.Events.Events;
+using metrics.Broker.Events;
 using metrics.Serialization.Abstractions;
 using metrics.Services.Abstractions;
 using metrics.Services.Utils;

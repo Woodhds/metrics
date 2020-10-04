@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Base.Contracts.Options;
 using metrics.Authentication.Services.Abstract;
 using metrics.Broker.Abstractions;
-using metrics.Broker.Events.Events;
+using metrics.Broker.Events;
 using metrics.Identity.Data.Models;
 using metrics.Identity.Data.Stores;
 using Microsoft.AspNetCore.Authentication;

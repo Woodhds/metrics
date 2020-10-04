@@ -4,7 +4,7 @@ using Confluent.Kafka;
 
 namespace metrics.Broker.Kafka
 {
-    public class KafkaSerializer<T> : ISerializer<T>, IDeserializer<T>
+    public class KafkaJsonSerializer<T> : ISerializer<T>, IDeserializer<T>
     {
         public byte[] Serialize(T data, SerializationContext context)
         {

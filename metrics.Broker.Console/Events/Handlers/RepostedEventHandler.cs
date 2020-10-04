@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Broker.Abstractions;
-using metrics.Broker.Events.Events;
+using metrics.Broker.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 
@@ -47,10 +47,8 @@ namespace metrics.Broker.Console.Events.Handlers
             await scope.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
 
             await scope.CommitAsync(token);
-            await Task.WhenAll(
-                _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token),
-                _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token)
-            );
+            await _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token);
+            await _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token);
         }
     }
 }

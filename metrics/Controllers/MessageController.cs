@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Broker.Abstractions;
-using metrics.Broker.Events.Events;
+using metrics.Broker.Events;
 using metrics.Events;
 using metrics.EventSourcing.Abstractions.Query;
 using metrics.Queries;
@@ -49,11 +50,15 @@ namespace metrics.Controllers
         {
             try
             {
-                await _messageBroker.SendAsync(new CreateRepostGroup
+                
+                var message = new CreateRepostGroup
                 {
-                    Reposts = reposts,
                     UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId()
-                });
+                };
+                
+                message.Reposts.AddRange(reposts.Select(f => new VkRepostGroup { Id = f.Id, OwnerId = f.OwnerId}));
+                
+                await _messageBroker.SendAsync(message);
 
                 return Ok(true);
             }

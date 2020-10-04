@@ -12,17 +12,17 @@ namespace metrics.Broker.Kafka
             _serviceCollection = serviceCollection;
         }
 
-        public void ConfigureConsumer<TEvent>() where TEvent : class
+        public void ConfigureConsumer<TEvent>() where TEvent : class, new()
         {
             _serviceCollection.AddHostedService<KafkaHostedHandler<TEvent>>();
         }
 
-        public void ConfigureCommandConsumer<TEvent>() where TEvent : class
+        public void ConfigureCommandConsumer<TEvent>() where TEvent : class, new()
         {
             ConfigureConsumer<TEvent>();
         }
 
-        public void ConfigureCommand<TCommand>(string host) where TCommand : class
+        public void ConfigureCommand<TCommand>(string host) where TCommand : class, new()
         {
         }
     }

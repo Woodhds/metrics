@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using metrics.Broker.Abstractions;
-using metrics.Broker.Events.Events;
+using metrics.Broker.Events;
 using metrics.Notification.SignalR.Hubs;
 using metrics.Services.Concrete;
 using Microsoft.AspNetCore.SignalR;

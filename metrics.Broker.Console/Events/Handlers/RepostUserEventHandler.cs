@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Console.Services;
-using metrics.Broker.Events.Events;
+using metrics.Broker.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;

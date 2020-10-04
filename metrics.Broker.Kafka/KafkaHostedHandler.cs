@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace metrics.Broker.Kafka
 {
-    public class KafkaHostedHandler<TEvent> : BackgroundService where TEvent : class
+    public class KafkaHostedHandler<TEvent> : BackgroundService where TEvent : class, new()
     {
         private readonly IMessageHandler<TEvent> _messageHandler;
         private readonly ILogger<KafkaHostedHandler<TEvent>> _logger;

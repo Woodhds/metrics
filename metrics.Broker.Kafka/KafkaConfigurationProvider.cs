@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using Confluent.SchemaRegistry.Serdes;
 using Microsoft.Extensions.Options;
 
 namespace metrics.Broker.Kafka
@@ -12,7 +13,7 @@ namespace metrics.Broker.Kafka
             _options = options;
         }
 
-        public IConsumer<Null, T> GetConsumerConfig<T>()
+        public IConsumer<Null, T> GetConsumerConfig<T>() where T : class, new()
         {
             return new ConsumerBuilder<Null, T>(
                     new ConsumerConfig
@@ -21,7 +22,7 @@ namespace metrics.Broker.Kafka
                         GroupId = typeof(T).Name + "-group",
                         AutoOffsetReset = AutoOffsetReset.Earliest
                     })
-                .SetValueDeserializer(new KafkaSerializer<T>())
+                .SetValueDeserializer(new KafkaJsonSerializer<T>())
                 .Build();
         }
 
@@ -31,7 +32,7 @@ namespace metrics.Broker.Kafka
                 {
                     BootstrapServers = _options.Value.Servers
                 })
-                .SetValueSerializer(new KafkaSerializer<T>())
+                .SetValueSerializer(new KafkaJsonSerializer<T>())
                 .Build();
         }
     }

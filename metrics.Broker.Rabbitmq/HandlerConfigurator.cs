@@ -16,7 +16,7 @@ namespace metrics.Broker.Rabbitmq
             _busControl = busControl;
         }
 
-        public void ConfigureConsumer<TEvent>() where TEvent : class
+        public void ConfigureConsumer<TEvent>() where TEvent : class, new()
         {
             _busControl.ConnectReceiveEndpoint(typeof(TEvent).Name + "-queue", configurator =>
             {
@@ -26,7 +26,7 @@ namespace metrics.Broker.Rabbitmq
             });
         }
 
-        public void ConfigureCommandConsumer<TEvent>() where TEvent : class
+        public void ConfigureCommandConsumer<TEvent>() where TEvent : class, new()
         {
             _busControl.ConnectReceiveEndpoint(typeof(TEvent).Name, configurator =>
             {
@@ -36,7 +36,7 @@ namespace metrics.Broker.Rabbitmq
             });
         }
 
-        public void ConfigureCommand<TCommand>(string host) where TCommand: class
+        public void ConfigureCommand<TCommand>(string host) where TCommand: class, new()
         {
             if (Uri.TryCreate(host + "/" + typeof(TCommand).Name, UriKind.Absolute, out var uri))
             {

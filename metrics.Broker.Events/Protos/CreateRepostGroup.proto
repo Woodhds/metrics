@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "metrics.Broker.Events";
+
+message CreateRepostGroup {
+  int32 UserId = 1;
+  repeated VkRepostGroup Reposts = 2;
+}
+
+message VkRepostGroup {
+  int32 OwnerId = 1;
+  int32 Id = 2;
+}
