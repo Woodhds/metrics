@@ -8,7 +8,7 @@ using metrics.Cache.Abstractions;
 
 namespace metrics.Broker.Console.Events.Handlers
 {
-    public class LoginEventHandler : IMessageHandler<ILoginEvent>
+    public class LoginEventHandler : IMessageHandler<LoginEvent>
     {
         private readonly ICachingService _cachingService;
 
@@ -17,7 +17,7 @@ namespace metrics.Broker.Console.Events.Handlers
             _cachingService = cachingService;
         }
 
-        public Task HandleAsync([NotNull] ILoginEvent obj, CancellationToken token = default)
+        public Task HandleAsync([NotNull] LoginEvent obj, CancellationToken token = default)
         {
             return _cachingService.SetAsync(obj.UserId.ToString(), obj.Token, TimeSpan.FromHours(6), token);
         }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Base.Contracts;
+using Base.Contracts.Events;
 using metrics.Broker.Abstractions;
 using metrics.Cache.Abstractions;
 using metrics.Identity.Client.Abstractions;
 
 namespace metrics.Broker.Console.Events.Handlers
 {
-    public class UserTokenChangedHandler : IMessageHandler<IUserTokenChanged>
+    public class UserTokenChangedHandler : IMessageHandler<UserTokenChanged>
     {
         private readonly ICachingService _cachingService;
         private readonly IUserTokenKeyProvider _userTokenKeyProvider;
@@ -19,7 +19,7 @@ namespace metrics.Broker.Console.Events.Handlers
             _userTokenKeyProvider = userTokenKeyProvider;
         }
 
-        public Task HandleAsync(IUserTokenChanged obj, CancellationToken token = default)
+        public Task HandleAsync(UserTokenChanged obj, CancellationToken token = default)
         {
             return _cachingService.SetAsync(
                 _userTokenKeyProvider.GetKey(obj.UserId),

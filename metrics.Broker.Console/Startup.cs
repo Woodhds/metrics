@@ -1,4 +1,5 @@
 ﻿using Base.Contracts;
+using Base.Contracts.Events;
 using Base.Contracts.Options;
 using Hangfire;
 using metrics.BackgroundJobs;
@@ -32,15 +33,15 @@ namespace metrics.Broker.Console
 
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
         {
-            provider.RegisterConsumer<ILoginEvent, LoginEventHandler>();
-            provider.RegisterConsumer<IUserTokenRemoved, UserTokenRemovedHandler>();
-            provider.RegisterConsumer<IUserTokenChanged, UserTokenChangedHandler>();
-            provider.RegisterCommandConsumer<ICreateRepostGroup, RepostEventGroupCreatedHandler>();
-            provider.RegisterCommandConsumer<IRepostCreated, RepostedEventHandler>();
-            provider.RegisterCommandConsumer<IExecuteNextRepost, RepostUserEventHandler>();
+            provider.RegisterConsumer<LoginEvent, LoginEventHandler>();
+            provider.RegisterConsumer<UserTokenRemoved, UserTokenRemovedHandler>();
+            provider.RegisterConsumer<UserTokenChanged, UserTokenChangedHandler>();
+            provider.RegisterCommandConsumer<CreateRepostGroup, RepostEventGroupCreatedHandler>();
+            provider.RegisterCommandConsumer<RepostCreated, RepostedEventHandler>();
+            provider.RegisterCommandConsumer<ExecuteNextRepost, RepostUserEventHandler>();
             
-            provider.RegisterCommand<IExecuteNextRepost>();
-            provider.RegisterCommand<IRepostCreated>();
+            provider.RegisterCommand<ExecuteNextRepost>();
+            provider.RegisterCommand<RepostCreated>();
         }
 
         protected override void ConfigureApplicationServices(IServiceCollection services)

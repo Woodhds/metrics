@@ -3,14 +3,7 @@ using Base.Contracts;
 
 namespace metrics.Broker.Events.Events
 {
-    public interface ICreateRepostGroup
-    {
-        int UserId { get; }
-
-        IEnumerable<VkRepostViewModel> Reposts { get; }
-    }
-    
-    public class CreateRepostGroup : ICreateRepostGroup
+    public class CreateRepostGroup
     {
         public int UserId { get; set; }
 

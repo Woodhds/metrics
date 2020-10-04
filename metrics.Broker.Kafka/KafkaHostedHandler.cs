@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 using metrics.Broker.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,10 +11,10 @@ namespace metrics.Broker.Kafka
 {
     public class KafkaHostedHandler<TEvent> : BackgroundService where TEvent : class
     {
-        private readonly IKafkaConfigurationProvider _kafkaConfigurationProvider;
         private readonly IMessageHandler<TEvent> _messageHandler;
         private readonly ILogger<KafkaHostedHandler<TEvent>> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IConsumer<Null, TEvent> _consumer;
 
         public KafkaHostedHandler(
             IKafkaConfigurationProvider kafkaConfigurationProvider,
@@ -22,30 +23,28 @@ namespace metrics.Broker.Kafka
             IServiceProvider serviceProvider
         )
         {
-            _kafkaConfigurationProvider = kafkaConfigurationProvider;
             _messageHandler = messageHandler;
             _logger = logger;
+            _consumer = kafkaConfigurationProvider.GetConsumerConfig<TEvent>();
             _serviceProvider = serviceProvider;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            using var consumer = _kafkaConfigurationProvider.GetConsumerConfig<TEvent>();
-            consumer.Subscribe(nameof(TEvent));
+            _consumer.Subscribe(typeof(TEvent).Name);
 
             return base.StartAsync(cancellationToken);
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await Task.Run(async () =>
+            Task.Run(async () =>
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     try
                     {
-                        using var consumer = _kafkaConfigurationProvider.GetConsumerConfig<TEvent>();
-                        var consumption = consumer.Consume(stoppingToken);
+                        var consumption = _consumer.Consume(stoppingToken);
                         if (consumption.Message.Value != null)
                         {
                             using var scope = _serviceProvider.CreateScope();
@@ -58,12 +57,14 @@ namespace metrics.Broker.Kafka
                         _logger.LogWarning(e.Message);
                     }
                 }
-            }, stoppingToken).ConfigureAwait(false);
+            }, stoppingToken);
+            
+            return Task.CompletedTask;
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _kafkaConfigurationProvider.GetConsumerConfig<TEvent>().Dispose();
+            _consumer.Unsubscribe();
             return base.StopAsync(cancellationToken);
         }
     }

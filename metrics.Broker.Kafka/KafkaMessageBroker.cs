@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using metrics.Broker.Abstractions;
@@ -17,7 +18,7 @@ namespace metrics.Broker.Kafka
         public Task PublishAsync<T>(T obj, CancellationToken token = default) where T : class
         {
             return _kafkaConfigurationProvider.GetProducerConfig<T>()
-                .ProduceAsync(nameof(T), new Message<Null, T> {Value = obj}, token);
+                .ProduceAsync(typeof(T).Name, new Message<Null, T> {Value = obj}, token);
         }
 
         public Task SendAsync<T>(T obj, CancellationToken token = default) where T : class

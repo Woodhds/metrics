@@ -18,7 +18,8 @@ namespace metrics.Broker.Kafka
                     new ConsumerConfig
                     {
                         BootstrapServers = _options.Value.Servers,
-                        GroupId = nameof(T) + "-group"
+                        GroupId = typeof(T).Name + "-group",
+                        AutoOffsetReset = AutoOffsetReset.Earliest
                     })
                 .SetValueDeserializer(new KafkaSerializer<T>())
                 .Build();

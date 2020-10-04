@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
+using Base.Contracts.Events;
 using metrics.Broker.Abstractions;
 using metrics.Identity.Data.Models;
 using metrics.Identity.Data.Stores;

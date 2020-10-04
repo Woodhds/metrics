@@ -41,11 +41,11 @@ namespace metrics
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
         {
             provider.RegisterConsumer<NotifyUserEvent, NotifyUserEventHandler>();
-            provider.RegisterCommandConsumer<ISetMessageTypeEvent, SetTypeEventHandler>();
+            provider.RegisterCommandConsumer<SetMessageTypeEvent, SetTypeEventHandler>();
 
-            provider.RegisterCommand<ICreateRepostGroup>();
-            provider.RegisterCommand<IRepostCreated>();
-            provider.RegisterCommand<ISetMessageTypeEvent>();
+            provider.RegisterCommand<CreateRepostGroup>();
+            provider.RegisterCommand<RepostCreated>();
+            provider.RegisterCommand<SetMessageTypeEvent>();
         }
 
         protected override void ConfigureEndpoints(IEndpointRouteBuilder endpoints)

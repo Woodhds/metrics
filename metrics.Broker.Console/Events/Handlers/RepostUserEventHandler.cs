@@ -13,7 +13,7 @@ using IBackgroundJobService = metrics.BackgroundJobs.Abstractions.IBackgroundJob
 
 namespace metrics.Broker.Console.Events.Handlers
 {
-    public class RepostUserEventHandler : IMessageHandler<IExecuteNextRepost>
+    public class RepostUserEventHandler : IMessageHandler<ExecuteNextRepost>
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IBackgroundJobService _jobService;
@@ -30,7 +30,7 @@ namespace metrics.Broker.Console.Events.Handlers
             _logger = logger;
         }
 
-        public async Task HandleAsync(IExecuteNextRepost obj, CancellationToken token = default)
+        public async Task HandleAsync(ExecuteNextRepost obj, CancellationToken token = default)
         {
             try
             {

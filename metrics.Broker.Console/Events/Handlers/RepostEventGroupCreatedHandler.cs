@@ -6,7 +6,7 @@ using metrics.Services.Concrete;
 
 namespace metrics.Broker.Console.Events.Handlers
 {
-    public class RepostEventGroupCreatedHandler : IMessageHandler<ICreateRepostGroup>
+    public class RepostEventGroupCreatedHandler : IMessageHandler<CreateRepostGroup>
     {
         private readonly IUserRepostedService _repostCacheAccessor;
         private readonly IMessageBroker _messageBroker;
@@ -17,7 +17,7 @@ namespace metrics.Broker.Console.Events.Handlers
             _messageBroker = messageBroker;
         }
 
-        public async Task HandleAsync(ICreateRepostGroup obj, CancellationToken token = default)
+        public async Task HandleAsync(CreateRepostGroup obj, CancellationToken token = default)
         {
             await _repostCacheAccessor.SetAsync(obj.UserId, obj.Reposts);
             await _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token);

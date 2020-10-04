@@ -17,7 +17,7 @@ namespace metrics.Broker
             _serviceCollection = serviceCollection;
         }
 
-        public void RegisterConsumer<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class
+        public void RegisterConsumer<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class, new()
         {
             _serviceCollection.AddSingleton<IMessageHandler<TEvent>, THandler>();
             if (!_consumers.ContainsKey(typeof(TEvent)))
@@ -26,7 +26,7 @@ namespace metrics.Broker
             }
         }
 
-        public void RegisterCommandConsumer<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class
+        public void RegisterCommandConsumer<TEvent, THandler>() where THandler : class, IMessageHandler<TEvent> where TEvent : class, new()
         {
             _serviceCollection.AddSingleton<IMessageHandler<TEvent>, THandler>();
             if (!_commandConsumers.ContainsKey(typeof(TEvent)))
@@ -50,7 +50,7 @@ namespace metrics.Broker
             return _commandConsumers.Select(f => (f.Key, f.Value));
         }
 
-        public void RegisterCommand<TCommand>() where TCommand : class
+        public void RegisterCommand<TCommand>() where TCommand : class, new()
         {
             _commands.Add(typeof(TCommand));
         }

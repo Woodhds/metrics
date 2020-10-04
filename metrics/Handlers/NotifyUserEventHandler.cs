@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace metrics.Handlers
 {
-    public class NotifyUserEventHandler : IMessageHandler<INotifyUserEvent>
+    public class NotifyUserEventHandler : IMessageHandler<NotifyUserEvent>
     {
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IUserRepostedService _repostCacheAccessor;
@@ -22,7 +22,7 @@ namespace metrics.Handlers
             _repostCacheAccessor = repostCacheAccessor;
         }
 
-        public async Task HandleAsync(INotifyUserEvent obj, CancellationToken token = default)
+        public async Task HandleAsync(NotifyUserEvent obj, CancellationToken token = default)
         {
             await _hubContext.Clients.User(obj.UserId.ToString())
                 .SendAsync("Count", await _repostCacheAccessor.GetCountAsync(obj.UserId), token);
