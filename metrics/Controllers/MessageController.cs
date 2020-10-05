@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Base.Contracts;
+using Base.Contracts.Events;
 using metrics.Broker.Abstractions;
 using metrics.Broker.Events;
-using metrics.Events;
 using metrics.EventSourcing.Abstractions.Query;
 using metrics.Queries;
 using Microsoft.Extensions.Logging;
@@ -84,7 +84,7 @@ namespace metrics.Controllers
         }
 
         [HttpPost("type")]
-        public async Task<IActionResult> SetType([FromBody] SetMessageTypeEvent @event)
+        public async Task<IActionResult> SetType([FromBody] SetMessageType @event)
         {
             await _messageBroker.SendAsync(@event);
             return Ok();

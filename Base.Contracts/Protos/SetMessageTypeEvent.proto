@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Base.Contracts.Events";
+
+message SetMessageType {
+  int32 MessageId = 1;
+  int32 OwnerId = 2;
+  int32 MessageCategory = 3;
+}

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Base.Contracts.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using metrics.Options;
@@ -10,7 +11,6 @@ using metrics.Data.Abstractions;
 using metrics.Data.Common;
 using metrics.Data.Common.Infrastructure.Configuration;
 using metrics.Data.Sql;
-using metrics.Events;
 using metrics.EventSourcing.Extensions;
 using metrics.Handlers;
 using metrics.Identity.Client;
@@ -41,11 +41,11 @@ namespace metrics
         protected override void AddBrokerHandlers(IMessageHandlerProvider provider)
         {
             provider.RegisterConsumer<NotifyUserEvent, NotifyUserEventHandler>();
-            provider.RegisterCommandConsumer<SetMessageTypeEvent, SetTypeEventHandler>();
+            provider.RegisterCommandConsumer<SetMessageType, SetTypeEventHandler>();
 
             provider.RegisterCommand<CreateRepostGroup>();
             provider.RegisterCommand<RepostCreated>();
-            provider.RegisterCommand<SetMessageTypeEvent>();
+            provider.RegisterCommand<SetMessageType>();
         }
 
         protected override void ConfigureEndpoints(IEndpointRouteBuilder endpoints)
