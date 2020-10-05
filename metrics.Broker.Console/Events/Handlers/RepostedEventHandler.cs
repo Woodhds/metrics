@@ -7,6 +7,7 @@ using metrics.Broker.Abstractions;
 using metrics.Broker.Events;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Broker.Console.Events.Handlers
 {
@@ -28,13 +29,13 @@ namespace metrics.Broker.Console.Events.Handlers
 
             using var scope = await _transactionScopeFactory.CreateAsync(token);
 
-            var message = scope.Query<VkRepost>()
-                .FirstOrDefault(q =>
+            var message = await scope.Query<VkRepost>()
+                .Where(q =>
                     q.UserId == obj.UserId &&
                     obj.OwnerId == q.OwnerId &&
                     q.Status == VkRepostStatus.Pending || q.Status == VkRepostStatus.New &&
                     q.MessageId == obj.Id
-                );
+                ).FirstOrDefaultAsync(token);
 
             if (message == null)
             {

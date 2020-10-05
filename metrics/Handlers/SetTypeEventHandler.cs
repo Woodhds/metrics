@@ -5,6 +5,7 @@ using Base.Contracts.Events;
 using metrics.Broker.Abstractions;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Handlers
 {
@@ -21,8 +22,10 @@ namespace metrics.Handlers
         {
             var transaction = await _transactionScopeFactory.CreateAsync(token);
 
-            var message = transaction.Query<MessageVk>()
-                .FirstOrDefault(a => a.MessageId == obj.MessageId && a.OwnerId == obj.OwnerId);
+            var message = await transaction.Query<MessageVk>()
+                .Where(a => a.MessageId == obj.MessageId && a.OwnerId == obj.OwnerId)
+                .FirstOrDefaultAsync(token);
+            
             if (message == null)
             {
                 await transaction.GetRepository<MessageVk>().CreateAsync(new MessageVk
