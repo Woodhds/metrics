@@ -22,17 +22,17 @@ namespace metrics.Broker.Kafka
                         GroupId = typeof(T).Name + "-group",
                         AutoOffsetReset = AutoOffsetReset.Earliest
                     })
-                .SetValueDeserializer(new KafkaJsonSerializer<T>())
+                .SetValueDeserializer(new KafkaProtobufSerializer<T>())
                 .Build();
         }
 
-        public IProducer<Null, T> GetProducerConfig<T>()
+        public IProducer<Null, T> GetProducerConfig<T>() where T: class, new()
         {
             return new ProducerBuilder<Null, T>(new ProducerConfig
                 {
                     BootstrapServers = _options.Value.Servers
                 })
-                .SetValueSerializer(new KafkaJsonSerializer<T>())
+                .SetValueSerializer(new KafkaProtobufSerializer<T>())
                 .Build();
         }
     }

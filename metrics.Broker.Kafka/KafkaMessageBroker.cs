@@ -14,13 +14,13 @@ namespace metrics.Broker.Kafka
             _kafkaConfigurationProvider = kafkaConfigurationProvider;
         }
 
-        public Task PublishAsync<T>(T obj, CancellationToken token = default) where T : class
+        public Task PublishAsync<T>(T obj, CancellationToken token = default) where T : class, new()
         {
             return _kafkaConfigurationProvider.GetProducerConfig<T>()
                 .ProduceAsync(typeof(T).Name, new Message<Null, T> {Value = obj}, token);
         }
 
-        public Task SendAsync<T>(T obj, CancellationToken token = default) where T : class
+        public Task SendAsync<T>(T obj, CancellationToken token = default) where T : class, new()
         {
             return PublishAsync(obj, token);
         }

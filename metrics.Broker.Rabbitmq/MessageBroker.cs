@@ -14,12 +14,12 @@ namespace metrics.Broker.Rabbitmq
             _bus = bus;
         }
 
-        public Task PublishAsync<T>(T obj, CancellationToken token = default) where T : class
+        public Task PublishAsync<T>(T obj, CancellationToken token = default) where T : class, new()
         {
             return _bus.Publish(obj, token);
         }
 
-        public Task SendAsync<T>(T obj, CancellationToken token = default) where T : class
+        public Task SendAsync<T>(T obj, CancellationToken token = default) where T : class, new()
         {
             return _bus.Send(obj, token);
         }
