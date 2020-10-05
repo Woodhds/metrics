@@ -1,0 +1,8 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Base.Contracts.Events";
+
+message UserTokenRemoved{
+  int32 UserId = 1;
+  string Name = 2;
+}
