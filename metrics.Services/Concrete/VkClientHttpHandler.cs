@@ -30,10 +30,11 @@ namespace metrics.Services.Concrete
             _authenticatedUserProvider = authenticatedUserProvider;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-            CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
         {
-            InnerHandler = null!;
             var url = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "v",
                 _vkontakteOptions.Value.ApiVersion);
             url = QueryHelpers.AddQueryString(url, "access_token", await _vkTokenAccessor.GetTokenAsync());

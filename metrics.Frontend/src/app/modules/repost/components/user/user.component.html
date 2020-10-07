@@ -1,6 +1,6 @@
 <mat-expansion-panel [expanded]="true">
   <mat-expansion-panel-header>
-    <mat-panel-title class="mat-h3"> Поиск </mat-panel-title>
+    <mat-panel-title class="mat-h3"> Поиск</mat-panel-title>
   </mat-expansion-panel-header>
   <div class="flex flex-wrap">
     <form class="w-1/2" [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -35,10 +35,10 @@
       >
         Репост всех
         <span
-          style="top:-0.4rem;right:-0.4rem;"
+          style="top: -0.4rem; right: -0.4rem"
           class="text-white w-6 h-6 bg-red-500 rounded-full absolute leading-7"
           *ngIf="selectedMessages.length"
-        >{{ selectedMessages.length }}</span
+          >{{ selectedMessages.length }}</span
         >
       </button>
     </div>
@@ -122,7 +122,7 @@
       </mat-card-footer>
       <mat-card-actions>
         <button mat-button (click)="like(message.OwnerId, message.Id)">
-          <mat-icon color="primary">thumb_up </mat-icon>
+          <mat-icon color="primary">thumb_up</mat-icon>
           {{ message.LikesCount }}
         </button>
         <button mat-button (click)="repost(message.OwnerId, message.Id)">

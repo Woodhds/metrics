@@ -37,7 +37,7 @@ namespace metrics.Services.Extensions
             services.AddSingleton<IVkLikeService, VkLikeService>();
             services.AddSingleton<IVkUserService, VkUserService>();
             services.AddSingleton<IVkWallService, VkWallService>();
-            services.AddSingleton<VkClientHttpHandler>();
+            services.AddTransient<VkClientHttpHandler>();
             
             services.AddSingleton<IDistributedLock, DistributedLock>(x =>
                 new DistributedLock(ConnectionMultiplexer.Connect(configuration[RedisConnectionStringLock]).GetDatabase()));
