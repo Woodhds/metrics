@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Data.Abstractions;
 using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Services.Concrete
 {
-    public class VkUserService : IVkUserService
+    public class UserService : IUserService
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
-        private readonly IVkService _vkClient;
+        private readonly IVkUserService _vkClient;
 
-        public VkUserService(IVkService vkClient, ITransactionScopeFactory transactionScopeFactory)
+        public UserService(IVkUserService vkClient, ITransactionScopeFactory transactionScopeFactory)
         {
             _vkClient = vkClient;
             _transactionScopeFactory = transactionScopeFactory;

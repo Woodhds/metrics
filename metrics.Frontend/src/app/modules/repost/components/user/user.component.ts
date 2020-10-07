@@ -1,12 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { VkUserService } from "../../services/vk-user.service";
 import { finalize } from "rxjs/operators";
 import { VkMessage, VkRepostModel } from "../../models/VkMessageModel";
 import { VkMessageService } from "../../services/vk-message.service";
 import { PageEvent } from "@angular/material/paginator";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import VkUserModel from "../../models/VkUserModel";
 import { Message } from "../../models/Message";
 import { MessageCategoryService } from "../../services/message-category.service";
 import { DataSourceResponse } from "../../models/DataSourceResponse";
@@ -25,12 +23,9 @@ export class UserComponent implements OnInit {
   pageSize = 80;
   total = 0;
   pageSizeOptions: Array<number> = [20, 40, 60, 80, 100, 200];
-  timeout = 30;
-  public users: VkUserModel[];
   public categories: Message[];
 
   constructor(
-    private userService: VkUserService,
     private fb: FormBuilder,
     private vkMessageService: VkMessageService,
     private messageService: MessageCategoryService
@@ -39,11 +34,6 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       search: "",
-      user: "",
-    });
-
-    this.userService.getUsers().subscribe((r) => {
-      this.users = r;
     });
 
     this.messageService
@@ -55,14 +45,8 @@ export class UserComponent implements OnInit {
 
   onSubmit() {
     this.loading = true;
-    const user = this.form.get("user").value;
     this.vkMessageService
-      .get(
-        this.page,
-        this.pageSize,
-        this.form.get("search").value,
-        user ? (user as VkUserModel).Id.toString() : ""
-      )
+      .get(this.page, this.pageSize, this.form.get("search").value)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((data) => {
         this.messages = data.Data;
@@ -75,8 +59,7 @@ export class UserComponent implements OnInit {
       (a) => a.OwnerId === ownerId && a.Id === id
     );
     if (message) {
-      this.vkMessageService.like(ownerId, id).subscribe(() => {
-      });
+      this.vkMessageService.like(ownerId, id).subscribe(() => {});
     }
   }
 
@@ -87,8 +70,7 @@ export class UserComponent implements OnInit {
     if (message) {
       this.vkMessageService
         .repost([new VkRepostModel(ownerId, id)])
-        .subscribe(() => {
-        });
+        .subscribe(() => {});
     }
   }
 
@@ -105,8 +87,7 @@ export class UserComponent implements OnInit {
   repostAll() {
     this.vkMessageService
       .repost(
-        this.selectedMessages.map((x) => new VkRepostModel(x.OwnerId, x.Id)),
-        this.timeout
+        this.selectedMessages.map((x) => new VkRepostModel(x.OwnerId, x.Id))
       )
       .subscribe(() => {});
   }
@@ -119,21 +100,8 @@ export class UserComponent implements OnInit {
       );
   }
 
-  toDate(date: string) : string {
+  toDate(date: string): string {
     return new Date(date).toLocaleString();
-  }
-
-  sliderChange(value) {
-    this.timeout = value;
-  }
-
-  displayFn(user: VkUserModel): string {
-    return user ? user.FullName : "";
-  }
-
-  clearUser(e: MouseEvent) {
-    e.preventDefault();
-    this.form.controls.user.setValue("");
   }
 
   setType(id: number, ownerId: number, ev: MatSelectChange) {

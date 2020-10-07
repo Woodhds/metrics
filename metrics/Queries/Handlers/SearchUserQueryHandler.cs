@@ -11,9 +11,9 @@ namespace metrics.Queries.Handlers
 {
     public class SearchUserQueryHandler : IQueryHandler<SearchUserQuery, IEnumerable<VkUserModel>>
     {
-        private readonly IVkUserService _vkUserService;
+        private readonly IUserService _vkUserService;
 
-        public SearchUserQueryHandler(IVkUserService vkUserService)
+        public SearchUserQueryHandler(IUserService vkUserService)
         {
             _vkUserService = vkUserService;
         }

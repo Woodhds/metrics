@@ -17,9 +17,9 @@ namespace metrics.Queries.Handlers
 
         public Task<DataSourceResponseModel> ExecuteAsync(MessageSearchQuery query, CancellationToken token = default)
         {
-            var (page, pageSize, user, search) = query;
+            var (page, pageSize, search) = query;
             
-            return _vkMessageService.GetMessages(page, pageSize, search, user);
+            return _vkMessageService.GetMessages(page, pageSize, search);
         }
     }
 }

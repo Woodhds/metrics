@@ -8,6 +8,7 @@ using metrics.BackgroundJobs.Abstractions;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Broker.Console.Services
@@ -19,22 +20,25 @@ namespace metrics.Broker.Console.Services
 
     public class RandomLikeService : IRandomLikeService
     {
-        private readonly IVkService _vkClient;
+        private readonly IVkWallService _vkClient;
         private readonly ISecurityUserManager _securityUserManager;
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IBackgroundJobService _backgroundJobService;
+        private readonly IVkLikeService _vkLikeService;
 
         public RandomLikeService(
-            IVkService vkClient,
+            IVkWallService vkClient,
             ISecurityUserManager securityUserManager,
             ITransactionScopeFactory transactionScopeFactory,
-            IBackgroundJobService schedulerJobService
+            IBackgroundJobService schedulerJobService,
+            IVkLikeService vkLikeService
         )
         {
             _vkClient = vkClient;
             _securityUserManager = securityUserManager;
             _transactionScopeFactory = transactionScopeFactory;
             _backgroundJobService = schedulerJobService;
+            _vkLikeService = vkLikeService;
         }
 
         public async Task ExecuteRandomLike(int userId)
@@ -57,7 +61,7 @@ namespace metrics.Broker.Console.Services
                 if (post != default && !(post.Likes?.User_Likes ?? true))
                 {
                     await Task.Delay(300);
-                    await _vkClient.Like(new VkRepostViewModel {Id = post.Id, OwnerId = post.OwnerId});
+                    await _vkLikeService.Like(new VkRepostViewModel {Id = post.Id, OwnerId = post.OwnerId});
                 }
 
                 _backgroundJobService.Schedule<IRandomLikeService>(x => x.ExecuteRandomLike(userId),

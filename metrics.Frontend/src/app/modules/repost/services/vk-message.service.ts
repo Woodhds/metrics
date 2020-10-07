@@ -16,8 +16,7 @@ export class VkMessageService {
   public get(
     page: number = 1,
     pageSize: number = 50,
-    search: string = "",
-    user: string = ""
+    search: string = ""
   ): Observable<DataSourceResponse<VkMessage>> {
     return this.httpClient.get<DataSourceResponse<VkMessage>>(
       `${this.routePrefix}/user`,
@@ -25,16 +24,13 @@ export class VkMessageService {
         params: new HttpParams()
           .set("page", page.toString())
           .set("pageSize", pageSize.toString())
-          .set("search", search)
-          .set("user", user),
+          .set("search", search),
       }
     );
   }
 
-  public repost(model: VkRepostModel[], timeout: number = 0) {
-    return this.httpClient.post(`${this.routePrefix}/repost`, model, {
-      params: new HttpParams().set("timeout", String(timeout)),
-    });
+  public repost(model: VkRepostModel[]) {
+    return this.httpClient.post(`${this.routePrefix}/repost`, model);
   }
 
   public like(owner_id: number, id: number) {

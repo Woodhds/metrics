@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
@@ -16,8 +15,10 @@ namespace metrics.Controllers
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IQueryProcessor _queryProcessor;
 
-        public MessageCategoryController(ITransactionScopeFactory transactionScopeFactory,
-            IQueryProcessor queryProcessor)
+        public MessageCategoryController(
+            ITransactionScopeFactory transactionScopeFactory,
+            IQueryProcessor queryProcessor
+        )
         {
             _transactionScopeFactory = transactionScopeFactory;
             _queryProcessor = queryProcessor;
@@ -42,7 +43,7 @@ namespace metrics.Controllers
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]
-        public async Task<DataSourceResponseModel> GetTypes([FromRoute]MessageCategoryTypesQuery query)
+        public async Task<DataSourceResponseModel> GetTypes([FromRoute] MessageCategoryTypesQuery query)
         {
             return await _queryProcessor.ProcessAsync(query);
         }

@@ -23,7 +23,9 @@ namespace metrics.Services.Concrete
         public VkMessageService(
             IElasticClientFactory elasticClientFactory,
             ITransactionScopeFactory transactionScopeFactory,
-            MessagePredicting.MessagePredictingClient messagePredictingClient, ILogger<VkMessageService> logger)
+            MessagePredicting.MessagePredictingClient messagePredictingClient,
+            ILogger<VkMessageService> logger
+        )
         {
             _elasticClientFactory = elasticClientFactory;
             _transactionScopeFactory = transactionScopeFactory;
@@ -31,8 +33,7 @@ namespace metrics.Services.Concrete
             _logger = logger;
         }
 
-        public async Task<DataSourceResponseModel> GetMessages(int page = 0, int take = 50, string? search = null,
-            string? user = null)
+        public async Task<DataSourceResponseModel> GetMessages(int page = 0, int take = 50, string? search = null)
         {
             var response = await _elasticClientFactory
                 .Create()
@@ -44,22 +45,17 @@ namespace metrics.Services.Concrete
                         var q = f
                             .Bool(e => e
                                 .Filter(g => g
-                                    .MatchPhrase(q => q
+                                    .MatchPhrase(n => n
                                         .Field(message => message.Text)
                                         .Query(search)
                                     )
                                 )
                             );
-                        if (string.IsNullOrEmpty(user)) return q;
 
-                        return q &&
-                               f
-                                   .Term(t => t
-                                       .Value(user)
-                                       .Field(l => l.RepostedFrom)
-                                   );
+                        return q;
                     })
                 );
+
             using var scope = _transactionScopeFactory.CreateQuery();
             var keys = response.Documents.Select(f => f.OwnerId + "_" + f.Id);
             var items = await scope.Query<MessageVk>()
@@ -84,7 +80,11 @@ namespace metrics.Services.Concrete
                     Messages =
                     {
                         response.Documents.Select(e => new MessagePredictRequest.Types.MessagePredict
-                            {Id = e.Id, Text = e.Text, OwnerId = e.OwnerId})
+                        {
+                            Id = e.Id,
+                            Text = e.Text,
+                            OwnerId = e.OwnerId
+                        })
                     }
                 });
             }

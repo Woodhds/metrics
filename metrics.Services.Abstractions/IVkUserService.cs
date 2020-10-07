@@ -5,7 +5,7 @@ using Base.Contracts;
 
 namespace metrics.Services.Abstractions
 {
-    public interface IVkUserService
+    public interface IUserService
     {
         Task<VkUserModel> CreateAsync(string userId, CancellationToken ct = default);
         Task<IEnumerable<VkUserModel>> GetAsync(string? searchStr, CancellationToken ct = default);

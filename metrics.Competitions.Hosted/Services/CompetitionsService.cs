@@ -9,6 +9,7 @@ using Base.Contracts.Options;
 using HtmlAgilityPack;
 using metrics.Competitions.Abstractions;
 using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -16,14 +17,14 @@ namespace metrics.Competitions.Hosted.Services
 {
     public class CompetitionsService : ICompetitionsService
     {
-        private readonly IVkService _vkClient;
+        private readonly IVkWallService _vkClient;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly CompetitionOptions _competitionOptions;
         private const int Take = 10;
         private readonly ILogger<CompetitionsService> _logger;
 
         public CompetitionsService(
-            IVkService vkClient,
+            IVkWallService vkClient,
             IHttpClientFactory httpClientFactory,
             IOptionsMonitor<CompetitionOptions> optionsMonitor,
             ILogger<CompetitionsService> logger

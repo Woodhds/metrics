@@ -25,7 +25,7 @@ namespace metrics.Broker.Console.Services
         {
             using (_userManager.SetUser(new SecurityUser {Id = userId}))
             {
-                await _vkClient.Repost(ownerId, messageId, 1);
+                await _vkClient.Repost(ownerId, messageId);
             }
         }
     }

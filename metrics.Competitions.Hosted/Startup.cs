@@ -34,7 +34,7 @@ namespace metrics.Competitions.Hosted
             services.AddSingleton<IElasticClientFactory, ElasticClientFactory>();
             services.AddSingleton<ICompetitionsService, CompetitionsService>();
             services.AddSingleton<ICompetitionsService, VkUserCompetitionService>();
-            services.AddSingleton<IVkUserService, VkUserService>();
+            services.AddSingleton<IUserService, UserService>();
             services.Configure<CompetitionOptions>(Configuration.GetSection(nameof(CompetitionOptions)));
             services.Configure<ElasticOptions>(Configuration.GetSection(nameof(ElasticOptions)));
             services.AddHostedService<CompetitionService>();

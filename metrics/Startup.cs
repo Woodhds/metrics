@@ -61,7 +61,7 @@ namespace metrics
 
             services.Configure<VkontakteOptions>(Configuration.GetSection(nameof(VkontakteOptions)));
             services.AddVkClient(Configuration);
-            services.AddSingleton<IVkUserService, VkUserService>();
+            services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IVkMessageService, VkMessageService>();
             services.AddSingleton<IUserRepostedService, UserRepostedService>();
             services.AddSingleton<IUserTokenKeyProvider, UserTokenKeyProvider>();

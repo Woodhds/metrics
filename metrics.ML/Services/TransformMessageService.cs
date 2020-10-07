@@ -6,16 +6,16 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
-using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using Microsoft.Extensions.Hosting;
 
 namespace metrics.ML.Services
 {
     public class TransformMessageService : BackgroundService
     {
-        private readonly IVkService _vkClient;
+        private readonly IVkWallService _vkClient;
 
-        public TransformMessageService(IVkService vkClient)
+        public TransformMessageService(IVkWallService vkClient)
         {
             _vkClient = vkClient;
         }
@@ -67,8 +67,8 @@ namespace metrics.ML.Services
         private async Task<IList<string>> ReadFile(Stream stream)
         {
             using var sr = new StreamReader(stream);
-            var lines = new List<string>();
-            string line;
+            var lines = new List<string?>();
+            string? line;
             while ((line = await sr.ReadLineAsync()) != null)
             {
                 lines.Add(line);

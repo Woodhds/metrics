@@ -11,6 +11,7 @@ using metrics.EventSourcing.Abstractions.Query;
 using metrics.Queries;
 using Microsoft.Extensions.Logging;
 using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using metrics.Web.Extensions;
 using Microsoft.AspNetCore.Http;
 
@@ -20,14 +21,14 @@ namespace metrics.Controllers
     [Route("[controller]")]
     public class MessageController : ControllerBase
     {
-        private readonly IVkService _vkClient;
+        private readonly IVkLikeService _vkClient;
         private readonly ILogger<MessageController> _logger;
         private readonly IMessageBroker _messageBroker;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IQueryProcessor _queryProcessor;
 
         public MessageController(
-            IVkService vkClient,
+            IVkLikeService vkClient,
             ILogger<MessageController> logger,
             IMessageBroker messageBroker,
             IHttpContextAccessor httpContextAccessor, IQueryProcessor queryProcessor)
@@ -40,7 +41,7 @@ namespace metrics.Controllers
         }
 
         [HttpGet("user")]
-        public Task<DataSourceResponseModel> GetData([FromQuery]MessageSearchQuery query)
+        public Task<DataSourceResponseModel> GetData([FromQuery] MessageSearchQuery query)
         {
             return _queryProcessor.ProcessAsync(query);
         }
@@ -50,15 +51,11 @@ namespace metrics.Controllers
         {
             try
             {
-                
-                var message = new CreateRepostGroup
+                await _messageBroker.SendAsync(new CreateRepostGroup
                 {
-                    UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId()
-                };
-                
-                message.Reposts.AddRange(reposts.Select(f => new VkRepostGroup { Id = f.Id, OwnerId = f.OwnerId}));
-                
-                await _messageBroker.SendAsync(message);
+                    UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId(),
+                    Reposts = {reposts.Select(f => new VkRepostGroup {Id = f.Id, OwnerId = f.OwnerId})}
+                });
 
                 return Ok(true);
             }
@@ -70,11 +67,11 @@ namespace metrics.Controllers
         }
 
         [HttpGet("like")]
-        public IActionResult Like([FromQuery] VkRepostViewModel model)
+        public async Task<IActionResult> Like([FromQuery] VkRepostViewModel model)
         {
             try
             {
-                _vkClient.Like(model);
+                await _vkClient.Like(model);
                 return Ok();
             }
             catch (Exception)

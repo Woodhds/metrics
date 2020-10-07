@@ -2,7 +2,9 @@ using Base.Contracts.Options;
 using metrics.Authentication.Infrastructure;
 using metrics.core.DistributedLock;
 using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using metrics.Services.Concrete;
+using metrics.Services.Concrete.VK;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -30,6 +32,11 @@ namespace metrics.Services.Extensions
             services.AddSingleton<IVkService, VkService>();
             services.AddHttpClient<IVkClient, VkClient>()
                 .AddHttpMessageHandler<VkClientHttpHandler>();
+            
+            services.AddSingleton<IVkGroupService, VkGroupService>();
+            services.AddSingleton<IVkLikeService, VkLikeService>();
+            services.AddSingleton<IVkUserService, VkUserService>();
+            services.AddSingleton<IVkWallService, VkWallService>();
             services.AddSingleton<VkClientHttpHandler>();
             
             services.AddSingleton<IDistributedLock, DistributedLock>(x =>

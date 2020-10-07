@@ -18,8 +18,10 @@ namespace metrics.Queries.Handlers
             _transactionScopeFactory = transactionScopeFactory;
         }
 
-        public async Task<DataSourceResponseModel> ExecuteAsync(MessageCategoryTypesQuery query,
-            CancellationToken token = default)
+        public async Task<DataSourceResponseModel> ExecuteAsync(
+            MessageCategoryTypesQuery query,
+            CancellationToken token = default
+        )
         {
             using var scope = _transactionScopeFactory.CreateQuery();
             var q = scope.Query<MessageCategory>().OrderBy(a => a.Id);

@@ -6,7 +6,7 @@ using metrics.Authentication.Infrastructure;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using metrics.EventSourcing.Abstractions.Query;
-using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using Microsoft.EntityFrameworkCore;
 
 namespace metrics.Queries.Handlers
@@ -15,12 +15,12 @@ namespace metrics.Queries.Handlers
     {
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
-        private readonly IVkService _vkClient;
+        private readonly IVkWallService _vkClient;
 
         public UserMessageQueryHandler(
             ITransactionScopeFactory transactionScopeFactory,
             IAuthenticatedUserProvider authenticatedUserProvider,
-            IVkService vkClient
+            IVkWallService vkClient
         )
         {
             _transactionScopeFactory = transactionScopeFactory;
