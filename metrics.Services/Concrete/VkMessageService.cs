@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Base.Contracts;
 using Base.Contracts.Models;
@@ -105,7 +108,16 @@ namespace metrics.Services.Concrete
                     .FirstOrDefault(e => e.Id == document.Id && e.OwnerId == document.OwnerId)?.Category;
             }
 
+            //await WriteLog(response.Documents);
             return new DataSourceResponseModel(response.Documents, response.Total);
+        }
+
+        private async Task WriteLog(IEnumerable<VkMessageModel> messages)
+        {
+            var sb = new StringBuilder();
+            messages.Select((v, i) => new { v,i }).ToList().ForEach(a => sb.AppendLine($"{a.i}.  https://vk.com/wall{a.v.OwnerId}_{a.v.Id}"));
+
+            await File.WriteAllTextAsync(@"D:\log.txt", sb.ToString());
         }
     }
 }
