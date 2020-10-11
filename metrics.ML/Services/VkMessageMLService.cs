@@ -8,8 +8,11 @@ using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
 using metrics.ML.Contracts.Data;
 using metrics.ML.Services.Abstractions;
+using metrics.Services.Abstractions;
+using metrics.Services.Abstractions.VK;
 using Microsoft.Extensions.Hosting;
 using Microsoft.ML;
+using Nest;
 
 namespace metrics.ML.Services
 {
@@ -18,16 +21,19 @@ namespace metrics.ML.Services
         private readonly IMessagePredictModelService _messagePredictModelService;
         private readonly IElasticClientFactory _elasticClientFactory;
         private readonly ITransactionScopeFactory _transactionScopeFactory;
+        private readonly IVkWallService _vkClient;
 
         public VkMessageMLService(
             IMessagePredictModelService messagePredictModelService,
             IElasticClientFactory elasticClientFactory,
-            ITransactionScopeFactory transactionScopeFactory
+            ITransactionScopeFactory transactionScopeFactory,
+            IVkWallService vkClient
         )
         {
             _messagePredictModelService = messagePredictModelService;
             _elasticClientFactory = elasticClientFactory;
             _transactionScopeFactory = transactionScopeFactory;
+            _vkClient = vkClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -45,22 +51,51 @@ namespace metrics.ML.Services
                     })
                     .ToList();
 
-                var messages = (await _elasticClientFactory.Create().SearchAsync<VkMessageModel>(descriptor =>
-                        descriptor.Query(containerDescriptor => containerDescriptor.Ids(idsQueryDescriptor =>
-                                idsQueryDescriptor.Values(messageVks.Select(f =>
-                                    (f.OwnerId ^ f.MessageId).ToString())))).Skip(0)
-                            .Take(9000),
-                    stoppingToken)).Documents.Join(messageVks, message => message.Identifier,
-                    vk => (vk.OwnerId ^ vk.MessageId),
-                    (e, vk) =>
-                        new VkMessageML
-                        {
-                            Category = vk.MessageCategory,
-                            Id = e.Id,
-                            Text = e.Text,
-                            OwnerId = e.OwnerId
-                        }).ToArray();
+                var messages = messageVks.GroupJoin((await _elasticClientFactory.Create().SearchAsync<VkMessageModel>(
+                        descriptor =>
+                            descriptor.Query(containerDescriptor => containerDescriptor.Ids(idsQueryDescriptor =>
+                                    idsQueryDescriptor.Values(messageVks.Select(f =>
+                                        (f.OwnerId ^ f.MessageId).GetHashCode().ToString())))).Skip(0)
+                                .Take(9000),
+                        stoppingToken)).Documents,
+                    vk => (vk.OwnerId ^ vk.MessageId).GetHashCode(),
+                    message => message.Identifier, (vk, e) => new VkMessageML
+                    {
+                        Category = vk.MessageCategory,
+                        Id = e.FirstOrDefault()?.Id ?? vk.MessageId,
+                        Text = e.FirstOrDefault()?.Text,
+                        OwnerId = e.FirstOrDefault()?.OwnerId ?? vk.OwnerId
+                    }).ToList();
 
+                var toFetch = messages.Where(f => string.IsNullOrEmpty(f.Text)).ToArray();
+                var i = 0;
+                while (i < toFetch.Length)
+                {
+                    var data = await _vkClient.GetById(toFetch.Skip(i).Take(100)
+                        .Select(f => new VkRepostViewModel(f.OwnerId, f.Id)));
+
+                    if (data.Response?.Items.Count > 0)
+                    {
+                        await _elasticClientFactory.Create()
+                            .IndexManyAsync(
+                                data.Response?.Items.Select(f => new VkMessageModel(f, data.Response.Groups)),
+                                cancellationToken: stoppingToken
+                            );
+                    }
+
+                    foreach (var entry in data.Response.Items)
+                    {
+                        var idx = messages.FindIndex(a => a.Id == entry.Id && a.OwnerId == entry.OwnerId);
+                        if (idx > -1)
+                        {
+                            messages[idx].Text = entry.Text;
+                        }
+                    }
+                    
+                    i += 100;
+                }
+
+                messages = messages.Where(f => !string.IsNullOrEmpty(f.Text)).ToList();
                 if (messages.Any())
                 {
                     var data = _messagePredictModelService.Load();
@@ -79,27 +114,7 @@ namespace metrics.ML.Services
                     var trainedModel = pipeline.Fit(transformedNewData);
 
                     _messagePredictModelService.Save(mlContext, trainedModel, transformedNewData);
-                    
-                    /*try
-                    {
-                        foreach (var message in messageVks)
-                        {
-                            await scope.GetRepository<MessageVk>().UpdateAsync(new MessageVk
-                            {
-                                Status = MessageVkStatus.Processed,
-                                MessageCategoryId = message.MessageCategoryId,
-                                MessageId = message.MessageId,
-                                OwnerId = message.OwnerId
-                            });
-                        }
 
-                        await scope.CommitAsync(stoppingToken);
-                    }
-                    catch (Exception e)
-                    {
-                        await scope.RollbackAsync(stoppingToken);
-                    }
-                    */
                 }
 
                 await Task.Delay(1000 * 60 * 60, stoppingToken);

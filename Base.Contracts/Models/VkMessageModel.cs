@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Base.Contracts.Models
 {
-    public class VkMessageModel
+    public class VkMessageModel : IEquatable<VkMessageModel>
     {
         public int Id { get; set; }
         public int OwnerId { get; set; }
@@ -29,6 +29,7 @@ namespace Base.Contracts.Models
             OwnerId = message.OwnerId;
             Date = message.Date;
             Text = message.Text;
+            FromId = message.FromId;
             Images = message.Attachments
                 .Where(f =>
                     f.Type == MessageAttachmentType.photo &&
@@ -42,6 +43,11 @@ namespace Base.Contracts.Models
             Owner = groups.Where(a => a.Id == -message.OwnerId).Select(f => f.Name).FirstOrDefault() ?? "";
         }
 
+        public bool Equals(VkMessageModel? other)
+        {
+            return OwnerId == other.OwnerId && Id == other.Id;
+        }
+
         public override bool Equals(object? x)
         {
             if (!(x is VkMessageModel obj)) return false;
@@ -51,7 +57,7 @@ namespace Base.Contracts.Models
 
         public override int GetHashCode()
         {
-            return (FromId + Id).GetHashCode();
+            return HashCode.Combine(OwnerId, Id);
         }
     }
 }

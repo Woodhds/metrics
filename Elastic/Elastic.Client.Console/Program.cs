@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Base.Contracts.Models;
 using Base.Contracts.Options;
 using Nest;
@@ -13,34 +14,18 @@ namespace Elastic.Client.Console
             {
                 Host = "http://localhost:9200"
             });
+        }
 
-            var page = 0;
-            var take = 50;
-            var search = "";
+        async Task GetDuplicates(IElasticClient client)
+        {
+            var result = await client.SearchAsync<VkMessageModel>(descriptor => descriptor.MatchAll());
+            var duplicated = result.Documents.GroupBy(f => new {f.OwnerId, f.Id}).Select(f => f.FirstOrDefault())
+                .ToList();
+        }
 
-            var client = await factory.Create()
-                .SearchAsync<VkMessageModel>(z => z
-                    .From(page * take)
-                    .Take(take)
-                    .Highlight(s => s
-                        .PreTags("<em>")
-                        .PostTags("</em>")
-                        .Fields(a => a
-                            .Field(t => t.Text)
-                        )
-                    )
-                    .Query(f => f
-                        .Bool(e => e
-                            .Filter(g => g
-                                .MatchPhrase(n => n
-                                    .Field(message => message.Text)
-                                    .Query(search)
-                                )
-                            )
-                        ))
-                );
-
-            System.Console.WriteLine(client.Documents.Count);
+        async Task WriteLog(IElasticClient client)
+        {
+            
         }
     }
 }
