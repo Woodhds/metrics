@@ -8,6 +8,7 @@ namespace Base.Contracts
         public string Name { get; set; }
         public string Description { get; set; }
         [JsonConverter(typeof(JsonBooleanConverter))]
-        public bool Is_member { get; set; }
+        [JsonPropertyName("is_member")]
+        public bool IsMember { get; set; }
     }
 }

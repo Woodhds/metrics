@@ -1,10 +1,15 @@
+using System.Text.Json.Serialization;
+
 namespace Base.Contracts
 {
     public class VkUserResponse
     {
         public int Id { get; set; }
-        public string First_name { get; set; }
-        public string Last_Name { get; set; }
-        public string Photo_50 { get; set; }
+        [JsonPropertyName("first_name")]
+        public string FirstName { get; set; }
+        [JsonPropertyName("last_name")]
+        public string LastName { get; set; }
+        [JsonPropertyName("photo_50")]
+        public string Photo50 { get; set; }
     }
 }

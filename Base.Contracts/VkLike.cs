@@ -7,6 +7,7 @@ namespace Base.Contracts
     {
         public uint Count { get; set; }
         [JsonConverter(typeof(JsonBooleanConverter))]
-        public bool User_Likes { get; set; }
+        [JsonPropertyName("user_likes")]
+        public bool UserLikes { get; set; }
     }
 }

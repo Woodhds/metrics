@@ -40,10 +40,5 @@ namespace Elastic.Client.Console
             await System.Console.Out.WriteLineAsync("EXECUTION DEBUG: " + resultDeleteByQueryAsync.DebugInformation);
             await System.Console.Out.WriteLineAsync("EXECUTION RESULT: " + resultDeleteByQueryAsync.Deleted);
         }
-
-        async Task WriteLog(IElasticClient client)
-        {
-            
-        }
     }
 }

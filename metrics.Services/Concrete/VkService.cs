@@ -68,7 +68,7 @@ namespace metrics.Services.Concrete
 
             var posts = await _wallService.GetById(vkRepostViewModels);
             var reposts = posts.Response.Items.Where(c => c.Reposts != null).ToArray();
-            foreach (var group in posts.Response.Groups.Where(c => !c.Is_member))
+            foreach (var group in posts.Response.Groups.Where(c => !c.IsMember))
             {
                 try
                 {

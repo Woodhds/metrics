@@ -1,6 +1,0 @@
-﻿apiVersion: v1
-kind: Namespace
-metadata:
-  name: metrics-app
-  labels:
-    app: metrics-app

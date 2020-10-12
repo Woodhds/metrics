@@ -32,8 +32,8 @@ namespace metrics.Services.Concrete
             var user = new VkUserModel
             {
                 Id = userInfo.Response.First().Id,
-                FullName = userInfo.Response.First()?.First_name + " " + userInfo.Response.First()?.Last_Name,
-                Avatar = userInfo.Response.First()?.Photo_50
+                FullName = userInfo.Response.First()?.FirstName + " " + userInfo.Response.First()?.LastName,
+                Avatar = userInfo.Response.First()?.Photo50
             };
             if (user.Id > 0)
             {

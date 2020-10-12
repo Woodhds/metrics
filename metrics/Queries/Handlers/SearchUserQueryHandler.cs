@@ -24,9 +24,9 @@ namespace metrics.Queries.Handlers
             return (await _vkUserService.SearchAsync(query.Search))?.Response?.Items?.Select(q =>
                 new VkUserModel
                 {
-                    Avatar = q.Photo_50,
+                    Avatar = q.Photo50,
                     Id = q.Id,
-                    FullName = q.First_name + " " + q.Last_Name
+                    FullName = q.FirstName + " " + q.LastName
                 });
         }
     }

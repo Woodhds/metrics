@@ -58,7 +58,7 @@ namespace metrics.Broker.Console.Services
                 var post = (await _vkClient.WallSearch(favouriteGroup, rnd.Next(1, 30), 1))?.Response?.Items
                     ?.FirstOrDefault();
 
-                if (post != default && !(post.Likes?.User_Likes ?? true))
+                if (post != default && !(post.Likes?.UserLikes ?? true))
                 {
                     await Task.Delay(300);
                     await _vkLikeService.Like(new VkRepostViewModel {Id = post.Id, OwnerId = post.OwnerId});
