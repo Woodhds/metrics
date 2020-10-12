@@ -14,13 +14,31 @@ namespace Elastic.Client.Console
             {
                 Host = "http://localhost:9200"
             });
+
+            await GetDuplicates(factory.Create());
         }
 
-        async Task GetDuplicates(IElasticClient client)
+        static async Task GetDuplicates(IElasticClient client)
         {
-            var result = await client.SearchAsync<VkMessageModel>(descriptor => descriptor.MatchAll());
-            var duplicated = result.Documents.GroupBy(f => new {f.OwnerId, f.Id}).Select(f => f.FirstOrDefault())
+            var result = await client.SearchAsync<VkMessageModel>(descriptor => descriptor.MatchAll().Skip(0).Take(10000));
+            var grouped = result.Documents
+                .GroupBy(f => new {f.OwnerId, f.Id});
+            
+            var duplicated = grouped
+                .Where(f => f.Count() > 1)
+                .Select(f => f.FirstOrDefault(a => a.FromId == 0))
                 .ToList();
+            
+            var resultDeleteByQueryAsync = await client.DeleteByQueryAsync<VkMessageModel>(f => f
+                .Query(t => t
+                    .Ids(q => q
+                        .Values(duplicated.Select(f => f.Identifier.ToString()))
+                    )
+                )
+            );
+
+            await System.Console.Out.WriteLineAsync("EXECUTION DEBUG: " + resultDeleteByQueryAsync.DebugInformation);
+            await System.Console.Out.WriteLineAsync("EXECUTION RESULT: " + resultDeleteByQueryAsync.Deleted);
         }
 
         async Task WriteLog(IElasticClient client)
