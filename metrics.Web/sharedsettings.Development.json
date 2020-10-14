@@ -8,12 +8,6 @@
   "KafkaConfiguration": {
     "Servers": "localhost:9092"
   },
-  "AmqpOptions": {
-    "Host": "rabbitmq://localhost:5672",
-    "UserName": "user",
-    "Password": "password",
-    "InMemory": false
-  },
   "ElasticOptions": {
     "Host": "http://localhost:9200"
   },
