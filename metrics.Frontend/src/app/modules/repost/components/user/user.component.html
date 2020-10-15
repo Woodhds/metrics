@@ -99,9 +99,9 @@
       </mat-card-header>
       <app-vk-image [src]="message.Images || []"></app-vk-image>
       <mat-card-content
-        [innerHTML]="message.Text"
-        class="h-32 overflow-auto text-xs"
+        class="h-48 overflow-auto"
       >
+        <pre class="mat-caption text-xs leading-4 whitespace-pre-wrap">{{ message.Text }}</pre>
       </mat-card-content>
       <mat-card-footer class="text-center">
         <mat-form-field class="message-category">

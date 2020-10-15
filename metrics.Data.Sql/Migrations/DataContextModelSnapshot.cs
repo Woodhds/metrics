@@ -17,14 +17,12 @@ namespace metrics.Data.Sql.Migrations
             modelBuilder
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.0-rc.1.20451.13");
+                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
 
             modelBuilder.Entity("Base.Contracts.VkUserModel", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("integer");
 
                     b.Property<string>("Avatar")
                         .IsRequired()
@@ -90,9 +88,6 @@ namespace metrics.Data.Sql.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("MessageCategoryId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.HasKey("MessageId", "OwnerId");
