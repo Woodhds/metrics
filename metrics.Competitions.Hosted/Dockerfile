@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:5.0
+FROM mcr.microsoft.com/dotnet/sdk:5.0
 ARG workdir="/src"
 
 # Copy source code
@@ -14,7 +14,7 @@ RUN dotnet publish ./Competition.Hosted/Competition.Hosted.csproj --no-restore -
 
 # Create docker image from published project
 # ------------------------------------------
-FROM mcr.microsoft.com/dotnet/core/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
 WORKDIR /app
 

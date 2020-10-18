@@ -1,0 +1,8 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: metrics-competition-config
+  name: metrics-competition-config
+data:
+  {{ .Values.data | toPrettyJson | quote }}

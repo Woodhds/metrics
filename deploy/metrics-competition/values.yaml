@@ -1,0 +1,50 @@
+image: metrics-competition
+tag: latest
+name: metrics-competition
+imagePullPolicy: IfNotPresent
+configName: metrics-competition-config
+sharedConfigName: metrics-shared-config
+labels:
+  - app: metrics-competition
+shared:
+  RedisConnectionStringLock: 'redis-master,password=password'
+  CacheOptions:
+    Configuration: 'redis-master,password=password'
+    Instance: 'UserTokens:'
+  KafkaConfiguration:
+    Servers: 'kafka'
+  ElasticOptions:
+    Host: 'http://elasticsearch-master'
+  NLog:
+    extensions:
+      - assembly: 'NLog.Targets.ElasticSearch'
+    targets:
+      main:
+        type: 'BufferingWrapper'
+        flushTimeout: 5000
+        target:
+          type: 'ElasticSearch'
+          uri: 'http://elasticsearch-master'
+        fields:
+          - name: 'StackTrace'
+            layout: '${exception:format=ToString,StackTrace}${newline}'
+    rules:
+      - logger: '*'
+        minLevel: 'Error'
+        writeTo: 'main'
+        
+data:
+  ConnectionStrings: 'Host=postgres-postgresql;Port=5432;Database=repost_ctx;UserId=postgres;Password=password'
+  Token: ''
+  CompetitionOptions:
+    CityId: 97
+  VkontakteOptions:
+    AppId: 5662498
+    AppSecret: 'mKuNcx99X552UoVdeTNO'
+    AppScope: '111111111'
+    Fields:
+      - first_name
+      - photo_50
+      - last_name
+    ApiVersion: '5.103'
+      

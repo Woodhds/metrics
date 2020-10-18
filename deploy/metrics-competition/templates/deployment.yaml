@@ -1,0 +1,35 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  {{- with .Values.labels }}
+  labels:
+    {{ toYaml .}}
+  {{ end }}
+  name: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      {{- with .Values.labels }}
+        {{ toYaml .}}
+      {{ end }}
+  template:
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          volumeMounts:
+            - mountPath: /app/sharedsettings.json
+              name: shared-config
+              subPath: sharedsettings.json
+            - mountPath: /app/appsettings.json
+              name: competition-config
+              subPath: appsettings.json
+      volumes:
+        - name: shared-config
+          configMap:
+            name: {{ .Values.sharedConfigName }}
+        - name: competition-config
+          configMap:
+            name: {{ .Values.configName }}
+    
