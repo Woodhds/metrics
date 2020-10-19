@@ -6,10 +6,10 @@ COPY . $workdir
 
 # Restore dependencies
 WORKDIR $workdir
-RUN dotnet restore ./Competition.Hosted/Competition.Hosted.csproj
+RUN dotnet restore ./metrics.Competitions.Hosted/metrics.Competitions.Hosted.csproj
 
 # Publish project
-RUN dotnet publish ./Competition.Hosted/Competition.Hosted.csproj --no-restore -c Release -o /app
+RUN dotnet publish ./metrics.Competitions.Hosted/metrics.Competitions.Hosted.csproj --no-restore -c Release -o /app
 
 
 # Create docker image from published project
@@ -22,5 +22,8 @@ WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # Don't forget to expose a port for the application
+ENV ASPNETCORE_URLS=http://+:80;https://+:443
+EXPOSE 80
+EXPOSE 443
 COPY --from=0 /app .
-ENTRYPOINT ["dotnet", "Competition.Hosted.dll"]
+ENTRYPOINT ["dotnet", "metrics.Competitions.Hosted.dll"]

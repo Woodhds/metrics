@@ -1,11 +1,10 @@
 image: metrics-competition
 tag: latest
-name: metrics-competition
 imagePullPolicy: IfNotPresent
 configName: metrics-competition-config
 sharedConfigName: metrics-shared-config
 labels:
-  - app: metrics-competition
+  app: metrics-competition
 shared:
   RedisConnectionStringLock: 'redis-master,password=password'
   CacheOptions:
@@ -35,7 +34,6 @@ shared:
         
 data:
   ConnectionStrings: 'Host=postgres-postgresql;Port=5432;Database=repost_ctx;UserId=postgres;Password=password'
-  Token: ''
   CompetitionOptions:
     CityId: 97
   VkontakteOptions:

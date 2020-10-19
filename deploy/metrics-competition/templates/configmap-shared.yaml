@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   labels:
     app: metrics-shared-config
-  name: metrics-shared-config
+  name: {{ .Values.sharedConfigName }}
 data:
-  {{ .Values.shared | toPrettyJson | quote }}
+  sharedsettings.json:
+    {{ .Values.shared | toPrettyJson | quote }}

@@ -36,13 +36,18 @@ namespace metrics.Web
             ConfigureAuthentication(services);
             ConfigureLogging(services);
             ConfigureApplicationServices(services);
-
+            ConfigureHealthChecks(services);
             ConfigureMessageBroker(services);
         }
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             IHostApplicationLifetime lifeTime)
         {
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/health");
+            });
         }
 
         protected virtual void ConfigureMessageBroker(IServiceCollection services)
@@ -76,6 +81,11 @@ namespace metrics.Web
         protected virtual void ConfigureLogging(IServiceCollection services)
         {
             services.AddLogging(c => c.AddMetricsLogging(Configuration));
+        }
+
+        protected virtual void ConfigureHealthChecks(IServiceCollection services)
+        {
+            services.AddHealthChecks();
         }
 
         protected abstract void AddBrokerHandlers(IMessageHandlerProvider provider);

@@ -4,18 +4,18 @@ metadata:
   {{- with .Values.labels }}
   labels:
     {{ toYaml .}}
-  {{ end }}
-  name: {{ .Values.name }}
+  {{- end }}
+  name: {{ .Chart.Name }}
 spec:
   selector:
     matchLabels:
       {{- with .Values.labels }}
         {{ toYaml .}}
-      {{ end }}
+      {{- end }}
   template:
     spec:
       containers:
-        - name: {{ .Values.name }}
+        - name: {{ .Chart.Name }}
           image: {{ .Values.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           volumeMounts:
@@ -25,6 +25,22 @@ spec:
             - mountPath: /app/appsettings.json
               name: competition-config
               subPath: appsettings.json
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /health
+            periodSeconds: 5
+            initialDelaySeconds: 5
+          env:
+            - name: Token
+              valueFrom:
+                secretKeyRef:
+                  key: Token
+                  name: {{ .Chart.Name }}-secret
       volumes:
         - name: shared-config
           configMap:
@@ -32,4 +48,9 @@ spec:
         - name: competition-config
           configMap:
             name: {{ .Values.configName }}
-    
+    metadata:
+      name: {{ .Chart.Name }}
+      {{- with .Values.labels }}
+      labels:
+        {{ toYaml .}}
+      {{- end }}

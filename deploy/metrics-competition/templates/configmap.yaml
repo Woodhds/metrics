@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   labels:
     app: metrics-competition-config
-  name: metrics-competition-config
+  name: {{ .Values.configName }}
 data:
-  {{ .Values.data | toPrettyJson | quote }}
+  appsettings.json:
+    {{ .Values.data | toPrettyJson | quote }}
