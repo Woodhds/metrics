@@ -45,7 +45,7 @@ namespace metrics.Competitions.Hosted.Services
             {
                 try
                 {
-                    var formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                    FormUrlEncodedContent formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
                     {
                         new KeyValuePair<string, string>("page_num", i.ToString()),
                         new KeyValuePair<string, string>("our", string.Empty),
@@ -71,6 +71,8 @@ namespace metrics.Competitions.Hosted.Services
 
                     if (models == null || !models.Any()) continue;
                     var response = await _vkClient.GetById(models);
+
+                    if (response?.Response?.Items == null) continue;
                         
                     data.AddRange(response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)));
 

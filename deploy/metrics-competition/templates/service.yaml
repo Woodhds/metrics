@@ -6,6 +6,8 @@ metadata:
     app: {{ .Chart.Name }}
 spec:
   ports:
-    - port: 80
+    - port: {{ .Values.port }}
+      protocol: TCP
+      name: https
   selector:
     app: {{ .Chart.Name }}

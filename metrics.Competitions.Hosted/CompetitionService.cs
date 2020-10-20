@@ -40,7 +40,8 @@ namespace metrics.Competitions.Hosted
                         var data = await service.Fetch();
                         if (!data.Any()) continue;
 
-                        await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: stoppingToken);
+                        var indexingResult = await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: stoppingToken);
+                        await Console.Out.WriteLineAsync($"Indexing result: {indexingResult.IsValid}");
                         await Task.Delay(900 * 10, stoppingToken);
                     }
                     catch (Exception e)

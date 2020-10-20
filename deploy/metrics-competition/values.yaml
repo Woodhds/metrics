@@ -3,6 +3,8 @@ tag: latest
 imagePullPolicy: IfNotPresent
 configName: metrics-competition-config
 sharedConfigName: metrics-shared-config
+certificatePassword: '358359'
+port: 443
 labels:
   app: metrics-competition
 shared:
@@ -13,7 +15,7 @@ shared:
   KafkaConfiguration:
     Servers: 'kafka'
   ElasticOptions:
-    Host: 'http://elasticsearch-master'
+    Host: 'http://elasticsearch-master:9200'
   NLog:
     extensions:
       - assembly: 'NLog.Targets.ElasticSearch'
@@ -23,21 +25,23 @@ shared:
         flushTimeout: 5000
         target:
           type: 'ElasticSearch'
-          uri: 'http://elasticsearch-master'
+          uri: 'http://elasticsearch-master:9200'
         fields:
           - name: 'StackTrace'
             layout: '${exception:format=ToString,StackTrace}${newline}'
+      logconsole:
+        type: 'Console'
     rules:
       - logger: '*'
         minLevel: 'Error'
         writeTo: 'main'
-        
 data:
-  ConnectionStrings: 'Host=postgres-postgresql;Port=5432;Database=repost_ctx;UserId=postgres;Password=password'
+  ConnectionStrings:
+    DataContext: 'Host=postgresql;Port=5432;Database=repost_ctx;UserId=postgres;Password=password'
   CompetitionOptions:
-    CityId: 97
+    CityId: '97'
   VkontakteOptions:
-    AppId: 5662498
+    AppId: '5662498'
     AppSecret: 'mKuNcx99X552UoVdeTNO'
     AppScope: '111111111'
     Fields:

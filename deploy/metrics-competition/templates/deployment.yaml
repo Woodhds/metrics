@@ -28,19 +28,30 @@ spec:
           resources:
             requests:
               memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
               cpu: "500m"
           livenessProbe:
             httpGet:
-              port: 80
+              port: {{ .Values.port }}
               path: /health
+              scheme: "HTTPS"
             periodSeconds: 5
             initialDelaySeconds: 5
           env:
-            - name: Token
+            - name: Token__Value
               valueFrom:
                 secretKeyRef:
                   key: Token
                   name: {{ .Chart.Name }}-secret
+            - name: Kestrel__Certificates__Default__Path
+              value: /certs/aspnetcore-cert.pfx
+            - name: Kestrel__Certificates__Default__Password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-secret
+                  key: certificatePassword
       volumes:
         - name: shared-config
           configMap:
@@ -48,6 +59,12 @@ spec:
         - name: competition-config
           configMap:
             name: {{ .Values.configName }}
+        - name: cert-volume
+          secret:
+            secretName: {{ .Chart.Name }}-secret
+            items:
+              - key: certificate
+                path: aspnetcore-cert.pfx
     metadata:
       name: {{ .Chart.Name }}
       {{- with .Values.labels }}
