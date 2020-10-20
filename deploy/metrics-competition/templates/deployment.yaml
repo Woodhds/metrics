@@ -19,10 +19,10 @@ spec:
           image: {{ .Values.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           volumeMounts:
-            - mountPath: /app/sharedsettings.json
+            - mountPath: /app/sharedsettings.{{.Values.environment}}.json
               name: shared-config
               subPath: sharedsettings.json
-            - mountPath: /app/appsettings.json
+            - mountPath: /app/appsettings.{{.Values.environment}}.json
               name: competition-config
               subPath: appsettings.json
             - mountPath: /certs/aspnetcore-cert.pfx
