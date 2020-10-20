@@ -25,6 +25,9 @@ spec:
             - mountPath: /app/appsettings.json
               name: competition-config
               subPath: appsettings.json
+            - mountPath: /certs/aspnetcore-cert.pfx
+              name: cert-volume
+              subPath: aspnetcore-cert.pfx
           resources:
             requests:
               memory: "128Mi"
