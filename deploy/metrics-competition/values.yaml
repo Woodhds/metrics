@@ -19,6 +19,7 @@ sharedConfigName: metrics-shared-config
 certificatePassword: '358359'
 environment: Production
 shared:
+  JobsHost: 'redis-master,password=password'
   RedisConnectionStringLock: 'redis-master,password=password'
   CacheOptions:
     Configuration: 'redis-master,password=password'

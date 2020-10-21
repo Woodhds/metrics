@@ -11,6 +11,7 @@
   "ElasticOptions": {
     "Host": "http://localhost:9200"
   },
+  "JobsHost": "localhost:6379,password=password",
   "NLog": {
     "throwConfigExceptions": true,
     "targets": {

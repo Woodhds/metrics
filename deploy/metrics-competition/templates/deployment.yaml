@@ -36,7 +36,7 @@ spec:
           livenessProbe:
             httpGet:
               port: {{ .Values.probes.liveness.port }}
-              path:  {{ .Values.probes.liveness.path }}
+              path: {{ .Values.probes.liveness.path }}
               scheme: "HTTPS"
             periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
             initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
