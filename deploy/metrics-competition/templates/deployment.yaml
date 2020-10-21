@@ -1,23 +1,21 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  {{- with .Values.labels }}
   labels:
-    {{ toYaml .}}
-  {{- end }}
+    app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
   name: {{ .Chart.Name }}
 spec:
   selector:
     matchLabels:
-      {{- with .Values.labels }}
-        {{ toYaml .}}
-      {{- end }}
+      app: {{ .Chart.Name }}
+      release: {{ .Release.Name }}
   template:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ .Values.image }}
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           volumeMounts:
             - mountPath: /app/sharedsettings.{{.Values.environment}}.json
               name: shared-config
@@ -37,11 +35,11 @@ spec:
               cpu: "500m"
           livenessProbe:
             httpGet:
-              port: {{ .Values.port }}
-              path: /health
+              port: {{ .Values.probes.liveness.port }}
+              path:  {{ .Values.probes.liveness.path }}
               scheme: "HTTPS"
-            periodSeconds: 5
-            initialDelaySeconds: 5
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
           env:
             - name: Token__Value
               valueFrom:
@@ -70,7 +68,6 @@ spec:
                 path: aspnetcore-cert.pfx
     metadata:
       name: {{ .Chart.Name }}
-      {{- with .Values.labels }}
       labels:
-        {{ toYaml .}}
-      {{- end }}
+        app: {{ .Chart.Name }}
+        release: {{ .Release.Name }}

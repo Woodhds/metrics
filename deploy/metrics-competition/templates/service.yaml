@@ -4,10 +4,13 @@ metadata:
   name: {{ .Chart.Name }}
   labels:
     app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.port }}
+    - port: {{ .Values.service.port }}
       protocol: TCP
       name: https
   selector:
     app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}

@@ -1,23 +1,13 @@
-image:
-  repository: metrics-competition
-  tag: latest
-  imagePullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 443
-  
-probes:
-  liveness:
-    port: 443
-    path: /health
-    periodSeconds: 5
-    initialDelaySeconds: 5
-
-configName: metrics-competition-config
+image: metrics-broker
+tag: latest
+imagePullPolicy: IfNotPresent
+configName: metrics-broker-config
 sharedConfigName: metrics-shared-config
 certificatePassword: '358359'
 environment: Production
+port: 443
+labels:
+  app: metrics-broker
 shared:
   RedisConnectionStringLock: 'redis-master,password=password'
   CacheOptions:
