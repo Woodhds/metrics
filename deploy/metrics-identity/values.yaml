@@ -1,0 +1,15 @@
+image:
+  repository: metrics-identity
+  tag: latest
+  imagePullPolicy: IfNotPresent
+
+service:
+  port: 443
+  type: ClusterIP
+  
+probes:
+  liveness:
+    port: 443
+    path: /health
+    periodSeconds: 5
+    initialDelaySeconds: 5

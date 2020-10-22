@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Elastic.Client;
-using Hangfire;
 using metrics.Competitions.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ namespace metrics.Competitions.Hosted
 {
     public interface ICompetitionService
     {
-        Task ExecuteAsync();
+        Task ExecuteAsync(CancellationToken cancellationToken = default);
     }
 
     public class CompetitionService : ICompetitionService
@@ -32,21 +32,20 @@ namespace metrics.Competitions.Hosted
             _logger = logger;
         }
 
-        [Queue("competition")]
-        public async Task ExecuteAsync()
+        public async Task ExecuteAsync(CancellationToken cancellationToken = default)
         {
             foreach (var service in _serviceProvider.GetServices<ICompetitionsService>())
             {
                 try
                 {
                     Console.WriteLine($"Start fetching from \"{service.GetType().Name}\" {DateTimeOffset.Now}");
-                    var data = await service.Fetch();
+                    var data = await service.Fetch(cancellationToken: cancellationToken);
                     if (!data.Any()) continue;
 
                     var indexingResult = await _elasticClientProvider.Create()
-                        .IndexManyAsync(data);
+                        .IndexManyAsync(data, cancellationToken: cancellationToken);
                     await Console.Out.WriteLineAsync($"Indexing result: {indexingResult.IsValid}");
-                    await Task.Delay(900 * 10);
+                    await Task.Delay(900 * 10, cancellationToken);
                 }
                 catch (Exception e)
                 {

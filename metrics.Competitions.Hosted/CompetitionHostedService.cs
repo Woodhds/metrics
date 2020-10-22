@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Hangfire;
 using metrics.BackgroundJobs.Abstractions;
 using Microsoft.Extensions.Hosting;
 
@@ -16,7 +17,8 @@ namespace metrics.Competitions.Hosted
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _backgroundJobService.Register<ICompetitionService>("CompetitionJob",x => x.ExecuteAsync(), "0 0 * ? * *");
+            _backgroundJobService.Register<ICompetitionService>("CompetitionJob",
+                x => x.ExecuteAsync(CancellationToken.None), Cron.Hourly(), "competition");
             return Task.CompletedTask;
         }
     }

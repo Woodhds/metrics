@@ -8,6 +8,6 @@ namespace metrics.BackgroundJobs.Abstractions
         string Execute<TService>(Expression<Action<TService>> action);
         string Schedule<TService>(Expression<Action<TService>> task, DateTimeOffset date);
         string Schedule<TService>(Expression<Action<TService>> action, TimeSpan delay);
-        void Register<TService>(string jobId, Expression<Action<TService>> action, string recurring);
+        void Register<TService>(string jobId, Expression<Action<TService>> action, string recurring, string queue = "default");
     }
 }

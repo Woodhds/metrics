@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts.Models;
 using metrics.Competitions.Abstractions;
@@ -26,10 +27,10 @@ namespace metrics.Competitions.Hosted.Services
             _logger = logger;
         }
 
-        public async Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 1)
+        public async Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 1, CancellationToken cancellationToken = default)
         {
             var data = new List<VkMessageModel>();
-            var users = await _vkUserService.GetAsync(null);
+            var users = await _vkUserService.GetAsync(null, cancellationToken);
             foreach (var user in users)
             {
                 try
@@ -47,7 +48,7 @@ namespace metrics.Competitions.Hosted.Services
                                 data.AddRange(models);
                             }
 
-                            await Task.Delay(1000);
+                            await Task.Delay(1000, cancellationToken);
                         }
                         catch (Exception e)
                         {

@@ -31,9 +31,10 @@ namespace metrics.BackgroundJobs
             return _backgroundJobClient.Schedule(action, delay);
         }
 
-        public void Register<TService>(string jobId, Expression<Action<TService>> action, string recurring)
+        public void Register<TService>(string jobId, Expression<Action<TService>> action, string recurring,
+            string queue = "default")
         {
-            _recurringJobManager.AddOrUpdate(jobId, action, recurring);
+            _recurringJobManager.AddOrUpdate(jobId, action, queue: queue, cronExpression: recurring);
         }
     }
 }

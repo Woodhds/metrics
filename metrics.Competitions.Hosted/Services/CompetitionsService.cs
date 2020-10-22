@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts;
 using Base.Contracts.Models;
@@ -36,7 +37,8 @@ namespace metrics.Competitions.Hosted.Services
             _competitionOptions = optionsMonitor.CurrentValue;
         }
 
-        public async Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 10)
+        public async Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 10,
+            CancellationToken cancellationToken = default)
         {
             var client = _httpClientFactory.CreateClient();
 
@@ -52,18 +54,19 @@ namespace metrics.Competitions.Hosted.Services
                         new KeyValuePair<string, string>("city_id", _competitionOptions.CityId)
                     });
 
-                    var result = await client.PostAsync("https://wingri.ru/main/getPosts", formContent);
+                    var result = await client.PostAsync("https://wingri.ru/main/getPosts", formContent, cancellationToken);
 
-                    var content = await result.Content.ReadAsStringAsync();
+                    var content = await result.Content.ReadAsStringAsync(cancellationToken);
 
                     var doc = new HtmlDocument();
                     doc.LoadHtml(content);
                     if (doc?.DocumentNode == null) continue;
-                    
+
                     var models = doc.DocumentNode?
                         .SelectNodes(
                             "//div[@class='grid-item']/div[@class='post_container']/div[@class='post_footer']/a/@href")
-                        .Where(d => d.Attributes != null && d.Attributes.Any(h => h.Name == "href" && !string.IsNullOrEmpty(h.Value)))
+                        .Where(d => d.Attributes != null &&
+                                    d.Attributes.Any(h => h.Name == "href" && !string.IsNullOrEmpty(h.Value)))
                         .Select(d => d.GetAttributeValue("href", "")?.Replace("https://vk.com/wall", "").Split('_'))
                         .Where(h => h != null && h.Length > 1)
                         .Select(d => new VkRepostViewModel(int.Parse(d[0]), int.Parse(d[1])))
@@ -73,9 +76,8 @@ namespace metrics.Competitions.Hosted.Services
                     var response = await _vkClient.GetById(models);
 
                     if (response?.Response?.Items == null) continue;
-                        
-                    data.AddRange(response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)));
 
+                    data.AddRange(response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)));
                 }
                 catch (Exception e)
                 {
