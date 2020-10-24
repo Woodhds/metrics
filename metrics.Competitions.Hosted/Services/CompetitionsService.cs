@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Base.Contracts;
 using Base.Contracts.Models;
 using Base.Contracts.Options;
 using HtmlAgilityPack;
 using metrics.Competitions.Abstractions;
-using metrics.Services.Abstractions;
 using metrics.Services.Abstractions.VK;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -37,12 +37,11 @@ namespace metrics.Competitions.Hosted.Services
             _competitionOptions = optionsMonitor.CurrentValue;
         }
 
-        public async Task<IReadOnlyCollection<VkMessageModel>> Fetch(int page = 10,
-            CancellationToken cancellationToken = default)
+        public async Task Fetch(
+            ChannelWriter<VkMessageModel> writer, int page = 10, CancellationToken cancellationToken = default)
         {
             var client = _httpClientFactory.CreateClient();
 
-            var data = new List<VkMessageModel>();
             for (var i = (page - 1) * Take; i < (page - 1) * Take + Take; i++)
             {
                 try
@@ -77,15 +76,17 @@ namespace metrics.Competitions.Hosted.Services
 
                     if (response?.Response?.Items == null) continue;
 
-                    data.AddRange(response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)));
+                    response.Response.Items.Select(f => new VkMessageModel(f, response.Response.Groups)).ToList().ForEach(
+                        async x =>
+                        {
+                            await writer.WriteAsync(x, cancellationToken);
+                        });
                 }
                 catch (Exception e)
                 {
                     _logger.LogError("ERROR Parsing", e);
                 }
             }
-
-            return data;
         }
     }
 }

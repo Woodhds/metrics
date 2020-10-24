@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
+using Base.Contracts.Models;
 using Elastic.Client;
 using metrics.Competitions.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,27 +37,43 @@ namespace metrics.Competitions.Hosted
 
         public async Task ExecuteAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var service in _serviceProvider.GetServices<ICompetitionsService>())
-            {
-                try
-                {
-                    Console.WriteLine($"Start fetching from \"{service.GetType().Name}\" {DateTimeOffset.Now}");
-                    var data = await service.Fetch(cancellationToken: cancellationToken);
-                    if (!data.Any()) continue;
+            var channel = Channel.CreateUnbounded<VkMessageModel>();
 
-                    var indexingResult = await _elasticClientProvider.Create()
-                        .IndexManyAsync(data, cancellationToken: cancellationToken);
-                    await Console.Out.WriteLineAsync($"Indexing result: {indexingResult.IsValid}");
-                    await Task.Delay(900 * 10, cancellationToken);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Error fetch posts");
-                }
-                finally
-                {
-                    Console.WriteLine($"Stop fetching from \"{service.GetType().Name}\" {DateTimeOffset.Now}");
-                }
+            try
+            {
+                StartReading(channel.Reader, cancellationToken);
+                await Task.WhenAll(_serviceProvider.GetServices<ICompetitionsService>()
+                    .Select(f => f.Fetch(channel, cancellationToken: cancellationToken)));
+
+                channel.Writer.Complete();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error fetch posts");
+            }
+            finally
+            {
+                Console.WriteLine($"Stop fetching \" {DateTimeOffset.Now}");
+            }
+        }
+
+        async Task StartReading(ChannelReader<VkMessageModel> reader, CancellationToken cancellationToken = default)
+        {
+            var data = new List<VkMessageModel>();
+            while (await reader.WaitToReadAsync(cancellationToken))
+            {
+                data.Add(await reader.ReadAsync(cancellationToken));
+                if (data.Count <= Constants.MaximumIndexingBatchCount) 
+                    continue;
+                
+                var result = await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: cancellationToken);
+                Console.WriteLine("ERROR OCCURED BY INDEXING: " + result.Errors);
+                data.Clear();
+            }
+
+            if (data.Count > 0)
+            {
+                await _elasticClientProvider.Create().IndexManyAsync(data, cancellationToken: cancellationToken);
             }
         }
     }
