@@ -89,8 +89,7 @@
             {{ message.Owner ? message.Owner : "Пост" }}
           </a>
           <mat-slide-toggle
-            *ngIf="!message.UserReposted"
-            [color]="'accent'"
+            [color]="!message.UserReposted ? 'primary' : 'warn'"
             (change)="onSelect($event, message)"
             [checked]="message.IsSelected"
           ></mat-slide-toggle>

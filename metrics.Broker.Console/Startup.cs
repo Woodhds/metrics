@@ -68,6 +68,7 @@ namespace metrics.Broker.Console
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
         {
             base.Configure(app, env, lifeTime);
+            app.UseHangfireServer(new BackgroundJobServerOptions {Queues = new[] {"repost"}});
             app.UseHangfireDashboard();
         }
     }

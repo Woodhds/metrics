@@ -27,7 +27,7 @@ shared:
   KafkaConfiguration:
     Servers: 'kafka'
   ElasticOptions:
-    Host: 'http://elasticsearch-master:9200'
+    Host: 'http://elasticsearch-elasticsearch-master:9200'
   NLog:
     extensions:
       - assembly: 'NLog.Targets.ElasticSearch'
@@ -37,7 +37,7 @@ shared:
         flushTimeout: 5000
         target:
           type: 'ElasticSearch'
-          uri: 'http://elasticsearch-master:9200'
+          uri: 'http://elasticsearch-elasticsearch-master:9200'
         fields:
           - name: 'StackTrace'
             layout: '${exception:format=ToString,StackTrace}${newline}'
