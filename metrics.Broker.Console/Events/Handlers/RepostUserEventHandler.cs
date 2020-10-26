@@ -40,7 +40,8 @@ namespace metrics.Broker.Console.Events.Handlers
                     .Query<VkRepost>()
                     .OrderBy(f => f.DateStatus)
                     .Where(f => f.Status == VkRepostStatus.New && f.UserId == obj.UserId)
-                    .FirstOrDefaultAsync(token);
+                    .TagWith("Select next repost message")
+                    .FirstOrDefaultAsync(CancellationToken.None);
 
                 if (message == null)
                     return;
@@ -48,9 +49,9 @@ namespace metrics.Broker.Console.Events.Handlers
                 message.Status = VkRepostStatus.Pending;
                 message.DateStatus = DateTime.Now;
 
-                await transaction.GetRepository<VkRepost>().UpdateAsync(message, token);
+                await transaction.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
 
-                await transaction.CommitAsync(token);
+                await transaction.CommitAsync(CancellationToken.None);
 
                 _jobService.Schedule<ISchedulerJobService>(
                     client => client.Repost(message.OwnerId, message.MessageId, obj.UserId),

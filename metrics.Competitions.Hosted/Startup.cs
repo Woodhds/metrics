@@ -43,7 +43,7 @@ namespace metrics.Competitions.Hosted
             services.Configure<ElasticOptions>(Configuration.GetSection(nameof(ElasticOptions)));
             services.AddSingleton<ICompetitionService, CompetitionService>();
             services.AddHostedService<CompetitionHostedService>();
-            services.AddHangfire(Configuration["JobsHost"]);
+            services.AddHangfire(Configuration["JobsHost"], "competition");
         }
 
         protected override void ConfigureDataContext(IServiceCollection services)
@@ -56,6 +56,7 @@ namespace metrics.Competitions.Hosted
         {
             base.Configure(app, env, lifeTime);
             app.UseHangfireServer(new BackgroundJobServerOptions {Queues = new[] {"competition"}});
+            app.UseHangfireDashboard();
         }
     }
 }
