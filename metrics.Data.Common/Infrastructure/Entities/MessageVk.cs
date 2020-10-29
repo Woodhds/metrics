@@ -6,9 +6,9 @@ namespace metrics.Data.Common.Infrastructure.Entities
     {
         public int MessageId { get; set; }
         public int OwnerId { get; set; }
-        
         public int MessageCategoryId { get; set; }
         public MessageCategory MessageCategory { get; set; }
+        public bool IsExported { get; set; }
 
         [NotMapped]
         public int Identifier => (OwnerId ^ MessageId).GetHashCode();
