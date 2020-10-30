@@ -3,6 +3,7 @@ import {User} from 'src/app/models/User';
 import * as signalR from '@microsoft/signalr';
 import {environment} from '../../../environments/environment';
 import {AuthService} from '../../services/concrete/auth/auth.service';
+import {RepostService} from "../../services/concrete/auth/repost.service";
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   count = 0;
   hub: signalR.HubConnection = null;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private repostService: RepostService) {
   }
 
   public user: User = null;
@@ -63,5 +64,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.log(f);
       });
     }
+  }
+
+  executeNext() {
+    this.repostService.executeNextRepost().subscribe()
   }
 }

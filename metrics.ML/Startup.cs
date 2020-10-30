@@ -46,7 +46,7 @@ namespace metrics.ML
         protected override void ConfigureApplicationServices(IServiceCollection services)
         {
             services.AddGrpc();
-            //services.AddHostedService<VkMessageMLService>();
+            services.AddHostedService<VkMessageMLService>();
             services.AddPredictClient(Configuration["ClientUrl"]);
         }
 

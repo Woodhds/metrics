@@ -10,7 +10,7 @@ namespace metrics.ML.Contracts.Data
         public int OwnerId { get; set; }
         [LoadColumn(3)]
         public string? Text { get; set; }
-        [LoadColumn(3)]
+        [LoadColumn(2)]
         public string? Category { get; set; }
     }
 }
