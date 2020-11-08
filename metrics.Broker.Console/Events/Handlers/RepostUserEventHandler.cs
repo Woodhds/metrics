@@ -60,6 +60,7 @@ namespace metrics.Broker.Console.Events.Handlers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during consuming {nameof(RepostUserEventHandler)}");
+                throw;
             }
         }
     }

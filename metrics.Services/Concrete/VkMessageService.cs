@@ -47,7 +47,7 @@ namespace metrics.Services.Concrete
                     {
                         var q = f
                             .Bool(e => e
-                                .Filter(g => g
+                                .Must(g => g
                                     .MatchPhrase(n => n
                                         .Field(message => message.Text)
                                         .Query(search)
