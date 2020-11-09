@@ -18,16 +18,17 @@ namespace metrics.Broker.Console.Events.Handlers
         private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IBackgroundJobService _jobService;
         private readonly ILogger<RepostUserEventHandler> _logger;
+        private readonly IMessageBroker _messageBroker;
 
         public RepostUserEventHandler(
             ITransactionScopeFactory transactionScopeFactory,
             IBackgroundJobService jobService,
-            ILogger<RepostUserEventHandler> logger
-        )
+            ILogger<RepostUserEventHandler> logger, IMessageBroker messageBroker)
         {
             _transactionScopeFactory = transactionScopeFactory;
             _jobService = jobService;
             _logger = logger;
+            _messageBroker = messageBroker;
         }
 
         public async Task HandleAsync(ExecuteNextRepost obj, CancellationToken token = default)
@@ -59,8 +60,8 @@ namespace metrics.Broker.Console.Events.Handlers
             }
             catch (Exception e)
             {
+                await _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token);
                 _logger.LogError(e, $"Error during consuming {nameof(RepostUserEventHandler)}");
-                throw;
             }
         }
     }

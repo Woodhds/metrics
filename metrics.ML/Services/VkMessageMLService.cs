@@ -27,7 +27,10 @@ namespace metrics.ML.Services
 
             var pipeline = mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(VkMessageML.Category))
                 .Append(mlContext.Transforms.Text.NormalizeText("NormalizedText", nameof(VkMessageML.Text)))
-                .Append(mlContext.Transforms.Text.FeaturizeText("Features", "NormalizedText"))
+                .Append(mlContext.Transforms.Text.NormalizeText("NormalizedOwnerName", nameof(VkMessageML.OwnerName)))
+                .Append(mlContext.Transforms.Text.FeaturizeText("FeaturedOwnerName", "NormalizedOwnerName"))
+                .Append(mlContext.Transforms.Text.FeaturizeText("FeaturedText", "NormalizedText"))
+                .Append(mlContext.Transforms.Concatenate("Features", "FeaturedText", "FeaturedOwnerName"))
                 .Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy())
                 .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"))
                 .AppendCacheCheckpoint(mlContext);
