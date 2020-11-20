@@ -27,6 +27,7 @@ import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/materia
 import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 const routes: Routes = [
   {path: '', canActivate: [AuthGuard], component: RepostComponent},
@@ -65,7 +66,8 @@ const routes: Routes = [
     MatSnackBarModule,
     MatSelectModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    DragDropModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor},

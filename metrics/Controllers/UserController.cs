@@ -51,13 +51,5 @@ namespace metrics.Controllers
         {
             return _vkUserService.CreateAsync(userId);
         }
-
-        [HttpPost("next")]
-        public async Task<IActionResult> ExecuteNext()
-        {
-            await _messageBroker.SendAsync(new ExecuteNextRepost()
-                {UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId()});
-            return Ok();
-        }
     }
 }

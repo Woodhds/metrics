@@ -7,6 +7,7 @@ import {Message} from '../../models/Message';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogComponent} from '../dialog/dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-message',
@@ -16,7 +17,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class MessageComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   resultsLength = 0;
-  displayedColumns = ['Id', 'Title', 'Color', 'Actions']
+  displayedColumns = ['Id', 'Title', 'Color', 'Actions', 'drag']
   data: Message[];
   isLoading = false;
 
@@ -66,5 +67,9 @@ export class MessageComponent implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe(data => this.data = data);
+  }
+
+  dropTable(e: CdkDragDrop<Message[]>) {
+    
   }
 }

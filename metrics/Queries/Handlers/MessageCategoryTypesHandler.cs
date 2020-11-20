@@ -24,7 +24,7 @@ namespace metrics.Queries.Handlers
         )
         {
             using var scope = _transactionScopeFactory.CreateQuery();
-            var q = scope.Query<MessageCategory>().OrderBy(a => a.Id);
+            var q = scope.Query<MessageCategory>().OrderBy(a => a.SortOrder);
             var (page, pageSize) = query;
             return new DataSourceResponseModel(
                 await q.Skip(page * pageSize).Take(pageSize).ToListAsync(token),

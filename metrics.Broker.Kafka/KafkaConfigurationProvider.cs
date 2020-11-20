@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using Confluent.SchemaRegistry.Serdes;
 using Microsoft.Extensions.Options;
 
 namespace metrics.Broker.Kafka

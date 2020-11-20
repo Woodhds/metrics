@@ -11,5 +11,7 @@ namespace metrics.Data.Common.Infrastructure.Entities
         
         [MaxLength(100)]
         public string? Color { get; set; }
+        
+        public int? SortOrder { get; set; }
     }
 }

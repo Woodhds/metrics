@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp5.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,8 +9,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Confluent.Kafka" Version="1.5.1" />
-        <PackageReference Include="Confluent.SchemaRegistry.Serdes.Protobuf" Version="1.5.1" />
+        <PackageReference Include="Confluent.Kafka" Version="1.5.2" />
+        <PackageReference Include="Google.Protobuf" Version="3.13.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0-*" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0-*" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0-*" />

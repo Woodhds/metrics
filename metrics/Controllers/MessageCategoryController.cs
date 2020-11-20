@@ -52,7 +52,7 @@ namespace metrics.Controllers
         public async Task<ActionResult> DeleteAsync(int id)
         {
             using var scope = await _transactionScopeFactory.CreateAsync();
-            await scope.GetRepository<MessageCategory>().DeleteAsync(new MessageCategory() {Id = id});
+            await scope.GetRepository<MessageCategory>().DeleteAsync(new MessageCategory {Id = id});
             await scope.CommitAsync();
             return Ok();
         }

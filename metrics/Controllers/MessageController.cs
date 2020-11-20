@@ -31,7 +31,9 @@ namespace metrics.Controllers
             IVkLikeService vkClient,
             ILogger<MessageController> logger,
             IMessageBroker messageBroker,
-            IHttpContextAccessor httpContextAccessor, IQueryProcessor queryProcessor)
+            IHttpContextAccessor httpContextAccessor,
+            IQueryProcessor queryProcessor
+        )
         {
             _vkClient = vkClient;
             _logger = logger;
