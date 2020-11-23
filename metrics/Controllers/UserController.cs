@@ -2,13 +2,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Base.Contracts;
-using metrics.Broker.Abstractions;
-using metrics.Broker.Events;
 using metrics.EventSourcing.Abstractions.Query;
 using metrics.Queries;
 using metrics.Services.Abstractions;
-using metrics.Web.Extensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace metrics.Controllers
@@ -18,20 +14,14 @@ namespace metrics.Controllers
     {
         private readonly IUserService _vkUserService;
         private readonly IQueryProcessor _queryProcessor;
-        private readonly IMessageBroker _messageBroker;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserController(
             IUserService vkUserService,
-            IQueryProcessor queryProcessor,
-            IMessageBroker messageBroker,
-            IHttpContextAccessor httpContextAccessor
+            IQueryProcessor queryProcessor
         )
         {
             _vkUserService = vkUserService;
             _queryProcessor = queryProcessor;
-            _messageBroker = messageBroker;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]

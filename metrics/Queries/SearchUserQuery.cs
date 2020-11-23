@@ -5,8 +5,5 @@ using metrics.EventSourcing.Abstractions.Query;
 
 namespace metrics.Queries
 {
-    public class SearchUserQuery : IQuery<IEnumerable<VkUserModel>>
-    {
-        public string? Search { get; set; }
-    }
+    public record SearchUserQuery(string? Search) : IQuery<IEnumerable<VkUserModel>>;
 }

@@ -48,9 +48,9 @@ namespace metrics.Competitions.Hosted.Services
                 {
                     FormUrlEncodedContent formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
                     {
-                        new KeyValuePair<string, string>("page_num", i.ToString()),
-                        new KeyValuePair<string, string>("our", string.Empty),
-                        new KeyValuePair<string, string>("city_id", _competitionOptions.CityId)
+                        new("page_num", i.ToString()),
+                        new("our", string.Empty),
+                        new("city_id", _competitionOptions.CityId)
                     });
 
                     var result = await client.PostAsync("https://wingri.ru/main/getPosts", formContent, cancellationToken);

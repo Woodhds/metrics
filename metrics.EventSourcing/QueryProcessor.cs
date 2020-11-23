@@ -24,7 +24,7 @@ namespace metrics.EventSourcing
         private readonly IServiceProvider _resolver;
 
         private readonly ConcurrentDictionary<Type, CacheItem> _implementations =
-            new ConcurrentDictionary<Type, CacheItem>();
+            new();
 
         public QueryProcessor(IServiceProvider resolver)
         {
