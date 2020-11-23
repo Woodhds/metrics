@@ -17,7 +17,7 @@ import {CdkDragDrop} from "@angular/cdk/drag-drop";
 export class MessageComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   resultsLength = 0;
-  displayedColumns = ['Id', 'Title', 'Color', 'Actions', 'drag']
+  displayedColumns = ['Id', 'Title', 'Color', 'Actions']
   data: Message[];
   isLoading = false;
 
@@ -70,6 +70,6 @@ export class MessageComponent implements AfterViewInit {
   }
 
   dropTable(e: CdkDragDrop<Message[]>) {
-    
+
   }
 }
