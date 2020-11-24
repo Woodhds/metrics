@@ -26,6 +26,10 @@ export class MessageCategoryService {
     return this.httpClient.post(`${this.routePrefix}`, data);
   }
 
+  saveList(data: Array<Message>) : Observable<Array<Message>> {
+    return this.httpClient.post<Array<Message>>(`${this.routePrefix}/list`, data)
+  }
+
   delete(id: number) {
     return this.httpClient.delete(`${this.routePrefix}/${id}`);
   }

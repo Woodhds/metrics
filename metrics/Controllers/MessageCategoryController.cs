@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Base.Contracts;
 using metrics.Data.Abstractions;
 using metrics.Data.Common.Infrastructure.Entities;
@@ -40,6 +41,20 @@ namespace metrics.Controllers
             await scope.CommitAsync();
 
             return Ok();
+        }
+
+        [HttpPost("list")]
+        public async Task<IActionResult> SaveList([FromBody] IEnumerable<MessageCategory> categories)
+        {
+            using var scope = await _transactionScopeFactory.CreateAsync();
+            foreach (var category in categories)
+            {
+                await scope.GetRepository<MessageCategory>().UpdateAsync(category);
+            }
+
+            await scope.CommitAsync();
+
+            return Ok(categories);
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]

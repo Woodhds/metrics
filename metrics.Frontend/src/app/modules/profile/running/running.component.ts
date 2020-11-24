@@ -25,17 +25,19 @@ export class RunningComponent implements OnInit {
     });
   }
 
-  private async fetch() {
-    const { Total, Data } = await this.userMessageService
+  private fetch() {
+    this.userMessageService
       .get(this.page, this.pageSize)
-      .toPromise();
-    this.total = Total;
-    this.data = Data;
+      .subscribe(({Total, Data}) => {
+        this.total = Total;
+        this.data = Data;
+      })
+
   }
 
-  async onChangePage({ pageIndex, pageSize }: PageEvent) {
+  onChangePage({ pageIndex, pageSize }: PageEvent) {
     this.pageSize = pageSize;
     this.page = pageIndex;
-    await this.fetch();
+    this.fetch();
   }
 }
