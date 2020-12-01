@@ -74,7 +74,8 @@
             "browserTarget": "metrics:build",
             "customWebpackConfig": {
               "path": "./extra-webpack.config.ts"
-            }
+            },
+            "ssl": true
           },
           "configurations": {
             "production": {
