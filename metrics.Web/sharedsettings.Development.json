@@ -8,6 +8,9 @@
   "KafkaConfiguration": {
     "Servers": "localhost:9092"
   },
+  "NatsOptions": {
+    "Servers": ["localhost:4222"]
+  },
   "ElasticOptions": {
     "Host": "http://localhost:9200"
   },
