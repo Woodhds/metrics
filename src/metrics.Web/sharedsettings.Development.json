@@ -1,5 +1,5 @@
 ﻿{
-  "FrontendUrl": "https://localhost:4200",
+  "FrontendUrl": "http://localhost:4200",
   "RedisConnectionStringLock": "localhost:6379,password=password",
   "CacheOptions": {
     "Configuration": "localhost:6379,password=password",

@@ -75,7 +75,7 @@
             "customWebpackConfig": {
               "path": "./extra-webpack.config.ts"
             },
-            "ssl": true
+            "ssl": false
           },
           "configurations": {
             "production": {

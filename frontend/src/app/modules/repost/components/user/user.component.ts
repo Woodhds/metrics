@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   messages: VkMessage[] = [];
   loading = false;
   page = 0;
-  pageSize = 80;
+  pageSize = 100;
   total = 0;
   pageSizeOptions: Array<number> = [20, 40, 60, 80, 100, 200];
   public categories: Message[];

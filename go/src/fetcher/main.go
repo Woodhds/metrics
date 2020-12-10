@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	token string = ""
+	token string = "3bbd60323fd573841955090e91a3d76bc5724fd9c35ef0daa5543ee031589d01ca9f672c20e0fe8b9eaa6"
 )
 
 type vkMessage struct {
@@ -85,10 +85,10 @@ func comb(data []vkMessage) []vkMessage {
 			resp, err := http.Get(query)
 
 			if err == nil {
-				defer resp.Body.Close()
 				var decoded vkResponse
 
 				err = json.NewDecoder(resp.Body).Decode(&decoded)
+				resp.Body.Close()
 
 				if decoded.Response.Items != nil {
 					for _, m := range decoded.Response.Items {

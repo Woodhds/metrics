@@ -46,7 +46,7 @@ namespace metrics.Competitions.Hosted.Services
             {
                 try
                 {
-                    FormUrlEncodedContent formContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                    FormUrlEncodedContent formContent = new(new List<KeyValuePair<string, string>>
                     {
                         new("page_num", i.ToString()),
                         new("our", string.Empty),

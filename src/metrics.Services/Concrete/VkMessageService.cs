@@ -111,7 +111,6 @@ namespace metrics.Services.Concrete
             var result = response.Documents.GroupBy(f => new {f.OwnerId, f.Id})
                 .Select(f => f.FirstOrDefault())
                 .OrderBy(k => k.UserReposted);
-            await WriteLog(result);
             return new DataSourceResponseModel(result, response.Total);
         }
 

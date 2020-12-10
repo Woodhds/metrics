@@ -7,6 +7,7 @@ namespace Base.Contracts.Models
 {
     public class VkMessageModel : IEquatable<VkMessageModel>
     {
+        public string Key { get; set; }
         public int Id { get; set; }
         public int OwnerId { get; set; }
         public int FromId { get; set; }
@@ -16,7 +17,7 @@ namespace Base.Contracts.Models
         public uint RepostsCount { get; set; }
         public string Owner { get; set; }
         public string[] Images { get; set; }
-        public int Identifier => (FromId ^ Id).GetHashCode();
+        public long Identifier { get; set; }
         [JsonIgnore] public int RepostedFrom { get; set; }
         public int? MessageCategoryId { get; set; }
         [JsonIgnore] public string? MessageCategory { get; set; }

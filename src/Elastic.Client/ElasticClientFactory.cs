@@ -27,7 +27,7 @@ namespace Elastic.Client
                 new ConnectionSettings(new Uri(_options.Host))
                     .DefaultMappingFor<VkMessageModel>(descriptor =>
                         descriptor
-                            .IdProperty(model => model.Identifier)
+                            .IdProperty(model => model.Key)
                             .IndexName("vk_message")
                     );
             return new ElasticClient(connection);

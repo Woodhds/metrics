@@ -1,0 +1,29 @@
+﻿apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: user-fetcher-job
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: user-fetcher-job
+              image: user-fetcher
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: ACCESS_TOKEN
+                  value: "3bbd60323fd573841955090e91a3d76bc5724fd9c35ef0daa5543ee031589d01ca9f672c20e0fe8b9eaa6"
+                - name: VERSION
+                  value: "5.124"
+                - name: COUNT
+                  value: "100"
+                - name: PG
+                  value: "host=postgresql port=5432 database=repost_ctx user=postgres password=password"
+                - name: ES
+                  value: "http://elasticsearch-elasticsearch-master:9200" 
+              command:
+                - /main
+  schedule: "0 * * * *"
