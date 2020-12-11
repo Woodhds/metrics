@@ -15,7 +15,7 @@ spec:
               imagePullPolicy: IfNotPresent
               env:
                 - name: ACCESS_TOKEN
-                  value: "3bbd60323fd573841955090e91a3d76bc5724fd9c35ef0daa5543ee031589d01ca9f672c20e0fe8b9eaa6"
+                  value: ""
                 - name: VERSION
                   value: "5.124"
                 - name: COUNT

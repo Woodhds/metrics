@@ -17,7 +17,6 @@ namespace Base.Contracts.Models
         public uint RepostsCount { get; set; }
         public string Owner { get; set; }
         public string[] Images { get; set; }
-        public long Identifier { get; set; }
         [JsonIgnore] public int RepostedFrom { get; set; }
         public int? MessageCategoryId { get; set; }
         [JsonIgnore] public string? MessageCategory { get; set; }
