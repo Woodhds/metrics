@@ -37,7 +37,7 @@ namespace metrics.Services.Concrete
             };
             if (user.Id > 0)
             {
-                using var scope = await _transactionScopeFactory.CreateAsync(token);
+                await using var scope = await _transactionScopeFactory.CreateAsync(token);
                 await scope.GetRepository<VkUserModel>().CreateAsync(user, token);
                 await scope.CommitAsync(token);
             }

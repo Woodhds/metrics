@@ -26,7 +26,7 @@ namespace metrics.Services.Concrete
 
         public async Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models)
         {
-            using var scope = await _transactionScopeFactory.CreateAsync();
+            await using var scope = await _transactionScopeFactory.CreateAsync();
 
             var obj = models.Select(f => new
             {

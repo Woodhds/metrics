@@ -8,46 +8,52 @@ namespace metrics.Data.Sql.Contexts
 {
     public class TransactionContext : ITransactionContext
     {
-        private readonly IDbContextTransaction _dbContextTransaction;
-        private bool _disposed;
+        private IDbContextTransaction? _dbContextTransaction;
 
         public TransactionContext(IDbContextTransaction dbContextTransaction)
         {
-            _dbContextTransaction = dbContextTransaction;
+            _dbContextTransaction = dbContextTransaction ?? throw new ArgumentNullException(nameof(dbContextTransaction));
         }
 
-        public Task CommitAsync(CancellationToken cancellationToken = default)
+        public Task? CommitAsync(CancellationToken cancellationToken = default)
         {
             return _dbContextTransaction?.CommitAsync(cancellationToken);
         }
 
-        public Task RollbackAsync(CancellationToken cancellationToken = default)
+        public Task? RollbackAsync(CancellationToken cancellationToken = default)
         {
             return _dbContextTransaction?.RollbackAsync(cancellationToken);
         }
 
-        ~TransactionContext()
-        {
-            Dispose(false);
-        }
-
         private void Dispose(bool disposing)
         {
-            if (_disposed)
-                return;
-
             if (disposing)
             {
                 _dbContextTransaction?.Dispose();
             }
-
-            _disposed = true;
         }
 
         public virtual void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public virtual async ValueTask DisposeAsync()
+        {
+            await DisposeAsyncCore();
+            Dispose(false);
+            GC.SuppressFinalize(this);
+        }
+
+        private async ValueTask DisposeAsyncCore()
+        {
+            if (_dbContextTransaction != null)
+            {
+                await _dbContextTransaction.DisposeAsync().ConfigureAwait(false);
+            }
+           
+            _dbContextTransaction = null;
         }
     }
 }

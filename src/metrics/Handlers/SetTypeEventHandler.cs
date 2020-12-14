@@ -20,7 +20,7 @@ namespace metrics.Handlers
 
         public async Task HandleAsync(SetMessageType obj, CancellationToken token = default)
         {
-            var transaction = await _transactionScopeFactory.CreateAsync(token);
+            await using var transaction = await _transactionScopeFactory.CreateAsync(token);
 
             var message = await transaction.Query<MessageVk>()
                 .Where(a => a.MessageId == obj.MessageId && a.OwnerId == obj.OwnerId)

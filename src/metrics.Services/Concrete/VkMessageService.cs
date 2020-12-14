@@ -59,7 +59,7 @@ namespace metrics.Services.Concrete
                     })
                 );
 
-            using var scope = _transactionScopeFactory.CreateQuery();
+            await using var scope = _transactionScopeFactory.CreateQuery();
             var keys = response.Documents.Select(f => f.OwnerId + "_" + f.Id);
             var items = await scope.Query<MessageVk>()
                 .Select(r =>

@@ -1,5 +1,4 @@
 using System;
-using Base.Contracts;
 using Base.Contracts.Models;
 using Base.Contracts.Options;
 using Microsoft.Extensions.Options;

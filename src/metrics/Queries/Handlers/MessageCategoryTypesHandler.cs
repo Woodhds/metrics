@@ -23,7 +23,7 @@ namespace metrics.Queries.Handlers
             CancellationToken token = default
         )
         {
-            using var scope = _transactionScopeFactory.CreateQuery();
+            await using var scope = _transactionScopeFactory.CreateQuery();
             var q = scope.Query<MessageCategory>().OrderBy(a => a.SortOrder);
             var (page, pageSize) = query;
             return new DataSourceResponseModel(

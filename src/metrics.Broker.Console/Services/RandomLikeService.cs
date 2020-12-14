@@ -43,7 +43,7 @@ namespace metrics.Broker.Console.Services
 
         public async Task ExecuteRandomLike(int userId)
         {
-            var scope = _transactionScopeFactory.CreateQuery();
+            await using var scope = _transactionScopeFactory.CreateQuery();
 
             var favouriteGroup = await scope
                 .RawSql<FavouriteGroup>(

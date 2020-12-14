@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace metrics.Data.Abstractions
 {
-    public interface ITransactionContext : IDisposable
+    public interface ITransactionContext : IDisposable, IAsyncDisposable
     {
-        Task CommitAsync(CancellationToken cancellationToken = default);
-        Task RollbackAsync(CancellationToken cancellationToken = default);
+        Task? CommitAsync(CancellationToken cancellationToken = default);
+        Task? RollbackAsync(CancellationToken cancellationToken = default);
     }
 }

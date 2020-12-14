@@ -28,7 +28,7 @@ namespace metrics.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveAsync([FromBody] MessageCategory category)
         {
-            using var scope = await _transactionScopeFactory.CreateAsync();
+            await using var scope = await _transactionScopeFactory.CreateAsync();
             if (category.Id > 0)
             {
                 await scope.GetRepository<MessageCategory>().UpdateAsync(category);

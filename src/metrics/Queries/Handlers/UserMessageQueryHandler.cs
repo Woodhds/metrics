@@ -32,7 +32,7 @@ namespace metrics.Queries.Handlers
             CancellationToken token = default)
         {
             var (page, pageSize) = messageQuery;
-            using var scope = await _transactionScopeFactory.CreateAsync(token);
+            await using var scope = await _transactionScopeFactory.CreateAsync(token);
 
             var query = scope.Query<VkRepost>()
                 .Where(f => f.UserId == _authenticatedUserProvider.GetUser().Id).OrderByDescending(f => f.Id);

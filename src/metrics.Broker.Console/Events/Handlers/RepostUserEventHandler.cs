@@ -35,7 +35,7 @@ namespace metrics.Broker.Console.Events.Handlers
         {
             try
             {
-                using var transaction = await _transactionScopeFactory.CreateAsync(token);
+                await using var transaction = await _transactionScopeFactory.CreateAsync(token);
 
                 var message = await transaction
                     .Query<VkRepost>()
@@ -52,7 +52,7 @@ namespace metrics.Broker.Console.Events.Handlers
 
                 await transaction.GetRepository<VkRepost>().UpdateAsync(message, token);
 
-                await transaction.CommitAsync(token);
+                await transaction.CommitAsync(token)!;
 
                 _jobService.Schedule<ISchedulerJobService>(
                     client => client.Repost(message.OwnerId, message.MessageId, obj.UserId),

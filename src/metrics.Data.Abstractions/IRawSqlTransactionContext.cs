@@ -5,7 +5,7 @@ namespace metrics.Data.Abstractions
 {
     public interface IRawSqlTransactionContext : ITransactionContext
     {
-        Task<int> ExecuteRawCommandAsync(FormattableString sql);
-        Task<int> ExecuteRawCommandAsync(string sql, params object[] parameters);
+        Task<int>? ExecuteRawCommandAsync(FormattableString sql);
+        Task<int>? ExecuteRawCommandAsync(string sql, params object[] parameters);
     }
 }

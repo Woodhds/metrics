@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using metrics.Data.Abstractions;
@@ -9,52 +10,61 @@ namespace metrics.Data.Sql.Contexts
 {
     public class BatchTransactionContext : QueryContext, IBatchTransactionContext
     {
-        private readonly IDbContextTransaction _dbContextTransaction;
-        private readonly DbContext _dbContext;
-        private bool _disposed;
+        private IDbContextTransaction? _dbContextTransaction;
+        private DbContext? _dbContext;
 
         public BatchTransactionContext(IDbContextTransaction dbContextTransaction, DbContext dbContext) :
             base(dbContext)
         {
-            _dbContextTransaction = dbContextTransaction;
-            _dbContext = dbContext;
+            _dbContextTransaction = dbContextTransaction ?? throw new ArgumentNullException(nameof(dbContextTransaction));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public Task CreateCollectionAsync<T>(IEnumerable<T> collection, CancellationToken ct = default) where T : class
+        public Task? CreateCollectionAsync<T>(IEnumerable<T> collection, CancellationToken ct = default) where T : class
         {
-            return _dbContext.Set<T>().AddRangeAsync(collection, ct);
+            return _dbContext?.Set<T>().AddRangeAsync(collection, ct);
         }
 
-
-        ~BatchTransactionContext()
-        {
-            Dispose(false);
-        }
         public override void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        protected void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
-            if (_disposed || !disposing) return;
+            if (!disposing) return;
             
             _dbContextTransaction?.Dispose();
             _dbContext?.Dispose();
+            _dbContext = null;
+            _dbContextTransaction = null;
             base.Dispose();
-
-            _disposed = true;
         }
 
-        public async Task CommitAsync(CancellationToken cancellationToken = default)
+        public override async ValueTask DisposeAsync()
         {
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _dbContextTransaction.CommitAsync(cancellationToken);
+            if (_dbContextTransaction != null)
+            {
+                await _dbContextTransaction.DisposeAsync().ConfigureAwait(false);
+                
+            }
+            _dbContextTransaction = null;
+            Dispose(false);
+            await base.DisposeAsync();
+            
+            GC.SuppressFinalize(this);
         }
 
-        public Task RollbackAsync(CancellationToken cancellationToken = default)
+        public async Task? CommitAsync(CancellationToken cancellationToken = default)
         {
-            return _dbContextTransaction.RollbackAsync(cancellationToken);
+            await _dbContext?.SaveChangesAsync(cancellationToken)!;
+            await _dbContextTransaction?.CommitAsync(cancellationToken)!;
+        }
+
+        public Task? RollbackAsync(CancellationToken cancellationToken = default)
+        {
+            return _dbContextTransaction?.RollbackAsync(cancellationToken);
         }
     }
 }

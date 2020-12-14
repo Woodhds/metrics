@@ -27,7 +27,7 @@ namespace metrics.Broker.Console.Events.Handlers
             if (obj.UserId == default)
                 return;
 
-            using var scope = await _transactionScopeFactory.CreateAsync(token);
+            await using var scope = await _transactionScopeFactory.CreateAsync(token);
 
             var message = await scope.Query<VkRepost>()
                 .Where(q =>
