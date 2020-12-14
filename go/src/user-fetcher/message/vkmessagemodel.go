@@ -5,10 +5,10 @@ type VkMessageModel struct {
 	FromID       int                 `json:"fromId"`
 	Date         *Timestamp          `json:"date"`
 	Images       []string            `json:"images"`
-	Identifier   int                 `json:"identifier"`
+	Identifier   int64               `json:"identifier"`
 	LikesCount   int                 `json:"likesCount"`
 	Owner        string              `json:"owner"`
-	OwnerId      int                 `json:"ownerId"`
+	OwnerID      int                 `json:"ownerId"`
 	RepostedFrom int                 `json:"repostedFrom"`
 	RepostsCount int                 `json:"repostsCount"`
 	Text         string              `json:"text"`

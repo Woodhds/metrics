@@ -146,7 +146,7 @@ func getMessages(mutex *sync.Mutex, bulkIndexer esutil.BulkIndexer, httpClient *
 		c = c + 1
 		reader := esutil.NewJSONReader(m)
 		bulkIndexer.Add(context.Background(), esutil.BulkIndexerItem{
-			DocumentID: fmt.Sprintf("%d_%d", m.OwnerId, m.ID),
+			DocumentID: fmt.Sprintf("%d_%d", m.OwnerID, m.ID),
 			Body:       reader,
 			Index:      "vk_message",
 			Action:     "index",
@@ -172,10 +172,10 @@ func vkMessageModel(post *message.VkMessage, id int, groups []*message.VkGroup) 
 		FromID:       post.FromID,
 		Date:         post.Date,
 		Images:       []string{},
-		Identifier:   hash(post.OwnerID, post.ID),
+		Identifier:   time.Now().UTC().Unix(),
 		LikesCount:   post.Likes.Count,
 		Owner:        "",
-		OwnerId:      post.OwnerID,
+		OwnerID:      post.OwnerID,
 		RepostedFrom: id,
 		RepostsCount: post.Reposts.Count,
 		Text:         post.Text,

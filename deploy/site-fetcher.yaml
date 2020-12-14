@@ -1,7 +1,7 @@
 ﻿apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: user-fetcher-job
+  name: site-fetcher-job
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -10,24 +10,22 @@ spec:
         spec:
           restartPolicy: OnFailure
           containers:
-            - name: user-fetcher-job
-              image: user-fetcher
+            - name: site-fetcher-job
+              image: site-fetcher
               imagePullPolicy: IfNotPresent
               resources:
                 limits:
                   cpu: 10m
                   memory: 30Mi
               env:
+                - name: CITY_ID
+                  value: "97"
                 - name: ACCESS_TOKEN
                   value: ""
                 - name: VERSION
                   value: "5.124"
-                - name: COUNT
-                  value: "100"
-                - name: PG
-                  value: "host=postgresql port=5432 database=repost_ctx user=postgres password=password"
                 - name: ES
-                  value: "http://elasticsearch-elasticsearch-master:9200" 
+                  value: "http://elasticsearch-elasticsearch-master:9200"
               command:
                 - /main
-  schedule: "0 * * * *"
+  schedule: "10 * * * *"
