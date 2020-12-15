@@ -87,18 +87,18 @@ type VkProfile struct {
 }
 
 type VkMessageModel struct {
-	ID           int                 `json:"id"`
-	FromID       int                 `json:"fromId"`
-	Date         *Timestamp          `json:"date"`
-	Images       []string            `json:"images"`
-	Identifier   int64               `json:"identifier"`
-	LikesCount   int                 `json:"likesCount"`
-	Owner        string              `json:"owner"`
-	OwnerID      int                 `json:"ownerId"`
-	RepostedFrom int                 `json:"repostedFrom"`
-	RepostsCount int                 `json:"repostsCount"`
-	Text         string              `json:"text"`
-	UserReposted *ConvertibleBoolean `json:"userReposted"`
+	ID           int        `json:"id"`
+	FromID       int        `json:"fromId"`
+	Date         *Timestamp `json:"date"`
+	Images       []string   `json:"images"`
+	Identifier   int64      `json:"identifier"`
+	LikesCount   int        `json:"likesCount"`
+	Owner        string     `json:"owner"`
+	OwnerID      int        `json:"ownerId"`
+	RepostedFrom int        `json:"repostedFrom"`
+	RepostsCount int        `json:"repostsCount"`
+	Text         string     `json:"text"`
+	UserReposted bool       `json:"userReposted"`
 }
 
 func (t *Timestamp) MarshalJSON() ([]byte, error) {
@@ -106,12 +106,12 @@ func (t *Timestamp) MarshalJSON() ([]byte, error) {
 	return []byte(stamp), nil
 }
 
-func (bit ConvertibleBoolean) UnmarshalJSON(data []byte) error {
+func (bit *ConvertibleBoolean) UnmarshalJSON(data []byte) error {
 	asString := string(data)
 	if asString == "1" || asString == "true" {
-		bit = true
+		*bit = true
 	} else if asString == "0" || asString == "false" {
-		bit = false
+		*bit = false
 	} else {
 		return errors.New(fmt.Sprintf("Boolean unmarshal error: invalid input %s", asString))
 	}
@@ -248,7 +248,7 @@ func vkMessageModel(post *VkMessage, groups []*VkGroup) *VkMessageModel {
 		RepostedFrom: 0,
 		RepostsCount: post.Reposts.Count,
 		Text:         post.Text,
-		UserReposted: post.Reposts.UserReposted,
+		UserReposted: bool(*post.Reposts.UserReposted),
 	}
 
 	for _, i := range post.Attachments {

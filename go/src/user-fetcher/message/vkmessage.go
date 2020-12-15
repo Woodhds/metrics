@@ -73,12 +73,12 @@ func (t *Timestamp) MarshalJSON() ([]byte, error) {
 	return []byte(stamp), nil
 }
 
-func (bit ConvertibleBoolean) UnmarshalJSON(data []byte) error {
+func (bit *ConvertibleBoolean) UnmarshalJSON(data []byte) error {
 	asString := string(data)
 	if asString == "1" || asString == "true" {
-		bit = true
+		*bit = true
 	} else if asString == "0" || asString == "false" {
-		bit = false
+		*bit = false
 	} else {
 		return errors.New(fmt.Sprintf("Boolean unmarshal error: invalid input %s", asString))
 	}
