@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Base.Contracts;
 using Base.Contracts.Models;
@@ -57,6 +54,14 @@ namespace metrics.Services.Concrete
 
                         return q;
                     })
+                    .Highlight(a => a
+                        .Fields(descriptor => descriptor
+                            .Field(h => h.Text)
+                            .NumberOfFragments(0)
+                            .PreTags("<strong>")
+                            .PostTags("</strong>")
+                        )
+                    )
                 );
 
             await using var scope = _transactionScopeFactory.CreateQuery();
@@ -96,37 +101,31 @@ namespace metrics.Services.Concrete
                 _logger.LogError(e, "Error to access predict client");
             }
 
-            foreach (var document in response.Documents)
+            foreach (var document in response.Hits)
             {
                 var messageCategory =
                     items.FirstOrDefault(f =>
-                        f.message.MessageId == document.Id && f.message.OwnerId == document.OwnerId);
-                document.MessageCategoryId = messageCategory?.message?.MessageCategoryId;
-                document.MessageCategory = messageCategory?.category;
-                document.UserReposted = reposts.Any(f => f.MessageId == document.Id && f.OwnerId == document.OwnerId);
-                document.MessageCategoryPredict = predicted?.Messages
-                    .FirstOrDefault(e => e.Id == document.Id && e.OwnerId == document.OwnerId)?.Category;
+                        f.message.MessageId == document.Source.Id && f.message.OwnerId == document.Source.OwnerId);
+                document.Source.MessageCategoryId = messageCategory?.message?.MessageCategoryId;
+                document.Source.MessageCategory = messageCategory?.category;
+
+                if (document.Highlight.ContainsKey("text"))
+                {
+                    document.Source.Text = document.Highlight["text"].FirstOrDefault();
+                }
+                document.Source.UserReposted = reposts.Any(f =>
+                    f.MessageId == document.Source.Id && f.OwnerId == document.Source.OwnerId);
+                document.Source.MessageCategoryPredict = predicted?.Messages
+                    .FirstOrDefault(e => e.Id == document.Source.Id && e.OwnerId == document.Source.OwnerId)?.Category;
             }
 
-            var result = response.Documents.GroupBy(f => new {f.OwnerId, f.Id})
-                .Select(f => f.FirstOrDefault())
-                .OrderBy(k => k.UserReposted);
+            var result = response.Hits
+                .OrderByDescending(a => a.Score)
+                .Select(f => f.Source)
+                .GroupBy(f => new {f.OwnerId, f.Id})
+                .Select(f => f.FirstOrDefault());
+
             return new DataSourceResponseModel(result, response.Total);
-        }
-
-        private async Task WriteLog(IEnumerable<VkMessageModel> messages)
-        {
-            var sb = new StringBuilder();
-            messages.GroupBy(f => f.MessageCategoryPredict).ToList().ForEach(a =>
-            {
-                sb.AppendLine(a.Key);
-                a.Select((v, i) => new {v, i  }).ToList().ForEach(t =>
-                {
-                    sb.AppendLine($"{t.i}.  https://vk.com/wall{t.v.OwnerId}_{t.v.Id}");
-                });
-            });
-
-            await File.WriteAllTextAsync(@"D:\log.txt", sb.ToString());
         }
     }
 }

@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   startHub() {
     this.hub.start().catch(reason => {
       console.log('Error', reason);
-      setTimeout(this.startHub, 60000)
+      setTimeout(this.startHub.bind(this), 60000)
     });
   }
 

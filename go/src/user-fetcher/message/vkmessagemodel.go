@@ -12,5 +12,4 @@ type VkMessageModel struct {
 	RepostedFrom int        `json:"repostedFrom"`
 	RepostsCount int        `json:"repostsCount"`
 	Text         string     `json:"text"`
-	UserReposted bool       `json:"userReposted"`
 }

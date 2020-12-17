@@ -179,7 +179,6 @@ func vkMessageModel(post *message.VkMessage, id int, groups []*message.VkGroup) 
 		RepostedFrom: id,
 		RepostsCount: post.Reposts.Count,
 		Text:         post.Text,
-		UserReposted: bool(*post.Reposts.UserReposted),
 	}
 
 	for _, i := range post.Attachments {

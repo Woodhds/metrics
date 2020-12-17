@@ -1,14 +1,12 @@
 package message
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"time"
 )
 
 type Timestamp time.Time
-type ConvertibleBoolean bool
 
 type VkWallResponse struct {
 	Response struct {
@@ -53,13 +51,11 @@ type VkGroup struct {
 }
 
 type VkReposts struct {
-	Count        int                 `json:"count"`
-	UserReposted *ConvertibleBoolean `json:"user_reposted"`
+	Count int `json:"count"`
 }
 
 type VkLikes struct {
-	UserLikes *ConvertibleBoolean `json:"user_likes"`
-	Count     int                 `json:"count"`
+	Count int `json:"count"`
 }
 
 type VkProfile struct {
@@ -71,18 +67,6 @@ type VkProfile struct {
 func (t *Timestamp) MarshalJSON() ([]byte, error) {
 	stamp := fmt.Sprintf("\"%s\"", time.Time(*t).UTC().Format(time.RFC3339))
 	return []byte(stamp), nil
-}
-
-func (bit *ConvertibleBoolean) UnmarshalJSON(data []byte) error {
-	asString := string(data)
-	if asString == "1" || asString == "true" {
-		*bit = true
-	} else if asString == "0" || asString == "false" {
-		*bit = false
-	} else {
-		return errors.New(fmt.Sprintf("Boolean unmarshal error: invalid input %s", asString))
-	}
-	return nil
 }
 
 func (t *Timestamp) UnmarshalJSON(b []byte) error {
