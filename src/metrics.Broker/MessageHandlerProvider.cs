@@ -9,9 +9,9 @@ namespace metrics.Broker
     internal class MessageHandlerProvider : IMessageHandlerProvider
     {
         private readonly IServiceCollection _serviceCollection;
-        private readonly Dictionary<Type, Type> _consumers = new Dictionary<Type, Type>();
-        private readonly Dictionary<Type, Type> _commandConsumers = new Dictionary<Type, Type>();
-        private readonly List<Type> _commands = new List<Type>();
+        private readonly Dictionary<Type, Type> _consumers = new();
+        private readonly Dictionary<Type, Type> _commandConsumers = new();
+        private readonly List<Type> _commands = new();
         public MessageHandlerProvider(IServiceCollection serviceCollection)
         {
             _serviceCollection = serviceCollection;
