@@ -2,6 +2,7 @@
 using Hangfire;
 using metrics.Authentication;
 using metrics.Authentication.Services.Abstract;
+using metrics.BackgroundJobs.Attributes;
 using metrics.Services.Abstractions;
 
 namespace metrics.Broker.Console.Services
@@ -9,6 +10,7 @@ namespace metrics.Broker.Console.Services
     public interface ISchedulerJobService
     {
         [Queue("repost")]
+        [Mutex("repost-{2}", MaxAttempts = 0)]
         Task Repost(int ownerId, int messageId, int userId);
     }
 

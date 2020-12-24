@@ -35,7 +35,7 @@ namespace metrics.EventSourcing
         {
             var handler = GetHandler<TResponse>(query.GetType());
 
-            return await handler.HandlerImpl.ExecuteAsync<TResponse>(handler.Handler, query, token);
+            return await handler.HandlerImpl.ExecuteAsync<TResponse>(handler.Handler, query, token).ConfigureAwait(false);
         }
 
         private CacheItem GetHandler<TResponse>(Type queryType)

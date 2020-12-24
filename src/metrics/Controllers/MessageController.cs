@@ -51,35 +51,20 @@ namespace metrics.Controllers
         [HttpPost("repost")]
         public async Task<IActionResult> Repost([FromBody] List<VkRepostViewModel> reposts)
         {
-            try
+            await _messageBroker.SendAsync(new CreateRepostGroup
             {
-                await _messageBroker.SendAsync(new CreateRepostGroup
-                {
-                    UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId(),
-                    Reposts = {reposts.Select(f => new VkRepostGroup {Id = f.Id, OwnerId = f.OwnerId})}
-                });
+                UserId = _httpContextAccessor.HttpContext.User.Identity.GetUserId(),
+                Reposts = {reposts.Select(f => new VkRepostGroup {Id = f.Id, OwnerId = f.OwnerId})}
+            });
 
-                return Ok(true);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return BadRequest(false);
-            }
+            return Ok(true);
         }
 
         [HttpGet("like")]
         public async Task<IActionResult> Like([FromQuery] VkRepostViewModel model)
         {
-            try
-            {
-                await _vkClient.Like(model);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            await _vkClient.Like(model);
+            return Ok();
         }
 
         [HttpPost("type")]

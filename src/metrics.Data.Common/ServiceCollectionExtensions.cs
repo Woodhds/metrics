@@ -10,15 +10,15 @@ namespace metrics.Data.Common
         public static IServiceCollection AddDataContext<T>(this IServiceCollection services,
             string connectionString) where T : DbContext
         {
-            services.AddSingleton<IEntityConfigurationProvider, EntityConfigurationProvider>();
-            services.AddSingleton<ITransactionScopeFactory, TransactionScopeFactory>();
-            services.AddSingleton<IDataContextFactory, DataContextFactory>();
-            services.AddTransient<DbContext, T>();
-            services.AddDbContextPool<T>(x =>
+            void OptionsAction(DbContextOptionsBuilder builder)
             {
-                x.UseNpgsql(connectionString);
-                x.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
+                builder.UseNpgsql(connectionString);
+                builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            }
+
+            services.AddSingleton<IEntityConfigurationProvider, EntityConfigurationProvider>();
+            services.AddSingleton<ITransactionScopeFactory, TransactionScopeFactory<T>>();
+            services.AddPooledDbContextFactory<T>(OptionsAction);
 
             return services;
         }
