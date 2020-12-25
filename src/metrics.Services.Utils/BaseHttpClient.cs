@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Mime;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using metrics.Serialization.Abstractions;
@@ -48,7 +49,8 @@ namespace metrics.Services.Utils
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                throw;
+                ExceptionDispatchInfo.Capture(e).Throw();
+                return default;
             }
         }
 
@@ -62,7 +64,8 @@ namespace metrics.Services.Utils
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                throw;
+                ExceptionDispatchInfo.Capture(e).Throw();
+                return default;
             }
         }
     }

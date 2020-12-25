@@ -6,7 +6,7 @@ namespace metrics.Serialization
 {
     public class JsonSerializerOptionsProvider : IJsonSerializerOptionsProvider
     {
-        public JsonSerializerOptions Apply(JsonSerializerOptions options)
+        public JsonSerializerOptions Apply(JsonSerializerOptions? options)
         {
             options ??= new JsonSerializerOptions();
 

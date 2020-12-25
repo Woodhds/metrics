@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace metrics.Data.Common.Infrastructure.Entities
+﻿namespace metrics.Data.Common.Infrastructure.Entities
 {
     public class MessageVk
     {
@@ -9,8 +7,5 @@ namespace metrics.Data.Common.Infrastructure.Entities
         public int MessageCategoryId { get; set; }
         public MessageCategory MessageCategory { get; set; }
         public bool IsExported { get; set; }
-
-        [NotMapped]
-        public int Identifier => (OwnerId ^ MessageId).GetHashCode();
     }
 }

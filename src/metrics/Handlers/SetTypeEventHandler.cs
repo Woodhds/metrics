@@ -40,6 +40,7 @@ namespace metrics.Handlers
                 message.MessageCategoryId = obj.MessageCategory;
                 await transaction.GetRepository<MessageVk>().UpdateAsync(message, token);
             }
+            
             await transaction.CommitAsync(token);
         }
     }

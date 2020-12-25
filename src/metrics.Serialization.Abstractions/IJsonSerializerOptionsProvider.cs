@@ -4,6 +4,6 @@ namespace metrics.Serialization.Abstractions
 {
     public interface IJsonSerializerOptionsProvider
     {
-        JsonSerializerOptions Apply(JsonSerializerOptions options);
+        JsonSerializerOptions Apply(JsonSerializerOptions? options);
     }
 }
