@@ -10,6 +10,6 @@ namespace metrics.Services.Abstractions
         Task Repost(List<VkRepostViewModel> reposts);
 
         Task Repost(int ownerId, int id) =>
-            Repost(new List<VkRepostViewModel> {new VkRepostViewModel(ownerId, id)});
+            Repost(new List<VkRepostViewModel> {new(ownerId, id)});
     }
 }

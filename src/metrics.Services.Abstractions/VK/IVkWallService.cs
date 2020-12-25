@@ -9,6 +9,5 @@ namespace metrics.Services.Abstractions.VK
         Task<VkResponse<List<VkMessage>>> WallSearch(string id, int skip, int take, string? search = null);
         Task<VkResponse<List<VkMessage>>> GetById(IEnumerable<VkRepostViewModel>? vkRepostViewModels);
         Task<SimpleVkResponse<VkRepostMessage>> Repost(VkRepostViewModel model);
-
     }
 }

@@ -16,8 +16,8 @@ namespace Base.Contracts
         public DateTime Date { get; set; }
         public string? Text { get; set; }
         [JsonPropertyName("copy_history")]
-        public List<VkMessage>? CopyHistory { get; set; } = new List<VkMessage>();
-        public List<MessageAttachment> Attachments { get; set; } = new List<MessageAttachment>();
+        public List<VkMessage>? CopyHistory { get; set; } = new();
+        public List<MessageAttachment> Attachments { get; set; } = new();
         public MessageReposts? Reposts { get; set; }
         public VkLike? Likes { get; set; }
     }
@@ -84,14 +84,14 @@ namespace Base.Contracts
         w = 9
     }
 
-    public class Owner
+    public record Owner
     {
         public int Id { get; set; }
         [JsonPropertyName("screen_name")]
         public string ScreenName { get; set; }
     }
 
-    public class Profile : Owner
+    public record Profile : Owner
     {
         [JsonPropertyName("first_name")]
         public string FirstName { get; set; }

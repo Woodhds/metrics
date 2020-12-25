@@ -25,7 +25,7 @@ namespace metrics.Identity.Client
             _userTokenKeyProvider = userTokenKeyProvider;
         }
 
-        public async Task<string> GetTokenAsync()
+        public async ValueTask<string> GetTokenAsync()
         {
             var user = _authenticatedUserProvider.GetUser();
 

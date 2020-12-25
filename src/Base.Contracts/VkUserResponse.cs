@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Base.Contracts
 {
-    public class VkUserResponse
+    public record VkUserResponse
     {
         public int Id { get; set; }
         [JsonPropertyName("first_name")]

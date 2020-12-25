@@ -4,6 +4,6 @@ namespace metrics.Authentication.Infrastructure
 {
     public interface IUserTokenAccessor
     {
-        Task<string> GetTokenAsync();
+        ValueTask<string> GetTokenAsync();
     }
 }

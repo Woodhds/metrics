@@ -7,8 +7,11 @@ namespace Base.Contracts
     {
         [JsonConverter(typeof(JsonBooleanConverter))]
         public bool Success { get; set; }
-        public uint Post_Id { get; set; }
-        public uint Reposts_Count { get; set; }
-        public uint Likes_Count { get; set; }
+        [JsonPropertyName("post_id")]
+        public uint PostId { get; set; }
+        [JsonPropertyName("reposts_count")]
+        public uint RepostsCount { get; set; }
+        [JsonPropertyName("likes_count")]
+        public uint LikesCount { get; set; }
     }
 }

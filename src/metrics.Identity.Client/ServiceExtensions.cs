@@ -16,7 +16,7 @@ namespace metrics.Identity.Client
             IConfiguration configuration)
         {
             services.AddHttpClient();
-            services.AddGrpcClient<IdentityTokenService.IdentityTokenServiceClient>((serviceProvider, options) =>
+            services.AddGrpcClient<IdentityTokenService.IdentityTokenServiceClient>((_, options) =>
                 {
                     options.Address = new Uri(configuration["IdentityOptions:ServerUrl"]);
                 })

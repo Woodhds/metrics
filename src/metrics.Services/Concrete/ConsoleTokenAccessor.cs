@@ -13,9 +13,9 @@ namespace metrics.Services.Concrete
         {
             _options = options;
         }
-        public Task<string> GetTokenAsync()
+        public ValueTask<string> GetTokenAsync()
         {
-            return Task.FromResult(_options?.Value?.Value ?? "");
+            return new(_options?.Value?.Value);
         }
     }
 }

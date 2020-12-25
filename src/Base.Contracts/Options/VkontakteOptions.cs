@@ -10,6 +10,6 @@ namespace Base.Contracts.Options
         public string AppSecret { get; set; } = "";
         public string AppScope { get; set; } = "";
         
-        public HashSet<string> Fields { get; set; } = new HashSet<string>();
+        public HashSet<string> Fields { get; set; } = new();
     }
 }

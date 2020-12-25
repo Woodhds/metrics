@@ -1,6 +1,6 @@
 namespace Base.Contracts
 {
-    public class VkResponseLikeModel
+    public record VkResponseLikeModel
     {
         public int Likes { get; set; }
     }

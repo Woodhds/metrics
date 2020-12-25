@@ -3,7 +3,7 @@ using metrics.Serialization;
 
 namespace Base.Contracts
 {
-    public class VkGroup : Owner
+    public record VkGroup : Owner
     {
         public string Name { get; set; }
         public string Description { get; set; }

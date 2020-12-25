@@ -23,7 +23,7 @@ namespace metrics.core.DistributedLock
 
             public async ValueTask DisposeAsync()
             {
-                await _database.LockReleaseAsync(_key, _value);
+                await _database.LockReleaseAsync(_key, _value).ConfigureAwait(false);
             }
         }
 
@@ -34,7 +34,7 @@ namespace metrics.core.DistributedLock
 
         public async Task<IAsyncDisposable> AcquireAsync(string? key)
         {
-            while (!_database.LockTake(key, key, TimeSpan.FromSeconds(30)))
+            while (!await _database.LockTakeAsync(key, key, TimeSpan.FromSeconds(30)))
             {
                 await Task.Delay(300);
             }

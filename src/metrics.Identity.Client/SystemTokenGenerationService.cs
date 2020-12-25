@@ -16,7 +16,7 @@ namespace metrics.Identity.Client
 
         public string GetSystemToken()
         {
-            var claims = new List<Claim> {new Claim(ClaimTypes.Role, "Admin")};
+            var claims = new List<Claim> {new(ClaimTypes.Role, "Admin")};
             var principal = new ClaimsPrincipal(new ClaimsIdentity(claims));
             return _jsonWebTokenGenerationService.Generate(principal);
         }

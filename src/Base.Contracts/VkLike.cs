@@ -3,7 +3,7 @@ using metrics.Serialization;
 
 namespace Base.Contracts
 {
-    public class VkLike
+    public record VkLike
     {
         public uint Count { get; set; }
         [JsonConverter(typeof(JsonBooleanConverter))]

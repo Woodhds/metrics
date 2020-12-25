@@ -6,7 +6,8 @@ namespace Base.Contracts
     public class MessageReposts
     {
         [JsonConverter(typeof(JsonBooleanConverter))]
-        public bool User_reposted { get; set; }
+        [JsonPropertyName("user_reposted")]
+        public bool UserReposted { get; set; }
         public uint Count { get; set; }
     }
 }
