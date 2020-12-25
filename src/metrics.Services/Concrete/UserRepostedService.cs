@@ -12,7 +12,7 @@ namespace metrics.Services.Concrete
     {
         Task SetAsync(int userId, IEnumerable<VkRepostViewModel> models);
 
-        ValueTask<int> GetCountAsync(int userId);
+        Task<int> GetCountAsync(int userId);
     }
 
     public class UserRepostedService : IUserRepostedService
@@ -65,7 +65,7 @@ namespace metrics.Services.Concrete
             await scope.CommitAsync();
         }
 
-        public async ValueTask<int> GetCountAsync(int userId)
+        public async Task<int> GetCountAsync(int userId)
         {
             return (await _transactionScopeFactory.CreateAsync()).Query<VkRepost>()
                 .Count(f => f.UserId == userId &&
