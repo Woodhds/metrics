@@ -1,4 +1,5 @@
 ﻿using metrics.Broker.Abstractions;
+using metrics.Broker.Nats.Pooling;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,17 +16,20 @@ namespace metrics.Broker.Nats
             _services.AddSingleton<INatsConnectionFactory, NatsConnectionFactory>();
             _services.AddSingleton<INatsSubjectProvider, NatsSubjectProvider>();
             _services.AddSingleton<INatsMessageSerializer, NatsMessageSerializer>();
-            _services.Configure<NatsOptions>(configuration.GetSection(nameof(NatsOptions)));
+            var options = new NatsOptions();
+            configuration.GetSection(nameof(NatsOptions)).Bind(options);
+            _services.AddSingleton<INatsPool>(new NatsPool(options: opts =>
+            {
+                opts.Servers = options.Servers;
+                opts.ReconnectWait = 2000;
+            }));
         }
 
         public BrokerConfiguration Build()
         {
             var provider = _services.BuildServiceProvider();
             return new BrokerConfiguration(provider.GetRequiredService<IMessageBroker>(),
-                new NatsHandlerConfigurator(_services, 
-                    provider.GetRequiredService<INatsConnectionFactory>(),
-                    provider.GetRequiredService<INatsSubjectProvider>(),
-                    provider.GetRequiredService<INatsMessageSerializer>()), "");
+                new NatsHandlerConfigurator(_services), "");
         }
     }
 }

@@ -2,14 +2,14 @@
 
 namespace Base.Contracts.Options
 {
-    public class VkontakteOptions
+    public record VkontakteOptions
     {
-        public string ApiVersion { get; set; } = "";
+        public string ApiVersion { get; init; } = "";
 
-        public string AppId { get; set; } = "";
-        public string AppSecret { get; set; } = "";
-        public string AppScope { get; set; } = "";
+        public string AppId { get; init; } = "";
+        public string AppSecret { get; init; } = "";
+        public string AppScope { get; init; } = "";
         
-        public HashSet<string> Fields { get; set; } = new();
+        public HashSet<string> Fields { get; init; } = new();
     }
 }

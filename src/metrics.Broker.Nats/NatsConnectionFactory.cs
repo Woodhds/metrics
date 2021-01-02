@@ -1,31 +1,21 @@
-﻿using Microsoft.Extensions.Options;
-using NATS.Client;
+﻿using metrics.Broker.Nats.Pooling;
 
 namespace metrics.Broker.Nats
 {
     public interface INatsConnectionFactory
     {
-        IConnection CreateConnection();
+        INatsConnection CreateConnection();
     }
     
     public class NatsConnectionFactory : INatsConnectionFactory
     {
-        private readonly IOptions<NatsOptions> _options;
+        private readonly INatsPool _natsPool;
 
-        public NatsConnectionFactory(IOptions<NatsOptions> options)
+        public NatsConnectionFactory(INatsPool natsPool)
         {
-            _options = options;
+            _natsPool = natsPool;
         }
 
-        public IConnection CreateConnection()
-        {
-            var options = ConnectionFactory.GetDefaultOptions();
-            options.Servers = _options.Value.Servers;
-            options.ReconnectWait = 2000;
-
-            var connection = new ConnectionFactory().CreateConnection(options);
-
-            return connection;
-        }
+        public INatsConnection CreateConnection() => _natsPool.Rent();
     }
 }

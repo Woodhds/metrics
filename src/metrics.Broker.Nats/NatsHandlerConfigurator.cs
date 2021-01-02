@@ -1,31 +1,20 @@
-﻿using System;
-using metrics.Broker.Abstractions;
+﻿using metrics.Broker.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace metrics.Broker.Nats
 {
     public class NatsHandlerConfigurator : IHandlerConfigurator
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly INatsConnectionFactory _natsConnectionFactory;
-        private readonly INatsSubjectProvider _natsSubjectProvider;
-        private readonly INatsMessageSerializer _natsMessageSerializer;
+        private readonly IServiceCollection _serviceCollection;
 
-        public NatsHandlerConfigurator(IServiceCollection serviceCollection,
-            INatsConnectionFactory natsConnectionFactory, INatsSubjectProvider natsSubjectProvider, INatsMessageSerializer natsMessageSerializer)
+        public NatsHandlerConfigurator(IServiceCollection serviceCollection)
         {
-            _natsConnectionFactory = natsConnectionFactory;
-            _natsSubjectProvider = natsSubjectProvider;
-            _natsMessageSerializer = natsMessageSerializer;
-            _serviceProvider = serviceCollection.BuildServiceProvider();
+            _serviceCollection = serviceCollection;
         }
 
         public void ConfigureConsumer<TEvent>() where TEvent : class, new()
         {
-            _natsConnectionFactory.CreateConnection().SubscribeAsync(_natsSubjectProvider.GetSubject<TEvent>(),
-                (sender, args) =>
-                    new NatsMessageHandler<TEvent>(_serviceProvider.GetService<IMessageHandler<TEvent>>(),
-                        _natsMessageSerializer).HandleAsync(args.Message)).Start();
+            _serviceCollection.AddHostedService<NatsHostedHandler<TEvent>>();
         }
 
         public void ConfigureCommandConsumer<TEvent>() where TEvent : class, new()

@@ -58,6 +58,7 @@ namespace metrics.Identity
                 });
 
             services.AddHttpContextAccessor();
+            services.AddDataProtection();
 
             services
                 .AddControllers(x => { x.UseGeneralRoutePrefix("api"); });

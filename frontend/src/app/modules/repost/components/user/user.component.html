@@ -38,7 +38,7 @@
           style="top: -0.4rem; right: -0.4rem"
           class="text-white w-6 h-6 bg-red-500 rounded-full absolute leading-7"
           *ngIf="selectedMessages.length"
-          >{{ selectedMessages.length }}</span
+        >{{ selectedMessages.length }}</span
         >
       </button>
     </div>
@@ -126,7 +126,7 @@
         </button>
         <button mat-button (click)="repost(message.OwnerId, message.Id)">
           <mat-icon [color]="message.UserReposted ? 'warn' : 'primary'"
-            >share
+          >share
           </mat-icon>
           {{ message.RepostsCount }}
         </button>
