@@ -105,6 +105,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Kafka", "met
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Nats", "metrics.Broker.Nats\metrics.Broker.Nats.csproj", "{105627BC-BA38-48CF-8A47-118D1C486F22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Diagnostics", "metrics.Diagnostics\metrics.Diagnostics.csproj", "{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -271,6 +273,10 @@ Global
 		{105627BC-BA38-48CF-8A47-118D1C486F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{105627BC-BA38-48CF-8A47-118D1C486F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{105627BC-BA38-48CF-8A47-118D1C486F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

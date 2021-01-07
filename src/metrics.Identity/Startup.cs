@@ -5,6 +5,7 @@ using metrics.Authentication;
 using metrics.Broker;
 using metrics.Broker.Nats;
 using metrics.Identity.Data;
+using metrics.Identity.Data.Services;
 using metrics.Identity.Extensions;
 using metrics.Identity.Infrastructure.Identity;
 using metrics.Identity.Options;
@@ -13,6 +14,7 @@ using metrics.Serialization;
 using metrics.Web.Conventions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -58,7 +60,8 @@ namespace metrics.Identity
                 });
 
             services.AddHttpContextAccessor();
-            services.AddDataProtection();
+            services.Configure<EncryptionOptions>(_configuration.GetSection("EncryptionOptions"));
+            services.AddSingleton<IEncryptionService, EncryptionService>();
 
             services
                 .AddControllers(x => { x.UseGeneralRoutePrefix("api"); });
