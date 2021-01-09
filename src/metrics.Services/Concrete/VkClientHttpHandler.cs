@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using metrics.Authentication.Infrastructure;
 using metrics.core.DistributedLock;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 
 namespace metrics.Services.Concrete
 {
@@ -35,9 +37,12 @@ namespace metrics.Services.Concrete
             CancellationToken cancellationToken
         )
         {
-            var url = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "v",
-                _vkontakteOptions.Value.ApiVersion);
-            url = QueryHelpers.AddQueryString(url, "access_token", await _vkTokenAccessor.GetTokenAsync());
+            var url = QueryHelpers.AddQueryString(request.RequestUri.ToString(),
+                new List<KeyValuePair<string, StringValues>>
+                {
+                    new("v", _vkontakteOptions.Value.ApiVersion),
+                    new("access_token", await _vkTokenAccessor.GetTokenAsync())
+                });
             request.RequestUri = new Uri(url);
             await using (await _distributedLock.AcquireAsync(_authenticatedUserProvider.GetUser().Id.ToString()))
             {
