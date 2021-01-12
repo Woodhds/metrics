@@ -86,7 +86,7 @@
             class="block flex-1"
             [href]="'https://vk.com/wall' + message.OwnerId + '_' + message.Id"
           >
-            {{ message.Owner ? message.Owner : "Пост" }}
+            {{ message.Owner ? trimText(message.Owner, 27) : "Пост" }}
           </a>
           <mat-slide-toggle
             [color]="!message.UserReposted ? 'primary' : 'warn'"

@@ -28,7 +28,6 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {CdkTableModule} from "@angular/cdk/table";
 
 const routes: Routes = [
   {path: '', canActivate: [AuthGuard], component: RepostComponent},

@@ -18,7 +18,7 @@ namespace metrics.Data.Common
 
             services.AddSingleton<IEntityConfigurationProvider, EntityConfigurationProvider>();
             services.AddSingleton<ITransactionScopeFactory, TransactionScopeFactory<T>>();
-            services.AddDbContextFactory<T>(OptionsAction);
+            services.AddPooledDbContextFactory<T>(OptionsAction);
 
             return services;
         }

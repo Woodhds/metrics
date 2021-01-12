@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { finalize } from "rxjs/operators";
-import { VkMessage, VkRepostModel } from "../../models/VkMessageModel";
-import { VkMessageService } from "../../services/vk-message.service";
-import { PageEvent } from "@angular/material/paginator";
-import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import { Message } from "../../models/Message";
-import { MessageCategoryService } from "../../services/message-category.service";
-import { DataSourceResponse } from "../../models/DataSourceResponse";
-import { MatSelectChange } from "@angular/material/select";
+import {Component, OnInit} from "@angular/core";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {finalize} from "rxjs/operators";
+import {VkMessage, VkRepostModel} from "../../models/VkMessageModel";
+import {VkMessageService} from "../../services/vk-message.service";
+import {PageEvent} from "@angular/material/paginator";
+import {MatSlideToggleChange} from "@angular/material/slide-toggle";
+import {Message} from "../../models/Message";
+import {MessageCategoryService} from "../../services/message-category.service";
+import {DataSourceResponse} from "../../models/DataSourceResponse";
+import {MatSelectChange} from "@angular/material/select";
 
 @Component({
   selector: "app-user",
@@ -29,7 +29,8 @@ export class UserComponent implements OnInit {
     private fb: FormBuilder,
     private vkMessageService: VkMessageService,
     private messageService: MessageCategoryService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -59,7 +60,8 @@ export class UserComponent implements OnInit {
       (a) => a.OwnerId === ownerId && a.Id === id
     );
     if (message) {
-      this.vkMessageService.like(ownerId, id).subscribe(() => {});
+      this.vkMessageService.like(ownerId, id).subscribe(() => {
+      });
     }
   }
 
@@ -70,7 +72,8 @@ export class UserComponent implements OnInit {
     if (message) {
       this.vkMessageService
         .repost([new VkRepostModel(ownerId, id)])
-        .subscribe(() => {});
+        .subscribe(() => {
+        });
     }
   }
 
@@ -89,7 +92,8 @@ export class UserComponent implements OnInit {
       .repost(
         this.selectedMessages.map((x) => new VkRepostModel(x.OwnerId, x.Id))
       )
-      .subscribe(() => {});
+      .subscribe(() => {
+      });
   }
 
   onSelect(ev: MatSlideToggleChange, message: VkMessage) {
@@ -105,7 +109,8 @@ export class UserComponent implements OnInit {
   }
 
   setType(id: number, ownerId: number, ev: MatSelectChange) {
-    this.vkMessageService.setType(id, ownerId, ev.value).subscribe(() => {});
+    this.vkMessageService.setType(id, ownerId, ev.value).subscribe(() => {
+    });
   }
 
   onCustomPageChange() {
@@ -114,5 +119,12 @@ export class UserComponent implements OnInit {
 
   track(idx: number, item: VkMessage) {
     return `${item.FromId}_${item.Id}`;
+  }
+
+  trimText(text: string, count: number): string {
+    if (text.length <= count) {
+      return text
+    }
+    return text.slice(0, count) + '...'
   }
 }
