@@ -61,7 +61,7 @@ namespace metrics.Services.Concrete.VK
             {
                 {"object", $"wall{model.OwnerId}_{model.Id}"}
             };
-            
+
             return base.PostAsync<SimpleVkResponse<VkRepostMessage>>(VkApiUrls.Repost, null, @params);
         }
     }

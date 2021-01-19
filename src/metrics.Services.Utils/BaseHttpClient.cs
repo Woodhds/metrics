@@ -44,7 +44,7 @@ namespace metrics.Services.Utils
 
                 response.EnsureSuccessStatusCode();
 
-                return _jsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync());
+                return _jsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
             }
             catch (Exception e)
             {

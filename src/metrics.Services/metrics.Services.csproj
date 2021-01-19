@@ -24,6 +24,7 @@
     <ProjectReference Include="..\metrics.core\metrics.core.csproj" />
     <ProjectReference Include="..\metrics.Data.Abstractions\metrics.Data.Abstractions.csproj" />
     <ProjectReference Include="..\metrics.Data.Common\metrics.Data.Common.csproj" />
+    <ProjectReference Include="..\metrics.Diagnostics\metrics.Diagnostics.csproj" />
     <ProjectReference Include="..\metrics.ML.Services\metrics.ML.Services.csproj" />
     <ProjectReference Include="..\metrics.Services.Abstractions\metrics.Services.Abstractions.csproj" />
     <ProjectReference Include="..\metrics.Services.Utils\metrics.Services.Utils.csproj" />
