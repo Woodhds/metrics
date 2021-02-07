@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Base.Contracts.Options;
 using metrics.Authentication.Infrastructure;
 using metrics.core.DistributedLock;
+using metrics.Diagnostics;
+using metrics.Services.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -18,6 +21,7 @@ namespace metrics.Services.Concrete
         private readonly IUserTokenAccessor _vkTokenAccessor;
         private readonly IDistributedLock _distributedLock;
         private readonly IAuthenticatedUserProvider _authenticatedUserProvider;
+        private DiagnosticSource DiagnosticSource { get; } = new DiagnosticListener("VkClientHttpHandler");
 
         public VkClientHttpHandler(
             IOptions<VkontakteOptions> vkontakteOptions,
@@ -44,9 +48,13 @@ namespace metrics.Services.Concrete
                     new("access_token", await _vkTokenAccessor.GetTokenAsync())
                 });
             request.RequestUri = new Uri(url);
-            await using (await _distributedLock.AcquireAsync(_authenticatedUserProvider.GetUser().Id.ToString()))
+            using (DiagnosticSource.Diagnose("VkRequest",
+                new VkRequestState(_authenticatedUserProvider, url)))
             {
-                return await base.SendAsync(request, cancellationToken);
+                await using (await _distributedLock.AcquireAsync(_authenticatedUserProvider.GetUser().Id.ToString()))
+                {
+                    return await base.SendAsync(request, cancellationToken);
+                }
             }
         }
     }

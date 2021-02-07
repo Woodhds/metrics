@@ -1,0 +1,14 @@
+﻿apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-pv
+  labels:
+    app: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: "gitlab-volume"
+  
