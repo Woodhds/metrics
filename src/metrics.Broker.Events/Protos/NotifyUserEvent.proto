@@ -1,7 +1,10 @@
 ﻿syntax = "proto3";
+import "google/protobuf/wrappers.proto";
 
 option csharp_namespace = "metrics.Broker.Events";
 
 message NotifyUserEvent {
   int32 UserId = 1;
+  google.protobuf.Int32Value MessageId = 2;
+  google.protobuf.Int32Value OwnerId = 3;
 }

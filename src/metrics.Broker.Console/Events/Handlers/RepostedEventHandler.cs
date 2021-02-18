@@ -48,8 +48,18 @@ namespace metrics.Broker.Console.Events.Handlers
             await scope.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
 
             await scope.CommitAsync(token);
-            await _messageBroker.PublishAsync(new NotifyUserEvent {UserId = obj.UserId}, token);
-            await _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token);
+
+            await Task.WhenAll(
+                _messageBroker.PublishAsync(
+                    new NotifyUserEvent
+                    {
+                        UserId = obj.UserId,
+                        MessageId = message.MessageId,
+                        OwnerId = message.OwnerId
+                    },
+                    token),
+                _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token)
+            );
         }
     }
 }

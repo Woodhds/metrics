@@ -2,9 +2,9 @@ import { Injectable } from "@angular/core";
 import { User } from "src/app/models/User";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { BehaviorSubject, Observable } from "rxjs";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../environments/environment";
 import { map } from "rxjs/operators";
-import { UserToken } from "../../../models/UserToken";
+import { UserToken } from "../models/UserToken";
 
 @Injectable({
   providedIn: "root",

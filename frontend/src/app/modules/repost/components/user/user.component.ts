@@ -9,6 +9,12 @@ import {Message} from "../../models/Message";
 import {MessageCategoryService} from "../../services/message-category.service";
 import {DataSourceResponse} from "../../models/DataSourceResponse";
 import {MatSelectChange} from "@angular/material/select";
+import NotificationService from "../../../../services/notification.service";
+
+type RequestPayload = {
+  ownerId: number;
+  messageId: number;
+}
 
 @Component({
   selector: "app-user",
@@ -28,7 +34,8 @@ export class UserComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private vkMessageService: VkMessageService,
-    private messageService: MessageCategoryService
+    private messageService: MessageCategoryService,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -42,6 +49,17 @@ export class UserComponent implements OnInit {
       .subscribe((data: DataSourceResponse<Message>) => {
         this.categories = data.Data;
       });
+
+    this.notificationService.hub.subscribe(hub => {
+      hub.on('reposted', (args: RequestPayload) => {
+        const idx = this.messages.findIndex(x => x.OwnerId === args.ownerId && x.Id === args.messageId);
+
+        if (idx >= 0) {
+          this.messages[idx].UserReposted = true;
+          this.messages[idx].IsSelected = false;
+        }
+      })
+    })
   }
 
   onSubmit() {

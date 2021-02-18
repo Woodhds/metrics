@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { AuthService } from "../../../services/concrete/auth/auth.service";
+import { AuthService } from "../../../services/auth.service";
 import { UserToken } from "../../../models/UserToken";
 import { environment } from "../../../../environments/environment";
 import { MatSnackBar } from "@angular/material/snack-bar";

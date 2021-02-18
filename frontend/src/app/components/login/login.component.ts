@@ -1,19 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from 'src/app/models/User';
-import * as signalR from '@microsoft/signalr';
-import {environment} from '../../../environments/environment';
-import {AuthService} from '../../services/concrete/auth/auth.service';
+import {AuthService} from '../../services/auth.service';
+import NotificationService from "../../services/notification.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   count = 0;
-  hub: signalR.HubConnection = null;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private notificationService: NotificationService) {
   }
 
   public user: User = null;
@@ -21,32 +19,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authService.currentUserObs.subscribe(d => {
       this.user = d;
+    })
 
-      if (this.user) {
+    this.notificationService.hub.subscribe(hub => {
+      if (!hub) return;
 
-        const self = this;
-        this.hub = new signalR.HubConnectionBuilder()
-          .withUrl(`${environment.baseUrl}/notifications`, {
-            accessTokenFactory(): string | Promise<string> {
-              return self.user.Token;
-            }
-          })
-          .build();
+      hub.on('Count', (args: number) => {
+        this.count = args;
+      });
+    })
 
-        this.hub.on('Count', (args: number) => {
-          self.count = args;
-        });
-
-        this.startHub();
-      }
-    });
-  }
-
-  startHub() {
-    this.hub.start().catch(reason => {
-      console.log('Error', reason);
-      setTimeout(this.startHub.bind(this), 60000)
-    });
+    this.notificationService.connect()
   }
 
   public get isAuthenticated(): boolean {
@@ -55,13 +38,5 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
-  }
-
-  ngOnDestroy(): void {
-    if (this.hub) {
-      this.hub.stop().catch(f => {
-        console.log(f);
-      });
-    }
   }
 }

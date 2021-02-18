@@ -26,6 +26,12 @@ namespace metrics.Handlers
         {
             await _hubContext.Clients.User(obj.UserId.ToString())
                 .SendAsync("Count", await _repostCacheAccessor.GetCountAsync(obj.UserId), token);
+
+            if (obj.MessageId.HasValue && obj.OwnerId.HasValue)
+            {
+                await _hubContext.Clients.User(obj.UserId.ToString())
+                    .SendAsync("reposted", new {obj.MessageId, obj.OwnerId}, token);
+            }
         }
     }
 }
