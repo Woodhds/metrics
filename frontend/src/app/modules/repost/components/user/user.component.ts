@@ -26,9 +26,8 @@ export class UserComponent implements OnInit {
   messages: VkMessage[] = [];
   loading = false;
   page = 0;
-  pageSize = 100;
+  pageSize = 80;
   total = 0;
-  pageSizeOptions: Array<number> = [20, 40, 60, 80, 100, 200];
   public categories: Message[];
 
   constructor(
@@ -99,12 +98,6 @@ export class UserComponent implements OnInit {
     return this.messages.filter((x) => x.IsSelected);
   }
 
-  onChangePage(pageEvent: PageEvent) {
-    this.pageSize = pageEvent.pageSize;
-    this.page = pageEvent.pageIndex;
-    this.onSubmit();
-  }
-
   repostAll() {
     this.vkMessageService
       .repost(
@@ -131,10 +124,6 @@ export class UserComponent implements OnInit {
     });
   }
 
-  onCustomPageChange() {
-    this.onSubmit();
-  }
-
   track(idx: number, item: VkMessage) {
     return `${item.FromId}_${item.Id}`;
   }
@@ -144,5 +133,14 @@ export class UserComponent implements OnInit {
       return text
     }
     return text.slice(0, count) + '...'
+  }
+
+  get hasMessages(): boolean {
+    return this.total - (this.pageSize * this.page + 1) > 0;
+  }
+
+  nextPage() {
+    this.page++;
+    this.onSubmit();
   }
 }

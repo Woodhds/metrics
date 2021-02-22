@@ -1,84 +1,50 @@
-<mat-expansion-panel [expanded]="true">
-  <mat-expansion-panel-header>
-    <mat-panel-title class="mat-h3"> Поиск</mat-panel-title>
-  </mat-expansion-panel-header>
-  <div class="flex flex-wrap">
-    <form class="w-1/2" [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field class="w-1/2 mr-6">
-        <input
-          type="search"
-          placeholder="Текст"
-          matInput
-          autocomplete="off"
-          formControlName="search"
-        />
-      </mat-form-field>
-      <p>
-        <button
-          class="focus:outline-none"
-          [disabled]="!form.valid"
-          mat-raised-button
-          color="primary"
-          type="submit"
-        >
-          Отправить
-        </button>
-      </p>
-    </form>
-    <div class="w-1/2 flex flex-wrap justify-center items-start">
-      <button
-        class="relative focus:outline-none"
-        (click)="repostAll()"
-        mat-raised-button
-        color="primary"
-        [disabled]="selectedMessages.length === 0"
-      >
-        Репост всех
-        <span
-          style="top: -0.4rem; right: -0.4rem"
-          class="text-white w-6 h-6 bg-red-500 rounded-full absolute leading-7"
-          *ngIf="selectedMessages.length"
-        >{{ selectedMessages.length }}</span
-        >
-      </button>
-    </div>
-  </div>
-  <div class="flex items-center flex-row-reverse">
-    <mat-paginator
-      [showFirstLastButtons]="true"
-      (page)="onChangePage($event)"
-      [pageSize]="pageSize"
-      [length]="total"
-      [pageIndex]="page"
-      [pageSizeOptions]="pageSizeOptions"
-    >
-    </mat-paginator>
-    <mat-form-field class="pr-3">
-      <div class="flex items-center">
-        <input
-          placeholder="Страница"
-          (keyup.enter)="onSubmit()"
-          type="number"
-          min="0"
-          matInput
-          [(ngModel)]="page"
-        />
-        <button matSuffix (click)="onCustomPageChange()">
-          <mat-icon>navigate_next</mat-icon>
-        </button>
-      </div>
+<div class="flex flex-wrap items-center">
+  <form class="md:w-1/2 w-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-1/2 mr-6">
+      <input
+        type="search"
+        placeholder="Поиск"
+        matInput
+        autocomplete="off"
+        formControlName="search"
+      />
     </mat-form-field>
+    <button
+      class="focus:outline-none"
+      [disabled]="!form.valid"
+      mat-raised-button
+      color="primary"
+      type="submit"
+    >
+      Отправить
+    </button>
+  </form>
+  <div class="md:w-1/2 w-full flex flex-wrap md:justify-end items-start">
+    <button
+      class="relative focus:outline-none"
+      (click)="repostAll()"
+      mat-raised-button
+      color="primary"
+      [disabled]="selectedMessages.length === 0"
+    >
+      Репост всех
+      <span
+        style="top: -0.4rem; right: -0.4rem"
+        class="text-white w-6 h-6 bg-red-500 rounded-full absolute leading-7"
+        *ngIf="selectedMessages.length"
+      >{{ selectedMessages.length }}</span
+      >
+    </button>
   </div>
-</mat-expansion-panel>
-<div
-  class="h-full w-full flex flex-wrap justify-center mt-3 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-  [ngClass]="messages.length > 0 && !loading ? 'mat-elevation-z10' : ''"
->
-  <div class="loading-shade" *ngIf="loading; else card">
-    <mat-spinner *ngIf="loading"></mat-spinner>
-  </div>
-  <ng-template #card>
-    <mat-card class="text-sm" *ngFor="let message of messages; trackBy: track">
+</div>
+<div class="loading-shade" *ngIf="loading; else card">
+  <mat-spinner *ngIf="loading"></mat-spinner>
+</div>
+<ng-template #card>
+  <mat-divider *ngIf="messages.length > 0"></mat-divider>
+  <div
+    class="h-full w-full flex flex-wrap justify-center mt-3 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <mat-card class="text-sm mat-elevation-z2" *ngFor="let message of messages; trackBy: track">
       <mat-card-header>
         <mat-card-title class="flex items-center w-full">
           <a
@@ -132,5 +98,8 @@
         </button>
       </mat-card-actions>
     </mat-card>
-  </ng-template>
-</div>
+  </div>
+  <div *ngIf="hasMessages" class="flex flex-wrap align-self-center justify-center mb-3">
+    <button mat-button color="primary" mat-raised-button (click)="nextPage()">Еще</button>
+  </div>
+</ng-template>

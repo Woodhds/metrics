@@ -25,7 +25,7 @@ import {DialogComponent} from './components/dialog/dialog.component'
 import {MatDialogModule} from '@angular/material/dialog';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
-import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDividerModule} from '@angular/material/divider';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
@@ -65,7 +65,7 @@ const routes: Routes = [
     FormsModule,
     MatSnackBarModule,
     MatSelectModule,
-    MatExpansionModule,
+    MatDividerModule,
     MatTooltipModule,
     DragDropModule
   ],
