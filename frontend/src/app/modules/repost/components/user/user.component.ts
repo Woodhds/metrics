@@ -10,6 +10,7 @@ import {DataSourceResponse} from '../../models/DataSourceResponse';
 import {MatSelectChange} from '@angular/material/select';
 import NotificationService from '../../../../services/notification.service';
 import {Observable} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 type RequestPayload = {
   ownerId: number;
@@ -26,7 +27,10 @@ export class UserComponent implements OnInit {
   messages: VkMessage[] = [];
   loading = false;
   additionalLoading = false;
-  page = 0;
+  page = 1;
+  search = '';
+  needReload = false;
+  needChangePage = false;
   pageSize = 80;
   total = 0;
   public categories: Message[];
@@ -35,7 +39,9 @@ export class UserComponent implements OnInit {
     private fb: FormBuilder,
     private vkMessageService: VkMessageService,
     private messageService: MessageCategoryService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {
   }
 
@@ -60,10 +66,45 @@ export class UserComponent implements OnInit {
         }
       });
     });
+
+    this.activatedRoute.queryParamMap.subscribe(par => {
+
+      const checkNeeds = () => {
+        if (this.needReload) {
+          this.onSubmit();
+        } else if (this.needChangePage) {
+          this.nextPage();
+        }
+
+        const actionPerformed = this.needChangePage || this.needReload;
+        this.needReload = false;
+        this.needChangePage = false;
+        return actionPerformed;
+      };
+
+      if (checkNeeds()) {
+        return;
+      }
+
+      const search = par.get('query');
+      const control = this.form.get('search');
+      if (search && control.value !== search) {
+        control.setValue(search);
+        this.needReload = true;
+      }
+
+      const page = par.get('page');
+
+      if (page !== null && page !== undefined && Number(page)) {
+        this.page = +page;
+        this.needChangePage = true;
+      }
+
+      checkNeeds();
+    });
   }
 
   onSubmit() {
-    this.page = 0;
     this.loading = true;
     this.getData()
       .pipe(finalize(() => (this.loading = false)))
@@ -75,7 +116,7 @@ export class UserComponent implements OnInit {
 
   getData(): Observable<DataSourceResponse<VkMessage>> {
     return this.vkMessageService
-      .get(this.page, this.pageSize, this.form.get('search').value);
+      .get(this.page <= 0 ? 0 : this.page - 1, this.pageSize, this.searchValue);
   }
 
   like(ownerId: number, id: number) {
@@ -102,6 +143,10 @@ export class UserComponent implements OnInit {
 
   get selectedMessages(): Array<VkMessage> {
     return this.messages.filter((x) => x.IsSelected);
+  }
+
+  get searchValue() {
+    return this.form.get('search').value;
   }
 
   repostAll() {
@@ -145,13 +190,26 @@ export class UserComponent implements OnInit {
     return this.messages.length < this.total;
   }
 
-  nextPage() {
+  navigateToSearch() {
+    if (this.searchValue) {
+      this.needReload = true;
+      this.router.navigate([], {queryParams: {query: this.searchValue}});
+    }
+  }
+
+  navigateToNextPage() {
     this.page++;
+    this.needChangePage = true;
+    this.router.navigate([], {queryParams: {page: this.page}, queryParamsHandling: 'merge'});
+  }
+
+  nextPage() {
     this.additionalLoading = true;
     this.getData()
       .pipe(finalize(() => (this.additionalLoading = false)))
       .subscribe(x => {
         this.messages.push(...x.Data);
+        this.total = x.Total;
       });
   }
 }

@@ -1,5 +1,5 @@
 <div class="flex flex-wrap items-center">
-  <form class="md:w-1/2 w-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <form class="md:w-1/2 w-full" [formGroup]="form" (ngSubmit)="navigateToSearch()">
     <mat-form-field class="w-1/2 mr-6">
       <input
         type="search"
@@ -102,7 +102,7 @@
   <mat-progress-bar *ngIf="additionalLoading; else more" class="my-5" mode="indeterminate"></mat-progress-bar>
   <ng-template #more>
     <div *ngIf="hasMessages" class="flex flex-wrap align-self-center justify-center mb-3">
-      <button mat-button color="primary" mat-raised-button (click)="nextPage()">Еще</button>
+      <button mat-button color="primary" mat-raised-button (click)="navigateToNextPage()">Еще</button>
     </div>
   </ng-template>
 </ng-template>
