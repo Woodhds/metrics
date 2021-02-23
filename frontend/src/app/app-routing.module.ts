@@ -1,27 +1,27 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { AccountComponent } from "./components/account/account.component";
-import { AuthenticatedGuard } from "./helpers/authenticated.guard";
-import { AppComponent } from "./components/app/app.component";
-import { AuthGuard } from "./helpers/auth.guard";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AccountComponent } from './components/account/account.component';
+import { AuthenticatedGuard } from './helpers/authenticated.guard';
+import { AppComponent } from './components/app/app.component';
+import { AuthGuard } from './helpers/auth.guard';
 
 const routes: Routes = [
   {
-    path: "login",
+    path: 'login',
     component: AccountComponent,
     canActivate: [AuthenticatedGuard],
   },
   {
-    path: "profile",
+    path: 'profile',
     canActivate: [AuthGuard],
-    loadChildren: "./modules/profile/profile.module#ProfileModule",
+    loadChildren: './modules/profile/profile.module#ProfileModule',
   },
   {
-    path: "repost",
+    path: 'repost',
     canActivate: [AuthGuard],
-    loadChildren: "./modules/repost/repost.module#RepostModule",
+    loadChildren: './modules/repost/repost.module#RepostModule',
   },
-  { path: "*", component: AppComponent },
+  { path: '*', component: AppComponent },
 ];
 
 @NgModule({

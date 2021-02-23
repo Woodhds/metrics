@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { DataSourceResponse } from "../../repost/models/DataSourceResponse";
-import { UserMessage } from "../models/UserMessage";
-import { environment } from "../../../../environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { DataSourceResponse } from '../../repost/models/DataSourceResponse';
+import { UserMessage } from '../models/UserMessage';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class UserMessageService {
   private routePrefix = `${environment.apiUrl}/usermessage`;

@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  baseUrl: "",
+  baseUrl: '',
   identityUrl: 'http://metrics-identity',
-  get apiUrl() : string {
-    return this.baseUrl + '/api'
+  get apiUrl(): string {
+    return this.baseUrl + '/api';
   }
 };

@@ -1,22 +1,22 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { AuthService } from "../../../services/auth.service";
-import { UserToken } from "../../../models/UserToken";
-import { environment } from "../../../../environments/environment";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { ProfileTab } from "../models/ProfileTab";
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
+import { UserToken } from '../../../models/UserToken';
+import { environment } from '../../../../environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProfileTab } from '../models/ProfileTab';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: "app-user-profile",
-  templateUrl: "./user-profile.component.html",
-  styleUrls: ["./user-profile.component.scss"],
+  selector: 'app-user-profile',
+  templateUrl: './user-profile.component.html',
+  styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
   form: FormGroup;
   data: Array<UserToken>;
-  columns = ["Name", "Value", "LoginProvider", "Actions"];
-  externalUrl = environment.apiUrl + "/auth/authorize/externalToken";
+  columns = ['Name', 'Value', 'LoginProvider', 'Actions'];
+  externalUrl = environment.apiUrl + '/auth/authorize/externalToken';
   selectedIndex: ProfileTab = ProfileTab.Token;
 
   constructor(
@@ -26,7 +26,7 @@ export class UserProfileComponent implements OnInit {
     private routeSnapshot: ActivatedRoute
   ) {
     routeSnapshot.paramMap.subscribe((route) => {
-      const tab = route.get("tabIndex");
+      const tab = route.get('tabIndex');
       if (tab in ProfileTab) {
         this.selectedIndex = ProfileTab[tab];
       }
@@ -35,13 +35,13 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      token: "",
+      token: '',
     });
     this.getData();
   }
 
   submit() {
-    this.authService.setToken(this.form.get("token").value).subscribe(() => {
+    this.authService.setToken(this.form.get('token').value).subscribe(() => {
       this.getData();
     });
   }
@@ -54,7 +54,7 @@ export class UserProfileComponent implements OnInit {
 
   removeToken(name: string, loginProvider: string) {
     this.authService.removeToken(name, loginProvider).subscribe(() => {
-      this.snackBar.open("Токен удален");
+      this.snackBar.open('Токен удален');
       this.getData();
     });
   }

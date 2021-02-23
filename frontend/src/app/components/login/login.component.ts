@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from 'src/app/models/User';
 import {AuthService} from '../../services/auth.service';
-import NotificationService from "../../services/notification.service";
+import NotificationService from '../../services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -19,17 +19,17 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.authService.currentUserObs.subscribe(d => {
       this.user = d;
-    })
+    });
 
     this.notificationService.hub.subscribe(hub => {
-      if (!hub) return;
+      if (!hub) {return;}
 
       hub.on('Count', (args: number) => {
         this.count = args;
       });
-    })
+    });
 
-    this.notificationService.connect()
+    this.notificationService.connect();
   }
 
   public get isAuthenticated(): boolean {

@@ -12,7 +12,7 @@ export class RepostComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {
     this.form = formBuilder.group({
       name: ''
-    })
+    });
   }
 
   ngOnInit() {

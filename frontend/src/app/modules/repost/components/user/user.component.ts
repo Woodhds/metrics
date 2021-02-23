@@ -1,30 +1,31 @@
-import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {finalize} from "rxjs/operators";
-import {VkMessage, VkRepostModel} from "../../models/VkMessageModel";
-import {VkMessageService} from "../../services/vk-message.service";
-import {PageEvent} from "@angular/material/paginator";
-import {MatSlideToggleChange} from "@angular/material/slide-toggle";
-import {Message} from "../../models/Message";
-import {MessageCategoryService} from "../../services/message-category.service";
-import {DataSourceResponse} from "../../models/DataSourceResponse";
-import {MatSelectChange} from "@angular/material/select";
-import NotificationService from "../../../../services/notification.service";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {finalize} from 'rxjs/operators';
+import {VkMessage, VkRepostModel} from '../../models/VkMessageModel';
+import {VkMessageService} from '../../services/vk-message.service';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {Message} from '../../models/Message';
+import {MessageCategoryService} from '../../services/message-category.service';
+import {DataSourceResponse} from '../../models/DataSourceResponse';
+import {MatSelectChange} from '@angular/material/select';
+import NotificationService from '../../../../services/notification.service';
+import {Observable} from 'rxjs';
 
 type RequestPayload = {
   ownerId: number;
   messageId: number;
-}
+};
 
 @Component({
-  selector: "app-user",
-  templateUrl: "./user.component.html",
-  styleUrls: ["./user.component.scss"],
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
   form: FormGroup;
   messages: VkMessage[] = [];
   loading = false;
+  additionalLoading = false;
   page = 0;
   pageSize = 80;
   total = 0;
@@ -40,7 +41,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      search: "",
+      search: '',
     });
 
     this.messageService
@@ -57,19 +58,24 @@ export class UserComponent implements OnInit {
           this.messages[idx].UserReposted = true;
           this.messages[idx].IsSelected = false;
         }
-      })
-    })
+      });
+    });
   }
 
   onSubmit() {
+    this.page = 0;
     this.loading = true;
-    this.vkMessageService
-      .get(this.page, this.pageSize, this.form.get("search").value)
+    this.getData()
       .pipe(finalize(() => (this.loading = false)))
-      .subscribe((data) => {
-        this.messages = data.Data;
-        this.total = data.Total;
+      .subscribe(x => {
+        this.total = x.Total;
+        this.messages = x.Data;
       });
+  }
+
+  getData(): Observable<DataSourceResponse<VkMessage>> {
+    return this.vkMessageService
+      .get(this.page, this.pageSize, this.form.get('search').value);
   }
 
   like(ownerId: number, id: number) {
@@ -130,17 +136,22 @@ export class UserComponent implements OnInit {
 
   trimText(text: string, count: number): string {
     if (text.length <= count) {
-      return text
+      return text;
     }
-    return text.slice(0, count) + '...'
+    return text.slice(0, count) + '...';
   }
 
   get hasMessages(): boolean {
-    return this.total - (this.pageSize * this.page + 1) > 0;
+    return this.messages.length < this.total;
   }
 
   nextPage() {
     this.page++;
-    this.onSubmit();
+    this.additionalLoading = true;
+    this.getData()
+      .pipe(finalize(() => (this.additionalLoading = false)))
+      .subscribe(x => {
+        this.messages.push(...x.Data);
+      });
   }
 }

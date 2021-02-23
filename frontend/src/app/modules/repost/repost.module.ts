@@ -21,13 +21,14 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LazyImageDirective} from '../../directives/lazy-image/lazy-image.directive';
 import {MessageComponent} from './components/message/message.component';
 import {MatTableModule} from '@angular/material/table';
-import {DialogComponent} from './components/dialog/dialog.component'
+import {DialogComponent} from './components/dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
-import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const routes: Routes = [
   {path: '', canActivate: [AuthGuard], component: RepostComponent},
@@ -67,7 +68,8 @@ const routes: Routes = [
     MatSelectModule,
     MatDividerModule,
     MatTooltipModule,
-    DragDropModule
+    DragDropModule,
+    MatProgressBarModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor},

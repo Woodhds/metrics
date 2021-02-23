@@ -1,19 +1,19 @@
-import { Component, OnInit } from "@angular/core";
-import { UserMessage } from "../models/UserMessage";
-import { UserMessageService } from "../services/user-message.service";
-import { PageEvent } from "@angular/material/paginator";
+import { Component, OnInit } from '@angular/core';
+import { UserMessage } from '../models/UserMessage';
+import { UserMessageService } from '../services/user-message.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: "app-running",
-  templateUrl: "./running.component.html",
-  styleUrls: ["./running.component.scss"],
+  selector: 'app-running',
+  templateUrl: './running.component.html',
+  styleUrls: ['./running.component.scss'],
 })
 export class RunningComponent implements OnInit {
-  displayColumns = ["Id", 'DateStatus', "Text"];
+  displayColumns = ['Id', 'DateStatus', 'Text'];
   pageSizes = [50, 100];
-  total: number = 0;
-  pageSize: number = 50;
-  page: number = 0;
+  total = 0;
+  pageSize = 50;
+  page = 0;
   data: Array<UserMessage> = [];
 
   constructor(private userMessageService: UserMessageService) {}
@@ -31,7 +31,7 @@ export class RunningComponent implements OnInit {
       .subscribe(({Total, Data}) => {
         this.total = Total;
         this.data = Data;
-      })
+      });
 
   }
 

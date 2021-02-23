@@ -1,12 +1,12 @@
-﻿import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
+﻿import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 import * as signalR from '@microsoft/signalr';
-import {HubConnection} from "@microsoft/signalr";
-import {environment} from "../../environments/environment";
-import {AuthService} from "./auth.service";
+import {HubConnection} from '@microsoft/signalr';
+import {environment} from '../../environments/environment';
+import {AuthService} from './auth.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export default class NotificationService {
   private _hub: BehaviorSubject<signalR.HubConnection> = new BehaviorSubject<HubConnection>(null);
@@ -33,15 +33,15 @@ export default class NotificationService {
           })
           .build();
 
-        this._hub.next(hub)
+        this._hub.next(hub);
         this.startHub();
       }
     });
   }
 
-  private startHub() : void {
+  private startHub(): void {
     if (this._hub.value) {
-      this._hub.value.onclose(this.tryReconnect)
+      this._hub.value.onclose(this.tryReconnect);
       this._hub.value.start().catch(this.tryReconnect);
     }
   }
@@ -49,7 +49,7 @@ export default class NotificationService {
   private tryReconnect(error?: Error) {
     if (error) {
       console.log('Error', error);
-      setTimeout(this.startHub.bind(this), 60000)
+      setTimeout(this.startHub.bind(this), 60000);
     }
   }
 

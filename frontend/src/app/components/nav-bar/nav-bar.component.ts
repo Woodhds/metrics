@@ -20,6 +20,6 @@ export class NavBarComponent implements OnInit {
   ngOnInit() {
     this.userService.currentUserObs.subscribe(e => {
       this.user = e;
-    })
+    });
   }
 }

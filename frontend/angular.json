@@ -72,9 +72,6 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "browserTarget": "metrics:build",
-            "customWebpackConfig": {
-              "path": "./extra-webpack.config.ts"
-            },
             "ssl": false
           },
           "configurations": {

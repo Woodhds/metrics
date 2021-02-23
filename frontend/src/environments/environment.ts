@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   baseUrl: 'https://localhost:5011',
   identityUrl: 'https://localhost:5004',
-  get apiUrl() : string {
-    return this.baseUrl + '/api'
+  get apiUrl(): string {
+    return this.baseUrl + '/api';
   }
 };
 

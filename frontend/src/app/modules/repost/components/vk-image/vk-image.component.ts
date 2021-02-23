@@ -42,10 +42,10 @@ export class VkImageComponent implements OnInit {
   }
 
   private assignSrc(): void {
-    if (!this.img) return;
+    if (!this.img) {return;}
     const el = this.img.nativeElement as HTMLImageElement;
 
-    if (!el) return;
+    if (!el) {return;}
     el.src = this.srcImg;
   }
 

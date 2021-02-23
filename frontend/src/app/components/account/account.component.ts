@@ -16,9 +16,9 @@ export class AccountComponent implements OnInit {
 
     this.authService.currentUserObs.subscribe(user => {
       if (user) {
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
       }
-    })
+    });
 
     this.activatedRoute.queryParamMap.subscribe(params => {
 
@@ -26,7 +26,7 @@ export class AccountComponent implements OnInit {
       if (token) {
         this.authService.getUserInfo(token).subscribe();
       }
-    })
+    });
   }
 
   authorize(loginProvider) {

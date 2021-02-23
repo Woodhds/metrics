@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  get backToTopVisible() : boolean {
+  get backToTopVisible(): boolean {
     return window.scrollY > 250;
   }
 
@@ -15,6 +15,6 @@ export class AppComponent {
     window.scroll({
       top: 0,
       behavior: 'smooth'
-    })
+    });
   }
 }

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {VkUserService} from '../../services/vk-user.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import VkUserModel from "../../models/VkUserModel";
-import {Observable} from "rxjs";
-import {debounceTime} from "rxjs/operators";
+import {MatSnackBar} from '@angular/material/snack-bar';
+import VkUserModel from '../../models/VkUserModel';
+import {Observable} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user',
@@ -22,10 +22,10 @@ export class AddUserComponent implements OnInit {
     this.form = this.formBuilder.group({
       userId: ''
     });
-    this.form.controls['userId'].valueChanges.pipe(debounceTime(1000))
+    this.form.controls.userId.valueChanges.pipe(debounceTime(1000))
       .subscribe((value: string) => {
-        this.filteredOptions = this._filter(value)
-      })
+        this.filteredOptions = this._filter(value);
+      });
   }
 
   _filter(value: string) {
@@ -33,8 +33,8 @@ export class AddUserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.createUser((<VkUserModel>this.form.get('userId').value).Id)
-    this._snackbar.open('Пользователь добавлен')
+    this.userService.createUser((<VkUserModel>this.form.get('userId').value).Id);
+    this._snackbar.open('Пользователь добавлен');
   }
 
   display(user: VkUserModel) {
