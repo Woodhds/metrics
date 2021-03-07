@@ -1,7 +1,7 @@
 ﻿using metrics.Authentication.Options;
 using metrics.Broker;
 using metrics.Broker.Abstractions;
-using metrics.Broker.Nats;
+using metrics.Broker.Redis;
 using metrics.Cache;
 using metrics.logging;
 using metrics.Serialization;
@@ -52,7 +52,7 @@ namespace metrics.Web
         protected virtual void ConfigureMessageBroker(IServiceCollection services)
         {
             services.AddMessageBroker(Configuration,
-                (collection, configuration) => new NatsBrokerConfigurationBuilder(configuration, services),
+                (collection, configuration) => new RedisBrokerConfigurationBuilder(configuration, services),
                 AddBrokerHandlers);
         }
 

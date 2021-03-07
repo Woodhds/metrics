@@ -16,6 +16,7 @@ namespace metrics.Broker.Nats
             _services.AddSingleton<INatsConnectionFactory, NatsConnectionFactory>();
             _services.AddSingleton<INatsSubjectProvider, NatsSubjectProvider>();
             _services.AddSingleton<INatsMessageSerializer, NatsMessageSerializer>();
+            _services.AddSingleton<IProtobufMessageSerializer, ProtobufMessageSerializer>();
             var options = new NatsOptions();
             configuration.GetSection(nameof(NatsOptions)).Bind(options);
             _services.AddSingleton<INatsPool>(new NatsPool(options: opts =>

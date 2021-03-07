@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Base.Contracts.Options;
 using metrics.Authentication;
 using metrics.Broker;
-using metrics.Broker.Nats;
+using metrics.Broker.Redis;
 using metrics.Identity.Data;
 using metrics.Identity.Data.Services;
 using metrics.Identity.Extensions;
@@ -14,7 +14,6 @@ using metrics.Serialization;
 using metrics.Web.Conventions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -108,7 +107,7 @@ namespace metrics.Identity
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Identity API", Version = "v1"});
             });
 
-            services.AddMessageBroker(_configuration, (collection, configuration) => new NatsBrokerConfigurationBuilder(_configuration, services));
+            services.AddMessageBroker(_configuration, (collection, configuration) => new RedisBrokerConfigurationBuilder(_configuration, services));
             services.AddGrpc();
         }
 

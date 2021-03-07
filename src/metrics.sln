@@ -107,6 +107,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Nats", "metr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Diagnostics", "metrics.Diagnostics\metrics.Diagnostics.csproj", "{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metrics.Broker.Redis", "metrics.Broker.Redis\metrics.Broker.Redis.csproj", "{E991C4A2-A042-40D6-9E6F-773A2742527B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -277,6 +279,10 @@ Global
 		{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74A07EDE-0739-4EF6-AC07-117E5F4A3C47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E991C4A2-A042-40D6-9E6F-773A2742527B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E991C4A2-A042-40D6-9E6F-773A2742527B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E991C4A2-A042-40D6-9E6F-773A2742527B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E991C4A2-A042-40D6-9E6F-773A2742527B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -317,6 +323,7 @@ Global
 		{65B21ED1-81A1-4479-B324-44AF6E04A92C} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
 		{3D3B3A95-1956-4889-81A1-3225BDC883B8} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
 		{105627BC-BA38-48CF-8A47-118D1C486F22} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
+		{E991C4A2-A042-40D6-9E6F-773A2742527B} = {51038CB5-7130-4AF4-B23A-91BF02FEF180}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B9B1AA4-B7E9-4A7C-B1D5-7F683FA9B1D0}

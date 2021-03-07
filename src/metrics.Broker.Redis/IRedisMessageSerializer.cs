@@ -1,16 +1,16 @@
-﻿namespace metrics.Broker.Nats
+﻿namespace metrics.Broker.Redis
 {
-    public interface INatsMessageSerializer
+    public interface IRedisMessageSerializer
     {
         byte[] Serialize<T>(T data) where T : class, new();
         T Deserialize<T>(byte[] bytes) where T : class, new();
     }
-    
-    public class NatsMessageSerializer : INatsMessageSerializer
+
+    public class RedisMessageSerializer : IRedisMessageSerializer
     {
         private readonly IProtobufMessageSerializer _protobufMessageSerializer;
 
-        public NatsMessageSerializer(IProtobufMessageSerializer protobufMessageSerializer)
+        public RedisMessageSerializer(IProtobufMessageSerializer protobufMessageSerializer)
         {
             _protobufMessageSerializer = protobufMessageSerializer;
         }
