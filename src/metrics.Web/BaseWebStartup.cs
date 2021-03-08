@@ -65,6 +65,8 @@ namespace metrics.Web
             services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });
 
             services.Configure<KestrelServerOptions>(z => { z.AllowSynchronousIO = true; });
+
+            services.AddSwaggerGen();
         }
 
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifeTime)
@@ -87,10 +89,14 @@ namespace metrics.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Metrics API V1");
+            });
             
             ConfigureManualMiddleware(app);
-            
-            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Metrics API V1"); });
 
             app.UseEndpoints(endpoints =>
             {
