@@ -35,7 +35,9 @@ namespace metrics.Broker.Console.Events.Handlers
                     obj.OwnerId == q.OwnerId &&
                     q.Status == VkRepostStatus.Pending || q.Status == VkRepostStatus.New &&
                     q.MessageId == obj.Id
-                ).FirstOrDefaultAsync(token);
+                )
+                .Select(a => new VkRepost {Id = a.Id, RowVersion = a.RowVersion})
+                .FirstOrDefaultAsync(token);
 
             if (message == null)
             {
@@ -45,7 +47,8 @@ namespace metrics.Broker.Console.Events.Handlers
             message.Status = VkRepostStatus.Complete;
             message.DateStatus = DateTime.Now;
 
-            await scope.GetRepository<VkRepost>().UpdateAsync(message, CancellationToken.None);
+            await scope.GetRepository<VkRepost>().UpdateProperties(message,
+                repost => new {repost.Status, repost.DateStatus}, CancellationToken.None);
 
             await scope.CommitAsync(token);
 
@@ -58,7 +61,10 @@ namespace metrics.Broker.Console.Events.Handlers
                         OwnerId = message.OwnerId
                     },
                     token),
-                _messageBroker.SendAsync(new ExecuteNextRepost {UserId = obj.UserId}, token)
+                _messageBroker.SendAsync(new ExecuteNextRepost
+                {
+                    UserId = obj.UserId
+                }, token)
             );
         }
     }

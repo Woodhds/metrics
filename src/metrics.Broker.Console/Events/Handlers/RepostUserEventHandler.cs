@@ -42,6 +42,13 @@ namespace metrics.Broker.Console.Events.Handlers
                     .OrderBy(f => f.DateStatus)
                     .Where(f => f.Status == VkRepostStatus.New && f.UserId == obj.UserId)
                     .TagWith("Select next repost message")
+                    .Select(x => new VkRepost
+                    {
+                        Id = x.Id, 
+                        RowVersion = x.RowVersion,
+                        OwnerId = x.OwnerId,
+                        MessageId = x.MessageId
+                    })
                     .FirstOrDefaultAsync(token);
 
                 if (message == null)
@@ -50,7 +57,8 @@ namespace metrics.Broker.Console.Events.Handlers
                 message.Status = VkRepostStatus.Pending;
                 message.DateStatus = DateTime.Now;
 
-                await transaction.GetRepository<VkRepost>().UpdateAsync(message, token);
+                await transaction.GetRepository<VkRepost>()
+                    .UpdateProperties(message, repost => new {repost.Status, repost.DateStatus}, token);
 
                 await transaction.CommitAsync(token)!;
 
